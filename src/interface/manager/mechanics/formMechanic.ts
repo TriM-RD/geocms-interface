@@ -51,8 +51,15 @@ export namespace Manager.Mechanic{
 
     private reStructure (stats: any, append: any = null): any {
       let temp = {}
-      stats.forEach((_stat : any, _index: number) => { temp = Object.assign(temp, { [_index]: StatType.StatTypes[_index]().CreateStat().InitData(_stat.Data != null ? _stat.Data : '') }) })
+      // console.log(stats)
+      // stats.forEach((_stat : any, _index: number) => { if (_stat !== undefined) temp = Object.assign(temp, { [_index]: StatType.StatTypes[_index]().CreateStat().InitData(_stat.Data != null ? _stat.Data : '') }) })
+      for (let i = 0; i < Object.keys(StatType.StatTypes).length; i++) {
+        if (stats[i] !== undefined) {
+          temp = Object.assign(temp, { [i]: StatType.StatTypes[i]().CreateStat().InitData(stats[i].Data != null ? stats[i].Data : '') })
+        }
+      }
       if (append !== null) { temp = Object.assign(temp, append) }
+      console.log(temp)
       return temp
     }
 
@@ -78,10 +85,10 @@ export namespace Manager.Mechanic{
         case SubObjectTypeEnum.Middle:
           if (this.inEdit) {
             await http.patch('http://blog.test/api/entity/' + this.id, this.ObjectTemplates)
-              .then(response => (router.push({ name: 'Show', params: { id: response.data.id } })))
+              .then(response => (console.log('yes')/* router.push({ name: 'Show', params: { id: response.data.id } }) */))
           } else {
             await http.post('http://blog.test/api/entity', this.ObjectTemplates)
-              .then(response => (router.push({ name: 'Show', params: { id: response.data.id } })))
+              .then(response => (console.log('yes')/* router.push({ name: 'Show', params: { id: response.data.id } }) */))
           }
           break
         case SubObjectTypeEnum.ParentObject:
@@ -132,7 +139,7 @@ export namespace Manager.Mechanic{
           if (_object.Stats[StatTypeEnum.Label].Data === _prevObject.Stats[StatTypeEnum.Label].Data) {
             _object.Stats = _prevObject.Stats
             _object = _prevObject
-          } else if (_prevObject.Stats[StatTypeEnum.Label].Data === 'Content' && runOnce === false) {
+          } else if (_prevObject.Stats[StatTypeEnum.Label].Data === 'Content' && !runOnce) {
             runOnce = true
             this.ObjectTemplates.splice(this.ObjectTemplates.length - 2, 0, new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.ModularText, SubObjectTypeEnum.ParentObject, ActionTypeEnum.AppendEntity, _prevObject.Stats))
           }

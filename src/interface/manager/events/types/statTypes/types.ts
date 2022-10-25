@@ -62,4 +62,24 @@ export namespace Manager.Events.Type{
         alert(this.Data)
       }
     }
+
+  export class Type extends StatAbstract {
+    public CreateStat (): StatAbstract {
+      return new Type()
+    }
+
+    public CheckRequirements (_object: any): void {
+      alert(this.Data)
+    }
+  }
+
+  export class Placeholder extends StatAbstract {
+    public CreateStat (): StatAbstract {
+      return new Placeholder()
+    }
+
+    public CheckRequirements (_object: any): void {
+      alert(this.Data)
+    }
+  }
 }

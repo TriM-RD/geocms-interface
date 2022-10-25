@@ -1,7 +1,13 @@
 import { Manager } from './objectTypes/types'
 
 export enum ObjectTypeEnum {
-  Row, Field, Button, Text, ShowResolve, ContentToolkitObject, ModularText
+  Row,
+  Field,
+  Button,
+  Text,
+  ShowResolve,
+  ContentToolkitObject,
+  ModularText
 }
 
 export class ObjectType {

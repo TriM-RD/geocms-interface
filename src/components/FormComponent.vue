@@ -38,8 +38,7 @@ export default class FormComponent extends Vue {
   }
 
   async Init () {
-    // this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id === undefined ? -1 : Number(this.$route.params.id)))
-    this.objectTemplates = this.mechanic.InitSet([this.constEntity])
+    this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id === undefined ? -1 : Number(this.$route.params.id)))
     this.renderComponent = true
   }
 

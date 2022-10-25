@@ -1,5 +1,5 @@
 <template>
-  <button :class="`${object.Stats[statTypeEnum.Design].Data}`" @Click='regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object)'>{{object.Stats[statTypeEnum.Title].Data}}</button>
+  <button :class="`${object.Stats[statTypeEnum.Design].Data}`" @Click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object)'>{{object.Stats[statTypeEnum.Title].Data}}</button>
 </template>
 
 <script lang="ts">

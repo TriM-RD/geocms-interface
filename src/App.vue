@@ -1,8 +1,7 @@
 <template>
   <div id="nav">
     <router-link to="/">Dodaj Novi</router-link> |
-    <router-link to="/show">Prikaži Sve</router-link> |
-    <router-link to="/credit">Zasluge</router-link>
+    <router-link to="/show">Prikaži Sve</router-link>
   </div>
   <router-view/>
 </template>

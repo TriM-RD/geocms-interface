@@ -105,4 +105,19 @@ export namespace Manager.Events.Type{
         throw new Error('Method not implemented.')
       }
     }
+
+  export class InsertNumber extends MethodTypeAbstract {
+    public Act (_object: ObjectTemplate, _data : any, _invokeLogic: LogicDelegate): boolean {
+      this.Enact(_data).then(response => (_object.Stats[StatTypeEnum.Value].Data = response))
+      return true
+    }
+
+    public async Enact (_data : any): Promise<any> {
+      if (_data < 1 || _data > 100) {
+        alert('Broj uređaja mora biti veći od 1 i manji od 100')
+        return ''
+      }
+      return await _data
+    }
+  }
 }
