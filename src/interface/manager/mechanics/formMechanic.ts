@@ -83,13 +83,14 @@ export namespace Manager.Mechanic{
 
       switch (eventHandler.subObjectType) {
         case SubObjectTypeEnum.Middle:
-          if (this.inEdit) {
-            await http.patch('http://blog.test/api/entity/' + this.id, this.ObjectTemplates)
-              .then(response => (console.log('yes')/* router.push({ name: 'Show', params: { id: response.data.id } }) */))
-          } else {
-            await http.post('http://blog.test/api/entity', this.ObjectTemplates)
-              .then(response => (console.log('yes')/* router.push({ name: 'Show', params: { id: response.data.id } }) */))
-          }
+          console.log(this.ObjectTemplates)
+          // if (this.inEdit) {
+          // await http.patch('http://blog.test/api/entity/' + this.id, this.ObjectTemplates)
+          //  .then(response => (console.log('yes')/* router.push({ name: 'Show', params: { id: response.data.id } }) */))
+          // } else {
+          // await http.post('http://blog.test/api/entity', this.ObjectTemplates)
+          // .then(response => (console.log('yes')/* router.push({ name: 'Show', params: { id: response.data.id } }) */))
+          // }
           break
         case SubObjectTypeEnum.ParentObject:
           console.log(this.ObjectTemplates)
@@ -136,10 +137,10 @@ export namespace Manager.Mechanic{
       prevObjectTemplates.forEach((_prevObject: ObjectTemplate) => {
         this.ObjectTemplates.forEach((_object: ObjectTemplate) => {
           _object.Stats[StatTypeEnum.Id].Data = _prevObject.Stats[StatTypeEnum.Id].Data
-          if (_object.Stats[StatTypeEnum.Label].Data === _prevObject.Stats[StatTypeEnum.Label].Data) {
+          if (_object.Stats[StatTypeEnum.Tag].Data === _prevObject.Stats[StatTypeEnum.Tag].Data) {
             _object.Stats = _prevObject.Stats
             _object = _prevObject
-          } else if (_prevObject.Stats[StatTypeEnum.Label].Data === 'Content' && !runOnce) {
+          } else if (_prevObject.Stats[StatTypeEnum.Tag].Data === 'Content' && !runOnce) {
             runOnce = true
             this.ObjectTemplates.splice(this.ObjectTemplates.length - 2, 0, new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.ModularText, SubObjectTypeEnum.ParentObject, ActionTypeEnum.AppendEntity, _prevObject.Stats))
           }

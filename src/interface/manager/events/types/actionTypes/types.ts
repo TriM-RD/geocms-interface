@@ -64,13 +64,14 @@ export namespace Manager.Events.Type{
                 router.push({ name: 'Edit', params: { id: _id } })
                 break
               case SubObjectTypeEnum.Right: // Pregledaj
-                router.push({ name: 'Show', params: { id: _id } })
+                // router.push({ name: 'Show', params: { id: _id } })
+                _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: _object })
                 break
               default:
                 break
             }
             break
-          case RegionEnum.Form:
+          /* case RegionEnum.Form:
             switch (_object.SubObjectEnum) {
               case SubObjectTypeEnum.Left:// Izbriši
                 _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: _object })
@@ -79,7 +80,7 @@ export namespace Manager.Events.Type{
                 _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: null })
                 break
             }
-            break
+            break */
           default:
             _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: null })
             break
@@ -117,6 +118,17 @@ export namespace Manager.Events.Type{
         alert('Broj uređaja mora biti veći od 1 i manji od 100')
         return ''
       }
+      return await _data
+    }
+  }
+
+  export class Check extends MethodTypeAbstract {
+    public Act (_object: ObjectTemplate, _data : any, _invokeLogic: LogicDelegate): boolean {
+      this.Enact(_data).then(response => (_object.Stats[StatTypeEnum.Value].Data = response))
+      return true
+    }
+
+    public async Enact (_data : any): Promise<any> {
       return await _data
     }
   }

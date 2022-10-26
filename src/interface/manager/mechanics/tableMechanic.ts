@@ -19,7 +19,7 @@ export namespace Manager.Mechanic{
     private forEachElement (data: any) : ObjectTemplate[] {
       let _temp: ObjectTemplate[] = []
       data.forEach((_list: any) => {
-        _temp = _temp.concat(_list.filter((_object : ObjectTemplate) => { return _object.Stats[StatTypeEnum.Label].Data === 'Title' }).map((_object: any) => {
+        _temp = _temp.concat(_list.filter((_object : ObjectTemplate) => { return _object.Stats[StatTypeEnum.Tag].Data === 'Title' }).map((_object: any) => {
           return new ObjectTemplate(RegionEnum.Table, ObjectTypeEnum.Row, SubObjectTypeEnum.ParentObject, ActionTypeEnum.Click, this.reStructure(_object.Stats))
         }))
       })

@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <img alt="Vue logo" src="../assets/logo.png">
+
     <FormComponent msg="Welcome to Your Vue.js + TypeScript App"/>
   </div>
 </template>

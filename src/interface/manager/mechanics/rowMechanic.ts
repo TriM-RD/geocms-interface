@@ -39,16 +39,17 @@ export namespace Manager.Mechanic{
     }
 
     protected SubscribeConditions (): void {
-      // RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
+      RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
     }
 
     public UnsubscribeConditions () {
-      // RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
+      RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
     }
 
     protected Button (eventHandler: EventHandlerType): void {
       console.log('test')
-      const _id = this.ObjectTemplates[0].Stats[StatTypeEnum.Id].Data
+      // const _id = this.ObjectTemplates[0].Stats[StatTypeEnum.Id].Data
+      const _id = eventHandler.payload.Stats[StatTypeEnum.Id].Data
       switch (eventHandler.subObjectType) {
         case SubObjectTypeEnum.Left:// Izbriši
           http.delete('http://blog.test/api/entity/' + _id)

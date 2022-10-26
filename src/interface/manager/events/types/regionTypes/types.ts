@@ -20,7 +20,12 @@ export namespace Manager.Events.Type{
       [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button(),
       [ObjectTypeEnum.Text]: new ObjectTypeAbstract.Events.Type.Text(),
       [ObjectTypeEnum.ContentToolkitObject]: new ObjectTypeAbstract.Events.Type.ContentToolkitObject(),
-      [ObjectTypeEnum.ModularText]: new ObjectTypeAbstract.Events.Type.ModularText()
+      [ObjectTypeEnum.ModularText]: new ObjectTypeAbstract.Events.Type.ModularText(),
+      [ObjectTypeEnum.Alert]: new ObjectTypeAbstract.Events.Type.Alert(),
+      [ObjectTypeEnum.CheckBox]: new ObjectTypeAbstract.Events.Type.CheckBox(),
+      [ObjectTypeEnum.DataList]: new ObjectTypeAbstract.Events.Type.DataList(),
+      [ObjectTypeEnum.SelectList]: new ObjectTypeAbstract.Events.Type.SelectList(),
+      [ObjectTypeEnum.Radio]: new ObjectTypeAbstract.Events.Type.Radio()
     }
   }
 

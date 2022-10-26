@@ -13,9 +13,9 @@ export namespace Manager.Events.Type{
     }
     export type CreateStatDel = () => StatAbstract;
 
-    export class Title extends StatAbstract {
+    export class Tag extends StatAbstract {
       public CreateStat (): StatAbstract {
-        return new Title()
+        return new Tag()
       }
 
       public CheckRequirements (_object: any): void {
@@ -63,9 +63,9 @@ export namespace Manager.Events.Type{
       }
     }
 
-  export class Type extends StatAbstract {
+  export class ElementType extends StatAbstract {
     public CreateStat (): StatAbstract {
-      return new Type()
+      return new ElementType()
     }
 
     public CheckRequirements (_object: any): void {
@@ -74,6 +74,16 @@ export namespace Manager.Events.Type{
   }
 
   export class Placeholder extends StatAbstract {
+    public CreateStat (): StatAbstract {
+      return new Placeholder()
+    }
+
+    public CheckRequirements (_object: any): void {
+      alert(this.Data)
+    }
+  }
+
+  export class ItemList extends StatAbstract {
     public CreateStat (): StatAbstract {
       return new Placeholder()
     }

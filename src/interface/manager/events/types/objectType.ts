@@ -7,7 +7,12 @@ export enum ObjectTypeEnum {
   Text,
   ShowResolve,
   ContentToolkitObject,
-  ModularText
+  ModularText,
+  Alert,
+  CheckBox,
+  DataList,
+  SelectList,
+  Radio
 }
 
 export class ObjectType {

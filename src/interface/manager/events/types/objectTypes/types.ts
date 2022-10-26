@@ -1,13 +1,18 @@
 import { SubObjectTypeEnum, SubObjectType } from '../subObjectType'
 import { StatChangeDel, StatChangeEventArgs } from '@/interface/manager/containerClasses/statChangeEventArgs'
 import { SimpleEventDispatcher } from 'ste-simple-events'
-import InputComponent from '@/components/InputComponent.vue'
-import SubmitButtonComponent from '@/components/SubmitButtonComponent.vue'
+import InputComponent from '@/components/formComponents/InputComponent.vue'
+import SubmitButtonComponent from '@/components/formComponents/SubmitButtonComponent.vue'
 import RowComponent from '@/components/RowComponent.vue'
-import TextAreaComponent from '@/components/TextAreaComponent.vue'
+import TextAreaComponent from '@/components/formComponents/TextAreaComponent.vue'
 import ResolveShowComponent from '@/components/ResolveShowComponent.vue'
-import ContentToolkitComponent from '@/components/ContentToolkitComponent.vue'
-import TextAreaPartComponent from '@/components/TextAreaPartComponent.vue'
+import ContentToolkitComponent from '@/components/formComponents/ContentToolkitComponent.vue'
+import TextAreaPartComponent from '@/components/formComponents/TextAreaPartComponent.vue'
+import AlertComponent from '@/components/formComponents/AlertComponent.vue'
+import CheckBoxComponent from '@/components/formComponents/CheckBoxComponent.vue'
+import DataListComponent from '@/components/formComponents/DataListComponent.vue'
+import SelectListComponent from '@/components/formComponents/SelectListComponent.vue'
+import RadioComponent from '@/components/formComponents/RadioComponent.vue'
 import { StatTypeEnum } from '../statType'
 import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
 
@@ -110,6 +115,36 @@ export namespace Manager.Events.Type{
    export class ModularText extends IChangeStat {
      public GetVueComponent () {
        return TextAreaPartComponent
+     }
+   }
+
+   export class Alert extends IChangeStat {
+     public GetVueComponent () {
+       return AlertComponent
+     }
+   }
+
+   export class CheckBox extends IChangeStat {
+     public GetVueComponent () {
+       return CheckBoxComponent
+     }
+   }
+
+   export class DataList extends IChangeStat {
+     public GetVueComponent () {
+       return DataListComponent
+     }
+   }
+
+   export class SelectList extends IChangeStat {
+     public GetVueComponent () {
+       return SelectListComponent
+     }
+   }
+
+   export class Radio extends IChangeStat {
+     public GetVueComponent () {
+       return RadioComponent
      }
    }
 }

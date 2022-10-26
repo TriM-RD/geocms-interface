@@ -1,0 +1,46 @@
+<template>
+  <div class="mb-3 row justify-content-md-center">
+    <div class="col"></div>
+    <div class="col">
+  <div class="form-check">
+    <label for="exampleDataList" class="form-label">{{object.Stats[statTypeEnum.Label].Data }}</label>
+    <input list="datalistOptions"
+           :type="`${object.Stats[statTypeEnum.ElementType] !== undefined?object.Stats[statTypeEnum.ElementType].Data:''}`"
+           :class="`${object.Stats[statTypeEnum.Design].Data}`"
+           :value="object.Stats[statTypeEnum.Value].Data"
+           :placeholder="`${object.Stats[statTypeEnum.Placeholder].Data}`"
+           @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, $event.target.value)">
+    <!--input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search..."-->
+    <datalist id="datalistOptions">
+      <option v-for="(item, key, index) in JSON.parse(object.Stats[statTypeEnum.ItemList].Data)" :key="`${ key }-${ index }`">{{item}}</option>
+    </datalist>
+
+  </div>
+  </div>
+  <div class="col"></div>
+  </div>
+</template>
+
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component'
+import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
+import { ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, RegionEnum } from '@/interface/manager/events/types'
+@Options({
+  props: {
+    object: ObjectTemplate
+  }
+})
+export default class DataListComponent extends Vue {
+  statTypeEnum = StatTypeEnum
+  objectTypeEnum = ObjectTypeEnum
+  objectType = ObjectType
+  regionType = RegionType
+  regionEnum = RegionEnum
+  object!: ObjectTemplate
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+
+</style>

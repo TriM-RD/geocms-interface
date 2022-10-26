@@ -1,8 +1,8 @@
 <template>
-  <h1 v-if="object.Stats[statTypeEnum.Label].Data === 'Title'">{{object.Stats[statTypeEnum.Value].Data}}</h1>
-  <div v-html="object.Stats[statTypeEnum.Value].Data" v-if="object.Stats[statTypeEnum.Label].Data === 'Content'"></div>
-  <br v-if="object.Stats[statTypeEnum.Label].Data === 'Content'">
-  <div v-if="object.Stats[statTypeEnum.Label].Data === 'Author'">
+  <h1 v-if="object.Stats[statTypeEnum.Tag].Data === 'Title'">{{object.Stats[statTypeEnum.Value].Data}}</h1>
+  <div v-html="object.Stats[statTypeEnum.Value].Data" v-if="object.Stats[statTypeEnum.Tag].Data === 'Content'"></div>
+  <br v-if="object.Stats[statTypeEnum.Tag].Data === 'Content'">
+  <div v-if="object.Stats[statTypeEnum.Tag].Data === 'Author'">
     <div class="row text-start p-3">
       <figure><blockquote class="blockquote"><p>Autor: {{object.Stats[statTypeEnum.Value].Data}}</p></blockquote>
         </figure>
