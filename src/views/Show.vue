@@ -1,17 +1,30 @@
 <template>
   <div class="container">
-    <ShowComponent msg="Welcome to Your Vue.js + TypeScript App"/>
+    <FilterComponent />
+    <div class="tableComp">
+    <TableComponent />
+  </div>
+  </div>
+  <div>
+    <FooterComponent />
   </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import ShowComponent from '@/components/ShowComponent.vue' // @ is an alias to /src
+import TableComponent from '@/components/TableComponent.vue' // @ is an alias to /src
+import FilterComponent from '@/components/showComponents/FilterComponent.vue'
+import FooterComponent from '@/components/showComponents/FooterComponent.vue'
 
 @Options({
   components: {
-    ShowComponent
+    FilterComponent,
+    TableComponent,
+    FooterComponent
   }
+
 })
-export default class About extends Vue {}
+export default class Show extends Vue {}
 </script>
+<style scoped>
+</style>

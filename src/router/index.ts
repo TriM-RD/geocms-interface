@@ -16,13 +16,49 @@ const routes: Array<RouteRecordRaw> = [
     component: Edit
   },
   {
-    path: '/show',
-    name: 'All',
+    path: '/device',
+    name: 'Device',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: About
+    component: Show
+  },
+  {
+    path: '/categories',
+    name: 'Categories',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: Show
+  },
+  {
+    path: '/map',
+    name: 'Map',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: Show
+  },
+  {
+    path: '/types',
+    name: 'Types',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: Show
+  },
+  {
+    path: '/permissions',
+    name: 'Permissions',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: Show
   },
   {
     path: '/show/:id',

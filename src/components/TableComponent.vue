@@ -1,10 +1,13 @@
 <template>
   <table class="table" v-if="renderComponent">
-  <thead>
+  <thead class="table-light">
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">Naslov</th>
-      <th scope="col">Opcije</th>
+      <th scope="col"></th>
+      <th scope="col">Type</th>
+      <th scope="col">Name</th>
+      <th scope="col">Category</th>
+      <th scope="col">Last Updated</th>
+      <th scope="col">Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -51,5 +54,7 @@ export default class TableComponent extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.table{
+  margin-bottom: 5%;
+}
 </style>
