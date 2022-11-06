@@ -1,30 +1,51 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Dodaj Novi</router-link> |
-    <router-link to="/show">Prikaži Sve</router-link>
+  <div class="container">
+    <div class="half">
+      <Search
+        :search="search"
+      />
+    </div>
+    <div class="half">
+      <Posts :posts="posts" />
+    </div>
   </div>
-  <router-view/>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script>
+import Search from './components/Search.vue'
+import Posts from './components/Posts.vue'
+import MOCK_DATA from './MOCK_DATA.json'
+export default {
+  name: 'App',
+  components: {
+    Search,
+    Posts
+  },
+  data () {
+    return {
+      posts: MOCK_DATA
+    }
+  },
+  methods: {
+    search (term) {
+      this.resetPosts()
+      this.posts = this.posts.filter((post) => {
+        return post.title.toLowerCase().includes(term.toLowerCase()) || post.category.toLowerCase().includes(term.toLowerCase())
+      })
+    },
+    resetPosts () {
+      this.posts = MOCK_DATA
+    }
+  }
 }
+</script>
 
-#nav {
-  padding: 30px;
+<style scoped>
+.container {
+  display: flex;
+  margin: 20px;
 }
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+.half {
+  width: 40%;
 }
 </style>
