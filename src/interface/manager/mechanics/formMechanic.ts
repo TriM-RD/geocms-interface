@@ -83,14 +83,14 @@ export namespace Manager.Mechanic{
 
       switch (eventHandler.subObjectType) {
         case SubObjectTypeEnum.Middle:
-          console.log(this.ObjectTemplates)
-          // if (this.inEdit) {
-          // await http.patch('http://blog.test/api/entity/' + this.id, this.ObjectTemplates)
-          //  .then(response => (console.log('yes')/* router.push({ name: 'Show', params: { id: response.data.id } }) */))
-          // } else {
-          // await http.post('http://blog.test/api/entity', this.ObjectTemplates)
-          // .then(response => (console.log('yes')/* router.push({ name: 'Show', params: { id: response.data.id } }) */))
-          // }
+          // console.log(this.ObjectTemplates)
+          if (this.inEdit) {
+            await http.patch('http://blog.test/api/entity/' + this.id, this.ObjectTemplates)
+              .then(response => (router.push({ name: 'Show', params: { id: response.data.id } })))
+          } else {
+            await http.post('http://blog.test/api/entity', this.ObjectTemplates)
+              .then(response => (router.push({ name: 'Show', params: { id: response.data.id } })))
+          }
           break
         case SubObjectTypeEnum.ParentObject:
           console.log(this.ObjectTemplates)

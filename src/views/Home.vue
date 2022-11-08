@@ -7,12 +7,14 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import FormComponent from '@/components/FormComponent.vue' // @ is an alias to /src
+import FormComponent from '@/components/FormComponent.vue'
+import http from '@/http-common' // @ is an alias to /src
 
 @Options({
   components: {
     FormComponent
   }
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+}
 </script>
