@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <FilterComponent />
-    <div class="tableComp">
+  <div class="tableComp">
     <TableComponent />
   </div>
   </div>
@@ -22,7 +22,6 @@ import FooterComponent from '@/components/showComponents/FooterComponent.vue'
     TableComponent,
     FooterComponent
   }
-
 })
 export default class Show extends Vue {}
 </script>

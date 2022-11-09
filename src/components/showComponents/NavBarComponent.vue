@@ -1,23 +1,43 @@
 <template>
-  <div>
-    <div id="nav">
-    <img class="img" alt="Vue logo" width="90" src="../../assets/logo.png">
-      <input class="form" type="text" placeholder="Search">
-      <select class="form1">
-        <option selected>User Name</option>
-        <option value="Log out">Log out</option>
-      </select>
-          <hr>
+ <nav>
+ <div class="navbar container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="../../assets/logo.png" alt="Logo" width="90" class="d-inline-block align-text-top">
+    </a>
+    <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+    </form>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle boja" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          User name
+        </a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#">Action</a></li>
+          <li><a class="dropdown-item" href="#">Another action</a></li>
+        </ul>
+      </li>
     </div>
-    <hr>
-  <div id="nav1">
-    <router-link to="/" class="nav-link">Map/Home</router-link>
-    <router-link to="/device" class="nav-link">Devices</router-link>
-    <router-link to="/permissions" class="nav-link">Permissions</router-link>
-    <router-link to="/types" class="nav-link">Types</router-link>
-    <router-link to="/categories" class="nav-link">Categories</router-link>
-  </div>
-  </div>
+  <hr>
+  <div class="container">
+  <ul class="nav nav-pills nav-fill">
+  <li class="nav-item border">
+    <router-link to="/" class="nav-link boja">Map/Home</router-link>
+  </li>
+  <li class="nav-item border">
+    <router-link to="/device" class="nav-link boja">Devices</router-link>
+  </li>
+  <li class="nav-item border">
+    <router-link to="/permissions" class="nav-link boja">Permissions</router-link>
+  </li>
+  <li class="nav-item border">
+    <router-link to="/types" class="nav-link boja">Types</router-link>
+  </li>
+  <li class="nav-item border">
+    <router-link to="/categories" class="nav-link boja">Categories</router-link>
+  </li>
+</ul>
+</div>
+</nav>
   <router-view/>
 </template>
 
@@ -42,52 +62,24 @@ export default class NavBarComponent extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#nav {
-  display: grid;
-  grid-auto-flow: column;
-  grid-column-gap: 33%;
+a{
+  color:#868b90;
 }
-#nav1 {
-  padding-bottom: 20px;
+a.boja:hover{
+  background-color:#969b9f;
+  color:#fff
 }
-.nav-link {
-  display: inline-block;
-  color: #2c3e50;
-  border-style: solid;
-  border-width: thin;
-  border-color:#d4d7d9;
-  border-radius: 2px;
+a.boja:focus{
+  background-color:#606467;
+  color: #fff;
 }
-.nav-link:hover{
-  background-color:#97999c;
-  color: white;
+.container{
+padding-bottom: 5%;
 }
-.active,.nav-link:focus{
-  color: white;
-  background-color:#6e7277;
-}
-.form {
-  margin-top: 15% !important;
-  border-radius: 5px;
-  height: 30px;
-  width: 200px;
-  margin: 5px;
-  padding: 2px;
-  border-color: #d4d7d9;
-  border-width: 1px;
-}
-.form1 {
-  margin-top: 15% !important;
-  height: 30px;
-  width: 150px;
-  text-align-last: center;
-  border-radius: 5px;
-  margin: 5px;
-  padding: 5px;
-  border-color: transparent;
-  color: #2c3e50;
+li{
+  list-style-type: none;
 }
 hr{
-  margin-top:-5px !important;
+margin-top:-1.5% !important;
 }
 </style>

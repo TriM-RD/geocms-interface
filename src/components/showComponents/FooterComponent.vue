@@ -1,8 +1,10 @@
 <template>
-    <footer class="fixed-bottom" id="footer">
-      <router-link to="/" class="nav1-link">Scan <img alt="QR" width="25" src="../../assets/QRcode.png"></router-link>
-      <router-link to="/" class="nav1-link">Add<img alt="plus" width="25" src="../../assets/plus.png"></router-link>
-    </footer>
+<nav class="navbar fixed-bottom navbar-light bg-light">
+  <form class="container-fluid justify-content-around">
+    <router-link class="btn btn-outline-success me-2 flex-fill" type="button" to="/scan">Scan<img alt="QR" width="25" src="../../assets/QRcode.png"></router-link>
+    <router-link class="btn btn-outline-secondary flex-fill" type="button" to="/add">Add<img alt="plus" width="25" src="../../assets/plus.png"></router-link>
+</form>
+  </nav>
     <router-view/>
 </template>
 
@@ -27,24 +29,7 @@ export default class FooterComponent extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.nav1-link {
-  display: inline-block;
-  text-decoration: none;
-  color: #2c3e50;
-  border-style: solid;
-  border-width: thin;
-  border-color: #d4d7d9;
-  border-radius: 2px;
-  padding: 15px;
-  width: 49%;
-}
-.nav1-link:hover{
-  background-color:#97999c;
-  color: white;
-}
-#footer {
-  position: absolute;
-  bottom: 1.5%;
-  width: 100%;
+.container-fluid{
+  padding-bottom: 0.5%;
 }
 </style>
