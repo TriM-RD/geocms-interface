@@ -3,7 +3,15 @@ import Home from '../views/Home.vue'
 import Edit from '../views/Edit.vue'
 import About from '../views/About.vue'
 import Show from '../views/Show.vue'
-
+import Map from '../views/Map.vue'
+import Types from '../views/Types.vue'
+import Categories from '../views/Categories.vue'
+import DeviceAdd from '../views/DeviceAdd.vue'
+import TypesAdd from '../views/TypesAdd.vue'
+import AttributeAdd from '../views/AttributeAdd.vue'
+import CategoriesAdd from '../views/CategoriesAdd.vue'
+import DeviceAppend from '../views/DeviceAppend.vue'
+import DeviceCabinet from '../views/DeviceCabinet.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -31,7 +39,7 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: Show
+    component: Categories
   },
   {
     path: '/map',
@@ -40,7 +48,7 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: Show
+    component: Map
   },
   {
     path: '/types',
@@ -49,7 +57,7 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: Show
+    component: Types
   },
   {
     path: '/permissions',
@@ -67,6 +75,54 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: Show
+  },
+  {
+    path: '/deviceAdd',
+    name: 'DeviceAdd',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: DeviceAdd
+  },
+  {
+    path: '/typesAdd',
+    name: 'TypesAdd',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: TypesAdd
+  },
+  {
+    path: '/attributeAdd',
+    name: 'AttributeAdd',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: AttributeAdd
+  },
+  {
+    path: '/categoriesAdd',
+    name: 'CategoriesAdd',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: CategoriesAdd
+  },
+  {
+    path: '/deviceAppend',
+    name: 'DeviceAppend',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: DeviceAppend
+  },
+  {
+    path: '/deviceCabinet',
+    name: 'DeviceCabinet',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: DeviceCabinet
   }
 ]
 
