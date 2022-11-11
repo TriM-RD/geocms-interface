@@ -81,7 +81,6 @@ export namespace Manager.Mechanic{
 
       switch (eventHandler.subObjectType) {
         case SubObjectTypeEnum.Middle:
-          // console.log(this.ObjectTemplates)
           if (this.inEdit) {
             await http.patch('http://blog.test/api/entity/' + this.id, this.ObjectTemplates)
               .then(response => (router.push({ name: 'Show', params: { id: response.data.id } })))

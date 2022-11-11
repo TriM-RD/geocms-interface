@@ -3,7 +3,6 @@
   <form v-if="renderComponent">
     <component  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'> </component>
   </form>
-
 </template>
 
 <script lang="ts">

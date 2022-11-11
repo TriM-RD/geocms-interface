@@ -1,4 +1,3 @@
-
 import { StatChangeDel } from '@/interface/manager/containerClasses/statChangeEventArgs'
 import { ObjectTypeEnum, ObjectType } from '../objectType'
 import { SubObjectTypeEnum } from '../subObjectType'
