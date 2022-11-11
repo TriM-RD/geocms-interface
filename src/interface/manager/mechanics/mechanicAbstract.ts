@@ -10,7 +10,7 @@ export abstract class MechanicAbstract {
     this.SubscribeConditions()
   }
 
-  public abstract InitGet(_id : number): Promise<ObjectTemplate[]>;
+  public abstract InitGet(_id : string): Promise<ObjectTemplate[]>;
 
   public abstract InitSet(_objectTemplates: ObjectTemplate[]) : ObjectTemplate[];
 

@@ -31,7 +31,7 @@ export namespace Manager.Events.Type{
       }
 
       public async Enact (_data : any): Promise<any> {
-        return await _data.charAt(0).toUpperCase() + _data.slice(1)
+        return await _data// _data.charAt(0).toUpperCase() + _data.slice(1)
       }
     }
 

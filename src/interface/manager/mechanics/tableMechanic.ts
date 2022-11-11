@@ -10,7 +10,7 @@ import { EventHandlerType } from '../events/types/objectTypes/types'
 export namespace Manager.Mechanic{
 
   export class TableMechanic extends MechanicAbstract {
-    public async InitGet (_id = -1): Promise<ObjectTemplate[]> {
+    public async InitGet (_id = '-1'): Promise<ObjectTemplate[]> {
       this.ObjectTemplates = []
       const response = await http.get('http://blog.test/api/entity')
       return (this.ObjectTemplates = this.forEachElement(response.data))
@@ -19,7 +19,7 @@ export namespace Manager.Mechanic{
     private forEachElement (data: any) : ObjectTemplate[] {
       let _temp: ObjectTemplate[] = []
       data.forEach((_list: any) => {
-        _temp = _temp.concat(_list.filter((_object : ObjectTemplate) => { return _object.Stats[StatTypeEnum.Tag].Data === 'Title' }).map((_object: any) => {
+        _temp = _temp.concat(_list.filter((_object : ObjectTemplate) => { return _object.Stats[StatTypeEnum.Tag].Data === 'code' }).map((_object: any) => {
           return new ObjectTemplate(RegionEnum.Table, ObjectTypeEnum.Row, SubObjectTypeEnum.ParentObject, ActionTypeEnum.Click, this.reStructure(_object.Stats))
         }))
       })

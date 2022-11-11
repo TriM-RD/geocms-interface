@@ -8,7 +8,6 @@ export class RegionType {
       [RegionEnum.Form]: new Manager.Events.Type.Form(),
       [RegionEnum.Table]: new Manager.Events.Type.Table(),
       [RegionEnum.TableColumn]: new Manager.Events.Type.TableColumn(),
-      [RegionEnum.Show]: new Manager.Events.Type.Show(),
-      [RegionEnum.ContentToolkit]: new Manager.Events.Type.ContentToolkit()
+      [RegionEnum.Show]: new Manager.Events.Type.Show()
     }
 }
