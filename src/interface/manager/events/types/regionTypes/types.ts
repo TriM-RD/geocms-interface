@@ -56,4 +56,19 @@ export namespace Manager.Events.Type{
       [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button()
     }
   }
+
+  export class ContentList extends RegionAbstract {
+    public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
+      {
+        [ObjectTypeEnum.ContentListRow]: new ObjectTypeAbstract.Events.Type.ContentListRow()
+
+      }
+  }
+
+  export class ContentListRow extends RegionAbstract {
+    public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
+      {
+        [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button()
+      }
+  }
 }

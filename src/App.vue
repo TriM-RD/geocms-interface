@@ -1,5 +1,11 @@
 <template>
-  <div class="container">
+  <div id="nav">
+    <router-link to="/">Dodaj Novi</router-link> |
+    <router-link to="/show">Prikaži Sve</router-link> |
+    <a href="http://blog.test/oauth/redirect">Auth</a>
+  </div>
+  <router-view/>
+  <!--div class="container">
     <div class="half">
       <Search
         :search="search"
@@ -8,18 +14,19 @@
     <div class="half">
       <Posts :posts="posts" />
     </div>
-  </div>
+  </div-->
 </template>
 
 <script>
 import Search from './components/Search.vue'
 import Posts from './components/Posts.vue'
 import MOCK_DATA from './MOCK_DATA.json'
+import axios from 'axios'
 export default {
   name: 'App',
   components: {
-    Search,
-    Posts
+    // Search,
+    // Posts
   },
   data () {
     return {

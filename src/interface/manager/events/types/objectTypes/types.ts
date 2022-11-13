@@ -13,6 +13,7 @@ import CheckBoxComponent from '@/components/formComponents/CheckBoxComponent.vue
 import DataListComponent from '@/components/formComponents/DataListComponent.vue'
 import SelectListComponent from '@/components/formComponents/SelectListComponent.vue'
 import RadioComponent from '@/components/formComponents/RadioComponent.vue'
+import ContentListRowComponent from '@/components/ContentListRowComponent.vue'
 import { StatTypeEnum } from '../statType'
 import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
 
@@ -147,4 +148,10 @@ export namespace Manager.Events.Type{
        return RadioComponent
      }
    }
+
+  export class ContentListRow extends IChangeStat {
+    public GetVueComponent () {
+      return ContentListRowComponent
+    }
+  }
 }
