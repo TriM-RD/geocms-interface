@@ -12,6 +12,7 @@ import AttributeAdd from '../views/AttributeAdd.vue'
 import CategoriesAdd from '../views/CategoriesAdd.vue'
 import DeviceAppend from '../views/DeviceAppend.vue'
 import DeviceCabinet from '../views/DeviceCabinet.vue'
+import Search from '@/views/Search.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -123,6 +124,14 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: DeviceCabinet
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: Search
   }
 ]
 
