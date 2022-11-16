@@ -1,5 +1,8 @@
 <template>
     <NavBarComponent />
+    <NavComponent />
+    <!-- Contect></Contect-->
+    <FooterComponent />
 </template>
 
 <style>
@@ -15,10 +18,15 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import NavBarComponent from '@/components/showComponents/NavBarComponent.vue'
+import NavComponent from '@/components/showComponents/NavComponent.vue'
+import FooterComponent from '@/components/showComponents/FooterComponent.vue'
+import http from '@/http-common'
 
 @Options({
   components: {
-    NavBarComponent
+    NavBarComponent,
+    NavComponent,
+    FooterComponent
   }
 })
 export default class App extends Vue {}

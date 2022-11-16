@@ -55,4 +55,11 @@ export namespace Manager.Events.Type{
       [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button()
     }
   }
+
+  export class Footer extends RegionAbstract {
+    public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
+      {
+        [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button()
+      }
+  }
 }

@@ -2,8 +2,8 @@
   <div v-if="renderComponent" class="mb-3 row justify-content-md-center">
         <div class="col"></div>
         <div class="col">
-      <div class="form-check">
-        <label for="exampleDataList" class="form-label">{{object.Stats[statTypeEnum.Label].Data }}</label>
+      <div class="input-group">
+        <label for="exampleDataList" class="input-group-text">{{object.Stats[statTypeEnum.Label].Data }}</label>
         <select class="form-select" aria-label="Default select example"
         @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, $event.target.value)">
           <option v-for="(item, key, index) in JSON.parse(object.Stats[statTypeEnum.ItemList].Data)" :key="`${ key }-${ index }`" :value="item">{{item}}</option>
@@ -37,5 +37,4 @@ export default class SelectListComponent extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 </style>

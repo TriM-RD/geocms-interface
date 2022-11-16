@@ -4,8 +4,9 @@ import Edit from '../views/Edit.vue'
 import About from '../views/About.vue'
 import Show from '../views/Show.vue'
 import Map from '../views/Map.vue'
-import Types from '../views/Types.vue'
-import Categories from '../views/Categories.vue'
+import Groups from '../views/Groups.vue'
+import Divisions from '../views/Divisions.vue'
+import Permission from '../views/Permission.vue'
 import DeviceAdd from '../views/DeviceAdd.vue'
 import TypesAdd from '../views/TypesAdd.vue'
 import AttributeAdd from '../views/AttributeAdd.vue'
@@ -33,13 +34,13 @@ const routes: Array<RouteRecordRaw> = [
     component: Show
   },
   {
-    path: '/categories',
-    name: 'Categories',
+    path: '/divisions',
+    name: 'Divisions',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: Categories
+    component: Show
   },
   {
     path: '/map',
@@ -51,17 +52,17 @@ const routes: Array<RouteRecordRaw> = [
     component: Map
   },
   {
-    path: '/types',
-    name: 'Types',
+    path: '/groups',
+    name: 'Groups',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: Types
+    component: Groups
   },
   {
-    path: '/permissions',
-    name: 'Permissions',
+    path: '/permission',
+    name: 'Permission',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -77,7 +78,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Show
   },
   {
-    path: '/deviceAdd',
+    path: '/device/add',
     name: 'DeviceAdd',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -85,7 +86,7 @@ const routes: Array<RouteRecordRaw> = [
     component: DeviceAdd
   },
   {
-    path: '/typesAdd',
+    path: '/types/add',
     name: 'TypesAdd',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -93,7 +94,7 @@ const routes: Array<RouteRecordRaw> = [
     component: TypesAdd
   },
   {
-    path: '/attributeAdd',
+    path: '/attribute/add',
     name: 'AttributeAdd',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -101,7 +102,7 @@ const routes: Array<RouteRecordRaw> = [
     component: AttributeAdd
   },
   {
-    path: '/categoriesAdd',
+    path: '/categories/add',
     name: 'CategoriesAdd',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -109,7 +110,7 @@ const routes: Array<RouteRecordRaw> = [
     component: CategoriesAdd
   },
   {
-    path: '/deviceAppend',
+    path: '/device/append',
     name: 'DeviceAppend',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -117,7 +118,7 @@ const routes: Array<RouteRecordRaw> = [
     component: DeviceAppend
   },
   {
-    path: '/deviceCabinet',
+    path: '/device/cabinet',
     name: 'DeviceCabinet',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
