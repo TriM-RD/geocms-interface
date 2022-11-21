@@ -1,5 +1,5 @@
 <template>
-    <NavBarComponent />
+    <NavBarComponent/>
     <NavComponent />
     <!-- Contect></Contect-->
     <FooterComponent />
