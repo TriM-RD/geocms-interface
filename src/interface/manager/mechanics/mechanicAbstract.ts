@@ -10,9 +10,16 @@ export abstract class MechanicAbstract {
     this.SubscribeConditions()
   }
 
-  public abstract InitGet(_id : string): Promise<ObjectTemplate[]>;
+  public abstract InitGet (_id: string): Promise<ObjectTemplate[]>;
 
   public abstract InitSet(_objectTemplates: ObjectTemplate[]) : ObjectTemplate[];
+
+  public Append (_objectTemplates: ObjectTemplate[]) : ObjectTemplate[] {
+    for (const element of _objectTemplates) {
+      this.ObjectTemplates.push(element)
+    }
+    return this.ObjectTemplates
+  }
 
   public ObjectTemplates!: ObjectTemplate[];
 }

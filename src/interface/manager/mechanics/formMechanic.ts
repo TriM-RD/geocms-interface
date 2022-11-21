@@ -16,7 +16,7 @@ export namespace Manager.Mechanic{
     private id = '-1';
     private inEdit = false;
 
-    public async InitGet (_id = '-1'): Promise<ObjectTemplate[]> {
+    public async InitGet (_id: string): Promise<ObjectTemplate[]> {
       this.id = _id
       if (this.id === '-1') {
         this.id = (await http.get('http://blog.test/api/entity/' + this.id)).data
