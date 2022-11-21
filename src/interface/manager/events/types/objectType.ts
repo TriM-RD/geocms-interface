@@ -6,8 +6,6 @@ export enum ObjectTypeEnum {
   Button,
   Text,
   ShowResolve,
-  ContentToolkitObject,
-  ModularText,
   Alert,
   CheckBox,
   DataList,

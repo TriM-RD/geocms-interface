@@ -13,12 +13,12 @@ import { ActionTypeEnum } from '../events/types'
 export namespace Manager.Mechanic{
 
   export class FormMechanic extends MechanicAbstract {
-    private id = -1;
+    private id = '-1';
     private inEdit = false;
 
-    public async InitGet (_id = -1): Promise<ObjectTemplate[]> {
+    public async InitGet (_id = '-1'): Promise<ObjectTemplate[]> {
       this.id = _id
-      if (this.id === -1) {
+      if (this.id === '-1') {
         this.id = (await http.get('http://blog.test/api/entity/' + this.id)).data
         console.log(this.id)
         const response = await http.get('http://blog.test/api/form')
@@ -70,12 +70,10 @@ export namespace Manager.Mechanic{
 
     protected SubscribeConditions (): void {
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
-      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.ModularText].SubscribeLogic(this.Button.bind(this))
     }
 
     public UnsubscribeConditions () {
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
-      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.ModularText].NullifyLogic()
     }
 
     protected async Button (eventHandler: EventHandlerType): Promise<void> {
@@ -111,7 +109,6 @@ export namespace Manager.Mechanic{
           break
         case SubObjectTypeEnum.Right:
           console.log(this.ObjectTemplates)
-          this.upgrade()
           console.log(this.ObjectTemplates)
           break
         default:
@@ -128,26 +125,6 @@ export namespace Manager.Mechanic{
         }
       }
       return answer
-    }
-
-    private async upgrade () {
-      let runOnce = false
-      const prevObjectTemplates = this.ObjectTemplates
-      this.InitSet(await this.InitGet(-1))
-      prevObjectTemplates.forEach((_prevObject: ObjectTemplate) => {
-        this.ObjectTemplates.forEach((_object: ObjectTemplate) => {
-          _object.Stats[StatTypeEnum.Id].Data = _prevObject.Stats[StatTypeEnum.Id].Data
-          if (_object.Stats[StatTypeEnum.Tag].Data === _prevObject.Stats[StatTypeEnum.Tag].Data) {
-            _object.Stats = _prevObject.Stats
-            _object = _prevObject
-          } else if (_prevObject.Stats[StatTypeEnum.Tag].Data === 'Content' && !runOnce) {
-            runOnce = true
-            this.ObjectTemplates.splice(this.ObjectTemplates.length - 2, 0, new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.ModularText, SubObjectTypeEnum.ParentObject, ActionTypeEnum.AppendEntity, _prevObject.Stats))
-          }
-        })
-      })
-      this.inEdit = true
-      this.id = Number(this.ObjectTemplates[0].Stats[StatTypeEnum.Id].Data)
     }
   }
 

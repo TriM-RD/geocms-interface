@@ -6,8 +6,6 @@ import SubmitButtonComponent from '@/components/formComponents/SubmitButtonCompo
 import RowComponent from '@/components/RowComponent.vue'
 import TextAreaComponent from '@/components/formComponents/TextAreaComponent.vue'
 import ResolveShowComponent from '@/components/ResolveShowComponent.vue'
-import ContentToolkitComponent from '@/components/formComponents/ContentToolkitComponent.vue'
-import TextAreaPartComponent from '@/components/formComponents/TextAreaPartComponent.vue'
 import AlertComponent from '@/components/formComponents/AlertComponent.vue'
 import CheckBoxComponent from '@/components/formComponents/CheckBoxComponent.vue'
 import DataListComponent from '@/components/formComponents/DataListComponent.vue'
@@ -104,18 +102,6 @@ export namespace Manager.Events.Type{
    export class ShowResolve extends IChangeStat {
      public GetVueComponent () {
        return ResolveShowComponent
-     }
-   }
-
-   export class ContentToolkitObject extends IChangeStat {
-     public GetVueComponent () {
-       return ContentToolkitComponent
-     }
-   }
-
-   export class ModularText extends IChangeStat {
-     public GetVueComponent () {
-       return TextAreaPartComponent
      }
    }
 

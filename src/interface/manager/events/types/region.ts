@@ -5,7 +5,6 @@ export enum RegionEnum {
   Table,
   TableColumn,
   Show,
-  ContentToolkit,
   ContentList,
 ContentListRow}
 
@@ -16,7 +15,6 @@ export class RegionType {
       [RegionEnum.Table]: new Manager.Events.Type.Table(),
       [RegionEnum.TableColumn]: new Manager.Events.Type.TableColumn(),
       [RegionEnum.Show]: new Manager.Events.Type.Show(),
-      [RegionEnum.ContentToolkit]: new Manager.Events.Type.ContentToolkit(),
       [RegionEnum.ContentList]: new Manager.Events.Type.ContentList(),
       [RegionEnum.ContentListRow]: new Manager.Events.Type.ContentListRow()
     }
