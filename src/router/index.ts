@@ -3,6 +3,8 @@ import Home from '../views/Home.vue'
 import Edit from '../views/Edit.vue'
 import About from '../views/About.vue'
 import Show from '../views/Show.vue'
+import Tree from '../views/Tree.vue'
+import MyComponent from '../views/MyComponent.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -31,6 +33,18 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: Show
+  },
+
+  {
+    path: '/stablo',
+    name: 'Tree',
+    component: Tree
+  },
+
+  {
+    path: '/tutorial',
+    name: 'MyComponent',
+    component: MyComponent
   }
 ]
 
