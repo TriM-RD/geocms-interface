@@ -10,7 +10,6 @@ import { EventHandlerType } from '../events/types/objectTypes/types'
 
 export namespace Manager.Mechanic{
 
-
   export class ColumnMechanic extends MechanicAbstract {
     public async InitGet (_id: string): Promise<ObjectTemplate[]> {
       this.ObjectTemplates = []

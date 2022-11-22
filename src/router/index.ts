@@ -35,8 +35,8 @@ const routes: Array<RouteRecordRaw> = [
     component: Show
   },
   {
-    path: '/divisions',
-    name: 'Divisions',
+    path: '/division',
+    name: 'Division',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -53,8 +53,8 @@ const routes: Array<RouteRecordRaw> = [
     component: Map
   },
   {
-    path: '/groups',
-    name: 'Groups',
+    path: '/group',
+    name: 'Group',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.

@@ -1,7 +1,7 @@
 <template>
-<nav class="navbar fixed-bottom navbar-light bg-light">
+<nav v-if="renderComponent" class="navbar fixed-bottom navbar-light bg-light">
   <form class="container-fluid justify-content-around">
-  <component class="ms-3"  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'> </component>
+  <component v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'> </component>
   </form>
   </nav>
     <router-view/>
@@ -9,6 +9,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
+import { Watch } from 'vue-property-decorator'
 import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
 import {
   ObjectType,
@@ -32,7 +33,8 @@ export default class FooterComponent extends Vue {
   objectType = ObjectType
   object!: ObjectTemplate
   index!: number
-  objectTemplates = this.mechanic.InitSet(
+  renderComponent= false
+  objectTemplates!: ObjectTemplate[] /* = this.mechanic.InitSet(
     [
       new ObjectTemplate(RegionEnum.Footer, ObjectTypeEnum.Button, SubObjectTypeEnum.Middle, ActionTypeEnum.Click, {
         [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Add'),
@@ -55,10 +57,18 @@ export default class FooterComponent extends Vue {
         [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-success me-2 flex-fill')
       })
     ]
-  )
+  ) */
+  openTab!: string
+
+  @Watch('$route')
+  onDataChanged (value: any, oldValue: string) {
+    this.renderComponent = false
+    this.openTab = value.name
+    this.choose()
+  }
 
   mounted () {
-    // this.choose()
+    this.choose()
   }
 
   beforeUnmount () {
@@ -70,24 +80,37 @@ export default class FooterComponent extends Vue {
   }
 
   choose () {
-    let test = ''
-    test = 'test'
-    switch (test) {
-      case 'device':
+    this.objectTemplates = []
+    switch (this.openTab) {
+      case 'Device':
         this.objectTemplates = this.mechanic.InitSet(
           [
-            new ObjectTemplate(RegionEnum.Footer, ObjectTypeEnum.Button, SubObjectTypeEnum.Middle, ActionTypeEnum.Click, {
+            new ObjectTemplate(RegionEnum.Footer, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
               [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Scan'),
               [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-success me-2 flex-fill')
             }),
-            new ObjectTemplate(RegionEnum.Footer, ObjectTypeEnum.Button, SubObjectTypeEnum.Middle, ActionTypeEnum.Click, {
+            new ObjectTemplate(RegionEnum.Footer, ObjectTypeEnum.Button, SubObjectTypeEnum.Right, ActionTypeEnum.Click, {
               [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Add'),
               [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-secondary flex-fill')
             })
           ]
         )
         break
+      case 'Group':
+        this.objectTemplates = this.mechanic.InitSet(
+          [
+            new ObjectTemplate(RegionEnum.Footer, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Save'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-success me-2 flex-fill')
+            }),
+            new ObjectTemplate(RegionEnum.Footer, ObjectTypeEnum.Button, SubObjectTypeEnum.Right, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Cancel'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-secondary flex-fill')
+            })
+          ]
+        )
     }
+    this.renderComponent = true
   }
 }
 </script>

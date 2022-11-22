@@ -10,13 +10,13 @@
     <router-link to="/device" class="nav-link boja">Devices</router-link>
   </li>
   <li class="nav-item border">
-    <router-link to="/permission" class="nav-link boja">Permission</router-link>
+    <router-link to="/permission" class="nav-link boja">Permissions</router-link>
   </li>
   <li class="nav-item border">
-    <router-link to="/groups" class="nav-link boja">Groups</router-link>
+    <router-link to="/group" class="nav-link boja">Groups</router-link>
   </li>
   <li class="nav-item border">
-    <router-link to="/divisions" class="nav-link boja">Divisions</router-link>
+    <router-link to="/division" class="nav-link boja">Divisions</router-link>
   </li>
 </ul>
 </div>

@@ -92,14 +92,4 @@ export namespace Manager.Events.Type{
       alert(this.Data)
     }
   }
-
-  export class EncompassHtml extends StatAbstract {
-    public CreateStat (): StatAbstract {
-      return new Placeholder()
-    }
-
-    public CheckRequirements (_object: any): void {
-      alert(this.Data)
-    }
-  }
 }
