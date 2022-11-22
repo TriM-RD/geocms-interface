@@ -11,6 +11,7 @@
         label: 'label', expand: 'expand', children: 'children',  key:'some_id', permission: 'permission'}">
       <template @nodeExpand="test()"  #node="{data}" >
           <label>
+            Test
             {{data.label}}
           </label>
 
