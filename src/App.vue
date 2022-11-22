@@ -3,7 +3,7 @@
     <router-link to="/">Dodaj Novi</router-link> |
     <router-link to="/show">Prikaži Sve</router-link> |
     <router-link to="/stablo">Stablo</router-link> |
-    <router-link to="/tutorial">Tutorial</router-link>
+    <router-link to="/permissionsTree">Permission Tree</router-link>
   </div>
   <router-view/>
 </template>

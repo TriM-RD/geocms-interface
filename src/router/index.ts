@@ -4,7 +4,7 @@ import Edit from '../views/Edit.vue'
 import About from '../views/About.vue'
 import Show from '../views/Show.vue'
 import Tree from '../views/Tree.vue'
-import MyComponent from '../views/MyComponent.vue'
+import PermissionsTree from '../views/PermissionsTree.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -42,9 +42,9 @@ const routes: Array<RouteRecordRaw> = [
   },
 
   {
-    path: '/tutorial',
+    path: '/permissionsTree',
     name: 'MyComponent',
-    component: MyComponent
+    component: PermissionsTree
   }
 ]
 

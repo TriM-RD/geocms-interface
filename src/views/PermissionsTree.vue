@@ -9,19 +9,25 @@
   <div>
     <blocks-tree :data="permissionsTreeData" :horizontal="treeOrientation=='1'" :collapsable="true" :props="{
         label: 'label', expand: 'expand', children: 'children',  key:'some_id', permission: 'permission'}">
-      <template #node="{data}" ><!-- ",context" ovo je next to data !-->
-        <div @click="show(data)"  @dragover.prevent @drop.prevent="drop">
-        {{data.label}}
-        <br>
-            <span v-if="data.expand">
-              <button @click="addChildButton(data)" > Add</button>
-              <button @click="deleteData(data)" > Delete</button>
-                <input type="checkbox" :checked="selected.indexOf(data.some_id)> -1" @change="(e)=>toggleSelect(data,e.target.checked)"/>
-            </span>
-        <!--<span v-if="data.children && data.children.length">
-                <a href="#" @click="context.toggleExpand">toggle expand</a>
-            </span>!-->
-        </div>
+      <template  #node="{data}" ><!-- ",context" ovo je bilo next to data !-->
+          <div >
+          <div @click="show(data)" >
+            {{data.label}}
+          </div>
+
+              <span v-if="data.expand">
+                <p>Child name:
+                <input type="text" v-model="data.newChildName" style="width: 100px"/>
+                </p>
+                <button @click="addChildButton(data, data.newChildName)" > Add child</button>
+
+                <p></p>
+                <button @click="deleteData(data)" > Delete this</button>
+              </span>
+          <!--<span v-if="data.children && data.children.length">
+                  <a href="#" @click="context.toggleExpand">toggle expand</a>
+              </span>!-->
+          </div>
       </template>
     </blocks-tree>
     <div>
@@ -47,21 +53,20 @@ import Tree from '@/views/Tree.vue'
 import { index } from 'd3'
 
 export default defineComponent({
-  name: 'MyComponent',
+  name: 'PermissionsTree',
   setup: function () {
     const selected = ref([])
-    let index = 4
+    let index = 50
     const treeOrientation = ref('0')
     const permissionsTreeData = reactive <TreeData>(
       {
         label: 'root',
         expand: true,
         some_id: 0,
+        newChildName: '',
         permission: {
           id: 0,
           title: 'string',
-          // eslint-disable-next-line camelcase
-          parent_id: 2,
           lft: 4,
           rgt: 5
         },
@@ -120,38 +125,28 @@ export default defineComponent({
 
     ])
 
-    const childPermission = ref <Permission>({
-      id: 9,
-      title: 'haleluya',
-      // eslint-disable-next-line camelcase
-      parent_id: 20,
-      lft: 4,
-      rgt: 6
-    })
-
-    function addChild () {
-      // eslint-disable-next-line no-unused-expressions
-      const newPermission: TreeData = {
-        label: 'child',
-        expand: true,
-        some_id: 23,
-        permission: childPermission.value,
-        children: []
-      }
-      // eslint-disable-next-line no-unused-expressions
-      permissionsTreeData.children.push(newPermission)
-    }
-
     function addChildButton (data: TreeData):void{
+      if (data.newChildName === '') {
+        return
+      }
       index = index + 1
       const newPermission: TreeData = {
-        label: 'child',
-        expand: true,
+        label: data.newChildName,
+        expand: false,
         some_id: index,
-        permission: childPermission.value,
+        newChildName: '',
+        permission: {
+          id: index,
+          title: data.newChildName,
+          // eslint-disable-next-line camelcase
+          parent_id: 20,
+          lft: 4,
+          rgt: 6
+        },
         parent: data,
         children: []
       }
+      data.newChildName = ''
       data.children.push(newPermission)
     }
 
@@ -176,10 +171,8 @@ export default defineComponent({
 
     return {
       permissionsTreeData,
-      addChild,
       selected,
       treeOrientation,
-      childPermission,
       addChildButton,
       show,
       logData,
@@ -213,8 +206,9 @@ export default defineComponent({
         else {
           const newTreeData: TreeData = {
             label: perm.title,
-            expand: true,
+            expand: false,
             some_id: perm.id,
+            newChildName: '',
             permission: perm,
             children: []
           }
@@ -224,7 +218,7 @@ export default defineComponent({
               newTreeData.parent = data
               data.children.push(newTreeData)
               treeObjects.push(newTreeData)
-              console.log(treeObjects)
+              // console.log(treeObjects)
             }
           }
         }

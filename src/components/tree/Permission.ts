@@ -17,6 +17,7 @@ export interface TreeData{
   expand: boolean,
   // eslint-disable-next-line camelcase
   some_id: number,
+  newChildName: string,
   permission: Permission,
   parent?: TreeData,
   children: TreeData[]
