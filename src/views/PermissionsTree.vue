@@ -7,19 +7,14 @@
 
   <h1>With slots</h1>
   <div>
-    <blocks-tree :data="permissionsTreeData" :horizontal="treeOrientation=='1'" :collapsable="true" :props="{
+    <blocks-tree @node-click="show" :data="permissionsTreeData" :horizontal="treeOrientation=='1'" :collapsable="true" :props="{
         label: 'label', expand: 'expand', children: 'children',  key:'some_id', permission: 'permission'}">
-      <template  #node="{data}" ><!-- ",context" ovo je bilo next to data !-->
-          <div :id="data.some_id"
-               @dragover.prevent
-               @drag.prevent="drag"
-               @drop.prevent="drop"
-                :draggable="dragable">
-          <div @click="show(data)" >
+      <template @nodeExpand="test()"  #node="{data}" >
+          <label>
             {{data.label}}
-          </div>
+          </label>
 
-              <span v-if="data.expand">
+              <span v-show="data.expand">
                 <p>Child name:
                 <input type="text" v-model="data.newChildName" style="width: 100px"/>
                 </p>
@@ -28,10 +23,6 @@
                 <p></p>
                 <button @click="deleteData(data)" > Delete this</button>
               </span>
-          <!--<span v-if="data.children && data.children.length">
-                  <a href="#" @click="context.toggleExpand">toggle expand</a>
-              </span>!-->
-          </div>
       </template>
     </blocks-tree>
     <div>
@@ -155,8 +146,10 @@ export default defineComponent({
       data.children.push(newPermission)
     }
 
-    function show (data:TreeData) {
-      data.expand = !data.expand
+    function show (e : any, data : any, test : any) {
+      if (e.target.tagName.toLowerCase() === 'div' || (e.target.tagName.toLowerCase() === 'label' && !data.expand)) {
+        data.expand = !data.expand
+      }
     }
 
     function logData () {

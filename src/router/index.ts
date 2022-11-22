@@ -12,6 +12,7 @@ import AttributeAdd from '../views/AttributeAdd.vue'
 import CategoriesAdd from '../views/CategoriesAdd.vue'
 import DeviceAppend from '../views/DeviceAppend.vue'
 import DeviceCabinet from '../views/DeviceCabinet.vue'
+import PermissionsTree from '@/views/PermissionsTree.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -66,7 +67,7 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: Show
+    component: PermissionsTree
   },
   {
     path: '/show/:id',
