@@ -8,9 +8,9 @@ import Groups from '../views/Groups.vue'
 import Divisions from '../views/Divisions.vue'
 import Permission from '../views/Permission.vue'
 import DeviceAdd from '../views/DeviceAdd.vue'
-import TypesAdd from '../views/TypesAdd.vue'
+import GroupAdd from '../views/GroupAdd.vue'
 import AttributeAdd from '../views/AttributeAdd.vue'
-import CategoriesAdd from '../views/CategoriesAdd.vue'
+import DivisionAdd from '../views/DivisionAdd.vue'
 import DeviceAppend from '../views/DeviceAppend.vue'
 import DeviceCabinet from '../views/DeviceCabinet.vue'
 import PermissionsTree from '@/views/PermissionsTree.vue'
@@ -87,12 +87,12 @@ const routes: Array<RouteRecordRaw> = [
     component: DeviceAdd
   },
   {
-    path: '/types/add',
-    name: 'TypesAdd',
+    path: '/group/add',
+    name: 'GroupAdd',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: TypesAdd
+    component: GroupAdd
   },
   {
     path: '/attribute/add',
@@ -103,12 +103,12 @@ const routes: Array<RouteRecordRaw> = [
     component: AttributeAdd
   },
   {
-    path: '/categories/add',
-    name: 'CategoriesAdd',
+    path: '/division/add',
+    name: 'DivisionAdd',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: CategoriesAdd
+    component: DivisionAdd
   },
   {
     path: '/device/append',

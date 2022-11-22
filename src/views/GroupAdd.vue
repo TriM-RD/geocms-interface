@@ -16,7 +16,7 @@ import TableComponent from '@/components/TableComponent.vue'
     TableComponent
   }
 })
-export default class TypesAdd extends Vue {}
+export default class GroupAdd extends Vue {}
 </script>
 <style scoped>
 </style>
