@@ -1,8 +1,7 @@
 <template>
   <Loading v-model:active="renderComponent"
-           :can-cancel="true"
-           :on-cancel="onCancel"
-           :is-full-page="fullPage"/>
+           :can-cancel="false"
+           :is-full-page="false"/>
   <table class="table" v-if="!renderComponent">
   <thead class="table-light">
     <tr>
