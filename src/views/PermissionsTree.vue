@@ -10,7 +10,11 @@
     <blocks-tree :data="permissionsTreeData" :horizontal="treeOrientation=='1'" :collapsable="true" :props="{
         label: 'label', expand: 'expand', children: 'children',  key:'some_id', permission: 'permission'}">
       <template  #node="{data}" ><!-- ",context" ovo je bilo next to data !-->
-          <div >
+          <div :id="data.some_id"
+               @dragover.prevent
+               @drag.prevent="drag"
+               @drop.prevent="drop"
+                :draggable="dragable">
           <div @click="show(data)" >
             {{data.label}}
           </div>
@@ -57,6 +61,7 @@ export default defineComponent({
   setup: function () {
     const selected = ref([])
     let index = 50
+    const dragData = ref()
     const treeOrientation = ref('0')
     const permissionsTreeData = reactive <TreeData>(
       {
@@ -77,7 +82,7 @@ export default defineComponent({
     const databaseData = reactive <permission[]>([
       {
         id: 1,
-        title: 'a',
+        title: 'DSAKFSALRKASLKRFLASKJFSA',
         // eslint-disable-next-line camelcase
         lft: 1,
         rgt: 1
@@ -178,7 +183,8 @@ export default defineComponent({
       logData,
       deleteData,
       index,
-      databaseData
+      databaseData,
+      dragData
     }
   },
   mounted () {
