@@ -10,7 +10,9 @@ export enum ObjectTypeEnum {
   CheckBox,
   DataList,
   SelectList,
-  Radio
+  Radio,
+  Column,
+  ColumnButton
 }
 
 export class ObjectType {

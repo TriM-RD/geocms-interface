@@ -11,7 +11,7 @@ import { EventHandlerType } from '../events/types/objectTypes/types'
 export namespace Manager.Mechanic{
 
   export class FooterMechanic extends MechanicAbstract {
-    public async InitGet (_id = -1): Promise<ObjectTemplate[]> {
+    public async InitGet (_id = '-1'): Promise<ObjectTemplate[]> {
       this.ObjectTemplates = []
       const response = await http.get('http://blog.test/api/entity')
       return (this.ObjectTemplates = this.forEachElement(response.data))
@@ -28,7 +28,9 @@ export namespace Manager.Mechanic{
     }
 
     private reStructure (stats: any): any {
+      console.log(JSON.parse(JSON.stringify(stats)))
       let temp = {}
+      // temp = Object.assign(temp, { [_index]: StatType.StatTypes[_index]().CreateStat().InitData(_stat.Data != null ? _stat.Data : '') })
       stats.forEach((_stat : any, _index: number) => { temp = Object.assign(temp, { [_index]: StatType.StatTypes[_index]().CreateStat().InitData(_stat.Data != null ? _stat.Data : '') }) })
       return temp
     }

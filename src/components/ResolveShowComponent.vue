@@ -1,5 +1,5 @@
 <template>
-  <h1 v-if="object.Stats[statTypeEnum.Tag].Data === 'Title'">{{object.Stats[statTypeEnum.Value].Data}}</h1>
+  <h1 v-if="object.Stats[statTypeEnum.Tag].Data === 'Code'">{{object.Stats[statTypeEnum.Value].Data}}</h1>
   <div v-html="object.Stats[statTypeEnum.Value].Data" v-if="object.Stats[statTypeEnum.Tag].Data === 'Content'"></div>
   <br v-if="object.Stats[statTypeEnum.Tag].Data === 'Content'">
   <div v-if="object.Stats[statTypeEnum.Tag].Data === 'Author'">

@@ -8,7 +8,8 @@ export enum StatTypeEnum {
   Id,
   ElementType,
   Placeholder,
-  ItemList
+  ItemList,
+  EncompassHtml
 }
 
 export class StatType {
@@ -21,6 +22,7 @@ export class StatType {
    [StatTypeEnum.Id]: new Manager.Events.Type.Id().CreateStat,
    [StatTypeEnum.ElementType]: new Manager.Events.Type.ElementType().CreateStat,
    [StatTypeEnum.Placeholder]: new Manager.Events.Type.Placeholder().CreateStat,
-   [StatTypeEnum.ItemList]: new Manager.Events.Type.ItemList().CreateStat
+   [StatTypeEnum.ItemList]: new Manager.Events.Type.ItemList().CreateStat,
+   [StatTypeEnum.EncompassHtml]: new Manager.Events.Type.EncompassHtml().CreateStat
  }
 }

@@ -36,22 +36,24 @@ export namespace Manager.Events.Type{
   export class TableColumn extends RegionAbstract {
     public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
     {
-      [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button()
+      [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button(),
+      [ObjectTypeEnum.Column]: new ObjectTypeAbstract.Events.Type.Column(),
+      [ObjectTypeEnum.ColumnButton]: new ObjectTypeAbstract.Events.Type.ColumnButton()
     }
   }
 
   export class Show extends RegionAbstract {
     public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
-    {
-      [ObjectTypeEnum.ShowResolve]: new ObjectTypeAbstract.Events.Type.ShowResolve()
-    }
+      {
+        [ObjectTypeEnum.ShowResolve]: new ObjectTypeAbstract.Events.Type.ShowResolve()
+      }
   }
 
-  export class ContentToolkit extends RegionAbstract {
+  export class TableRow extends RegionAbstract {
     public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
-    {
-      [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button()
-    }
+      {
+        [ObjectTypeEnum.ShowResolve]: new ObjectTypeAbstract.Events.Type.ShowResolve()
+      }
   }
 
   export class Footer extends RegionAbstract {

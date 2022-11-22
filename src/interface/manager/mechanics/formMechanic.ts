@@ -13,12 +13,12 @@ import { ActionTypeEnum } from '../events/types'
 export namespace Manager.Mechanic{
 
   export class FormMechanic extends MechanicAbstract {
-    private id = -1;
+    private id = '-1';
     private inEdit = false;
 
-    public async InitGet (_id = -1): Promise<ObjectTemplate[]> {
+    public async InitGet (_id: string): Promise<ObjectTemplate[]> {
       this.id = _id
-      if (this.id === -1) {
+      if (this.id === '-1') {
         this.id = (await http.get('http://blog.test/api/entity/' + this.id)).data
         console.log(this.id)
         const response = await http.get('http://blog.test/api/form')
@@ -81,7 +81,6 @@ export namespace Manager.Mechanic{
 
       switch (eventHandler.subObjectType) {
         case SubObjectTypeEnum.Middle:
-          console.log(this.ObjectTemplates)
           if (this.inEdit) {
             await http.patch('http://blog.test/api/entity/' + this.id, this.ObjectTemplates)
               .then(response => (router.push({ name: 'Show', params: { id: response.data.id } })))
@@ -91,33 +90,17 @@ export namespace Manager.Mechanic{
           }
           break
         case SubObjectTypeEnum.ParentObject:
-          console.log(this.ObjectTemplates)
-          if (this.compare(eventHandler.payload) === -1) { this.ObjectTemplates.splice(this.ObjectTemplates.length - 2, 0, eventHandler.payload) }
-          console.log(this.ObjectTemplates)
-          break
-        case SubObjectTypeEnum.Left:
-          console.log(this.ObjectTemplates)
-          console.log(eventHandler.payload)
-          if (eventHandler.payload.Stats[StatTypeEnum.Value].Data !== '') {
-            this.ObjectTemplates.splice(this.compare(eventHandler.payload), 1)
-          } else {
-            if (this.ObjectTemplates.indexOf(eventHandler.payload) !== -1) {
-              this.ObjectTemplates.splice(this.ObjectTemplates.indexOf(eventHandler.payload), 1)
-            }
-          }
-          console.log(this.ObjectTemplates)
-          break
-        case SubObjectTypeEnum.Right:
-          console.log(this.ObjectTemplates)
-          console.log(this.ObjectTemplates)
+          /* console.log(this.ObjectTemplates)
+          if (this.compare(eventHandler.payload) === '-1') { this.ObjectTemplates.splice(this.ObjectTemplates.length - 2, 0, eventHandler.payload) }
+          console.log(this.ObjectTemplates) */
           break
         default:
           break
       }
     }
 
-    private compare (objectToCompare: ObjectTemplate): number {
-      let answer = -1
+    /* private compare (objectToCompare: ObjectTemplate): string {
+      let answer = '-1'
       for (let i = 0; i < this.ObjectTemplates.length; i++) {
         if (this.ObjectTemplates[i].Stats[StatTypeEnum.Value].Data === objectToCompare.Stats[StatTypeEnum.Value].Data) {
           answer = i
@@ -126,6 +109,26 @@ export namespace Manager.Mechanic{
       }
       return answer
     }
+
+    private async upgrade () {
+      let runOnce = false
+      const prevObjectTemplates = this.ObjectTemplates
+      this.InitSet(await this.InitGet(-1))
+      prevObjectTemplates.forEach((_prevObject: ObjectTemplate) => {
+        this.ObjectTemplates.forEach((_object: ObjectTemplate) => {
+          _object.Stats[StatTypeEnum.Id].Data = _prevObject.Stats[StatTypeEnum.Id].Data
+          if (_object.Stats[StatTypeEnum.Tag].Data === _prevObject.Stats[StatTypeEnum.Tag].Data) {
+            _object.Stats = _prevObject.Stats
+            _object = _prevObject
+          } else if (_prevObject.Stats[StatTypeEnum.Tag].Data === 'Content' && !runOnce) {
+            runOnce = true
+            this.ObjectTemplates.splice(this.ObjectTemplates.length - 2, 0, new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.ModularText, SubObjectTypeEnum.ParentObject, ActionTypeEnum.AppendEntity, _prevObject.Stats))
+          }
+        })
+      })
+      this.inEdit = true
+      this.id = Number(this.ObjectTemplates[0].Stats[StatTypeEnum.Id].Data)
+    } */
   }
 
 }

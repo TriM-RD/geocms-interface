@@ -24,7 +24,7 @@ import { ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, RegionEnum } from
     object: ObjectTemplate
   }
 })
-export default class TypesAddComponent extends Vue {
+export default class CategoriesAddComponent extends Vue {
           statTypeEnum = StatTypeEnum
           objectTypeEnum = ObjectTypeEnum
           objectType = ObjectType

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$route.params.id !== undefined" class="mb-5 mt-0"><component :is="getComponent(constEntity.Region, constEntity.ObjectEnum)" :object='constEntity' @click="upgrade()"></component></div>
+  <!--div v-if="$route.params.id !== undefined" class="mb-5 mt-0"><component :is="getComponent(constEntity.Region, constEntity.ObjectEnum)" :object='constEntity' @click="upgrade()"></component></div-->
   <form v-if="renderComponent">
     <component  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'> </component>
   </form>
@@ -37,7 +37,7 @@ export default class FormComponent extends Vue {
   }
 
   async Init () {
-    this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id === undefined ? -1 : Number(this.$route.params.id)))
+    this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id === undefined ? '-1' : String(this.$route.params.id)))
     this.renderComponent = true
   }
 

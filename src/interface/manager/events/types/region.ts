@@ -1,6 +1,6 @@
 import { Manager } from './regionTypes/types'
 
-export enum RegionEnum {Form, Table, TableColumn, Show, ContentToolkit, Footer}
+export enum RegionEnum {Form, Table, TableColumn, TableRow, Show, Footer}
 
 export class RegionType {
     public static RegionTypes: { [index: number]: Manager.Events.Type.RegionAbstract } =
@@ -9,6 +9,7 @@ export class RegionType {
       [RegionEnum.Table]: new Manager.Events.Type.Table(),
       [RegionEnum.TableColumn]: new Manager.Events.Type.TableColumn(),
       [RegionEnum.Show]: new Manager.Events.Type.Show(),
-      [RegionEnum.Footer]: new Manager.Events.Type.Footer()
+      [RegionEnum.Footer]: new Manager.Events.Type.Footer(),
+      [RegionEnum.TableRow]: new Manager.Events.Type.TableRow()
     }
 }

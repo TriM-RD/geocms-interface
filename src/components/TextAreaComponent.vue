@@ -20,7 +20,7 @@ import { ObjectType, StatTypeEnum, ObjectTypeEnum } from '@/interface/manager/ev
     object: ObjectTemplate
   }
 })
-export default class InputComponent extends Vue {
+export default class TextAreaComponent extends Vue {
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType

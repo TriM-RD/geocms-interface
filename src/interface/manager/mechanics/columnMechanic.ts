@@ -10,7 +10,8 @@ import { EventHandlerType } from '../events/types/objectTypes/types'
 
 export namespace Manager.Mechanic{
 
-  export class RowMechanic extends MechanicAbstract {
+
+  export class ColumnMechanic extends MechanicAbstract {
     public async InitGet (_id: string): Promise<ObjectTemplate[]> {
       this.ObjectTemplates = []
       const response = await http.get('http://blog.test/api/entity')
@@ -36,12 +37,7 @@ export namespace Manager.Mechanic{
     }
 
     public InitSet (_objectTemplates: ObjectTemplate[]): ObjectTemplate[] {
-      console.log(_objectTemplates)
-      this.ObjectTemplates = []
-      for (const _object of _objectTemplates) {
-        this.ObjectTemplates.push(new ObjectTemplate(RegionEnum.TableColumn, ObjectTypeEnum.Column, SubObjectTypeEnum.ParentObject, ActionTypeEnum.Click, _object.Stats))
-      }
-      console.log(this.ObjectTemplates)
+      this.ObjectTemplates = _objectTemplates
       return this.ObjectTemplates
     }
 
