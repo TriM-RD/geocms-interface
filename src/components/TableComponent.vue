@@ -1,5 +1,9 @@
 <template>
-  <table class="table" v-if="renderComponent">
+  <Loading v-model:active="renderComponent"
+           :can-cancel="true"
+           :on-cancel="onCancel"
+           :is-full-page="fullPage"/>
+  <table class="table" v-if="!renderComponent">
   <thead class="table-light">
     <tr>
       <th v-for="(header, key) in headers" :key="`${ key }-${ header }-${ Math.random().toString(36).slice(2, 7) }`" scope="col">
@@ -15,11 +19,17 @@
 </template>
 
 <script lang="ts">
+import Loading from 'vue-loading-overlay'
 import { Options, Vue } from 'vue-class-component'
 import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
 import { Manager } from '@/interface/manager/mechanics/tableMechanic'
 import { MechanicAbstract } from '@/interface/manager/mechanics/mechanicAbstract'
 import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatTypeEnum, StatType, ObjectType, RegionType } from '@/interface/manager/events/types/index'
+@Options({
+  components: {
+    Loading
+  }
+})
 export default class TableComponent extends Vue {
   headers!: string[]
   regionEnum = RegionEnum
@@ -27,7 +37,7 @@ export default class TableComponent extends Vue {
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType
   mechanic: MechanicAbstract = new Manager.Mechanic.TableMechanic()
-  renderComponent= false
+  renderComponent= true
   objectTemplates!: ObjectTemplate[]
   entities!: ObjectTemplate[][]
 
@@ -66,7 +76,7 @@ export default class TableComponent extends Vue {
       this.entities[this.entities.length] = tempObjectTemplates
     }
     this.getHeaders()
-    this.renderComponent = true
+    this.renderComponent = false
   }
 
   getHeaders () : void { // TODO Needs to be reworked. @JosoMarich
