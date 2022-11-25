@@ -4,10 +4,10 @@ export interface NodeContext {
 }
 
 interface Permission{
-  id: number,
+  id: string,
   title: string,
   // eslint-disable-next-line camelcase
-  parent_id?: number,
+  parent_id?: string,
   lft: number,
   rgt: number
 }
@@ -16,8 +16,9 @@ export interface TreeData{
   label: string,
   expand: boolean,
   // eslint-disable-next-line camelcase
-  some_id: number,
+  some_id: string,
   newChildName: string,
+  rename:string,
   permission: Permission,
   parent?: TreeData,
   children: TreeData[]
