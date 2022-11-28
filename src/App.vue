@@ -49,10 +49,11 @@ export default class App extends Vue {
   }
 
   async checkBearer () : Promise<void> {
-    await http.get('http://blog.test/api/form').then(response => {
+    await http.get('http://blog.test/api/user').then(response => {
       // success
+      this.$store.state.name = response.data.name
+      this.$store.state.email = response.data.email
       this.$store.state.requiresAuth = true
-      console.log(response)
     }, response => {
       // error
       const temp = String(response)
