@@ -6,7 +6,8 @@
     <blocks-tree :data="permissionsTreeData" :horizontal="treeOrientation=='1'"  :collapsable="true" ></blocks-tree>
   </div>
   -->
-  <button class="btn btn-primary btn-lg " @click="save">Save changes</button>
+  <FlashMessage position="right top" strategy="single" />
+  <button class="btn btn-primary btn-lg " @click="test">Save changes</button>
   <h1>Current tree</h1>
   <div>
     <blocks-tree   @node-click="show" :data="permissionsTreeData" :horizontal="treeOrientation=='1'" :collapsable="true" :props="{
@@ -56,6 +57,7 @@ import permission, { TreeData } from '@/components/tree/Permission'
 import Permission from '@/components/tree/Permission'
 import Tree from '@/views/Tree.vue'
 import { index } from 'd3'
+import { flashMessage } from '@smartweb/vue-flash-message'
 
 export default defineComponent({
   name: 'PermissionsTree',
@@ -133,9 +135,12 @@ export default defineComponent({
 
     ])
 
-    function addChildButton (data: TreeData):void{
+    function addChild (data: TreeData):[string, string, string] {
       if (data.newChildName === '') {
-        return
+        return ['error',
+          'Child error',
+          'Child name input field cannot be empty'
+        ]
       }
       index = (parseInt(index) + 1).toString()
       const newPermission: TreeData = {
@@ -155,9 +160,14 @@ export default defineComponent({
         parent: data,
         children: []
       }
+      const temp = data.newChildName
       data.newChildName = ''
       data.children.push(newPermission)
       startPreorder()
+      return ['success',
+        'Child added successfuly',
+        `Child " ${temp} " successfuly added to " ${data.label} "`
+      ]
     }
 
     function show (e : any, data : any) {
@@ -212,7 +222,7 @@ export default defineComponent({
       permissionsTreeData,
       selected,
       treeOrientation,
-      addChildButton,
+      addChild,
       show,
       logData,
       deleteData,
@@ -264,6 +274,25 @@ export default defineComponent({
       }
 
       this.startPreorder()
+    },
+    test () {
+      this.$flashMessage.changeStrategy('single')
+      this.$flashMessage.show({
+        type: 'error',
+        title: 'Error Message Title'
+      })
+    },
+    addChildButton (data: TreeData) {
+      const created: [string, string, string] = this.addChild(data)
+      this.flashMessage(created)
+    },
+    flashMessage (text: [string, string, string]) {
+      this.$flashMessage.show({
+        type: text[0],
+        title: text[1],
+        text: text[2],
+        time: 3000
+      })
     }
   }
 })
