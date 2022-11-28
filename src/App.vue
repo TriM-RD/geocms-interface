@@ -1,10 +1,10 @@
 <template>
-  <div v-if="requiresAuth == true">
+  <div v-if="$store.state.requiresAuth === true">
     <NavBarComponent/>
     <NavComponent />
     <!-- Contect></Contect-->
+    <FooterComponent />
   </div>
-  <FooterComponent />
 </template>
 
 <style>
@@ -51,7 +51,7 @@ export default class App extends Vue {
   async checkBearer () : Promise<void> {
     await http.get('http://blog.test/api/form').then(response => {
       // success
-      createStore.state.requiresAuth = true
+      this.$store.state.requiresAuth = true
       console.log(response)
     }, response => {
       // error
