@@ -19,7 +19,7 @@ import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatType
   }
 })
 export default class RowComponent extends Vue {
-  mechanic: MechanicAbstract = new Manager.Mechanic.RowMechanic()
+  mechanic: MechanicAbstract = Manager.Mechanic.RowMechanic.getInstance()
   regionEnum = RegionEnum
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
@@ -36,9 +36,7 @@ export default class RowComponent extends Vue {
     }
     this.objectTemplates = this.mechanic.Append(
       [
-        new ObjectTemplate(RegionEnum.TableColumn, ObjectTypeEnum.ColumnButton, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
-          [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Delete'),
-          [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-danger'),
+        new ObjectTemplate(RegionEnum.TableColumn, ObjectTypeEnum.ColumnButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
           [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.objectTemplates[0].Stats[StatTypeEnum.Id].Data)
         })
       ]

@@ -14,6 +14,6 @@ import http from '@/http-common' // @ is an alias to /src
     FormComponent
   }
 })
-export default class Add extends Vue {
+export default class Form extends Vue {
 }
 </script>

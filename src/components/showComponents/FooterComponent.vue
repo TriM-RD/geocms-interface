@@ -4,7 +4,7 @@
   <component v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'> </component>
   </form>
   </nav>
-    <router-view/>
+    <router-view :key="$route.fullPath"/>
 </template>
 
 <script lang="ts">

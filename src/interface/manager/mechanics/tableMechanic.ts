@@ -6,6 +6,7 @@ import http from '@/http-common'
 import { StatType, StatTypeEnum } from '../events/types/statType'
 import { RegionEnum, ActionTypeEnum, RegionType } from '@/interface/manager/events/types/index'
 import { EventHandlerType } from '../events/types/objectTypes/types'
+import router from '@/router'
 
 export namespace Manager.Mechanic{
 
@@ -53,15 +54,30 @@ export namespace Manager.Mechanic{
     }
 
     protected SubscribeConditions (): void {
-      // RegionType.RegionTypes[RegionEnum.Table].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
+      RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
     }
 
     public UnsubscribeConditions () {
-      // RegionType.RegionTypes[RegionEnum.Table].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
+      RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
     }
 
     protected Button (_eventHandler: EventHandlerType): void {
-      throw new Error('Method not implemented.')
+      const _id = _eventHandler.payload.Stats[StatTypeEnum.Id].Data
+      switch (_eventHandler.subObjectType) {
+        case SubObjectTypeEnum.Left:// Izbriši
+          http.delete('http://blog.test/api/entity/' + _id)
+            .then(response => (router.push({ name: 'Device' })))
+          router.push({ name: 'Group' })
+          break
+        case SubObjectTypeEnum.Middle: // Uredi
+          router.push({ name: 'DeviceEdit', params: { id: _id } })
+          break
+        case SubObjectTypeEnum.Right: // Pregledaj
+          router.push({ name: 'DeviceEdit', params: { id: _id } })
+          break
+        default:
+          break
+      }
     }
   }
 

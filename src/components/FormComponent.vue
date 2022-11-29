@@ -1,6 +1,8 @@
 <template>
-  <!--div v-if="$route.params.id !== undefined" class="mb-5 mt-0"><component :is="getComponent(constEntity.Region, constEntity.ObjectEnum)" :object='constEntity' @click="upgrade()"></component></div-->
-  <form v-if="renderComponent">
+  <Loading v-model:active="renderComponent"
+           :can-cancel="false"
+           :is-full-page="false"/>
+  <form v-if="!renderComponent">
     <component  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'> </component>
   </form>
 </template>
@@ -11,15 +13,16 @@ import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTempl
 import { Manager } from '@/interface/manager/mechanics/formMechanic'
 import { MechanicAbstract } from '@/interface/manager/mechanics/mechanicAbstract'
 import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatTypeEnum, StatType, ObjectType, RegionType } from '@/interface/manager/events/types/index'
+import Loading from 'vue-loading-overlay'
 @Options({
-  props: {
-    msg: String
+  components: {
+    Loading
   }
 })
 export default class FormComponent extends Vue {
   msg!: string
   mechanic: MechanicAbstract = new Manager.Mechanic.FormMechanic()
-  renderComponent= false
+  renderComponent= true
   objectTemplates!: ObjectTemplate[]
   constEntity = new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Right, ActionTypeEnum.Click, {
     [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Nadogradi Formu'),
@@ -38,17 +41,11 @@ export default class FormComponent extends Vue {
 
   async Init () {
     this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id === undefined ? '-1' : String(this.$route.params.id), 'entity'))
-    this.renderComponent = true
+    this.renderComponent = false
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {
     return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetVueComponent()
-  }
-
-  upgrade () {
-    this.renderComponent = false
-    this.objectTemplates = this.mechanic.ObjectTemplates
-    this.renderComponent = true
   }
 }
 </script>

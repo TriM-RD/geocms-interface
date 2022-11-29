@@ -1,5 +1,5 @@
 <template v-if="renderComponent">
-  <button :class="`${object.Stats[statTypeEnum.Design].Data}`" @Click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object)'>{{object.Stats[statTypeEnum.Label].Data}}</button>
+  <button :class="`${object.Stats[statTypeEnum.Design].Data}`" @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object)'>{{object.Stats[statTypeEnum.Label].Data}}</button>
   <slot></slot>
 </template>
 
@@ -20,15 +20,6 @@ export default class SubmitButtonComponent extends Vue {
   regionEnum = RegionEnum
   object!: ObjectTemplate
   renderComponent= false
-
-  generateHtml (start = true, value : string) {
-    if ((start && value.includes('/')) || (!start && !value.includes('/'))) {
-      return ''
-    } else {
-      this.renderComponent = true
-      return '<td>Test</td>'
-    }
-  }
 }
 </script>
 

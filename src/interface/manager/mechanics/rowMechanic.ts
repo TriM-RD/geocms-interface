@@ -45,22 +45,23 @@ export namespace Manager.Mechanic{
       return this.ObjectTemplates
     }
 
-    protected SubscribeConditions (): void {
-      // RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
+    public SubscribeConditions (): void {
+      RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
     }
 
     public UnsubscribeConditions () {
-      // RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
+      RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
+      MechanicAbstract.instance = null
     }
 
     protected Button (eventHandler: EventHandlerType): void {
-      console.log('test')
-      // const _id = this.ObjectTemplates[0].Stats[StatTypeEnum.Id].Data
+      console.log(eventHandler)
       const _id = eventHandler.payload.Stats[StatTypeEnum.Id].Data
       switch (eventHandler.subObjectType) {
         case SubObjectTypeEnum.Left:// Izbriši
           http.delete('http://blog.test/api/entity/' + _id)
-            .then(response => (router.go(0)))
+            .then(response => (router.push({ name: 'Device' })))
+          router.push({ name: 'Group' })
           break
         case SubObjectTypeEnum.Middle: // Uredi
           router.push({ name: 'DeviceEdit', params: { id: _id } })
@@ -71,6 +72,14 @@ export namespace Manager.Mechanic{
         default:
           break
       }
+    }
+
+    static getInstance (): MechanicAbstract {
+      if (!MechanicAbstract.instance) {
+        MechanicAbstract.instance = new RowMechanic()
+      }
+
+      return MechanicAbstract.instance
     }
   }
 

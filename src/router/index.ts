@@ -10,7 +10,7 @@ import CategoriesAdd from '../views/CategoriesAdd.vue'
 import DeviceAppend from '../views/DeviceAppend.vue'
 import DeviceCabinet from '../views/DeviceCabinet.vue'
 import PermissionsTree from '@/views/PermissionsTree.vue'
-import Add from '@/views/Add.vue'
+import Form from '@/views/Form.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -29,12 +29,12 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/device/add',
     name: 'DeviceAdd',
-    component: Add
+    component: Form
   },
   {
     path: '/device/add/:id',
     name: 'DeviceEdit',
-    component: Add
+    component: Form
   },
   {
     path: '/division',
@@ -61,7 +61,7 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: Groups
+    component: Show
   },
   {
     path: '/permission',

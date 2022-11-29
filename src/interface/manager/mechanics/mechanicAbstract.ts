@@ -3,11 +3,16 @@ import { EventHandlerType } from '../events/types/objectTypes/types'
 import { SubObjectTypeEnum } from '../events/types/subObjectType'
 
 export abstract class MechanicAbstract {
+  protected static instance: MechanicAbstract | null;
   protected abstract SubscribeConditions() : void;
   public abstract UnsubscribeConditions() : any;
   protected abstract Button(eventHandler: EventHandlerType) : void;
   constructor () {
     this.SubscribeConditions()
+  }
+
+  public static getInstance (): MechanicAbstract | null {
+    return null
   }
 
   public abstract InitGet (_id: string, _api: string): Promise<ObjectTemplate[]>;
