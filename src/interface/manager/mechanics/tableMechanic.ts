@@ -10,9 +10,9 @@ import { EventHandlerType } from '../events/types/objectTypes/types'
 export namespace Manager.Mechanic{
 
   export class TableMechanic extends MechanicAbstract {
-    public async InitGet (_id: string): Promise<ObjectTemplate[]> {
+    public async InitGet (_id: string, _api: string): Promise<ObjectTemplate[]> {
       this.ObjectTemplates = []
-      const response = await http.get('http://blog.test/api/entity')
+      const response = await http.get('http://blog.test/api/' + _api)
       if (Object.keys(response.data).length !== 0) {
         this.ObjectTemplates = this.forEachElement(response.data)
         return this.ObjectTemplates

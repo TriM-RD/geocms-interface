@@ -34,7 +34,6 @@ export default class App extends Vue {
     const temp = location.hash.substr(1)
     if (temp !== '' && localStorage.getItem('access_token') === '') {
       const value = JSON.parse(atob(temp))
-      console.log(value.access_token)
       localStorage.setItem('access_token', value.access_token)
       history.pushState('', document.title, window.location.pathname + window.location.search)
       location.reload()
@@ -46,7 +45,8 @@ export default class App extends Vue {
   }
 
   async checkBearer () : Promise<void> {
-    await http.get('http://blog.test/api/form').then(response => {
+    await http.get('http://blog.test/api/user').then(response => {
+      console.log(response.data.name)
       // success
     }, response => {
       // error

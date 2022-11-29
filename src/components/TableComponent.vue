@@ -49,7 +49,13 @@ export default class TableComponent extends Vue {
   }
 
   async Init () {
-    this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1'))
+    switch (this.$route.name) {
+      case 'Device':
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'entity'))
+        break
+      case 'Group':
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'group'))
+    }
     if (Object.keys(this.objectTemplates).length === 0) {
       return
     }
