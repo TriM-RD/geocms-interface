@@ -41,27 +41,26 @@ export namespace Manager.Mechanic{
     }
 
     protected SubscribeConditions (): void {
-      RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
+      RegionType.RegionTypes[RegionEnum.Footer].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
     }
 
     public UnsubscribeConditions () {
-      RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
+      RegionType.RegionTypes[RegionEnum.Footer].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
     }
 
     protected Button (eventHandler: EventHandlerType): void {
       console.log('test')
       // const _id = this.ObjectTemplates[0].Stats[StatTypeEnum.Id].Data
-      const _id = eventHandler.payload.Stats[StatTypeEnum.Id].Data
+      // const _id = eventHandler.payload.Stats[StatTypeEnum.Id].Data
       switch (eventHandler.subObjectType) {
         case SubObjectTypeEnum.Left:// Izbriši
-          http.delete('http://blog.test/api/entity/' + _id)
-            .then(response => (router.go(0)))
+          router.push({ name: 'Show' })
           break
         case SubObjectTypeEnum.Middle: // Uredi
-          router.push({ name: 'Edit', params: { id: _id } })
+          router.push({ name: 'Edit' })
           break
         case SubObjectTypeEnum.Right: // Pregledaj
-          router.push({ name: 'Show', params: { id: _id } })
+          router.push({ name: 'DeviceAdd' })
           break
         default:
           break

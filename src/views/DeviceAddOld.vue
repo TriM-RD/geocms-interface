@@ -11,7 +11,7 @@ import DeviceAddComponent from '@/components/DeviceAddComponent.vue'
     DeviceAddComponent
   }
 })
-export default class DeviceAdd extends Vue {}
+export default class DeviceAddOld extends Vue {}
 </script>
 <style scoped>
 </style>

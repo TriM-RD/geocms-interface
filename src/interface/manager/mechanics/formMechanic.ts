@@ -78,15 +78,14 @@ export namespace Manager.Mechanic{
 
     protected async Button (eventHandler: EventHandlerType): Promise<void> {
       // const targetCopy = new ObjectTemplate(eventHandler.payload.Region, eventHandler.payload.ObjectEnum, eventHandler.payload.SubObjectEnum, eventHandler.payload.ActionEnum, this.reStructure(Object.values(JSON.parse(JSON.stringify(eventHandler.payload.Stats)))))
-
       switch (eventHandler.subObjectType) {
-        case SubObjectTypeEnum.Middle:
+        case SubObjectTypeEnum.Left:
           if (this.inEdit) {
             await http.patch('http://blog.test/api/entity/' + this.id, this.ObjectTemplates)
-              .then(response => (router.push({ name: 'Show', params: { id: response.data.id } })))
+              .then(response => (router.push({ name: 'DeviceEdit', params: { id: response.data.id } })))
           } else {
             await http.post('http://blog.test/api/entity', this.ObjectTemplates)
-              .then(response => (router.push({ name: 'Show', params: { id: response.data.id } })))
+              .then(response => (router.push({ name: 'DeviceEdit', params: { id: response.data.id } })))
           }
           break
         case SubObjectTypeEnum.ParentObject:

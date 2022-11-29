@@ -55,6 +55,10 @@ export default class TableComponent extends Vue {
         break
       case 'Group':
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'group'))
+        break
+      case 'Division':
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'division'))
+        break
     }
     if (Object.keys(this.objectTemplates).length === 0) {
       return

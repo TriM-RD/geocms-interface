@@ -50,6 +50,8 @@ export namespace Manager.Events.Type{
 
     export class Click extends MethodTypeAbstract {
       public Act (_object: ObjectTemplate, _data : any, _invokeLogic: LogicDelegate): boolean {
+        _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: _object })
+        return true
         switch (_object.Region) {
           case RegionEnum.TableColumn:
             /* eslint-disable */

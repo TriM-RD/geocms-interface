@@ -58,10 +58,10 @@ export namespace Manager.Mechanic{
             .then(response => (router.go(0)))
           break
         case SubObjectTypeEnum.Middle: // Uredi
-          router.push({ name: 'Edit', params: { id: _id } })
+          router.push({ name: 'DeviceEdit', params: { id: _id } })
           break
         case SubObjectTypeEnum.Right: // Pregledaj
-          router.push({ name: 'Show', params: { id: _id } })
+          router.push({ name: 'DeviceEdit', params: { id: _id } })
           break
         default:
           break

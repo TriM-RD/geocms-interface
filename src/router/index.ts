@@ -1,29 +1,21 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
 import Edit from '../views/Edit.vue'
-import About from '../views/About.vue'
 import Show from '../views/Show.vue'
 import Map from '../views/Map.vue'
 import Groups from '../views/Groups.vue'
-import Divisions from '../views/Divisions.vue'
-import Permission from '../views/Permission.vue'
-import DeviceAdd from '../views/DeviceAdd.vue'
 import TypesAdd from '../views/TypesAdd.vue'
 import AttributeAdd from '../views/AttributeAdd.vue'
 import CategoriesAdd from '../views/CategoriesAdd.vue'
 import DeviceAppend from '../views/DeviceAppend.vue'
 import DeviceCabinet from '../views/DeviceCabinet.vue'
 import PermissionsTree from '@/views/PermissionsTree.vue'
+import Add from '@/views/Add.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Home',
     component: Home
-  },
-  {
-    path: '/:id',
-    name: 'Edit',
-    component: Edit
   },
   {
     path: '/device',
@@ -33,6 +25,16 @@ const routes: Array<RouteRecordRaw> = [
     // which is lazy-loaded when the route is visited.
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
     component: Show
+  },
+  {
+    path: '/device/add',
+    name: 'DeviceAdd',
+    component: Add
+  },
+  {
+    path: '/device/add/:id',
+    name: 'DeviceEdit',
+    component: Add
   },
   {
     path: '/division',
@@ -77,14 +79,6 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: Show
-  },
-  {
-    path: '/device/add',
-    name: 'DeviceAdd',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: DeviceAdd
   },
   {
     path: '/types/add',
