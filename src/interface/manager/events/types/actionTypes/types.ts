@@ -52,42 +52,6 @@ export namespace Manager.Events.Type{
       public Act (_object: ObjectTemplate, _data : any, _invokeLogic: LogicDelegate): boolean {
         _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: _object })
         return true
-        switch (_object.Region) {
-          case RegionEnum.TableColumn:
-            /* eslint-disable */
-            const _id = _object.Stats[StatTypeEnum.Id].Data
-            /* eslint-enable */
-            switch (_object.SubObjectEnum) {
-              case SubObjectTypeEnum.Left:// Izbriši
-                http.delete('http://blog.test/api/entity/' + _id)
-                  .then(response => (router.go(0)))
-                break
-              case SubObjectTypeEnum.Middle: // Uredi
-                router.push({ name: 'Edit', params: { id: _id } })
-                break
-              case SubObjectTypeEnum.Right: // Pregledaj
-                // router.push({ name: 'Show', params: { id: _id } })
-                _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: _object })
-                break
-              default:
-                break
-            }
-            break
-          /* case RegionEnum.Form:
-            switch (_object.SubObjectEnum) {
-              case SubObjectTypeEnum.Left:// Izbriši
-                _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: _object })
-                break
-              default:
-                _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: null })
-                break
-            }
-            break */
-          default:
-            _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: null })
-            break
-        }
-        return true
       }
 
       public Enact (): void {
