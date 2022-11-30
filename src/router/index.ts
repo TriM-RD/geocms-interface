@@ -18,7 +18,7 @@ import PermissionsTree from '@/views/PermissionsTree.vue'
 import WelcomePage from '@/views/WelcomePage.vue'
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
+    path: '/home',
     name: 'Home',
     component: Home,
     meta: { requiresAuth: true }
@@ -143,7 +143,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/welcome',
+    path: '/',
     name: 'WelcomePage',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route

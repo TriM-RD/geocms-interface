@@ -1,9 +1,12 @@
 <template>
-  <div v-if="$store.state.requiresAuth === true">
+  <div v-if="($store.state.requiresAuth === true)">
     <NavBarComponent/>
     <NavComponent />
     <!-- Contect></Contect-->
     <FooterComponent />
+  </div>
+  <div v-if="($store.state.requiresAuth === false)">
+    <WelcomeComponent />
   </div>
 </template>
 
@@ -22,6 +25,7 @@ import { Options, Vue } from 'vue-class-component'
 import NavBarComponent from '@/components/showComponents/NavBarComponent.vue'
 import NavComponent from '@/components/showComponents/NavComponent.vue'
 import FooterComponent from '@/components/showComponents/FooterComponent.vue'
+import WelcomeComponent from '@/components/WelcomeComponent.vue'
 import http from '@/http-common'
 import createStore from '@/store/index'
 
@@ -29,7 +33,8 @@ import createStore from '@/store/index'
   components: {
     NavBarComponent,
     NavComponent,
-    FooterComponent
+    FooterComponent,
+    WelcomeComponent
   }
 })
 export default class App extends Vue {
@@ -40,9 +45,9 @@ export default class App extends Vue {
       console.log(value.access_token)
       localStorage.setItem('access_token', value.access_token)
       history.pushState('', document.title, window.location.pathname + window.location.search)
-      location.reload()
+      location.assign('/home')
       // alert('yes')
-      // this.$router.go(0)
+      // this.$router.replace('/home')
     } else {
       this.checkBearer()
     }
@@ -59,7 +64,8 @@ export default class App extends Vue {
       const temp = String(response)
       if (temp.includes('code 401')) {
         localStorage.setItem('access_token', '')
-        window.location.href = 'http://blog.test/oauth/redirect'
+        this.$router.push('/')
+        // window.location.href = 'http://blog.test/oauth/redirect'
       }
     })
   }
