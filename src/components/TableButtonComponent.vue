@@ -1,8 +1,5 @@
 <template>
-    <!--th scope="row"><img alt="arrow" width="27" src="../assets/arrow.png"></th-->
-  <td>
   <component v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ Math.random().toString(36).slice(2, 7) }`"  :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'></component>
-  </td>
 </template>
 
 <script lang="ts">
@@ -17,7 +14,7 @@ import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatType
     index: Number
   }
 })
-export default class ColumnButtonComponent extends Vue {
+export default class TableButtonComponent extends Vue {
   mechanic: MechanicAbstract = new Manager.Mechanic.ColumnMechanic()
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
@@ -25,15 +22,10 @@ export default class ColumnButtonComponent extends Vue {
   object!: ObjectTemplate
   index!: number
   objectTemplates: ObjectTemplate[] = this.mechanic.InitSet([
-    new ObjectTemplate(RegionEnum.TableColumn, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
-      [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Delete'),
-      [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-danger me-2'),
-      [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Id].Data)
-    }),
     new ObjectTemplate(RegionEnum.TableColumn, ObjectTypeEnum.Button, SubObjectTypeEnum.Middle, ActionTypeEnum.Click, {
-      [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Edit'),
-      [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-info'),
-      [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Id].Data)
+      [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Add Attribute'),
+      [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-info')
+      // [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Id].Data)
     })
   ])
 

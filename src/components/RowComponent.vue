@@ -32,7 +32,6 @@ export default class RowComponent extends Vue {
   mounted () {
     this.objectTemplates = this.mechanic.InitSet(this.entity)
     if (this.objectTemplates !== undefined) {
-      console.log(this.objectTemplates)
     }
     this.objectTemplates = this.mechanic.Append(
       [
@@ -41,7 +40,6 @@ export default class RowComponent extends Vue {
         })
       ]
     )
-    console.log(this.objectTemplates)
     this.renderComponent = true
   }
 

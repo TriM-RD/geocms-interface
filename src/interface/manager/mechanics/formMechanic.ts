@@ -16,12 +16,12 @@ export namespace Manager.Mechanic{
     private id = '-1';
     private inEdit = false;
 
-    public async InitGet (_id: string): Promise<ObjectTemplate[]> {
+    public async InitGet (_id: string, _route: string): Promise<ObjectTemplate[]> {
       this.id = _id
       if (this.id === '-1') {
-        this.id = (await http.get('http://blog.test/api/entity/' + this.id)).data
+        this.id = (await http.get('http://blog.test/api/' + _route + '/' + this.id)).data
         console.log(this.id)
-        const response = await http.get('http://blog.test/api/form')
+        const response = await http.get('http://blog.test/api/form/' + _route)
         return (this.ObjectTemplates = response.data.map((_object: any) => {
           return new ObjectTemplate(_object.Region, _object.ObjectEnum,
             _object.SubObjectEnum, _object.ActionEnum, this.reStructure(_object.Stats,
@@ -31,7 +31,7 @@ export namespace Manager.Mechanic{
               }))
         }))
       }
-      const response = await http.get('http://blog.test/api/entity/' + this.id)
+      const response = await http.get('http://blog.test/api/' + _route + '/' + this.id)
       this.inEdit = true
       return (this.ObjectTemplates = response.data.map((_object: any) => {
         return new ObjectTemplate(_object.Region, _object.ObjectEnum,
@@ -78,56 +78,69 @@ export namespace Manager.Mechanic{
 
     protected async Button (eventHandler: EventHandlerType): Promise<void> {
       // const targetCopy = new ObjectTemplate(eventHandler.payload.Region, eventHandler.payload.ObjectEnum, eventHandler.payload.SubObjectEnum, eventHandler.payload.ActionEnum, this.reStructure(Object.values(JSON.parse(JSON.stringify(eventHandler.payload.Stats)))))
-      switch (eventHandler.subObjectType) {
-        case SubObjectTypeEnum.Left:
-          if (this.inEdit) {
-            await http.patch('http://blog.test/api/entity/' + this.id, this.ObjectTemplates)
-              .then(response => (router.push({ name: 'DeviceEdit', params: { id: response.data.id } })))
-          } else {
-            await http.post('http://blog.test/api/entity', this.ObjectTemplates)
-              .then(response => (router.push({ name: 'DeviceEdit', params: { id: response.data.id } })))
+      switch (router.currentRoute.value.name) {
+        case 'DeviceAdd':
+        case 'DeviceEdit':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Left:
+              if (this.inEdit) {
+                await http.patch('http://blog.test/api/entity/' + this.id, this.ObjectTemplates)
+                  .then(response => (router.push({ name: 'DeviceEdit', params: { id: response.data.id } })))
+              } else {
+                await http.post('http://blog.test/api/entity', this.ObjectTemplates)
+                  .then(response => (router.push({ name: 'DeviceEdit', params: { id: response.data.id } })))
+              }
+              break
+            case SubObjectTypeEnum.Right:
+              router.back()
+              break
+            default:
+              break
           }
           break
-        case SubObjectTypeEnum.ParentObject:
-          /* console.log(this.ObjectTemplates)
-          if (this.compare(eventHandler.payload) === '-1') { this.ObjectTemplates.splice(this.ObjectTemplates.length - 2, 0, eventHandler.payload) }
-          console.log(this.ObjectTemplates) */
+        case 'GroupAdd':
+        case 'GroupEdit':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Left:
+              if (this.inEdit) {
+                await http.patch('http://blog.test/api/group/' + this.id, this.ObjectTemplates)
+                  .then(response => (router.push({ name: 'GroupEdit', params: { id: response.data.id } })))
+              } else {
+                await http.post('http://blog.test/api/group', this.ObjectTemplates)
+                  .then(response => (router.push({ name: 'GroupEdit', params: { id: response.data.id } })))
+              }
+              break
+            case SubObjectTypeEnum.Middle:
+              await router.push({ name: 'AttributeAdd', params: { parentId: this.id } })
+              break
+            case SubObjectTypeEnum.Right:
+              router.back()
+              break
+            default:
+              break
+          }
           break
-        default:
+        case 'AttributeAdd':
+        case 'AttributeEdit':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Left:
+              if (this.inEdit) {
+                await http.patch('http://blog.test/api/attribute/' + this.id, this.ObjectTemplates)
+                  .then(response => (router.push({ name: 'AttributeEdit', params: { id: response.data.id } })))
+              } else {
+                await http.post('http://blog.test/api/attribute', this.ObjectTemplates)
+                  .then(response => (router.push({ name: 'AttributeEdit', params: { id: response.data.id } })))
+              }
+              break
+            case SubObjectTypeEnum.Right:
+              router.back()
+              break
+            default:
+              break
+          }
           break
       }
     }
-
-    /* private compare (objectToCompare: ObjectTemplate): string {
-      let answer = '-1'
-      for (let i = 0; i < this.ObjectTemplates.length; i++) {
-        if (this.ObjectTemplates[i].Stats[StatTypeEnum.Value].Data === objectToCompare.Stats[StatTypeEnum.Value].Data) {
-          answer = i
-          return answer
-        }
-      }
-      return answer
-    }
-
-    private async upgrade () {
-      let runOnce = false
-      const prevObjectTemplates = this.ObjectTemplates
-      this.InitSet(await this.InitGet(-1))
-      prevObjectTemplates.forEach((_prevObject: ObjectTemplate) => {
-        this.ObjectTemplates.forEach((_object: ObjectTemplate) => {
-          _object.Stats[StatTypeEnum.Id].Data = _prevObject.Stats[StatTypeEnum.Id].Data
-          if (_object.Stats[StatTypeEnum.Tag].Data === _prevObject.Stats[StatTypeEnum.Tag].Data) {
-            _object.Stats = _prevObject.Stats
-            _object = _prevObject
-          } else if (_prevObject.Stats[StatTypeEnum.Tag].Data === 'Content' && !runOnce) {
-            runOnce = true
-            this.ObjectTemplates.splice(this.ObjectTemplates.length - 2, 0, new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.ModularText, SubObjectTypeEnum.ParentObject, ActionTypeEnum.AppendEntity, _prevObject.Stats))
-          }
-        })
-      })
-      this.inEdit = true
-      this.id = Number(this.ObjectTemplates[0].Stats[StatTypeEnum.Id].Data)
-    } */
   }
 
 }

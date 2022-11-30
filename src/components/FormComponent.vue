@@ -12,8 +12,15 @@ import { Options, Vue } from 'vue-class-component'
 import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
 import { Manager } from '@/interface/manager/mechanics/formMechanic'
 import { MechanicAbstract } from '@/interface/manager/mechanics/mechanicAbstract'
-import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatTypeEnum, StatType, ObjectType, RegionType } from '@/interface/manager/events/types/index'
+import {
+  ActionTypeEnum,
+  ObjectTypeEnum,
+  RegionEnum,
+  RegionType, StatType, StatTypeEnum,
+  SubObjectTypeEnum
+} from '@/interface/manager/events/types/index'
 import Loading from 'vue-loading-overlay'
+import router from '@/router'
 @Options({
   components: {
     Loading
@@ -24,12 +31,6 @@ export default class FormComponent extends Vue {
   mechanic: MechanicAbstract = new Manager.Mechanic.FormMechanic()
   renderComponent= true
   objectTemplates!: ObjectTemplate[]
-  constEntity = new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Right, ActionTypeEnum.Click, {
-    [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Nadogradi Formu'),
-    [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat(),
-    [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-primary'),
-    [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('AddParagraph')
-  })
 
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
@@ -40,7 +41,31 @@ export default class FormComponent extends Vue {
   }
 
   async Init () {
-    this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id === undefined ? '-1' : String(this.$route.params.id), 'entity'))
+    switch (router.currentRoute.value.name) {
+      case 'DeviceEdit':
+      case 'DeviceAdd':
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id === undefined ? '-1' : String(this.$route.params.id), 'entity'))
+        break
+      case 'GroupAdd':
+      case 'GroupEdit':
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id === undefined ? '-1' : String(this.$route.params.id), 'group'))
+        break
+      case 'AttributeAdd':
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id === undefined ? '-1' : String(this.$route.params.id), 'attribute'))
+        this.objectTemplates = this.mechanic.Append([
+          new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Alert, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
+            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Group'),
+            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('group'),
+            [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(this.$route.params.parentId.toString()),
+            [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('me-2 readonly'),
+            [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.objectTemplates[0].Stats[StatTypeEnum.Id].Data)
+          })
+        ])
+        break
+      case 'AttributeEdit':
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id === undefined ? '-1' : String(this.$route.params.id), 'attribute'))
+        break
+    }
     this.renderComponent = false
   }
 

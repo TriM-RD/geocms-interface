@@ -59,8 +59,15 @@ export default class TableComponent extends Vue {
       case 'Division':
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'division'))
         break
+      case 'GroupEdit':
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'filter/attribute/' + this.$route.params.id))
+        break
+      case 'GroupAdd':
+        this.renderComponent = false
+        return
     }
     if (Object.keys(this.objectTemplates).length === 0) {
+      this.renderComponent = false
       return
     }
     let tempId = null
@@ -91,7 +98,6 @@ export default class TableComponent extends Vue {
   getHeaders () : void { // TODO Needs to be reworked. @JosoMarich
     this.headers = []
     for (const header of this.objectTemplates) {
-      console.log(header.Stats[StatTypeEnum.Label].Data)
       if (this.headers.indexOf(header.Stats[StatTypeEnum.Label].Data) === -1) {
         this.headers[this.headers.length] = header.Stats[StatTypeEnum.Label].Data
       }

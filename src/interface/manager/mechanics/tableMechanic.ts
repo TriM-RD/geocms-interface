@@ -54,30 +54,15 @@ export namespace Manager.Mechanic{
     }
 
     protected SubscribeConditions (): void {
-      RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
+      // RegionType.RegionTypes[RegionEnum.Table].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
     }
 
     public UnsubscribeConditions () {
-      RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
+      // RegionType.RegionTypes[RegionEnum.Table].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
     }
 
     protected Button (_eventHandler: EventHandlerType): void {
-      const _id = _eventHandler.payload.Stats[StatTypeEnum.Id].Data
-      switch (_eventHandler.subObjectType) {
-        case SubObjectTypeEnum.Left:// Izbriši
-          http.delete('http://blog.test/api/entity/' + _id)
-            .then(response => (router.push({ name: 'Device' })))
-          router.push({ name: 'Group' })
-          break
-        case SubObjectTypeEnum.Middle: // Uredi
-          router.push({ name: 'DeviceEdit', params: { id: _id } })
-          break
-        case SubObjectTypeEnum.Right: // Pregledaj
-          router.push({ name: 'DeviceEdit', params: { id: _id } })
-          break
-        default:
-          break
-      }
+      console.log('not implemented')
     }
   }
 

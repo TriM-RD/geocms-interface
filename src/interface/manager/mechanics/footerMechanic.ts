@@ -49,20 +49,42 @@ export namespace Manager.Mechanic{
     }
 
     protected Button (eventHandler: EventHandlerType): void {
-      console.log('test')
-      // const _id = this.ObjectTemplates[0].Stats[StatTypeEnum.Id].Data
-      // const _id = eventHandler.payload.Stats[StatTypeEnum.Id].Data
-      switch (eventHandler.subObjectType) {
-        case SubObjectTypeEnum.Left:// Izbriši
-          router.push({ name: 'Show' })
+      switch (router.currentRoute.value.name) {
+        case 'Device':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Left:// Izbriši
+              router.push({ name: 'Show' })
+              break
+            case SubObjectTypeEnum.Right: // Pregledaj
+              router.push({ name: 'DeviceAdd' })
+              break
+            default:
+              break
+          }
           break
-        case SubObjectTypeEnum.Middle: // Uredi
-          router.push({ name: 'Edit' })
+        case 'Group':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Left:// Izbriši
+              router.push({ name: 'Show' })
+              break
+            case SubObjectTypeEnum.Right: // Pregledaj
+              router.push({ name: 'GroupAdd' })
+              break
+            default:
+              break
+          }
           break
-        case SubObjectTypeEnum.Right: // Pregledaj
-          router.push({ name: 'DeviceAdd' })
-          break
-        default:
+        case 'Division':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Left:// Izbriši
+              router.push({ name: 'Show' })
+              break
+            case SubObjectTypeEnum.Right: // Pregledaj
+              router.push({ name: 'DivisionAdd' })
+              break
+            default:
+              break
+          }
           break
       }
     }

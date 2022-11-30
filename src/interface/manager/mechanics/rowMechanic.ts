@@ -7,6 +7,7 @@ import { StatType, StatTypeEnum } from '../events/types/statType'
 import { RegionEnum, ActionTypeEnum, RegionType } from '@/interface/manager/events/types/index'
 import router from '@/router'
 import { EventHandlerType } from '../events/types/objectTypes/types'
+import { routerKey, useRouter } from 'vue-router'
 
 export namespace Manager.Mechanic{
 
@@ -28,7 +29,6 @@ export namespace Manager.Mechanic{
     }
 
     private reStructure (stats: any): any {
-      console.log(JSON.parse(JSON.stringify(stats)))
       let temp = {}
       // temp = Object.assign(temp, { [_index]: StatType.StatTypes[_index]().CreateStat().InitData(_stat.Data != null ? _stat.Data : '') })
       stats.forEach((_stat : any, _index: number) => { temp = Object.assign(temp, { [_index]: StatType.StatTypes[_index]().CreateStat().InitData(_stat.Data != null ? _stat.Data : '') }) })
@@ -36,12 +36,10 @@ export namespace Manager.Mechanic{
     }
 
     public InitSet (_objectTemplates: ObjectTemplate[]): ObjectTemplate[] {
-      console.log(_objectTemplates)
       this.ObjectTemplates = []
       for (const _object of _objectTemplates) {
         this.ObjectTemplates.push(new ObjectTemplate(RegionEnum.TableColumn, ObjectTypeEnum.Column, SubObjectTypeEnum.ParentObject, ActionTypeEnum.Click, _object.Stats))
       }
-      console.log(this.ObjectTemplates)
       return this.ObjectTemplates
     }
 
@@ -55,21 +53,58 @@ export namespace Manager.Mechanic{
     }
 
     protected Button (eventHandler: EventHandlerType): void {
-      console.log(eventHandler)
       const _id = eventHandler.payload.Stats[StatTypeEnum.Id].Data
-      switch (eventHandler.subObjectType) {
-        case SubObjectTypeEnum.Left:// Izbriši
-          http.delete('http://blog.test/api/entity/' + _id)
-            .then(response => (router.push({ name: 'Device' })))
-          router.push({ name: 'Group' })
+      switch (router.currentRoute.value.name) {
+        case 'Device':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Left:// Izbriši
+              http.delete('http://blog.test/api/entity/' + _id)
+                .then(response => (router.push({ name: 'Device' })))
+              router.push({ name: 'Group' })
+              break
+            case SubObjectTypeEnum.Middle: // Uredi
+              router.push({ name: 'DeviceEdit', params: { id: _id } })
+              break
+            case SubObjectTypeEnum.Right: // Pregledaj
+              router.push({ name: 'DeviceEdit', params: { id: _id } })
+              break
+            default:
+              break
+          }
           break
-        case SubObjectTypeEnum.Middle: // Uredi
-          router.push({ name: 'DeviceEdit', params: { id: _id } })
+        case 'Group':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Left:// Izbriši
+              http.delete('http://blog.test/api/group/' + _id)
+                .then(response => (router.push({ name: 'Group' })))
+              router.push({ name: 'Device' })
+              break
+            case SubObjectTypeEnum.Middle: // Uredi
+              router.push({ name: 'GroupEdit', params: { id: _id } })
+              break
+            case SubObjectTypeEnum.Right: // Pregledaj
+              router.push({ name: 'GroupEdit', params: { id: _id } })
+              break
+            default:
+              break
+          }
           break
-        case SubObjectTypeEnum.Right: // Pregledaj
-          router.push({ name: 'DeviceEdit', params: { id: _id } })
-          break
-        default:
+        case 'GroupEdit':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Left:// Izbriši
+              http.delete('http://blog.test/api/group/' + _id)
+                .then(response => (router.push({ name: 'Group' })))
+              router.push({ name: 'Device' })
+              break
+            case SubObjectTypeEnum.Middle: // Pregledaj
+              router.push({ name: 'AttributeEdit', params: { parentId: router.currentRoute.value.params.id, id: _id } })
+              break
+            case SubObjectTypeEnum.Right: // Pregledaj
+              router.push({ name: 'AttributeEdit', params: { id: _id } })
+              break
+            default:
+              break
+          }
           break
       }
     }
