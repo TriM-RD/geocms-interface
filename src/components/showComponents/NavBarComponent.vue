@@ -5,8 +5,7 @@
       <img src="../../assets/logo.png" alt="Logo" width="90" class="d-inline-block align-text-top">
     </a>
     <form class="d-flex" role="search" action="/search">
-      <input v-model="title" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" @keypress.enter="this.take()">
-      <h2>{{title}}</h2>
+      <input v-model="title" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" @keypress.enter.prevent="take()">
     </form>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle boja" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -64,9 +63,8 @@ export default class NavBarComponent extends Vue {
   regionType = RegionType
   regionEnum = RegionEnum
   object!: ObjectTemplate
-
   take (): void {
-    http.get('http://blog.test/api/filter/haha').then(response => { console.log(response) })
+    http.get('http://blog.test/api/filter/').then(response => { console.log(response.data) })
   }
 }
 </script>
