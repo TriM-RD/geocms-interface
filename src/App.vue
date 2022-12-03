@@ -2,12 +2,9 @@
   <div v-if="($store.state.requiresAuth === true)">
     <NavBarComponent/>
     <NavComponent />
-    <!-- Contect></Contect-->
     <FooterComponent />
   </div>
-  <div v-if="($store.state.requiresAuth === false)">
-    <WelcomeComponent />
-  </div>
+  <router-view/>
 </template>
 
 <style>
@@ -45,7 +42,7 @@ export default class App extends Vue {
       console.log(value.access_token)
       localStorage.setItem('access_token', value.access_token)
       history.pushState('', document.title, window.location.pathname + window.location.search)
-      location.assign('/home')
+      location.assign('/')
       // alert('yes')
       // this.$router.replace('/home')
     } else {

@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import createStore from '@/store/index'
 import Home from '../views/Home.vue'
 import Edit from '../views/Edit.vue'
 import About from '../views/About.vue'
@@ -15,19 +14,16 @@ import DivisionAdd from '../views/DivisionAdd.vue'
 import DeviceAppend from '../views/DeviceAppend.vue'
 import DeviceCabinet from '../views/DeviceCabinet.vue'
 import PermissionsTree from '@/views/PermissionsTree.vue'
-import WelcomePage from '@/views/WelcomePage.vue'
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/home',
+    path: '/',
     name: 'Home',
-    component: Home,
-    meta: { requiresAuth: true }
+    component: Home
   },
   {
     path: '/:id',
     name: 'Edit',
-    component: Edit,
-    meta: { requiresAuth: true }
+    component: Edit
   },
   {
     path: '/device',
@@ -36,8 +32,7 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: Show,
-    meta: { requiresAuth: true }
+    component: Show
   },
   {
     path: '/division',
@@ -46,8 +41,7 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: Show,
-    meta: { requiresAuth: true }
+    component: Show
   },
   {
     path: '/map',
@@ -56,8 +50,7 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: Map,
-    meta: { requiresAuth: true }
+    component: Map
   },
   {
     path: '/group',
@@ -66,8 +59,7 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: Groups,
-    meta: { requiresAuth: true }
+    component: Groups
   },
   {
     path: '/permission',
@@ -76,8 +68,7 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: PermissionsTree,
-    meta: { requiresAuth: true }
+    component: PermissionsTree
   },
   {
     path: '/show/:id',
@@ -85,8 +76,7 @@ const routes: Array<RouteRecordRaw> = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: Show,
-    meta: { requiresAuth: true }
+    component: Show
   },
   {
     path: '/device/add',
@@ -94,8 +84,7 @@ const routes: Array<RouteRecordRaw> = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: DeviceAdd,
-    meta: { requiresAuth: true }
+    component: DeviceAdd
   },
   {
     path: '/group/add',
@@ -103,8 +92,7 @@ const routes: Array<RouteRecordRaw> = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: GroupAdd,
-    meta: { requiresAuth: true }
+    component: GroupAdd
   },
   {
     path: '/attribute/add',
@@ -112,8 +100,7 @@ const routes: Array<RouteRecordRaw> = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: AttributeAdd,
-    meta: { requiresAuth: true }
+    component: AttributeAdd
   },
   {
     path: '/division/add',
@@ -121,8 +108,7 @@ const routes: Array<RouteRecordRaw> = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: DivisionAdd,
-    meta: { requiresAuth: true }
+    component: DivisionAdd
   },
   {
     path: '/device/append',
@@ -130,8 +116,7 @@ const routes: Array<RouteRecordRaw> = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: DeviceAppend,
-    meta: { requiresAuth: true }
+    component: DeviceAppend
   },
   {
     path: '/device/cabinet',
@@ -139,17 +124,7 @@ const routes: Array<RouteRecordRaw> = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: DeviceCabinet,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/',
-    name: 'WelcomePage',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: WelcomePage,
-    meta: { requiresAuth: false }
+    component: DeviceCabinet
   }
 ]
 
