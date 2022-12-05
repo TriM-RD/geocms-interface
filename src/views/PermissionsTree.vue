@@ -7,7 +7,7 @@
   </div>
   -->
   <FlashMessage position="right top" strategy="single" />
-  <button class="btn btn-primary btn-lg " @click="test">Save changes</button>
+  <button class="btn btn-primary btn-lg " @click="saveButton">Save changes</button>
   <h1>Current tree</h1>
   <div>
     <blocks-tree   @node-click="show" :data="permissionsTreeData" :horizontal="treeOrientation=='1'" :collapsable="true" :props="{
@@ -23,7 +23,7 @@
             <div class="col" v-show="data.expand">
               <label class="col" >Rename:
                 <input class="m-1"  type="text" v-model="data.rename" style="width: 100px"/>
-                <button type="button" class="btn btn-primary m-1"  @click="rename(data)" > Rename</button>
+                <button type="button" class="btn btn-primary m-1"  @click="renameButton(data)" > Rename</button>
               </label>
             </div>
             <div class="col" v-show="data.expand">
@@ -33,7 +33,7 @@
               </label>
             </div>
             <div class="col" v-show="data.expand">
-                <button v-if="data.parent !== undefined" type="button" class="btn btn-danger m-1"  @click="deleteData(data)" > Delete this</button>
+                <button v-show="showDelete(data)" type="button" class="btn btn-danger m-1"  @click="deleteData(data)" > Delete this</button>
             </div>
           </div>
         </div>
@@ -53,30 +53,31 @@
 import { defineComponent, reactive, ref } from 'vue'
 // eslint-disable-next-line import/no-duplicates
 import permission, { TreeData } from '@/components/tree/Permission'
+import http from '@/http-common'
+
 // eslint-disable-next-line import/no-duplicates
 import Permission from '@/components/tree/Permission'
 import Tree from '@/views/Tree.vue'
 import { index } from 'd3'
 import { flashMessage } from '@smartweb/vue-flash-message'
+import { v4 as uuidv4 } from 'uuid'
 
 export default defineComponent({
   name: 'PermissionsTree',
   setup: function () {
-    const selected = ref([])
-    let index = '50'
+    let index = uuidv4()
     let preorderNumber = 0
-    const dragData = ref()
     const treeOrientation = ref('0')
     const permissionsTreeData = reactive <TreeData>(
       {
         label: 'root',
         expand: true,
-        some_id: '0',
+        some_id: index,
         newChildName: '',
         rename: '',
         permission: {
-          id: '0',
-          title: 'string',
+          id: index,
+          name: 'string',
           lft: 4,
           rgt: 5
         },
@@ -84,56 +85,9 @@ export default defineComponent({
       }
     )
 
-    const databaseData = reactive <permission[]>([
-      {
-        id: '1',
-        title: 'root',
-        // eslint-disable-next-line camelcase
-        lft: 1,
-        rgt: 1
-      },
-      {
-        id: '2',
-        title: 'b',
-        // eslint-disable-next-line camelcase
-        parent_id: '1',
-        lft: 1,
-        rgt: 1
-      },
-      {
-        id: '3',
-        title: 'c',
-        // eslint-disable-next-line camelcase
-        parent_id: '2',
-        lft: 1,
-        rgt: 1
-      },
-      {
-        id: '4',
-        title: 'd',
-        // eslint-disable-next-line camelcase
-        parent_id: '2',
-        lft: 1,
-        rgt: 1
-      },
-      {
-        id: '5',
-        title: 'e',
-        // eslint-disable-next-line camelcase
-        parent_id: '1',
-        lft: 1,
-        rgt: 1
-      },
-      {
-        id: '6',
-        title: 'e',
-        // eslint-disable-next-line camelcase
-        parent_id: '5',
-        lft: 1,
-        rgt: 1
-      }
+    const databaseData = reactive<permission[]>([])
 
-    ])
+    const newDatabaseData = reactive<permission[]>([])
 
     function addChild (data: TreeData):[string, string, string] {
       if (data.newChildName === '') {
@@ -142,8 +96,20 @@ export default defineComponent({
           'Child name input field cannot be empty'
         ]
       }
-      index = (parseInt(index) + 1).toString()
-      const newPermission: TreeData = {
+      const newChild = newPermission(data)
+
+      data.newChildName = ''
+      data.children.push(newChild)
+      startPreorder()
+      return ['success',
+        'Child added successfuly',
+        `Child " ${newChild.label} " successfuly added to " ${data.label} "`
+      ]
+    }
+
+    function newPermission (data: TreeData):TreeData {
+      index = uuidv4()
+      return {
         label: data.newChildName,
         expand: false,
         some_id: index,
@@ -151,23 +117,16 @@ export default defineComponent({
         rename: '',
         permission: {
           id: index,
-          title: data.newChildName,
+          name: data.newChildName,
           // eslint-disable-next-line camelcase
-          parent_id: '20',
+          parent_id: data.permission.id,
+          // changed: true
           lft: 4,
           rgt: 6
         },
         parent: data,
         children: []
       }
-      const temp = data.newChildName
-      data.newChildName = ''
-      data.children.push(newPermission)
-      startPreorder()
-      return ['success',
-        'Child added successfuly',
-        `Child " ${temp} " successfuly added to " ${data.label} "`
-      ]
     }
 
     function show (e : any, data : any) {
@@ -175,30 +134,119 @@ export default defineComponent({
         data.expand = !data.expand
       }
     }
-    function rename (data:TreeData) {
-      if (data.rename === '') { return }
+
+    function rename (data:TreeData) :[string, string, string] {
+      if (data.rename === '') {
+        return ['error',
+          'Rename error',
+          'New name cannot be cannot be empty'
+        ]
+      }
+      const temp = data.label
       data.label = data.rename
+      data.permission.name = data.rename
       data.rename = ''
+
+      return ['success',
+        'Rename was successful',
+        `Renamed " ${temp} " to " ${data.label} "`
+      ]
     }
 
-    function save (event:any) {
-      alert('hello this is the save function thats not working yet')
-      alert(event.target.tagName)
+    async function save () : Promise<[string, string, string]> {
+      newDatabaseData.length = 0
+      addToNewDatabseData(permissionsTreeData)
+      console.log('old data')
+      console.log(databaseData)
+      updateOldData(permissionsTreeData)
+      console.log('old data but edited')
+      console.log(databaseData)
+
+      // sending to  backend oldDataForDeletion i newDatabaseData
+
+      for (const data of databaseData) {
+        data._method = 'PUT'
+        http.post(`http://blog.test/api/permission/${data.id}`, data)
+          .then(response => console.log(response))
+          .catch((error) => { console.log(error); return (['error', 'Failed to edit', `Editing of "${data.name}" has failed, reason unknown. Try refreshing page`]) })
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 500))
+
+      return http.post('http://blog.test/api/permission', newDatabaseData)
+        .then(response => {
+          if (response.status === 200) {
+            return ['success',
+              'Save was success',
+              'Data successfuly saved '
+            ]
+          } else {
+            return ['error',
+              'Error ',
+              'Something went wrong, try refreshing the page '
+            ]
+          }
+        })
+    }
+
+    function delay (time:number) {
+      return new Promise(resolve => setTimeout(resolve, time))
+    }
+
+    function addToNewDatabseData (data:TreeData) {
+      let isInOld = false
+      // goes throu all the tree and checks if there are new children and then places them into newDatabaseData
+      for (const oldData of databaseData) {
+        if (oldData.id === data.permission.id) {
+          isInOld = true
+          break
+        }
+      }
+
+      if (!isInOld) {
+        newDatabaseData.push(data.permission)
+      }
+
+      for (const childData of data.children) {
+        addToNewDatabseData(childData)
+      }
+    }
+
+    function updateOldData (data:TreeData) {
+      // goes throu all the tree and updates old data
+      for (let oldData of databaseData) {
+        if (oldData.id === data.permission.id) {
+          oldData = data.permission
+          break
+        }
+      }
+
+      for (const child of data.children) {
+        updateOldData(child)
+      }
     }
 
     function logData () {
       console.log(permissionsTreeData)
     }
 
-    function deleteData (data:TreeData) {
-      if (data.parent === undefined) { return }
+    async function deleteData (data: TreeData) : Promise<[string, string, string] > {
+      if (data.parent === undefined) {
+        return ['error',
+          'Error',
+          'This cannot be deleted']
+      }
+      //
+      // delete check needs to be added here, by sending a get http request for this object
+      // const response = await http.get('http://blog.test/api/permission')
+      // curently this delets it in the browser but cant edit it in database
       const test = data.parent?.children.indexOf(data)
       // eslint-disable-next-line no-unused-expressions
       data.parent?.children.splice(test, 1)
-    }
-
-    function takeData (data:TreeData) {
-      return data
+      startPreorder()
+      return ['success',
+        'Success',
+        'Object has been deleted successfuly']
     }
 
     function startPreorder () {
@@ -218,9 +266,16 @@ export default defineComponent({
       preorderNumber++
     }
 
+    function showDelete (data:TreeData) {
+      if (data.parent === undefined || data.children.length > 0) {
+        return false
+      } else {
+        return true
+      }
+    }
+
     return {
       permissionsTreeData,
-      selected,
       treeOrientation,
       addChild,
       show,
@@ -228,32 +283,53 @@ export default defineComponent({
       deleteData,
       index,
       databaseData,
-      dragData,
       startPreorder,
       rename,
-      save
+      save,
+      newDatabaseData,
+      showDelete
     }
   },
-  mounted () {
-    this.init()
+  async mounted () {
+    this.start()
   },
   methods: {
-    init () {
-      // no brain aproach
+    // ovo je funkcija za početak da se popuni permissionsTreeData objekt koji je ujedino i stablo
+
+    async start () {
+      const response = await http.get('http://blog.test/api/permission')
+      if (this.permissionsTreeData.children.length > 0) {
+        this.permissionsTreeData.children.splice(0)
+      }
+      this.init(response)
+      console.log(response)
+    },
+
+    init (response: any) {
+      console.log('WADUHEK!!')
+      const temp = JSON.parse(JSON.stringify(response.data))
+
+      if (this.databaseData.length > 0) {
+        this.databaseData.splice(0)
+      }
+      for (const all of temp) {
+        this.databaseData.push(all)
+      }
+
       const treeObjects: TreeData[] = []
       treeObjects.push(this.permissionsTreeData)
       for (const perm of this.databaseData) {
         // this is for the first element so it seets it as root
         if (this.databaseData.indexOf(perm) === 0) {
           this.permissionsTreeData.some_id = perm.id
-          this.permissionsTreeData.label = perm.title
+          this.permissionsTreeData.label = perm.name
           this.permissionsTreeData.permission = perm
           // eslint-disable-next-line brace-style
         }
         // this is for the rest
         else {
           const newTreeData: TreeData = {
-            label: perm.title,
+            label: perm.name,
             expand: false,
             some_id: perm.id,
             newChildName: '',
@@ -272,20 +348,24 @@ export default defineComponent({
           }
         }
       }
+    },
 
-      this.startPreorder()
-    },
-    test () {
-      this.$flashMessage.changeStrategy('single')
-      this.$flashMessage.show({
-        type: 'error',
-        title: 'Error Message Title'
-      })
-    },
     addChildButton (data: TreeData) {
-      const created: [string, string, string] = this.addChild(data)
-      this.flashMessage(created)
+      this.flashMessage(this.addChild(data))
     },
+    renameButton (data:TreeData) {
+      this.flashMessage(this.rename(data))
+    },
+    async saveButton () {
+      this.flashMessage(['info', 'Waiting', 'Waiting for response from server'])
+      this.flashMessage(await this.save())
+      this.start()
+    },
+    async deleteDataButton (data: TreeData) {
+      this.flashMessage(['info', 'Waiting', 'Checking if this data is used somewhere else'])
+      this.flashMessage(await this.deleteData(data))
+    },
+
     flashMessage (text: [string, string, string]) {
       this.$flashMessage.show({
         type: text[0],

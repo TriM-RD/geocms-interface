@@ -15,6 +15,7 @@
     "d3": "^7.6.1",
     "ste-events": "^2.1.7",
     "ste-simple-events": "^2.1.7",
+    "uuid": "^9.0.0",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
     "vue-d3": "^0.1.0",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@types/d3": "^7.4.0",
+    "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "@vue/cli-plugin-babel": "~4.5.0",

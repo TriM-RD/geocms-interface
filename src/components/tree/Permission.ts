@@ -1,3 +1,4 @@
+
 export interface NodeContext {
   isExpanded():boolean;
   toggleExpand():void;
@@ -5,11 +6,12 @@ export interface NodeContext {
 
 interface Permission{
   id: string,
-  title: string,
+  name: string,
   // eslint-disable-next-line camelcase
   parent_id?: string,
   lft: number,
-  rgt: number
+  rgt: number,
+  _method?: string
 }
 
 export interface TreeData{
