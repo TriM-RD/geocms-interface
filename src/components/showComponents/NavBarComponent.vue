@@ -25,6 +25,7 @@
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#">Action</a></li>
             <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><button class="dropdown-item" type="button" v-on:click="logout()">Log out</button></li>
           </ul>
         </ul>
         </li>
@@ -38,6 +39,7 @@
 import { Options, Vue } from 'vue-class-component'
 import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
 import { ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, RegionEnum } from '@/interface/manager/events/types'
+import http from '@/http-common'
 @Options({
   props: {
     object: ObjectTemplate
@@ -50,6 +52,14 @@ export default class NavBarComponent extends Vue {
   regionType = RegionType
   regionEnum = RegionEnum
   object!: ObjectTemplate
+  async logout () : Promise<void> {
+    await http.get('http://blog.test/api/user/logout').then(response => {
+      // success
+      window.location.reload()
+    }, response => {
+      // error
+    })
+  }
 }
 </script>
 
