@@ -59,7 +59,7 @@ export namespace Manager.Events.Type{
       }
     }
 
-    export class AppendEntity extends MethodTypeAbstract {
+    export class InsertClick extends MethodTypeAbstract {
       public Act (_object: ObjectTemplate, _data : any, _invokeLogic: LogicDelegate): boolean {
         _object.Stats[StatTypeEnum.Value].Data = _data
         _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: _object })
@@ -94,19 +94,6 @@ export namespace Manager.Events.Type{
 
     public async Enact (_data : any): Promise<any> {
       return await _data
-    }
-  }
-
-  export class SelectClick extends MethodTypeAbstract {
-    public Act (_object: ObjectTemplate, _data : any, _invokeLogic: LogicDelegate): boolean {
-      console.log(_data)
-      _object.Stats[StatTypeEnum.Value].Data = _data
-      _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: _object })
-      return true
-    }
-
-    public async Enact (_data : any): Promise<any> {
-      return await _data// _data.charAt(0).toUpperCase() + _data.slice(1)
     }
   }
 }

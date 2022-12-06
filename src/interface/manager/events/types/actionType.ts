@@ -5,10 +5,9 @@ export enum ActionTypeEnum {
   Click,
   Insert,
   InsertUrl,
-  AppendEntity,
+  InsertClick,
   InsertNumber,
   Check,
-  SelectClick
 }
 
 export class ActionType {
@@ -17,9 +16,8 @@ export class ActionType {
    [ActionTypeEnum.Click]: new Manager.Events.Type.Click(),
    [ActionTypeEnum.Insert]: new Manager.Events.Type.Insert(),
    [ActionTypeEnum.InsertUrl]: new Manager.Events.Type.InsertUrl(),
-   [ActionTypeEnum.AppendEntity]: new Manager.Events.Type.AppendEntity(),
+   [ActionTypeEnum.InsertClick]: new Manager.Events.Type.InsertClick(),
    [ActionTypeEnum.InsertNumber]: new Manager.Events.Type.InsertNumber(),
-   [ActionTypeEnum.Check]: new Manager.Events.Type.Check(),
-   [ActionTypeEnum.SelectClick]: new Manager.Events.Type.SelectClick()
+   [ActionTypeEnum.Check]: new Manager.Events.Type.Check()
  }
 }
