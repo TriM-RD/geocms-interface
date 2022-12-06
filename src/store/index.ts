@@ -4,7 +4,7 @@ export default createStore({
   state: {
     name: '',
     email: '',
-    requiresAuth: false
+    requiresAuth: 0
   },
   mutations: {
   },

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="($store.state.requiresAuth === true)">
+  <div v-if="($store.state.requiresAuth === 2)">
     <NavBarComponent/>
     <NavComponent />
     <FooterComponent />
@@ -55,9 +55,10 @@ export default class App extends Vue {
       // success
       this.$store.state.name = response.data.name
       this.$store.state.email = response.data.email
-      this.$store.state.requiresAuth = true
+      this.$store.state.requiresAuth = 2
     }, response => {
       // error
+      this.$store.state.requiresAuth = 1
       const temp = String(response)
       if (temp.includes('code 401')) {
         localStorage.setItem('access_token', '')
