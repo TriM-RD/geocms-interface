@@ -1,8 +1,7 @@
 import { ObjectTemplate } from '../containerClasses/objectTemplate'
-import { ObjectType, ObjectTypeEnum } from '../events/types/objectType'
+import { ObjectTypeEnum } from '../events/types/objectType'
 import { SubObjectTypeEnum } from '../events/types/subObjectType'
-import { MechanicAbstract } from './mechanicAbstract'
-import { Manager as Stat } from '../events/types/statTypes/types'
+import { MechanicAbstract, MechanicDelegate } from './mechanicAbstract'
 import http from '@/http-common'
 import { StatType, StatTypeEnum } from '../events/types/statType'
 import router from '@/router'
@@ -70,14 +69,64 @@ export namespace Manager.Mechanic{
 
     protected SubscribeConditions (): void {
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
+      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectList].SubscribeLogic(this.SelectList.bind(this))
+      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Field].SubscribeLogic(this.FieldButton.bind(this))
     }
 
-    public UnsubscribeConditions () {
+    public UnsubscribeConditions (): void {
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
+      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectList].NullifyLogic()
+      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Field].NullifyLogic()
+      MechanicAbstract.instance = null
+    }
+
+    refreshPage () {
+      if (this.mechanicInvoked !== null) {
+        this.mechanicInvoked.dispatch(true)
+      }
+    }
+
+    private compare (objectToCompare: ObjectTemplate): number {
+      let answer = -1
+      for (let i = 0; i < this.ObjectTemplates.length; i++) {
+        if (this.ObjectTemplates[i].Stats[StatTypeEnum.Value] !== undefined) {
+          if (this.ObjectTemplates[i].Stats[StatTypeEnum.Value].Data === objectToCompare.Stats[StatTypeEnum.Value].Data) {
+            answer = i
+            return answer
+          }
+        }
+      }
+      return answer
+    }
+
+    protected async FieldButton (eventHandler: EventHandlerType): Promise<void> {
+      console.log(eventHandler.payload.Stats[StatTypeEnum.Value].Data)
+      const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+      this.ObjectTemplates[temp].Stats[StatTypeEnum.Value].Data = eventHandler.payload.Stats[StatTypeEnum.Value].Data
+      console.log(this.ObjectTemplates)
+    }
+
+    protected async SelectList (eventHandler: EventHandlerType): Promise<void> {
+      switch (router.currentRoute.value.name) {
+        case 'AttributeAdd':
+        case 'AttributeEdit':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Middle:
+              while (this.ObjectTemplates.length > 3) {
+                this.ObjectTemplates.pop()
+              }
+              this.refreshPage()
+              this.ObjectTemplates = this.Append((await http.get('http://blog.test/api/form/attribute/' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
+              this.refreshPage()
+              break
+            default:
+              break
+          }
+          break
+      }
     }
 
     protected async Button (eventHandler: EventHandlerType): Promise<void> {
-      // const targetCopy = new ObjectTemplate(eventHandler.payload.Region, eventHandler.payload.ObjectEnum, eventHandler.payload.SubObjectEnum, eventHandler.payload.ActionEnum, this.reStructure(Object.values(JSON.parse(JSON.stringify(eventHandler.payload.Stats)))))
       switch (router.currentRoute.value.name) {
         case 'DeviceAdd':
         case 'DeviceEdit':
@@ -132,14 +181,43 @@ export namespace Manager.Mechanic{
                   .then(response => (router.push({ name: 'AttributeEdit', params: { id: response.data.id } })))
               }
               break
+            case SubObjectTypeEnum.Middle:
+              this.refreshPage()
+              this.ObjectTemplates = this.Append([
+                new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.FieldButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
+                  [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(Math.random().toString(36).slice(2, 7).toString()),
+                  [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(''),
+                  [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.Id].Data)
+                })
+              ])
+              this.refreshPage()
+              break
             case SubObjectTypeEnum.Right:
               router.back()
+              break
+            case SubObjectTypeEnum.Down:
+              this.refreshPage()
+              console.log(eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+              console.log(JSON.parse(JSON.stringify(this.ObjectTemplates)))
+              // eslint-disable-next-line no-case-declarations
+              const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+              this.ObjectTemplates.splice(temp, 1)
+              console.log(this.ObjectTemplates)
+              this.refreshPage()
               break
             default:
               break
           }
           break
       }
+    }
+
+    static getInstance (_mechanicCallback: MechanicDelegate | null = null): MechanicAbstract {
+      if (!MechanicAbstract.instance) {
+        MechanicAbstract.instance = new FormMechanic()
+      }
+      MechanicAbstract.instance.SubscribeToVueComponent(_mechanicCallback)
+      return MechanicAbstract.instance
     }
   }
 

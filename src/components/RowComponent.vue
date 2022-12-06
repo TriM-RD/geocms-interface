@@ -32,14 +32,14 @@ export default class RowComponent extends Vue {
   mounted () {
     this.objectTemplates = this.mechanic.InitSet(this.entity)
     if (this.objectTemplates !== undefined) {
+      this.objectTemplates = this.mechanic.Append(
+        [
+          new ObjectTemplate(RegionEnum.TableColumn, ObjectTypeEnum.ColumnButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
+            [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.objectTemplates[0].Stats[StatTypeEnum.Id].Data)
+          })
+        ]
+      )
     }
-    this.objectTemplates = this.mechanic.Append(
-      [
-        new ObjectTemplate(RegionEnum.TableColumn, ObjectTypeEnum.ColumnButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
-          [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.objectTemplates[0].Stats[StatTypeEnum.Id].Data)
-        })
-      ]
-    )
     this.renderComponent = true
   }
 
