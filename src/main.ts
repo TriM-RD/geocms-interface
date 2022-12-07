@@ -9,4 +9,8 @@ import 'vue3-blocks-tree/dist/vue3-blocks-tree.css'
 
 const defaultoptions = { treeName: 'blocks-tree' }
 
-createApp(App).use(store).use(router).use(VueBlocksTree, defaultoptions).mount('#app')
+createApp(App)
+  .use(store)
+  .use(router)
+  .use(VueBlocksTree, defaultoptions)
+  .mount('#app')
