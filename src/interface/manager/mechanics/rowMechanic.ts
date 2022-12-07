@@ -106,6 +106,23 @@ export namespace Manager.Mechanic{
               break
           }
           break
+        case 'Division':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Left:// Izbriši
+              http.delete('http://blog.test/api/division/' + _id)
+                .then(response => (router.push({ name: 'Division' })))
+              router.push({ name: 'Device' })
+              break
+            case SubObjectTypeEnum.Middle: // Uredi
+              router.push({ name: 'DivisionEdit', params: { id: _id } })
+              break
+            case SubObjectTypeEnum.Right: // Pregledaj
+              router.push({ name: 'DivisionEdit', params: { id: _id } })
+              break
+            default:
+              break
+          }
+          break
       }
     }
 

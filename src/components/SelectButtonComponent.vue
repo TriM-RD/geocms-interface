@@ -18,7 +18,7 @@ import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatType
     index: Number
   }
 })
-export default class FieldButtonComponent extends Vue {
+export default class SelectButtonComponent extends Vue {
   mechanic: MechanicAbstract = new Manager.Mechanic.ColumnMechanic()
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
@@ -26,7 +26,8 @@ export default class FieldButtonComponent extends Vue {
   object!: ObjectTemplate
   index!: number
   objectTemplates: ObjectTemplate[] = this.mechanic.InitSet([
-    new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.InsertClick, {
+    new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.SelectList, SubObjectTypeEnum.ParentObject, ActionTypeEnum.InsertClick, {
+      [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData(this.object.Stats[StatTypeEnum.ItemList].Data),
       [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Label].Data),
       [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Tag].Data),
       [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Value].Data),

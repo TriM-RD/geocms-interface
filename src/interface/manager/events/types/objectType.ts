@@ -13,7 +13,8 @@ export enum ObjectTypeEnum {
   Radio,
   Column,
   ColumnButton,
-  FieldButton
+  FieldButton,
+  SelectButton
 }
 
 export class ObjectType {

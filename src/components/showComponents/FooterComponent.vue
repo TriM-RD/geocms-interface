@@ -20,6 +20,7 @@ import {
 } from '@/interface/manager/events/types'
 import { MechanicAbstract } from '@/interface/manager/mechanics/mechanicAbstract'
 import { Manager } from '@/interface/manager/mechanics/footerMechanic'
+import router from '@/router'
 @Options({
   props: {
     object: ObjectTemplate
@@ -34,7 +35,7 @@ export default class FooterComponent extends Vue {
   index!: number
   renderComponent= false
   objectTemplates!: ObjectTemplate[]
-  openTab!: string
+  openTab!: string | symbol
 
   @Watch('$route')
   onDataChanged (value: any, oldValue: string) {
@@ -44,6 +45,7 @@ export default class FooterComponent extends Vue {
   }
 
   mounted () {
+    if (this.$route.name !== undefined && this.$route.name !== null) { this.openTab = this.$route.name }
     this.choose()
   }
 
@@ -170,6 +172,21 @@ export default class FooterComponent extends Vue {
               [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Cancel'),
               [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-secondary flex-fill')
             })])
+        break
+      case 'DivisionEdit':
+      case 'DivisionAdd':
+        this.objectTemplates = this.mechanic.InitSet(
+          [
+            new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Save'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-success me-2 flex-fill')
+            }),
+            new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Right, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Cancel'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-secondary flex-fill')
+            })
+          ]
+        )
         break
       case 'AttributeEdit':
       case 'AttributeAdd':
