@@ -1,5 +1,8 @@
 <template>
-  <table class="table" v-if="renderComponent">
+  <Loading v-model:active="renderComponent"
+           :can-cancel="false"
+           :is-full-page="false"/>
+  <table class="table" v-if="!renderComponent">
   <thead class="table-light">
     <tr>
       <th v-for="(header, key) in headers" :key="`${ key }-${ header }-${ Math.random().toString(36).slice(2, 7) }`" scope="col">
@@ -15,11 +18,17 @@
 </template>
 
 <script lang="ts">
+import Loading from 'vue-loading-overlay'
 import { Options, Vue } from 'vue-class-component'
 import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
 import { Manager } from '@/interface/manager/mechanics/tableMechanic'
 import { MechanicAbstract } from '@/interface/manager/mechanics/mechanicAbstract'
 import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatTypeEnum, StatType, ObjectType, RegionType } from '@/interface/manager/events/types/index'
+@Options({
+  components: {
+    Loading
+  }
+})
 export default class TableComponent extends Vue {
   headers!: string[]
   regionEnum = RegionEnum
@@ -27,7 +36,7 @@ export default class TableComponent extends Vue {
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType
   mechanic: MechanicAbstract = new Manager.Mechanic.TableMechanic()
-  renderComponent= false
+  renderComponent= true
   objectTemplates!: ObjectTemplate[]
   entities!: ObjectTemplate[][]
 
@@ -40,8 +49,25 @@ export default class TableComponent extends Vue {
   }
 
   async Init () {
-    this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1'))
+    switch (this.$route.name) {
+      case 'Device':
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'entity'))
+        break
+      case 'Group':
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'group'))
+        break
+      case 'Division':
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'division'))
+        break
+      case 'GroupEdit':
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'filter/attribute/' + this.$route.params.id))
+        break
+      case 'GroupAdd':
+        this.renderComponent = false
+        return
+    }
     if (Object.keys(this.objectTemplates).length === 0) {
+      this.renderComponent = false
       return
     }
     let tempId = null
@@ -66,13 +92,12 @@ export default class TableComponent extends Vue {
       this.entities[this.entities.length] = tempObjectTemplates
     }
     this.getHeaders()
-    this.renderComponent = true
+    this.renderComponent = false
   }
 
   getHeaders () : void { // TODO Needs to be reworked. @JosoMarich
     this.headers = []
     for (const header of this.objectTemplates) {
-      console.log(header.Stats[StatTypeEnum.Label].Data)
       if (this.headers.indexOf(header.Stats[StatTypeEnum.Label].Data) === -1) {
         this.headers[this.headers.length] = header.Stats[StatTypeEnum.Label].Data
       }

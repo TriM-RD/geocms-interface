@@ -4,7 +4,7 @@
 <div class="container">
   <ul class="nav nav-pills nav-fill">
   <li class="nav-item border">
-    <router-link to="/map" class="nav-link boja">Map/Home</router-link>
+    <router-link to="/" class="nav-link boja">Map/Home</router-link>
   </li>
   <li class="nav-item border">
     <router-link to="/device" class="nav-link boja">Devices</router-link>

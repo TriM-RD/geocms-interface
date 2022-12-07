@@ -4,7 +4,7 @@
     <NavComponent />
     <FooterComponent />
   </div>
-  <router-view/>
+  <router-view :key="$route.fullPath"/>
 </template>
 
 <style>
@@ -39,12 +39,9 @@ export default class App extends Vue {
     const temp = location.hash.substr(1)
     if (temp !== '' && localStorage.getItem('access_token') === '') {
       const value = JSON.parse(atob(temp))
-      console.log(value.access_token)
       localStorage.setItem('access_token', value.access_token)
       history.pushState('', document.title, window.location.pathname + window.location.search)
       location.assign('/')
-      // alert('yes')
-      // this.$router.replace('/home')
     } else {
       this.checkBearer()
     }

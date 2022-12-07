@@ -41,11 +41,11 @@ export namespace Manager.Mechanic{
     }
 
     protected SubscribeConditions (): void {
-      RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
+      // RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
     }
 
     public UnsubscribeConditions () {
-      RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
+      // RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
     }
 
     protected Button (eventHandler: EventHandlerType): void {
@@ -58,10 +58,10 @@ export namespace Manager.Mechanic{
             .then(response => (router.go(0)))
           break
         case SubObjectTypeEnum.Middle: // Uredi
-          router.push({ name: 'Edit', params: { id: _id } })
+          router.push({ name: 'DeviceEdit', params: { id: _id } })
           break
         case SubObjectTypeEnum.Right: // Pregledaj
-          router.push({ name: 'Show', params: { id: _id } })
+          router.push({ name: 'DeviceEdit', params: { id: _id } })
           break
         default:
           break

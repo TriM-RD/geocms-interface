@@ -22,7 +22,8 @@ export namespace Manager.Events.Type{
       [ObjectTypeEnum.CheckBox]: new ObjectTypeAbstract.Events.Type.CheckBox(),
       [ObjectTypeEnum.DataList]: new ObjectTypeAbstract.Events.Type.DataList(),
       [ObjectTypeEnum.SelectList]: new ObjectTypeAbstract.Events.Type.SelectList(),
-      [ObjectTypeEnum.Radio]: new ObjectTypeAbstract.Events.Type.Radio()
+      [ObjectTypeEnum.Radio]: new ObjectTypeAbstract.Events.Type.Radio(),
+      [ObjectTypeEnum.FieldButton]: new ObjectTypeAbstract.Events.Type.FieldButton()
     }
   }
 

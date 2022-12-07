@@ -36,4 +36,16 @@ export namespace Manager.Events.Type{
         throw new Error('Method not implemented.')
       }
     }
+
+  export class Up extends SubObjectTypeAbstract {
+    public Subscribe (_statChangeDel: StatChangeDel): StatChangeDel {
+      throw new Error('Method not implemented.')
+    }
+  }
+
+  export class Down extends SubObjectTypeAbstract {
+    public Subscribe (_statChangeDel: StatChangeDel): StatChangeDel {
+      throw new Error('Method not implemented.')
+    }
+  }
 }

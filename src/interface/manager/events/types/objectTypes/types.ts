@@ -13,6 +13,7 @@ import SelectListComponent from '@/components/formComponents/SelectListComponent
 import RadioComponent from '@/components/formComponents/RadioComponent.vue'
 import ColumnComponent from '@/components/ColumnComponent.vue'
 import ColumnButtonComponent from '@/components/ColumnButtonComponent.vue'
+import FieldButtonComponent from '@/components/FieldButtonComponent.vue'
 import { StatTypeEnum } from '../statType'
 import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
 
@@ -145,6 +146,12 @@ export namespace Manager.Events.Type{
   export class ColumnButton extends IChangeStat {
     public GetVueComponent () {
       return ColumnButtonComponent
+    }
+  }
+
+  export class FieldButton extends IChangeStat {
+    public GetVueComponent () {
+      return FieldButtonComponent
     }
   }
 }

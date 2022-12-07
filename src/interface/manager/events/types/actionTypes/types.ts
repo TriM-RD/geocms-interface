@@ -50,41 +50,7 @@ export namespace Manager.Events.Type{
 
     export class Click extends MethodTypeAbstract {
       public Act (_object: ObjectTemplate, _data : any, _invokeLogic: LogicDelegate): boolean {
-        switch (_object.Region) {
-          case RegionEnum.TableColumn:
-            /* eslint-disable */
-            const _id = _object.Stats[StatTypeEnum.Id].Data
-            /* eslint-enable */
-            switch (_object.SubObjectEnum) {
-              case SubObjectTypeEnum.Left:// Izbriši
-                http.delete('http://blog.test/api/entity/' + _id)
-                  .then(response => (router.go(0)))
-                break
-              case SubObjectTypeEnum.Middle: // Uredi
-                router.push({ name: 'Edit', params: { id: _id } })
-                break
-              case SubObjectTypeEnum.Right: // Pregledaj
-                // router.push({ name: 'Show', params: { id: _id } })
-                _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: _object })
-                break
-              default:
-                break
-            }
-            break
-          /* case RegionEnum.Form:
-            switch (_object.SubObjectEnum) {
-              case SubObjectTypeEnum.Left:// Izbriši
-                _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: _object })
-                break
-              default:
-                _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: null })
-                break
-            }
-            break */
-          default:
-            _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: null })
-            break
-        }
+        _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: _object })
         return true
       }
 
@@ -93,11 +59,9 @@ export namespace Manager.Events.Type{
       }
     }
 
-    export class AppendEntity extends MethodTypeAbstract {
+    export class InsertClick extends MethodTypeAbstract {
       public Act (_object: ObjectTemplate, _data : any, _invokeLogic: LogicDelegate): boolean {
-        const prepend = '<div class="container"><div class="row gy-5"><div class="col" style="margin: 1;text-indent: 2rem;text-align: justify;">'
-        const append = '</div></div></div>'
-        _object.Stats[StatTypeEnum.Value].Data = prepend + _data + append
+        _object.Stats[StatTypeEnum.Value].Data = _data
         _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: _object })
         return true
       }

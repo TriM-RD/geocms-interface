@@ -1,8 +1,7 @@
 import { ObjectTemplate } from '../containerClasses/objectTemplate'
-import { ObjectType, ObjectTypeEnum } from '../events/types/objectType'
+import { ObjectTypeEnum } from '../events/types/objectType'
 import { SubObjectTypeEnum } from '../events/types/subObjectType'
-import { MechanicAbstract } from './mechanicAbstract'
-import { Manager as Stat } from '../events/types/statTypes/types'
+import { MechanicAbstract, MechanicDelegate } from './mechanicAbstract'
 import http from '@/http-common'
 import { StatType, StatTypeEnum } from '../events/types/statType'
 import router from '@/router'
@@ -16,12 +15,12 @@ export namespace Manager.Mechanic{
     private id = '-1';
     private inEdit = false;
 
-    public async InitGet (_id: string): Promise<ObjectTemplate[]> {
+    public async InitGet (_id: string, _route: string): Promise<ObjectTemplate[]> {
       this.id = _id
       if (this.id === '-1') {
-        this.id = (await http.get('http://blog.test/api/entity/' + this.id)).data
+        this.id = (await http.get('http://blog.test/api/' + _route + '/' + this.id)).data
         console.log(this.id)
-        const response = await http.get('http://blog.test/api/form')
+        const response = await http.get('http://blog.test/api/form/' + _route)
         return (this.ObjectTemplates = response.data.map((_object: any) => {
           return new ObjectTemplate(_object.Region, _object.ObjectEnum,
             _object.SubObjectEnum, _object.ActionEnum, this.reStructure(_object.Stats,
@@ -31,7 +30,7 @@ export namespace Manager.Mechanic{
               }))
         }))
       }
-      const response = await http.get('http://blog.test/api/entity/' + this.id)
+      const response = await http.get('http://blog.test/api/' + _route + '/' + this.id)
       this.inEdit = true
       return (this.ObjectTemplates = response.data.map((_object: any) => {
         return new ObjectTemplate(_object.Region, _object.ObjectEnum,
@@ -70,66 +69,156 @@ export namespace Manager.Mechanic{
 
     protected SubscribeConditions (): void {
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
+      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectList].SubscribeLogic(this.SelectList.bind(this))
+      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Field].SubscribeLogic(this.FieldButton.bind(this))
     }
 
-    public UnsubscribeConditions () {
+    public UnsubscribeConditions (): void {
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
+      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectList].NullifyLogic()
+      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Field].NullifyLogic()
+      MechanicAbstract.instance = null
     }
 
-    protected async Button (eventHandler: EventHandlerType): Promise<void> {
-      // const targetCopy = new ObjectTemplate(eventHandler.payload.Region, eventHandler.payload.ObjectEnum, eventHandler.payload.SubObjectEnum, eventHandler.payload.ActionEnum, this.reStructure(Object.values(JSON.parse(JSON.stringify(eventHandler.payload.Stats)))))
-      alert('test')
-      switch (eventHandler.subObjectType) {
-        case SubObjectTypeEnum.Middle:
-          if (this.inEdit) {
-            await http.patch('http://blog.test/api/entity/' + this.id, this.ObjectTemplates)
-              .then(response => (router.push({ name: 'Show', params: { id: response.data.id } })))
-          } else {
-            alert('test')
-            await http.post('http://blog.test/api/entity', this.ObjectTemplates)
-              .then(response => (router.push({ name: 'Show', params: { id: response.data.id } })))
-          }
-          break
-        case SubObjectTypeEnum.ParentObject:
-          /* console.log(this.ObjectTemplates)
-          if (this.compare(eventHandler.payload) === '-1') { this.ObjectTemplates.splice(this.ObjectTemplates.length - 2, 0, eventHandler.payload) }
-          console.log(this.ObjectTemplates) */
-          break
-        default:
-          break
+    refreshPage () {
+      if (this.mechanicInvoked !== null) {
+        this.mechanicInvoked.dispatch(true)
       }
     }
 
-    /* private compare (objectToCompare: ObjectTemplate): string {
-      let answer = '-1'
+    private compare (objectToCompare: ObjectTemplate): number {
+      let answer = -1
       for (let i = 0; i < this.ObjectTemplates.length; i++) {
-        if (this.ObjectTemplates[i].Stats[StatTypeEnum.Value].Data === objectToCompare.Stats[StatTypeEnum.Value].Data) {
-          answer = i
-          return answer
+        if (this.ObjectTemplates[i].Stats[StatTypeEnum.Value] !== undefined) {
+          if (this.ObjectTemplates[i].Stats[StatTypeEnum.Value].Data === objectToCompare.Stats[StatTypeEnum.Value].Data) {
+            answer = i
+            return answer
+          }
         }
       }
       return answer
     }
 
-    private async upgrade () {
-      let runOnce = false
-      const prevObjectTemplates = this.ObjectTemplates
-      this.InitSet(await this.InitGet(-1))
-      prevObjectTemplates.forEach((_prevObject: ObjectTemplate) => {
-        this.ObjectTemplates.forEach((_object: ObjectTemplate) => {
-          _object.Stats[StatTypeEnum.Id].Data = _prevObject.Stats[StatTypeEnum.Id].Data
-          if (_object.Stats[StatTypeEnum.Tag].Data === _prevObject.Stats[StatTypeEnum.Tag].Data) {
-            _object.Stats = _prevObject.Stats
-            _object = _prevObject
-          } else if (_prevObject.Stats[StatTypeEnum.Tag].Data === 'Content' && !runOnce) {
-            runOnce = true
-            this.ObjectTemplates.splice(this.ObjectTemplates.length - 2, 0, new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.ModularText, SubObjectTypeEnum.ParentObject, ActionTypeEnum.AppendEntity, _prevObject.Stats))
+    protected async FieldButton (eventHandler: EventHandlerType): Promise<void> {
+      console.log(eventHandler.payload.Stats[StatTypeEnum.Value].Data)
+      const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+      this.ObjectTemplates[temp].Stats[StatTypeEnum.Value].Data = eventHandler.payload.Stats[StatTypeEnum.Value].Data
+      console.log(this.ObjectTemplates)
+    }
+
+    protected async SelectList (eventHandler: EventHandlerType): Promise<void> {
+      switch (router.currentRoute.value.name) {
+        case 'AttributeAdd':
+        case 'AttributeEdit':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Middle:
+              while (this.ObjectTemplates.length > 3) {
+                this.ObjectTemplates.pop()
+              }
+              this.refreshPage()
+              this.ObjectTemplates = this.Append((await http.get('http://blog.test/api/form/attribute/' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
+              this.refreshPage()
+              break
+            default:
+              break
           }
-        })
-      })
-      this.inEdit = true
-      this.id = Number(this.ObjectTemplates[0].Stats[StatTypeEnum.Id].Data)
-    } */
+          break
+      }
+    }
+
+    protected async Button (eventHandler: EventHandlerType): Promise<void> {
+      switch (router.currentRoute.value.name) {
+        case 'DeviceAdd':
+        case 'DeviceEdit':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Left:
+              if (this.inEdit) {
+                await http.patch('http://blog.test/api/entity/' + this.id, this.ObjectTemplates)
+                  .then(response => (router.push({ name: 'DeviceEdit', params: { id: response.data.id } })))
+              } else {
+                await http.post('http://blog.test/api/entity', this.ObjectTemplates)
+                  .then(response => (router.push({ name: 'DeviceEdit', params: { id: response.data.id } })))
+              }
+              break
+            case SubObjectTypeEnum.Right:
+              router.back()
+              break
+            default:
+              break
+          }
+          break
+        case 'GroupAdd':
+        case 'GroupEdit':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Left:
+              if (this.inEdit) {
+                await http.patch('http://blog.test/api/group/' + this.id, this.ObjectTemplates)
+                  .then(response => (router.push({ name: 'GroupEdit', params: { id: response.data.id } })))
+              } else {
+                await http.post('http://blog.test/api/group', this.ObjectTemplates)
+                  .then(response => (router.push({ name: 'GroupEdit', params: { id: response.data.id } })))
+              }
+              break
+            case SubObjectTypeEnum.Middle:
+              await router.push({ name: 'AttributeAdd', params: { parentId: this.id } })
+              break
+            case SubObjectTypeEnum.Right:
+              router.back()
+              break
+            default:
+              break
+          }
+          break
+        case 'AttributeAdd':
+        case 'AttributeEdit':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Left:
+              if (this.inEdit) {
+                await http.patch('http://blog.test/api/attribute/' + this.id, this.ObjectTemplates)
+                  .then(response => (router.push({ name: 'AttributeEdit', params: { id: response.data.id } })))
+              } else {
+                await http.post('http://blog.test/api/attribute', this.ObjectTemplates)
+                  .then(response => (router.push({ name: 'AttributeEdit', params: { id: response.data.id } })))
+              }
+              break
+            case SubObjectTypeEnum.Middle:
+              this.refreshPage()
+              this.ObjectTemplates = this.Append([
+                new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.FieldButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
+                  [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(Math.random().toString(36).slice(2, 7).toString()),
+                  [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(''),
+                  [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.Id].Data)
+                })
+              ])
+              this.refreshPage()
+              break
+            case SubObjectTypeEnum.Right:
+              router.back()
+              break
+            case SubObjectTypeEnum.Down:
+              this.refreshPage()
+              console.log(eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+              console.log(JSON.parse(JSON.stringify(this.ObjectTemplates)))
+              // eslint-disable-next-line no-case-declarations
+              const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+              this.ObjectTemplates.splice(temp, 1)
+              console.log(this.ObjectTemplates)
+              this.refreshPage()
+              break
+            default:
+              break
+          }
+          break
+      }
+    }
+
+    static getInstance (_mechanicCallback: MechanicDelegate | null = null): MechanicAbstract {
+      if (!MechanicAbstract.instance) {
+        MechanicAbstract.instance = new FormMechanic()
+      }
+      MechanicAbstract.instance.SubscribeToVueComponent(_mechanicCallback)
+      return MechanicAbstract.instance
+    }
   }
 
 }

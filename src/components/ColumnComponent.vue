@@ -16,7 +16,7 @@ import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatType
   }
 })
 export default class ColumnComponent extends Vue {
-  mechanic: MechanicAbstract = new Manager.Mechanic.RowMechanic()
+  // mechanic: MechanicAbstract = new Manager.Mechanic.RowMechanic()
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType
@@ -24,7 +24,7 @@ export default class ColumnComponent extends Vue {
   index!: number
 
   beforeUnmount () {
-    this.mechanic.UnsubscribeConditions()
+    // this.mechanic.UnsubscribeConditions()
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {

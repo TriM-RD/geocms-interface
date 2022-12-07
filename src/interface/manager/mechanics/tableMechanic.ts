@@ -6,13 +6,14 @@ import http from '@/http-common'
 import { StatType, StatTypeEnum } from '../events/types/statType'
 import { RegionEnum, ActionTypeEnum, RegionType } from '@/interface/manager/events/types/index'
 import { EventHandlerType } from '../events/types/objectTypes/types'
+import router from '@/router'
 
 export namespace Manager.Mechanic{
 
   export class TableMechanic extends MechanicAbstract {
-    public async InitGet (_id: string): Promise<ObjectTemplate[]> {
+    public async InitGet (_id: string, _api: string): Promise<ObjectTemplate[]> {
       this.ObjectTemplates = []
-      const response = await http.get('http://blog.test/api/entity')
+      const response = await http.get('http://blog.test/api/' + _api)
       if (Object.keys(response.data).length !== 0) {
         this.ObjectTemplates = this.forEachElement(response.data)
         return this.ObjectTemplates
@@ -61,7 +62,7 @@ export namespace Manager.Mechanic{
     }
 
     protected Button (_eventHandler: EventHandlerType): void {
-      throw new Error('Method not implemented.')
+      console.log('not implemented')
     }
   }
 

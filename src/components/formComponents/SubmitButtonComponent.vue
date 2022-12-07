@@ -20,15 +20,6 @@ export default class SubmitButtonComponent extends Vue {
   regionEnum = RegionEnum
   object!: ObjectTemplate
   renderComponent= false
-
-  generateHtml (start = true, value : string) {
-    if ((start && value.includes('/')) || (!start && !value.includes('/'))) {
-      return ''
-    } else {
-      this.renderComponent = true
-      return '<td>Test</td>'
-    }
-  }
 }
 </script>
 
