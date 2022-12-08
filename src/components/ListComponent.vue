@@ -42,7 +42,7 @@ export default class ListComponent extends Vue {
   }
 
   async Init () {
-    this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1'))
+    this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'entity'))
     this.renderComponent = true
   }
 

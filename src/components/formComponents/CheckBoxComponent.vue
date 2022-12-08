@@ -37,5 +37,8 @@ export default class CheckBoxComponent extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.form-check-input:checked {
+  background-color: #606467;
+  border-color: #606467;
+}
 </style>

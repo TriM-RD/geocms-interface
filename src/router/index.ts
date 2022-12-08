@@ -1,28 +1,16 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
-import Edit from '../views/Edit.vue'
-import About from '../views/About.vue'
 import Show from '../views/Show.vue'
-import Map from '../views/Map.vue'
-import Types from '../views/Types.vue'
-import Categories from '../views/Categories.vue'
-import DeviceAdd from '../views/DeviceAdd.vue'
-import TypesAdd from '../views/TypesAdd.vue'
-import AttributeAdd from '../views/AttributeAdd.vue'
-import CategoriesAdd from '../views/CategoriesAdd.vue'
 import DeviceAppend from '../views/DeviceAppend.vue'
 import DeviceCabinet from '../views/DeviceCabinet.vue'
 import Search from '@/views/Search.vue'
+import PermissionsTree from '@/views/PermissionsTree.vue'
+import Form from '@/views/Form.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Home',
     component: Home
-  },
-  {
-    path: '/:id',
-    name: 'Edit',
-    component: Edit
   },
   {
     path: '/device',
@@ -34,40 +22,73 @@ const routes: Array<RouteRecordRaw> = [
     component: Show
   },
   {
-    path: '/categories',
-    name: 'Categories',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: Categories
+    path: '/device/add',
+    name: 'DeviceAdd',
+    component: Form
   },
   {
-    path: '/map',
-    name: 'Map',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: Map
+    path: '/device/add/:id',
+    name: 'DeviceEdit',
+    component: Form
   },
   {
-    path: '/types',
-    name: 'Types',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: Types
-  },
-  {
-    path: '/permissions',
-    name: 'Permissions',
+    path: '/group',
+    name: 'Group',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
     component: Show
+  },
+  {
+    path: '/group/add',
+    name: 'GroupAdd',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: Form
+  },
+  {
+    path: '/group/add/:id',
+    name: 'GroupEdit',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: Form
+  },
+  {
+    path: '/permission',
+    name: 'Permission',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: PermissionsTree
+  },
+  {
+    path: '/division',
+    name: 'Division',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: Show
+  },
+  {
+    path: '/division/add',
+    name: 'DivisionAdd',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: Form
+  },
+  {
+    path: '/division/add/:id',
+    name: 'DivisionEdit',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: Form
   },
   {
     path: '/show/:id',
@@ -78,39 +99,33 @@ const routes: Array<RouteRecordRaw> = [
     component: Show
   },
   {
-    path: '/deviceAdd',
-    name: 'DeviceAdd',
+    path: '/attribute',
+    name: 'Attribute',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: DeviceAdd
+    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: Show
   },
   {
-    path: '/typesAdd',
-    name: 'TypesAdd',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: TypesAdd
-  },
-  {
-    path: '/attributeAdd',
+    path: '/attribute/add/:parentId',
     name: 'AttributeAdd',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: AttributeAdd
+    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: Form
   },
   {
-    path: '/categoriesAdd',
-    name: 'CategoriesAdd',
+    path: '/attribute/add/:parentId/:id',
+    name: 'AttributeEdit',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: CategoriesAdd
+    component: Form
   },
   {
-    path: '/deviceAppend',
+    path: '/device/append',
     name: 'DeviceAppend',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -118,7 +133,7 @@ const routes: Array<RouteRecordRaw> = [
     component: DeviceAppend
   },
   {
-    path: '/deviceCabinet',
+    path: '/device/cabinet',
     name: 'DeviceCabinet',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route

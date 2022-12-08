@@ -1,5 +1,10 @@
 <template>
-    <NavBarComponent />
+  <div v-if="($store.state.requiresAuth === 2)">
+    <NavBarComponent/>
+    <NavComponent />
+    <FooterComponent />
+  </div>
+  <router-view :key="$route.fullPath"/>
 </template>
 
 <style>
@@ -15,38 +20,47 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import NavBarComponent from '@/components/showComponents/NavBarComponent.vue'
+import NavComponent from '@/components/showComponents/NavComponent.vue'
+import FooterComponent from '@/components/showComponents/FooterComponent.vue'
+import WelcomeComponent from '@/components/WelcomeComponent.vue'
 import http from '@/http-common'
+import createStore from '@/store/index'
 
 @Options({
   components: {
-    NavBarComponent
+    NavBarComponent,
+    NavComponent,
+    FooterComponent,
+    WelcomeComponent
   }
 })
-export default class Home extends Vue {
+export default class App extends Vue {
   created (): void {
     const temp = location.hash.substr(1)
     if (temp !== '' && localStorage.getItem('access_token') === '') {
       const value = JSON.parse(atob(temp))
-      console.log(value.access_token)
       localStorage.setItem('access_token', value.access_token)
       history.pushState('', document.title, window.location.pathname + window.location.search)
-      location.reload()
-      // alert('yes')
-      // this.$router.go(0)
+      location.assign('/')
     } else {
       this.checkBearer()
     }
   }
 
   async checkBearer () : Promise<void> {
-    await http.get('http://blog.test/api/form').then(response => {
+    await http.get('http://blog.test/api/user').then(response => {
       // success
+      this.$store.state.name = response.data.name
+      this.$store.state.email = response.data.email
+      this.$store.state.requiresAuth = 2
     }, response => {
       // error
+      this.$store.state.requiresAuth = 1
       const temp = String(response)
       if (temp.includes('code 401')) {
         localStorage.setItem('access_token', '')
-        window.location.href = 'http://blog.test/oauth/redirect'
+        this.$router.push('/')
+        // window.location.href = 'http://blog.test/oauth/redirect'
       }
     })
   }

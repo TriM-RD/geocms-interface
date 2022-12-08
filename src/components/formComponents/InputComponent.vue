@@ -1,13 +1,15 @@
 <template>
   <div class="mb-3 row justify-content-md-center">
     <div class="col"></div>
-    <div class="col">
-      <label class="form-label h3">{{object.Stats[statTypeEnum.Label].Data }}</label>
-      <input :type="`${object.Stats[statTypeEnum.ElementType] !== undefined?object.Stats[statTypeEnum.ElementType].Data:''}`"
-             :class="`${object.Stats[statTypeEnum.Design].Data}`"
+    <div class="col input-group">
+      <label class="input-group-text" :hidden="specialCase()">{{object.Stats[statTypeEnum.Label].Data }}</label>
+      <input class="form-control"
+             :class="object.Stats[statTypeEnum.Design].Data"
+             :type="`${object.Stats[statTypeEnum.ElementType] !== undefined?object.Stats[statTypeEnum.ElementType].Data:''}`"
              :value="object.Stats[statTypeEnum.Value].Data"
              :placeholder="`${object.Stats[statTypeEnum.Placeholder].Data}`"
              @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, $event.target.value)">
+      <slot></slot>
     </div>
     <div class="col"></div>
   </div>
@@ -29,6 +31,11 @@ export default class InputComponent extends Vue {
   regionType = RegionType
   regionEnum = RegionEnum
   object!: ObjectTemplate
+
+  specialCase () : boolean {
+    if (this.object.Stats[this.statTypeEnum.ElementType] === undefined) { return false }
+    return this.object.Stats[this.statTypeEnum.ElementType].Data === 'hidden'
+  }
 }
 </script>
 

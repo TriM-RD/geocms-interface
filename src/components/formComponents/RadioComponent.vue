@@ -1,7 +1,5 @@
 <template>
-  <div class="mb-3 row justify-content-md-center">
-        <div class="col"></div>
-        <div class="col">
+  <div class="mb-3 justify-content-md-center">
       <div class="form-check">
         <label for="exampleDataList" class="form-label">{{object.Stats[statTypeEnum.Label].Data }}</label>
         <div class="form-check" v-for="(item, key, index) in JSON.parse(object.Stats[statTypeEnum.ItemList].Data)" :key="`${ key }-${ index }`">
@@ -12,8 +10,6 @@
         </div>
 
       </div>
-      </div>
-      <div class="col"></div>
   </div>
 </template>
 
@@ -38,5 +34,14 @@ export default class RadioComponent extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.form-check .form-check-input{
+  float: none;
+}
+.form-check-input{
+  margin-right: 1%;
+}
+.form-check-input:checked {
+  background-color: #606467;
+  border-color: #606467;
+}
 </style>

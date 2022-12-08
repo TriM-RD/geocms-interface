@@ -11,7 +11,7 @@ import { EventHandlerType } from '../events/types/objectTypes/types'
 export namespace Manager.Mechanic{
 
   export class ShowMechanic extends MechanicAbstract {
-    public async InitGet (_id = '-1'): Promise<ObjectTemplate[]> {
+    public async InitGet (_id: string): Promise<ObjectTemplate[]> {
       this.ObjectTemplates = []
       const response = await http.get('http://blog.test/api/entity/' + _id)
       return (this.ObjectTemplates = response.data.map((_object: any) => {

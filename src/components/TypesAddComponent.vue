@@ -9,13 +9,7 @@
     <router-link class="input-group-text nav-link boja" id="addon-wrapping" type="button" to="/attributeAdd">Add</router-link>
     </div>
   </div>
-    <nav class="navbar fixed-bottom navbar-light bg-light">
-          <form class="container-fluid justify-content-around">
-            <router-link class="btn btn-outline-success me-2 flex-fill" type="button" to="/">Save</router-link>
-            <router-link class="btn btn-outline-secondary flex-fill" type="button" to="/types">Cancel</router-link>
-        </form>
-          </nav>
-    <router-view/>
+  <router-view/>
     </template>
 
 <script lang="ts">

@@ -4,5 +4,13 @@ import router from './router'
 import store from './store'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
+import VueBlocksTree from 'vue3-blocks-tree'
+import 'vue3-blocks-tree/dist/vue3-blocks-tree.css'
 
-createApp(App).use(store).use(router).mount('#app')
+const defaultoptions = { treeName: 'blocks-tree' }
+
+createApp(App)
+  .use(store)
+  .use(router)
+  .use(VueBlocksTree, defaultoptions)
+  .mount('#app')

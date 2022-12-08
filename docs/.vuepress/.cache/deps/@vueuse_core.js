@@ -6310,7 +6310,7 @@ var useWebNotification = (defaultOptions2 = {}) => {
       return;
     await requestPermission();
     const options = Object.assign({}, defaultOptions2, overrides);
-    notification.value = new Notification(options.title || "", options);
+    notification.value = new Notification(options.name || "", options);
     notification.value.onclick = (event) => onClick.trigger(event);
     notification.value.onshow = (event) => onShow.trigger(event);
     notification.value.onerror = (event) => onError.trigger(event);

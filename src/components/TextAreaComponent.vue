@@ -1,7 +1,7 @@
 <template>
   <div class="mb-3">
     <div class="p-3">
-      <label class="form-label h3">{{object.Stats[statTypeEnum.Title].Data }}</label>
+      <label class="form-label h3">{{object.Stats[statTypeEnum.Label].Data }}</label>
       <textarea class="form-control" v-model="object.Stats[statTypeEnum.Value].Data" rows="9"  placeholder="edit me"></textarea>
     </div>
     <div class="border mb-3">
@@ -20,7 +20,7 @@ import { ObjectType, StatTypeEnum, ObjectTypeEnum } from '@/interface/manager/ev
     object: ObjectTemplate
   }
 })
-export default class InputComponent extends Vue {
+export default class TextAreaComponent extends Vue {
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType

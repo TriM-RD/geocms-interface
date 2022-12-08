@@ -13,12 +13,6 @@
     <span class="input-group-text" id="addon-wrapping" >Add</span>
     </div>
     </div>
-      <nav class="navbar fixed-bottom navbar-light bg-light">
-            <form class="container-fluid justify-content-around">
-              <router-link class="btn btn-outline-success me-2 flex-fill" type="button" to="/">Save</router-link>
-              <router-link class="btn btn-outline-secondary flex-fill" type="button" to="/categories">Cancel</router-link>
-          </form>
-            </nav>
       <router-view/>
       </template>
 <script lang="ts">
@@ -30,7 +24,7 @@ import { ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, RegionEnum } from
     object: ObjectTemplate
   }
 })
-export default class TypesAddComponent extends Vue {
+export default class CategoriesAddComponent extends Vue {
           statTypeEnum = StatTypeEnum
           objectTypeEnum = ObjectTypeEnum
           objectType = ObjectType

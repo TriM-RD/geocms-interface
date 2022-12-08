@@ -1,29 +1,211 @@
 <template>
-<nav class="navbar fixed-bottom navbar-light bg-light">
+<nav v-if="renderComponent" class="navbar fixed-bottom navbar-light bg-light">
   <form class="container-fluid justify-content-around">
-    <router-link class="btn btn-outline-success me-2 flex-fill" type="button" to="/scan">Scan<img alt="QR" width="25" src="../../assets/QRcode.png"></router-link>
-    <router-link class="btn btn-outline-secondary flex-fill" type="button" to="/deviceAdd">Add<img alt="plus" width="25" src="../../assets/plus.png"></router-link>
-</form>
+  <component v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'> </component>
+  </form>
   </nav>
-    <router-view/>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
+import { Watch } from 'vue-property-decorator'
 import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
-import { ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, RegionEnum } from '@/interface/manager/events/types'
+import {
+  ObjectType,
+  StatTypeEnum,
+  ObjectTypeEnum,
+  RegionType,
+  RegionEnum,
+  SubObjectTypeEnum, ActionTypeEnum, StatType
+} from '@/interface/manager/events/types'
+import { MechanicAbstract } from '@/interface/manager/mechanics/mechanicAbstract'
+import { Manager } from '@/interface/manager/mechanics/footerMechanic'
+import router from '@/router'
 @Options({
   props: {
     object: ObjectTemplate
   }
 })
 export default class FooterComponent extends Vue {
-    statTypeEnum = StatTypeEnum
-    objectTypeEnum = ObjectTypeEnum
-    objectType = ObjectType
-    regionType = RegionType
-    regionEnum = RegionEnum
-    object!: ObjectTemplate
+  mechanic: MechanicAbstract = new Manager.Mechanic.FooterMechanic()
+  statTypeEnum = StatTypeEnum
+  objectTypeEnum = ObjectTypeEnum
+  objectType = ObjectType
+  object!: ObjectTemplate
+  index!: number
+  renderComponent= false
+  objectTemplates!: ObjectTemplate[]
+  openTab!: string | symbol
+
+  @Watch('$route')
+  onDataChanged (value: any, oldValue: string) {
+    this.renderComponent = false
+    this.openTab = value.name
+    this.choose()
+  }
+
+  mounted () {
+    if (this.$route.name !== undefined && this.$route.name !== null) { this.openTab = this.$route.name }
+    this.choose()
+  }
+
+  beforeUnmount () {
+    this.mechanic.UnsubscribeConditions()
+  }
+
+  getComponent (_regionEnum : number, _objectEnum: number) {
+    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetVueComponent()
+  }
+
+  choose () {
+    this.objectTemplates = []
+    console.log(this.openTab)
+    switch (this.openTab) {
+      case 'Device':
+        this.objectTemplates = this.mechanic.InitSet(
+          [
+            new ObjectTemplate(RegionEnum.Footer, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Scan'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-success me-2 flex-fill')
+            }),
+            new ObjectTemplate(RegionEnum.Footer, ObjectTypeEnum.Button, SubObjectTypeEnum.Right, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Add'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-secondary flex-fill')
+            })
+          ]
+        )
+        break
+      case 'Group':
+        this.objectTemplates = this.mechanic.InitSet(
+          [
+            new ObjectTemplate(RegionEnum.Footer, ObjectTypeEnum.Button, SubObjectTypeEnum.Middle, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Lorem Ipsum'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-success me-2 flex-fill')
+            }),
+            new ObjectTemplate(RegionEnum.Footer, ObjectTypeEnum.Button, SubObjectTypeEnum.Right, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Add'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-secondary flex-fill')
+            })
+          ]
+        )
+        break
+      case 'Map':
+        this.objectTemplates = this.mechanic.InitSet(
+          [
+            new ObjectTemplate(RegionEnum.Footer, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Save'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-success me-2 flex-fill')
+            }),
+            new ObjectTemplate(RegionEnum.Footer, ObjectTypeEnum.Button, SubObjectTypeEnum.Right, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Add'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-secondary flex-fill')
+            })
+          ]
+        )
+        break
+      case 'Division':
+        this.objectTemplates = this.mechanic.InitSet(
+          [
+            new ObjectTemplate(RegionEnum.Footer, ObjectTypeEnum.Button, SubObjectTypeEnum.Middle, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Lorem Ipsum'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-success me-2 flex-fill')
+            }),
+            new ObjectTemplate(RegionEnum.Footer, ObjectTypeEnum.Button, SubObjectTypeEnum.Right, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Add'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-secondary flex-fill')
+            })
+          ]
+        )
+        break
+      case 'DeviceEdit':
+      case 'DeviceAdd':
+        this.objectTemplates = this.mechanic.InitSet(
+          [
+            new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Save'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-success me-2 flex-fill')
+            }),
+            new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Right, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Cancel'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-secondary flex-fill')
+            })
+          ]
+        )
+        break
+      case 'GroupEdit':
+      case 'GroupAdd':
+        this.objectTemplates = this.mechanic.InitSet(
+          [
+            new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Save'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-success me-2 flex-fill')
+            }),
+            new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Right, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Cancel'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-secondary flex-fill')
+            })
+          ]
+        )
+        break
+      case 'DeviceCabinet':
+        this.objectTemplates = this.mechanic.InitSet(
+          [
+            new ObjectTemplate(RegionEnum.Footer, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Save'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-success me-2 flex-fill')
+            }),
+            new ObjectTemplate(RegionEnum.Footer, ObjectTypeEnum.Button, SubObjectTypeEnum.Right, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Cancel'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-secondary flex-fill')
+            })
+          ]
+        )
+        break
+      case 'DeviceAppend':
+        this.objectTemplates = this.mechanic.InitSet(
+          [
+            new ObjectTemplate(RegionEnum.Footer, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Save'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-success me-2 flex-fill')
+            }),
+            new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Right, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Cancel'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-secondary flex-fill')
+            })])
+        break
+      case 'DivisionEdit':
+      case 'DivisionAdd':
+        this.objectTemplates = this.mechanic.InitSet(
+          [
+            new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Save'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-success me-2 flex-fill')
+            }),
+            new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Right, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Cancel'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-secondary flex-fill')
+            })
+          ]
+        )
+        break
+      case 'AttributeEdit':
+      case 'AttributeAdd':
+        this.objectTemplates = this.mechanic.InitSet(
+          [
+            new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Save'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-success me-2 flex-fill')
+            }),
+            new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Right, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Cancel'),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-secondary flex-fill')
+            })
+          ]
+        )
+        break
+    }
+    this.renderComponent = true
+  }
 }
 </script>
 

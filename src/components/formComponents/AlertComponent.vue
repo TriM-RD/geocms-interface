@@ -1,5 +1,5 @@
 <template>
-  <div :class="`${object.Stats[statTypeEnum.Design].Data}`">
+  <div class="alert alert-secondary">
     {{object.Stats[statTypeEnum.Value].Data}}
   </div>
 </template>

@@ -22,7 +22,9 @@ export namespace Manager.Events.Type{
       [ObjectTypeEnum.CheckBox]: new ObjectTypeAbstract.Events.Type.CheckBox(),
       [ObjectTypeEnum.DataList]: new ObjectTypeAbstract.Events.Type.DataList(),
       [ObjectTypeEnum.SelectList]: new ObjectTypeAbstract.Events.Type.SelectList(),
-      [ObjectTypeEnum.Radio]: new ObjectTypeAbstract.Events.Type.Radio()
+      [ObjectTypeEnum.Radio]: new ObjectTypeAbstract.Events.Type.Radio(),
+      [ObjectTypeEnum.FieldButton]: new ObjectTypeAbstract.Events.Type.FieldButton(),
+      [ObjectTypeEnum.SelectButton]: new ObjectTypeAbstract.Events.Type.SelectButton()
     }
   }
 
@@ -36,7 +38,9 @@ export namespace Manager.Events.Type{
   export class TableColumn extends RegionAbstract {
     public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
     {
-      [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button()
+      [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button(),
+      [ObjectTypeEnum.Column]: new ObjectTypeAbstract.Events.Type.Column(),
+      [ObjectTypeEnum.ColumnButton]: new ObjectTypeAbstract.Events.Type.ColumnButton()
     }
   }
 
@@ -44,6 +48,20 @@ export namespace Manager.Events.Type{
     public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
       {
         [ObjectTypeEnum.ShowResolve]: new ObjectTypeAbstract.Events.Type.ShowResolve()
+      }
+  }
+
+  export class TableRow extends RegionAbstract {
+    public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
+      {
+        [ObjectTypeEnum.ShowResolve]: new ObjectTypeAbstract.Events.Type.ShowResolve()
+      }
+  }
+
+  export class Footer extends RegionAbstract {
+    public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
+      {
+        [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button()
       }
   }
 }

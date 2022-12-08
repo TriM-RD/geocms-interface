@@ -17,12 +17,6 @@
         <input type="text" class="form-control" placeholder="Osigurač" aria-label="Username" aria-describedby="basic-addon1">
         </div>
         </div>
-    <nav class="navbar fixed-bottom navbar-light bg-light">
-          <form class="container-fluid justify-content-around">
-            <router-link class="btn btn-outline-success me-2 flex-fill" type="button" to="/">Save</router-link>
-            <router-link class="btn btn-outline-secondary flex-fill" type="button" to="/device">Cancel</router-link>
-        </form>
-          </nav>
             <router-view/>
 </template>
 

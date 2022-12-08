@@ -1,44 +1,37 @@
 <template>
- <nav>
- <div class="navbar container-fluid">
-    <a class="navbar-brand" href="#">
-      <img src="../../assets/logo.png" alt="Logo" width="90" class="d-inline-block align-text-top">
-    </a>
-    <form class="d-flex" role="search" action="/search">
-      <input v-model="title" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" @keypress.enter.prevent="take()">
-    </form>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle boja" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          User name
-        </a>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">Action</a></li>
-          <li><a class="dropdown-item" href="#">Another action</a></li>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <img src="../../assets/logo.png" alt="Logo" width="90" class="d-inline-block align-text-top">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <div class="flex-grow-1 d-flex">
+          <form class="form-inline flex-nowrap bg-light mx-0 mx-lg-auto rounded p-1">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username" aria-describedby="button-addon2">
+            </div>
+          </form>
+        </div>
+        <ul class="d-flex">
+          <li class="nav-item">
+            <ul class="nav-item dropdown padd">
+              <a class="nav-link dropdown-toggle boja" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                User name
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><button class="dropdown-item" type="button" v-on:click="logout()">Log out</button></li>
+              </ul>
+            </ul>
+          </li>
         </ul>
-      </li>
+      </div>
     </div>
-  <hr>
-  <div class="container">
-  <ul class="nav nav-pills nav-fill">
-  <li class="nav-item border">
-    <router-link to="/map" class="nav-link boja">Map/Home</router-link>
-  </li>
-  <li class="nav-item border">
-    <router-link to="/device" class="nav-link boja">Devices</router-link>
-  </li>
-  <li class="nav-item border">
-    <router-link to="/permissions" class="nav-link boja">Permissions</router-link>
-  </li>
-  <li class="nav-item border">
-    <router-link to="/types" class="nav-link boja">Types</router-link>
-  </li>
-  <li class="nav-item border">
-    <router-link to="/categories" class="nav-link boja">Categories</router-link>
-  </li>
-</ul>
-</div>
-</nav>
-  <router-view/>
+  </nav>
 </template>
 
 <script lang="ts">
@@ -49,11 +42,6 @@ import http from '@/http-common'
 @Options({
   props: {
     object: ObjectTemplate
-  },
-  data () {
-    return {
-      title: ' '
-    }
   }
 })
 export default class NavBarComponent extends Vue {
@@ -63,8 +51,13 @@ export default class NavBarComponent extends Vue {
   regionType = RegionType
   regionEnum = RegionEnum
   object!: ObjectTemplate
-  take (): void {
-    http.get('http://blog.test/api/filter/').then(response => { console.log(response.data) })
+  async logout () : Promise<void> {
+    await http.get('http://blog.test/api/user/logout').then(response => {
+      // success
+      window.location.reload()
+    }, response => {
+      // error
+    })
   }
 }
 </script>
@@ -82,13 +75,16 @@ a.boja:focus{
   background-color:#606467;
   color: #fff;
 }
-.container{
-padding-bottom: 5%;
-}
 li{
   list-style-type: none;
 }
-hr{
-margin-top:-1.5% !important;
+.container{
+  margin-bottom: 1%;
+}
+.d-flex{
+  display:contents !important;
+}
+ul.padd{
+  padding-inline-start: 0 !important;
 }
 </style>

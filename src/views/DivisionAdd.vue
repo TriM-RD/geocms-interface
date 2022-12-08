@@ -1,22 +1,22 @@
 <template>
-    <TypesAddComponent />
+    <CategoriesAddComponent />
     <div class="container">
     <TableComponent />
-    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import TypesAddComponent from '@/components/TypesAddComponent.vue'
+import CategoriesAddComponent from '@/components/CategoriesAddComponent.vue'
 import TableComponent from '@/components/TableComponent.vue'
 
 @Options({
   components: {
-    TypesAddComponent,
+    CategoriesAddComponent,
     TableComponent
   }
 })
-export default class TypesAdd extends Vue {}
+export default class DivisionAdd extends Vue {}
 </script>
 <style scoped>
 </style>
