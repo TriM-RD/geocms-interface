@@ -14,28 +14,26 @@
         label: 'label', expand: 'expand', children: 'children',  key:'some_id', permission: 'permission'}">
       <template class="test"  #node="{data}" >
         <div class="container justify-content-center">
-          <div class="row">
-            <div class="col" >
+            <div class="row" >
               <label >
                   {{data.permission.lft}} {{data.label}} {{data.permission.rgt}}
               </label>
             </div>
-            <div class="col" v-show="data.expand">
-              <label class="col" >Rename:
+            <div class="row" v-show="data.expand">
+              <label  >Rename:
                 <input class="m-1"  type="text" v-model="data.rename" style="width: 100px"/>
                 <button type="button" class="btn btn-primary m-1"  @click="renameButton(data)" > Rename</button>
               </label>
             </div>
-            <div class="col" v-show="data.expand">
-              <label class="col" >Child name:
+            <div class="row" v-show="data.expand">
+              <label  >Child name:
                 <input class="m-1"  type="text" v-model="data.newChildName" style="width: 100px"/>
                 <button type="button" class="btn btn-primary m-1"  @click="addChildButton(data)" > Add child</button>
               </label>
             </div>
-            <div class="col" v-show="data.expand">
+            <div class="row" v-show="data.expand">
                 <button v-show="showDelete(data)" type="button" class="btn btn-danger m-1"  @click="deleteData(data)" > Delete this</button>
             </div>
-          </div>
         </div>
       </template>
     </blocks-tree>
@@ -151,15 +149,13 @@ export default class PermissionsTree extends Vue {
     this.updateOldData(this.permissionsTreeData)
     console.log('old data but edited')
     console.log(this.databaseData)
+    console.log('new data')
+    console.log(this.newDatabaseData)
 
     // sending to  backend oldDataForDeletion i newDatabaseData
-
-    for (const data of this.databaseData) {
-      data._method = 'PUT'
-      http.post(`http://blog.test/api/permission/${data.id}`, data)
-        .then(response => console.log(response))
-        .catch((error) => { console.log(error); return (['error', 'Failed to edit', `Editing of "${data.name}" has failed, reason unknown. Try refreshing page`]) })
-    }
+    // edit old
+    http.post('http://blog.test/api/editAll/permission', this.databaseData)
+      .then(response => console.log(response))
 
     await new Promise(resolve => setTimeout(resolve, 500))
 
@@ -220,7 +216,7 @@ export default class PermissionsTree extends Vue {
     console.log(this.permissionsTreeData)
   }
 
-  async deleteData (data: TreeData) : Promise<[string, string, string] > {
+  async deleteData (data: TreeData) {
     if (data.parent === undefined) {
       return ['error',
         'Error',
@@ -230,13 +226,24 @@ export default class PermissionsTree extends Vue {
     // delete check needs to be added here, by sending a get http request for this object
     // const response = await http.get('http://blog.test/api/permission')
     // curently this delets it in the browser but cant edit it in database
-    const test = data.parent?.children.indexOf(data)
-    // eslint-disable-next-line no-unused-expressions
-    data.parent?.children.splice(test, 1)
-    this.startPreorder()
-    return ['success',
-      'Success',
-      'Object has been deleted successfuly']
+    console.log('this is the delete shit')
+    const deleteTest = await http.post('http://blog.test/api/deleteCheck/permission', data.permission)
+      .then(response => { return response.data })
+      .catch((error) => console.log(error))
+
+    console.log(deleteTest)
+
+    // if delete is false its gona delete the data
+    if (!deleteTest) {
+      // needs a popup here to confirm deletion
+      const test = data.parent?.children.indexOf(data)
+      // eslint-disable-next-line no-unused-expressions
+      data.parent?.children.splice(test, 1)
+      this.startPreorder()
+    } else {
+      // might need a popup or something here that returns message
+      console.log('it exists')
+    }
   }
 
   startPreorder () : void {
