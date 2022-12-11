@@ -6,9 +6,6 @@
     <blocks-tree :data="permissionsTreeData" :horizontal="treeOrientation=='1'"  :collapsable="true" ></blocks-tree>
   </div>
   -->
-  <div>
-    <blocks-tree :data="permissionsTreeData" :horizontal="treeOrientation=='1'"  :collapsable="true" ></blocks-tree>
-  </div>
   <!--FlashMessage position="right top" strategy="single" /-->
   <button class="btn btn-primary btn-lg " @click="saveButton">Save changes</button>
   <h1>Current tree</h1>
@@ -115,6 +112,7 @@ import permission, { TreeData } from '@/components/tree/Permission'
 import http from '@/http-common'
 import { v4 as uuidv4 } from 'uuid'
 import { Vue } from 'vue-class-component'
+
 export default class PermissionsTree extends Vue {
   index = uuidv4()
   preorderNumber = 0
@@ -139,12 +137,14 @@ export default class PermissionsTree extends Vue {
   databaseData = reactive<permission[]>([])
   newDatabaseData = reactive<permission[]>([])
   $toast: any
+  change = false
 
   addChild (data: TreeData) {
     if (data.newChildName === '') {
       this.$toast.error('Childs name cannot be empty.')
       return
     }
+    this.change = true
     const newChild = this.newPermission(data)
 
     data.newChildName = ''
@@ -190,6 +190,7 @@ export default class PermissionsTree extends Vue {
       this.$toast.error('New name cannot be empty')
       return
     }
+    this.change = true
     const temp = data.label
     data.label = data.rename
     data.permission.name = data.rename
@@ -241,6 +242,8 @@ export default class PermissionsTree extends Vue {
         console.log(error)
         this.$toast.error('Something went wrong during saving')
       })
+
+    this.change = false
   }
 
   addToNewDatabseData (data:TreeData) : void {
@@ -454,6 +457,25 @@ export default class PermissionsTree extends Vue {
     /* this.flashMessage(['info', 'Waiting', 'Checking if this data is used somewhere else'])
     this.flashMessage(await this.deleteData(data)) */
     await this.deleteData()
+  }
+
+  attemptToGoBack () {
+    console.log('it got unmunted')
+    window.alert()
+  }
+
+  beforeUnmount () {
+    console.log('beforeUnmount')
+  }
+
+  beforeRouteLeave (to:any, from:any, next:any) {
+    console.log('ayyyyyyyyyyyyyyyyyyyyyyy')
+    const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
+    if (answer) {
+      next()
+    } else {
+      next(false)
+    }
   }
 }
 </script>

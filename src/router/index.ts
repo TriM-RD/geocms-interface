@@ -5,6 +5,7 @@ import DeviceAppend from '../views/DeviceAppend.vue'
 import DeviceCabinet from '../views/DeviceCabinet.vue'
 import PermissionsTree from '@/views/PermissionsTree.vue'
 import Form from '@/views/Form.vue'
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
