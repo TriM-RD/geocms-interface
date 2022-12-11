@@ -2,9 +2,10 @@
   <Loading v-model:active="renderComponent"
            :can-cancel="false"
            :is-full-page="false"/>
-  <table class="table" v-if="!renderComponent">
+  <table class="table table-hover" v-if="!renderComponent">
   <thead class="table-light">
     <tr>
+      <th></th>
       <th v-for="(header, key) in headers" :key="`${ key }-${ header }-${ Math.random().toString(36).slice(2, 7) }`" scope="col">
         {{ header }}</th>
       <th>Actions</th>
