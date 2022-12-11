@@ -138,23 +138,19 @@ export default class PermissionsTree extends Vue {
 
   databaseData = reactive<permission[]>([])
   newDatabaseData = reactive<permission[]>([])
+  $toast: any
 
-  addChild (data: TreeData):[string, string, string] {
+  addChild (data: TreeData) {
     if (data.newChildName === '') {
-      return ['error',
-        'Child error',
-        'Child name input field cannot be empty'
-      ]
+      this.$toast.error('Childs name cannot be empty.')
+      return
     }
     const newChild = this.newPermission(data)
 
     data.newChildName = ''
     data.children.push(newChild)
     this.startPreorder()
-    return ['success',
-      'Child added successfuly',
-      `Child " ${newChild.label} " successfuly added to " ${data.label} "`
-    ]
+    this.$toast.success(`Child " ${newChild.label} " successfuly added to " ${data.label} "`)
   }
 
   newPermission (data: TreeData):TreeData {
@@ -189,25 +185,20 @@ export default class PermissionsTree extends Vue {
     }
   }
 
-  rename (data:TreeData) :[string, string, string] {
+  rename (data:TreeData) {
     if (data.rename === '') {
-      return ['error',
-        'Rename error',
-        'New name cannot be cannot be empty'
-      ]
+      this.$toast.error('New name cannot be empty')
+      return
     }
     const temp = data.label
     data.label = data.rename
     data.permission.name = data.rename
     data.rename = ''
 
-    return ['success',
-      'Rename was successful',
-      `Renamed " ${temp} " to " ${data.label} "`
-    ]
+    this.$toast.success(`Renamed " ${temp} " to " ${data.label} "`)
   }
 
-  async save () : Promise<[string, string, string]> {
+  async save () {
     this.newDatabaseData.length = 0
     this.addToNewDatabseData(this.permissionsTreeData)
     console.log('old data')
@@ -221,28 +212,35 @@ export default class PermissionsTree extends Vue {
     // sending to  backend  newDatabaseData
     // edit old
     http.post('http://blog.test/api/editAll/permission', this.databaseData)
-      .then(response => console.log(response))
+      .then(response => {
+        console.log(response)
+        if (response.status === 200) {
+          this.$toast.success('Edited old data successfuly')
+        } else {
+          this.$toast.error('Something went wrong during editing')
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+        this.$toast.error('Something went wrong during editing')
+      })
 
     await new Promise(resolve => setTimeout(resolve, 500))
 
-    return http.post('http://blog.test/api/permission', this.newDatabaseData)
+    // saving new data
+    http.post('http://blog.test/api/permission', this.newDatabaseData)
       .then(response => {
+        console.log(response)
         if (response.status === 200) {
-          return ['success',
-            'Save was success',
-            'Data successfuly saved '
-          ]
+          this.$toast.success('Saved new data successfuly')
         } else {
-          return ['error',
-            'Error ',
-            'Something went wrong, try refreshing the page '
-          ]
+          this.$toast.error('Something went wrong during saving')
         }
       })
-  }
-
-  delay (time:number) : Promise<any> {
-    return new Promise(resolve => setTimeout(resolve, time))
+      .catch((error) => {
+        console.log(error)
+        this.$toast.error('Something went wrong during saving')
+      })
   }
 
   addToNewDatabseData (data:TreeData) : void {
@@ -278,10 +276,6 @@ export default class PermissionsTree extends Vue {
     }
   }
 
-  logData () {
-    console.log(this.permissionsTreeData)
-  }
-
   deleteCheckData =reactive<TreeData>({
     label: 'root',
     expand: true,
@@ -304,8 +298,19 @@ export default class PermissionsTree extends Vue {
     console.log('Deletion')
     console.log(this.deleteCheckData)
     const deleteTest = await http.post('http://blog.test/api/delete/permission', this.deleteCheckData.permission)
-      .then(response => { return response.data })
-      .catch((error) => console.log(error))
+      .then(response => {
+        console.log(response)
+        if (response.status === 200) {
+          this.$toast.success('Delete was successful')
+        } else {
+          this.$toast.error('Something went wrong during deleting')
+        }
+        return response.data
+      })
+      .catch((error) => {
+        console.log(error)
+        this.$toast.error('Something went wrong during deleting')
+      })
 
     console.log(deleteTest)
 
@@ -334,6 +339,7 @@ export default class PermissionsTree extends Vue {
   // this function only checks if the data can be deleted and sets the proper true or false statment
   async deleteCheck (data: TreeData) {
     if (data.parent === undefined) {
+      this.$toast.error('Cant delete this')
       return
     }
     //
@@ -437,26 +443,17 @@ export default class PermissionsTree extends Vue {
     this.rename(data)
   }
 
-  async saveButton () : Promise<void> {
+  async saveButton () {
     /* this.flashMessage(['info', 'Waiting', 'Waiting for response from server'])
     this.flashMessage(await this.save()) */
     await this.save()
     await this.start()
   }
 
-  async deleteDataButton (data: TreeData) : Promise<void> {
+  async deleteDataButton (data: TreeData) {
     /* this.flashMessage(['info', 'Waiting', 'Checking if this data is used somewhere else'])
     this.flashMessage(await this.deleteData(data)) */
     await this.deleteData()
-  }
-
-  flashMessage (text: [string, string, string]) {
-    /* this.$flashMessage.show({
-      type: text[0],
-      title: text[1],
-      text: text[2],
-      time: 3000
-    }) */
   }
 }
 </script>
