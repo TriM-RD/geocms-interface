@@ -6,35 +6,58 @@
     <blocks-tree :data="permissionsTreeData" :horizontal="treeOrientation=='1'"  :collapsable="true" ></blocks-tree>
   </div>
   -->
+  <div>
+    <blocks-tree :data="permissionsTreeData" :horizontal="treeOrientation=='1'"  :collapsable="true" ></blocks-tree>
+  </div>
   <!--FlashMessage position="right top" strategy="single" /-->
   <button class="btn btn-primary btn-lg " @click="saveButton">Save changes</button>
   <h1>Current tree</h1>
   <div>
-    <blocks-tree   @node-click="show" :data="permissionsTreeData" :horizontal="treeOrientation=='1'" :collapsable="true" :props="{
+    <blocks-tree   @node-click="show"  :data="permissionsTreeData" :horizontal="treeOrientation=='1'" :collapsable="false" :props="{
         label: 'label', expand: 'expand', children: 'children',  key:'some_id', permission: 'permission'}">
-      <template class="test"  #node="{data}" >
+      <template class="test"  #node="{data}">
         <div class="container justify-content-center">
-            <div class="row" >
-              <label >
+          <div class="row">
+              <label  style=" padding-bottom: 10px">
                   {{data.permission.lft}} {{data.label}} {{data.permission.rgt}}
               </label>
+          </div>
+          <div v-show="data.expand" class="input-group mb-3" style="width: 280px" >
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default" >Rename</span>
+            </div>
+            <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" v-model="data.rename" style="width: 100px">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" @click="renameButton(data)" type="button" id="inputGroup-sizing-default" >Rename</button>
+            </div>
+          </div>
+          <div v-show="data.expand" class="input-group mb-3" style="width: 280px" >
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default" >Child name</span>
+            </div>
+            <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" v-model="data.newChildName" style="width: 100px">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button" id="inputGroup-sizing-default" @click="addChildButton(data)" >Create</button>
+            </div>
+          </div>
+          <!--
+            <div class="row" v-show="data.expand">
+              <label  >Rename:</label>
+              <input class="m-1"  type="text" v-model="data.rename" style="width: 100px"/>
+              <button type="button" class="btn btn-primary m-1"  @click="renameButton(data)" > Rename</button>
             </div>
             <div class="row" v-show="data.expand">
-              <label  >Rename:
-                <input class="m-1"  type="text" v-model="data.rename" style="width: 100px"/>
-                <button type="button" class="btn btn-primary m-1"  @click="renameButton(data)" > Rename</button>
-              </label>
+              <label  >Child name:</label>
+              <input class="m-1"  type="text" v-model="data.newChildName" style="width: 100px"/>
+              <button type="button" class="btn btn-primary m-1"  @click="addChildButton(data)" > Add child</button>
             </div>
-            <div class="row" v-show="data.expand">
-              <label  >Child name:
-                <input class="m-1"  type="text" v-model="data.newChildName" style="width: 100px"/>
-                <button type="button" class="btn btn-primary m-1"  @click="addChildButton(data)" > Add child</button>
-              </label>
-            </div>
-            <div class="row" v-show="data.expand">
-                <button v-show="showDelete(data)" type="button" class="btn btn-danger m-1"  @click="deleteData(data)" > Delete this</button>
+            -->
+            <div  v-show="data.expand">
+                <button  v-show="showDelete(data)" style="width: 100px" type="button" data-bs-toggle="modal" data-bs-target="#delete-modal" class="btn btn-danger m-1"  @click="deleteCheck(data)" > Delete this</button>
+
             </div>
         </div>
+
       </template>
     </blocks-tree>
   </div>
@@ -44,6 +67,45 @@
     <option value="0">Vertical</option>
     <option value="1">Horizontal</option>
   </select>
+
+  <!--modal-->
+
+  <div class="modal fade" v-bind="deleteCheckData" id="delete-modal" ref="delete-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-dialog" v-show="exists ===false">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" if="modal-title">Delete {{ deleteCheckData.permission.name }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <p>By clicking the yes button you will delete "{{ deleteCheckData.permission.name }}" from the database.</p>
+        </div>
+        <div class="modal-footer">
+          <span class="form-control-static pull-left">Delete {{ deleteCheckData.permission.name }}</span>
+          <button class="btn btn-primary mr-auto" data-bs-dismiss="modal" @click="deleteData()">Yes</button>
+          <button class="btn btn-primary" data-bs-dismiss="modal">No</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-dialog" v-show="exists ===true">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" if="modal-title">Cannot delete {{ deleteCheckData.permission.name }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <p>Cannot delete "{{ deleteCheckData.permission.name }}" from the database.</p>
+          <p>Because a user or a division is connected to it.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </template>
 
@@ -60,7 +122,7 @@ export default class PermissionsTree extends Vue {
   permissionsTreeData = reactive <TreeData>(
     {
       label: 'root',
-      expand: true,
+      expand: false,
       some_id: this.index,
       newChildName: '',
       rename: '',
@@ -119,6 +181,10 @@ export default class PermissionsTree extends Vue {
 
   show (e : any, data : any) : void {
     if (e.target.tagName.toLowerCase() === 'div' || (e.target.tagName.toLowerCase() === 'label' && !data.expand)) {
+      console.log('first if')
+      data.expand = !data.expand
+    } else if (e.target.tagName.toLowerCase() === 'label' && data.expand) {
+      console.log('second if')
       data.expand = !data.expand
     }
   }
@@ -152,7 +218,7 @@ export default class PermissionsTree extends Vue {
     console.log('new data')
     console.log(this.newDatabaseData)
 
-    // sending to  backend oldDataForDeletion i newDatabaseData
+    // sending to  backend  newDatabaseData
     // edit old
     http.post('http://blog.test/api/editAll/permission', this.databaseData)
       .then(response => console.log(response))
@@ -216,34 +282,70 @@ export default class PermissionsTree extends Vue {
     console.log(this.permissionsTreeData)
   }
 
-  async deleteData (data: TreeData) {
-    if (data.parent === undefined) {
-      return ['error',
-        'Error',
-        'This cannot be deleted']
-    }
-    //
-    // delete check needs to be added here, by sending a get http request for this object
-    // const response = await http.get('http://blog.test/api/permission')
-    // curently this delets it in the browser but cant edit it in database
-    console.log('this is the delete shit')
-    const deleteTest = await http.post('http://blog.test/api/deleteCheck/permission', data.permission)
+  deleteCheckData =reactive<TreeData>({
+    label: 'root',
+    expand: true,
+    some_id: this.index,
+    newChildName: '',
+    rename: '',
+    permission: {
+      id: this.index,
+      name: 'string',
+      lft: 4,
+      rgt: 5
+    },
+    children: []
+  })
+
+  exists = true
+
+  // funcion in popup that deletes permision in database
+  async deleteData () {
+    console.log('Deletion')
+    console.log(this.deleteCheckData)
+    const deleteTest = await http.post('http://blog.test/api/delete/permission', this.deleteCheckData.permission)
       .then(response => { return response.data })
       .catch((error) => console.log(error))
 
     console.log(deleteTest)
 
-    // if delete is false its gona delete the data
-    if (!deleteTest) {
-      // needs a popup here to confirm deletion
-      const test = data.parent?.children.indexOf(data)
-      // eslint-disable-next-line no-unused-expressions
-      data.parent?.children.splice(test, 1)
-      this.startPreorder()
-    } else {
-      // might need a popup or something here that returns message
-      console.log('it exists')
+    const test = this.deleteCheckData.parent?.children.indexOf(this.deleteCheckData)
+    // eslint-disable-next-line no-unused-expressions
+    if (test !== undefined) { this.deleteCheckData.parent?.children.splice(test, 1) }
+    console.log('object thtats being deleted in database')
+    if (this.databaseData.find(item => item.id === this.deleteCheckData.permission.id) !== undefined) {
+      const temp = this.databaseData.find(item => item.id === this.deleteCheckData.permission.id)
+      if (temp !== undefined) {
+        this.databaseData.splice(this.databaseData.indexOf(temp), 1)
+      }
     }
+
+    console.log(this.databaseData.indexOf(this.deleteCheckData.permission))
+    if (this.databaseData.indexOf(this.deleteCheckData.permission) !== -1) {
+      this.databaseData.splice(this.databaseData.indexOf(this.deleteCheckData.permission), 1)
+    }
+    console.log(this.databaseData)
+    this.startPreorder()
+    this.updateOldData(this.permissionsTreeData)
+    http.post('http://blog.test/api/editAll/permission', this.databaseData)
+      .then(response => console.log(response))
+  }
+
+  // this function only checks if the data can be deleted and sets the proper true or false statment
+  async deleteCheck (data: TreeData) {
+    if (data.parent === undefined) {
+      return
+    }
+    //
+    this.deleteCheckData = data
+    const deleteResponse = await http.post('http://blog.test/api/deleteCheck/permission', data.permission)
+      .then(response => { return response.data })
+      .catch((error) => console.log(error))
+
+    console.log(deleteResponse)
+
+    // if delete is false its gona delete the data
+    this.exists = deleteResponse
   }
 
   startPreorder () : void {
@@ -345,7 +447,7 @@ export default class PermissionsTree extends Vue {
   async deleteDataButton (data: TreeData) : Promise<void> {
     /* this.flashMessage(['info', 'Waiting', 'Checking if this data is used somewhere else'])
     this.flashMessage(await this.deleteData(data)) */
-    await this.deleteData(data)
+    await this.deleteData()
   }
 
   flashMessage (text: [string, string, string]) {
@@ -357,5 +459,4 @@ export default class PermissionsTree extends Vue {
     }) */
   }
 }
-
 </script>
