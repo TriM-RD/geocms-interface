@@ -104,6 +104,19 @@
     </div>
   </div>
 
+  <div class="modal fade" v-bind="deleteCheckData" id="delete-modal" ref="delete-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+
+    <div class="modal-dialog" v-show="exists ===true">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" if="modal-title">Cannot delete {{ deleteCheckData.permission.name }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 </template>
 
 <script lang="ts" >
@@ -466,16 +479,29 @@ export default class PermissionsTree extends Vue {
 
   beforeUnmount () {
     console.log('beforeUnmount')
+    window.addEventListener('beforeunload', event => {
+      console.log('FUCKING ULOAD ALREDY!!!')
+      alert('BRUWWWWW')
+      event.returnValue = 'Are you sure you want to leave?'
+    })
+    this.hell()
   }
 
-  beforeRouteLeave (to:any, from:any, next:any) {
-    console.log('ayyyyyyyyyyyyyyyyyyyyyyy')
-    const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-    if (answer) {
-      next()
-    } else {
-      next(false)
+  hell () {
+    console.log('beforeUnmount')
+    if (this.change) {
+      const saveChanges = confirm('There are unsaved changes. Do you want to save them?')
+      alert(saveChanges) // true if OK is pressed
+      console.log(saveChanges)
+      if (saveChanges) {
+        this.save()
+      }
     }
+  }
+
+  protected beforeRouteLeave (to:any, from:any, next:any) {
+    console.log('EYYYYYYYYYY')
+    // called before the route that renders this component is navigated away from
   }
 }
 </script>
