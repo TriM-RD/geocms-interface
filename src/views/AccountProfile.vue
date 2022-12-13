@@ -6,7 +6,7 @@
           <span class="form-control">{{ $store.state.name }}</span>
           </div>
           <div class="input-group mb-3 col-lg-4">
-          <span class="input-group-text" id="basic-addon1">Email</span>
+          <span class="input-group-text" id="basic-addon2">Email</span>
           <span class="form-control">{{ $store.state.email }}</span>
           </div>
           <TableComponent />
