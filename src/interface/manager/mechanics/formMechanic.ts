@@ -71,12 +71,14 @@ export namespace Manager.Mechanic{
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectList].SubscribeLogic(this.SelectList.bind(this))
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Field].SubscribeLogic(this.FieldButton.bind(this))
+      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectList].SubscribeLogic(this.FieldButton.bind(this))
     }
 
     public UnsubscribeConditions (): void {
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectList].NullifyLogic()
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Field].NullifyLogic()
+      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectList].NullifyLogic()
       MechanicAbstract.instance = null
     }
 
@@ -169,6 +171,45 @@ export namespace Manager.Mechanic{
               break
           }
           break
+        case 'DivisionAdd':
+        case 'DivisionEdit':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Left:
+              if (this.inEdit) {
+                await http.patch('http://blog.test/api/division/' + this.id, this.ObjectTemplates)
+                  .then(response => (router.push({ name: 'DivisionEdit', params: { id: response.data.id } })))
+              } else {
+                await http.post('http://blog.test/api/division', this.ObjectTemplates)
+                  .then(response => (router.push({ name: 'DivisionEdit', params: { id: response.data.id } })))
+              }
+              break
+            case SubObjectTypeEnum.Middle:
+              this.refreshPage()
+              this.ObjectTemplates = this.Append([
+                new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.SelectButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
+                  [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.ItemList].Data),
+                  [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Permission'),
+                  [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(Math.random().toString(36).slice(2, 7).toString()),
+                  [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(''),
+                  [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.Id].Data)
+                })
+              ])
+              this.refreshPage()
+              break
+            case SubObjectTypeEnum.Right:
+              router.back()
+              break
+            case SubObjectTypeEnum.Down:
+              this.refreshPage()
+              // eslint-disable-next-line no-case-declarations
+              const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+              this.ObjectTemplates.splice(temp, 1)
+              this.refreshPage()
+              break
+            default:
+              break
+          }
+          break
         case 'AttributeAdd':
         case 'AttributeEdit':
           switch (eventHandler.subObjectType) {
@@ -185,6 +226,7 @@ export namespace Manager.Mechanic{
               this.refreshPage()
               this.ObjectTemplates = this.Append([
                 new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.FieldButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
+                  [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Value'),
                   [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(Math.random().toString(36).slice(2, 7).toString()),
                   [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(''),
                   [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.Id].Data)
