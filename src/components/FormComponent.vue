@@ -18,7 +18,7 @@ import {
   RegionEnum,
   RegionType, StatType, StatTypeEnum,
   SubObjectTypeEnum
-} from '@/interface/manager/events/types/index'
+} from '@/interface/manager/events/types'
 import Loading from 'vue-loading-overlay'
 import router from '@/router'
 @Options({
@@ -50,6 +50,10 @@ export default class FormComponent extends Vue {
       case 'GroupAdd':
       case 'GroupEdit':
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id === undefined ? '-1' : String(this.$route.params.id), 'group'))
+        break
+      case 'DivisionAdd':
+      case 'DivisionEdit':
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id === undefined ? '-1' : String(this.$route.params.id), 'division'))
         break
       case 'AttributeAdd':
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id === undefined ? '-1' : String(this.$route.params.id), 'attribute'))

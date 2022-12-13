@@ -9,7 +9,7 @@
           <option :selected="object.Stats[statTypeEnum.Value] === undefined" hidden>Select a type.</option>
           <option v-for="(item, key, index) in JSON.parse(object.Stats[statTypeEnum.ItemList].Data)" :selected="check(item.id)" :key="`${ key }-${ index }`" :value="item.id">{{item.name}}</option>
         </select>
-
+        <slot></slot>
       </div>
       </div>
       <div class="col"></div>
