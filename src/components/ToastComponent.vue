@@ -25,7 +25,7 @@ import { Options, Vue } from 'vue-class-component'
     }
   }
 })
-export default class ShowInfo extends Vue {
+export default class ToastComponent extends Vue {
   title!: string
   message!: string
   customClass!: string

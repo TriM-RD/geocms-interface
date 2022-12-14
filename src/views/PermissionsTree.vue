@@ -8,6 +8,7 @@
   -->
   <!--FlashMessage position="right top" strategy="single" /-->
   <button class="btn btn-primary btn-lg " @click="saveButton">Save changes</button>
+
   <h1>Current tree</h1>
   <div>
     <blocks-tree   @node-click="show"  :data="permissionsTreeData" :horizontal="treeOrientation=='1'" :collapsable="false" :props="{
@@ -117,6 +118,8 @@
     </div>
   </div>
 
+  <ToastComponent id="tComponent"  title="a" message="aa" :custom-class="customClass"></ToastComponent>
+
 </template>
 
 <script lang="ts" >
@@ -124,7 +127,14 @@ import { reactive, ref } from 'vue'
 import permission, { TreeData } from '@/components/tree/Permission'
 import http from '@/http-common'
 import { v4 as uuidv4 } from 'uuid'
-import { Vue } from 'vue-class-component'
+import { Options, Vue } from 'vue-class-component'
+import ToastComponent from '@/components/ToastComponent.vue'
+import * as bootstrap from 'bootstrap'
+@Options({
+  components: {
+    ToastComponent
+  }
+})
 
 export default class PermissionsTree extends Vue {
   index = uuidv4()
@@ -149,12 +159,20 @@ export default class PermissionsTree extends Vue {
 
   databaseData = reactive<permission[]>([])
   newDatabaseData = reactive<permission[]>([])
-  $toast: any
   change = false
+
+  toastTrigger:any
+  toastLiveExample:any
+  tComponent:any
+
+  toastOptions = reactive({
+    title: '',
+    message: ''
+  })
 
   addChild (data: TreeData) {
     if (data.newChildName === '') {
-      this.$toast.error('Childs name cannot be empty.')
+      this.toast('Error', 'Cant do this')
       return
     }
     this.change = true
@@ -163,7 +181,7 @@ export default class PermissionsTree extends Vue {
     data.newChildName = ''
     data.children.push(newChild)
     this.startPreorder()
-    this.$toast.success(`Child " ${newChild.label} " successfuly added to " ${data.label} "`)
+    this.toast('Successfuly addad child', `Child " ${newChild.label} " successfuly added to " ${data.label} "`)
   }
 
   newPermission (data: TreeData):TreeData {
@@ -200,7 +218,7 @@ export default class PermissionsTree extends Vue {
 
   rename (data:TreeData) {
     if (data.rename === '') {
-      this.$toast.error('New name cannot be empty')
+      this.toast('Error', 'New name cannot be empty')
       return
     }
     this.change = true
@@ -209,7 +227,7 @@ export default class PermissionsTree extends Vue {
     data.permission.name = data.rename
     data.rename = ''
 
-    this.$toast.success(`Renamed " ${temp} " to " ${data.label} "`)
+    this.toast('Success', `Renamed " ${temp} " to " ${data.label} "`)
   }
 
   async save () {
@@ -229,14 +247,14 @@ export default class PermissionsTree extends Vue {
       .then(response => {
         console.log(response)
         if (response.status === 200) {
-          this.$toast.success('Edited old data successfuly')
+          this.toast('Success', 'Edited old data successfuly')
         } else {
-          this.$toast.error('Something went wrong during editing')
+          this.toast('Error', 'Something went wrong during editing')
         }
       })
       .catch((error) => {
         console.log(error)
-        this.$toast.error('Something went wrong during editing')
+        this.toast('Error', 'Something went wrong during editing')
       })
 
     await new Promise(resolve => setTimeout(resolve, 500))
@@ -246,14 +264,14 @@ export default class PermissionsTree extends Vue {
       .then(response => {
         console.log(response)
         if (response.status === 200) {
-          this.$toast.success('Saved new data successfuly')
+          this.toast('Success', 'Saved new data successfuly')
         } else {
-          this.$toast.error('Something went wrong during saving')
+          this.toast('Error', 'Something went wrong during saving')
         }
       })
       .catch((error) => {
         console.log(error)
-        this.$toast.error('Something went wrong during saving')
+        this.toast('Error', 'Something went wrong during saving')
       })
 
     this.change = false
@@ -317,15 +335,15 @@ export default class PermissionsTree extends Vue {
       .then(response => {
         console.log(response)
         if (response.status === 200) {
-          this.$toast.success('Delete was successful')
+          this.toast('Success', 'Delete was successful')
         } else {
-          this.$toast.error('Something went wrong during deleting')
+          this.toast('Error', 'Something went wrong during deleting')
         }
         return response.data
       })
       .catch((error) => {
         console.log(error)
-        this.$toast.error('Something went wrong during deleting')
+        this.toast('Error', 'Something went wrong during deleting')
       })
 
     console.log(deleteTest)
@@ -355,7 +373,7 @@ export default class PermissionsTree extends Vue {
   // this function only checks if the data can be deleted and sets the proper true or false statment
   async deleteCheck (data: TreeData) {
     if (data.parent === undefined) {
-      this.$toast.error('Cant delete this')
+      this.toast('Error', 'Cant delete this')
       return
     }
     //
@@ -402,6 +420,10 @@ export default class PermissionsTree extends Vue {
     }
     this.init(response)
     console.log(response)
+
+    this.toastTrigger = document.getElementById('liveToastBtn')
+    this.toastLiveExample = document.getElementById('liveToast')
+    this.tComponent = document.getElementById('tComponent')
   }
 
   init (response: any) : void {
@@ -447,6 +469,16 @@ export default class PermissionsTree extends Vue {
         }
       }
     }
+  }
+
+  toast (title:string, message:string) {
+    this.tComponent.title = title
+    this.tComponent.message = message
+    console.log(this.tComponent.title)
+    console.log(title, message)
+
+    const toast = new bootstrap.Toast(this.toastLiveExample)
+    toast.show()
   }
 
   addChildButton (data: TreeData) : void {

@@ -9,6 +9,7 @@ import 'vue3-blocks-tree/dist/vue3-blocks-tree.css'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import Toaster from '@meforma/vue-toaster'
+
 const defaultoptions = { treeName: 'blocks-tree' }
 
 createApp(App)
