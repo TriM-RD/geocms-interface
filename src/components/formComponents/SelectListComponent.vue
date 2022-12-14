@@ -3,7 +3,7 @@
         <div class="col"></div>
         <div class="col">
       <div class="input-group">
-        <label for="exampleDataList" class="input-group-text">{{object.Stats[statTypeEnum.Label].Data }}</label>
+        <label :title="`${object.Stats[statTypeEnum.Tooltip].Data}`" for="exampleDataList" class="input-group-text">{{object.Stats[statTypeEnum.Label].Data }}</label>
         <select class="form-select" aria-label="Default select example"
         @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, $event.target.value)">
           <option :selected="object.Stats[statTypeEnum.Value] === undefined" hidden>Select a type.</option>

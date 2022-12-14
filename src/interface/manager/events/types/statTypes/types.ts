@@ -83,6 +83,16 @@ export namespace Manager.Events.Type{
     }
   }
 
+  export class Tooltip extends StatAbstract {
+    public CreateStat (): StatAbstract {
+      return new Tooltip()
+    }
+
+    public CheckRequirements (_object: any): void {
+      alert(this.Data)
+    }
+  }
+
   export class ItemList extends StatAbstract {
     public CreateStat (): StatAbstract {
       return new ItemList()

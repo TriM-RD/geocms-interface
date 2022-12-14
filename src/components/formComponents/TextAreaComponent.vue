@@ -1,7 +1,7 @@
 <template>
   <div class="mb-3">
     <div class="p-3">
-      <label class="form-label h3">{{object.Stats[statTypeEnum.Label].Data }}</label>
+      <label :title="`${object.Stats[statTypeEnum.Tooltip].Data}`" class="form-label h3">{{object.Stats[statTypeEnum.Label].Data }}</label>
       <textarea class="form-control" v-model="object.Stats[statTypeEnum.Value].Data" rows="9"  placeholder="edit me"></textarea>
     </div>
     <div class="border mb-3">

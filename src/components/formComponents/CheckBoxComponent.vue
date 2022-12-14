@@ -9,7 +9,6 @@
     class="form-check-input"
     :value="object.Stats[statTypeEnum.Value].Data"
     @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, $event.target.value)">
-
   </div>
   </div>
   <div class="col"></div>
