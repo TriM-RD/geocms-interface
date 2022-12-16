@@ -1,5 +1,5 @@
 <template v-if="renderComponent">
-  <button data-bs-toggle="tooltip" data-bs-placement="top" title="`${object.Stats[statTypeEnum.Tooltip].Data}`" :class="`${object.Stats[statTypeEnum.Design].Data}`" @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object)'>{{object.Stats[statTypeEnum.Label].Data}}</button>
+  <button data-bs-toggle="tooltip" data-bs-placement="top" :data-bs-title="specialCase()" :class="`${object.Stats[statTypeEnum.Design].Data}`" @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object)'>{{object.Stats[statTypeEnum.Label].Data}}</button>
   <slot></slot>
 </template>
 
@@ -20,6 +20,13 @@ export default class SubmitButtonComponent extends Vue {
   regionEnum = RegionEnum
   object!: ObjectTemplate
   renderComponent= false
+
+  specialCase () {
+    if (this.object !== undefined) {
+      if (this.object.Stats[this.statTypeEnum.Tooltip] === undefined) { return false }
+      return this.object.Stats[this.statTypeEnum.Tooltip].Data
+    }
+  }
 }
 </script>
 
