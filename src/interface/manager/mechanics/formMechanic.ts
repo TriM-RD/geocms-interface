@@ -110,6 +110,20 @@ export namespace Manager.Mechanic{
 
     protected async SelectList (eventHandler: EventHandlerType): Promise<void> {
       switch (router.currentRoute.value.name) {
+        case 'DeviceAdd':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Middle:
+              while (this.ObjectTemplates.length > 3) {
+                this.ObjectTemplates.pop()
+              }
+              this.refreshPage()
+              this.ObjectTemplates = this.Append((await http.get('http://blog.test/api/form/entity/' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
+              this.refreshPage()
+              break
+            default:
+              break
+          }
+          break
         case 'AttributeAdd':
         case 'AttributeEdit':
           switch (eventHandler.subObjectType) {
