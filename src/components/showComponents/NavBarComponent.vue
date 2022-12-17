@@ -17,17 +17,14 @@
             </form>
         </div>
       <ul class="d-flex">
-        <li class="nav-item">
-        <ul class="nav-item dropdown">
+        <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle boja" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             User name
           </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
+          <ul class="dropdown-menu dropdown-content">
             <router-link to="/account" class="dropdown-item">Profile</router-link>
             <li><button class="dropdown-item" type="button" v-on:click="logout()">Log out</button></li>
           </ul>
-        </ul>
         </li>
       </ul>
     </div>
@@ -85,5 +82,11 @@ margin-bottom: 1%;
 .d-flex{
   display:contents !important;
 }
-
+ul{
+  padding-inline-start: 0 !important;
+}
+.dropdown-content {
+  right: 0 !important;
+  left: auto !important;
+}
 </style>
