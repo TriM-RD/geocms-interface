@@ -1,12 +1,4 @@
 <template>
-  <!--
-  <h1>Basic</h1>
-  <button @click="logData"> log permissionsTreeData</button>
-  <div>
-    <blocks-tree :data="permissionsTreeData" :horizontal="treeOrientation=='1'"  :collapsable="true" ></blocks-tree>
-  </div>
-  -->
-  <!--FlashMessage position="right top" strategy="single" /-->
   <button class="btn btn-primary btn-lg " @click="saveButton">Save changes</button>
 
   <h1>Current tree</h1>
@@ -17,7 +9,7 @@
         <div class="container justify-content-center">
           <div class="row">
               <label  style=" padding-bottom: 10px">
-                  {{data.permission.lft}} {{data.label}} {{data.permission.rgt}}
+                   {{data.label}}
               </label>
           </div>
           <div v-show="data.expand" class="input-group mb-3" style="width: 280px" >
@@ -26,7 +18,7 @@
             </div>
             <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" v-model="data.rename" style="width: 100px">
             <div class="input-group-append">
-              <button class="btn btn-outline-secondary" @click="renameButton(data)" type="button" id="inputGroup-sizing-default" >Rename</button>
+              <button class="btn btn-outline-secondary" @click="rename(data)" type="button" id="inputGroup-sizing-default" >Rename</button>
             </div>
           </div>
           <div v-show="data.expand" class="input-group mb-3" style="width: 280px" >
@@ -35,23 +27,11 @@
             </div>
             <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" v-model="data.newChildName" style="width: 100px">
             <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button" id="inputGroup-sizing-default" @click="addChildButton(data)" >Create</button>
+              <button class="btn btn-outline-secondary" type="button" id="inputGroup-sizing-default" @click="addChild(data)" >Create</button>
             </div>
           </div>
-          <!--
-            <div class="row" v-show="data.expand">
-              <label  >Rename:</label>
-              <input class="m-1"  type="text" v-model="data.rename" style="width: 100px"/>
-              <button type="button" class="btn btn-primary m-1"  @click="renameButton(data)" > Rename</button>
-            </div>
-            <div class="row" v-show="data.expand">
-              <label  >Child name:</label>
-              <input class="m-1"  type="text" v-model="data.newChildName" style="width: 100px"/>
-              <button type="button" class="btn btn-primary m-1"  @click="addChildButton(data)" > Add child</button>
-            </div>
-            -->
             <div  v-show="data.expand">
-                <button  v-show="showDelete(data)" style="width: 100px" type="button" data-bs-toggle="modal" data-bs-target="#delete-modal" class="btn btn-danger m-1"  @click="deleteCheck(data)" > Delete this</button>
+                <button  v-show="showDelete(data)" style="width: 100px" type="button" data-bs-toggle="modal" data-bs-target="#delete-modal" class="btn btn-danger m-1"  @click="deleteDataCheck(data)" > Delete this</button>
 
             </div>
         </div>
@@ -65,58 +45,6 @@
     <option value="0">Vertical</option>
     <option value="1">Horizontal</option>
   </select>
-
-  <!--modal-->
-
-  <div class="modal fade" v-bind="deleteCheckData" id="delete-modal" ref="delete-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
-    <div class="modal-dialog" v-show="exists ===false">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" if="modal-title">Delete {{ deleteCheckData.permission.name }}</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-
-        <div class="modal-body">
-          <p>By clicking the yes button you will delete "{{ deleteCheckData.permission.name }}" from the database.</p>
-        </div>
-        <div class="modal-footer">
-          <span class="form-control-static pull-left">Delete {{ deleteCheckData.permission.name }}</span>
-          <button class="btn btn-primary mr-auto" data-bs-dismiss="modal" @click="deleteData()">Yes</button>
-          <button class="btn btn-primary" data-bs-dismiss="modal">No</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal-dialog" v-show="exists ===true">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" if="modal-title">Cannot delete {{ deleteCheckData.permission.name }}</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-
-        <div class="modal-body">
-          <p>Cannot delete "{{ deleteCheckData.permission.name }}" from the database.</p>
-          <p>Because a user or a division is connected to it.</p>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" v-bind="deleteCheckData" id="delete-modal" ref="delete-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
-
-    <div class="modal-dialog" v-show="exists ===true">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" if="modal-title">Cannot delete {{ deleteCheckData.permission.name }}</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-
-      </div>
-    </div>
-  </div>
 
   <ToastComponent id="tComponent"  title="a" message="aa" :custom-class="customClass"></ToastComponent>
 
@@ -161,15 +89,17 @@ export default class PermissionsTree extends Vue {
   newDatabaseData = reactive<permission[]>([])
   change = false
 
+  // unsuccesfull toast stuff
   toastTrigger:any
   toastLiveExample:any
   tComponent:any
-
   toastOptions = reactive({
     title: '',
     message: ''
   })
+  //
 
+  // creats a new child in the tree but does  not sent it to the database
   addChild (data: TreeData) {
     if (data.newChildName === '') {
       this.toast('Error', 'Cant do this')
@@ -184,6 +114,7 @@ export default class PermissionsTree extends Vue {
     this.toast('Successfuly addad child', `Child " ${newChild.label} " successfuly added to " ${data.label} "`)
   }
 
+  // used ti create the new child in tree
   newPermission (data: TreeData):TreeData {
     this.index = uuidv4()
     return {
@@ -206,6 +137,7 @@ export default class PermissionsTree extends Vue {
     }
   }
 
+  // i think this is related to pressing parts of the tree for them to open
   show (e : any, data : any) : void {
     if (e.target.tagName.toLowerCase() === 'div' || (e.target.tagName.toLowerCase() === 'label' && !data.expand)) {
       console.log('first if')
@@ -216,6 +148,7 @@ export default class PermissionsTree extends Vue {
     }
   }
 
+  // renames a tree component BUT does not edit it in database
   rename (data:TreeData) {
     if (data.rename === '') {
       this.toast('Error', 'New name cannot be empty')
@@ -230,6 +163,7 @@ export default class PermissionsTree extends Vue {
     this.toast('Success', `Renamed " ${temp} " to " ${data.label} "`)
   }
 
+  // Saves all changes made to the tree
   async save () {
     this.newDatabaseData.length = 0
     this.addToNewDatabseData(this.permissionsTreeData)
@@ -243,6 +177,16 @@ export default class PermissionsTree extends Vue {
 
     // sending to  backend  newDatabaseData
     // edit old
+    this.editExistingOnServer()
+    await new Promise(resolve => setTimeout(resolve, 500))
+
+    // saving new data
+    this.saveNewToServer()
+
+    this.change = false
+  }
+
+  editExistingOnServer () {
     http.post('http://blog.test/api/editAll/permission', this.databaseData)
       .then(response => {
         console.log(response)
@@ -256,10 +200,9 @@ export default class PermissionsTree extends Vue {
         console.log(error)
         this.toast('Error', 'Something went wrong during editing')
       })
+  }
 
-    await new Promise(resolve => setTimeout(resolve, 500))
-
-    // saving new data
+  saveNewToServer () {
     http.post('http://blog.test/api/permission', this.newDatabaseData)
       .then(response => {
         console.log(response)
@@ -273,10 +216,9 @@ export default class PermissionsTree extends Vue {
         console.log(error)
         this.toast('Error', 'Something went wrong during saving')
       })
-
-    this.change = false
   }
 
+  // checks for new data in the tree and edits the arrays for them
   addToNewDatabseData (data:TreeData) : void {
     let isInOld = false
     // goes throu all the tree and checks if there are new children and then places them into newDatabaseData
@@ -331,6 +273,15 @@ export default class PermissionsTree extends Vue {
   async deleteData () {
     console.log('Deletion')
     console.log(this.deleteCheckData)
+    this.deleteOnServer()
+    this.deleteLocal()
+    this.startPreorder()
+    this.updateOldData(this.permissionsTreeData)
+    http.post('http://blog.test/api/editAll/permission', this.databaseData)
+      .then(response => console.log(response))
+  }
+
+  async deleteOnServer () {
     const deleteTest = await http.post('http://blog.test/api/delete/permission', this.deleteCheckData.permission)
       .then(response => {
         console.log(response)
@@ -347,16 +298,17 @@ export default class PermissionsTree extends Vue {
       })
 
     console.log(deleteTest)
+  }
 
+  deleteLocal () {
     const test = this.deleteCheckData.parent?.children.indexOf(this.deleteCheckData)
     // eslint-disable-next-line no-unused-expressions
     if (test !== undefined) { this.deleteCheckData.parent?.children.splice(test, 1) }
     console.log('object thtats being deleted in database')
-    if (this.databaseData.find(item => item.id === this.deleteCheckData.permission.id) !== undefined) {
-      const temp = this.databaseData.find(item => item.id === this.deleteCheckData.permission.id)
-      if (temp !== undefined) {
-        this.databaseData.splice(this.databaseData.indexOf(temp), 1)
-      }
+
+    const temp = this.databaseData.find(item => item.id === this.deleteCheckData.permission.id)
+    if (temp !== undefined) {
+      this.databaseData.splice(this.databaseData.indexOf(temp), 1)
     }
 
     console.log(this.databaseData.indexOf(this.deleteCheckData.permission))
@@ -364,28 +316,37 @@ export default class PermissionsTree extends Vue {
       this.databaseData.splice(this.databaseData.indexOf(this.deleteCheckData.permission), 1)
     }
     console.log(this.databaseData)
-    this.startPreorder()
-    this.updateOldData(this.permissionsTreeData)
-    http.post('http://blog.test/api/editAll/permission', this.databaseData)
-      .then(response => console.log(response))
   }
 
   // this function only checks if the data can be deleted and sets the proper true or false statment
-  async deleteCheck (data: TreeData) {
+  async deleteDataCheck (data: TreeData) {
     if (data.parent === undefined) {
       this.toast('Error', 'Cant delete this')
       return
     }
     //
     this.deleteCheckData = data
-    const deleteResponse = await http.post('http://blog.test/api/deleteCheck/permission', data.permission)
+    const deleteCheckResponse = await http.post('http://blog.test/api/deleteCheck/permission', data.permission)
       .then(response => { return response.data })
       .catch((error) => console.log(error))
 
-    console.log(deleteResponse)
+    console.log(deleteCheckResponse)
 
-    // if delete is false its gona delete the data
-    this.exists = deleteResponse
+    this.deleteDataAlert(deleteCheckResponse)
+  }
+
+  deleteDataAlert (deleteCheckResponse:boolean) {
+    // if deleteResponse is false that measn it can be deleted
+    // and gives alert to confirm or reject
+    if (deleteCheckResponse) {
+      alert('It exists in another table so it canot be deleted')
+      this.toast('Error', 'Cant delete this, it exists in another table')
+    } else {
+      const del = confirm(`Do u wona delete ${this.deleteCheckData.label}?`)
+      if (del) {
+        this.deleteData()
+      }
+    }
   }
 
   startPreorder () : void {
@@ -405,6 +366,7 @@ export default class PermissionsTree extends Vue {
     this.preorderNumber++
   }
 
+  // only for showing the delete button
   showDelete (data:TreeData) : boolean {
     return !(data.parent === undefined || data.children.length > 0)
   }
@@ -481,27 +443,11 @@ export default class PermissionsTree extends Vue {
     toast.show()
   }
 
-  addChildButton (data: TreeData) : void {
-    // this.flashMessage(this.addChild(data))
-    this.addChild(data)
-  }
-
-  renameButton (data:TreeData) : void {
-    // this.flashMessage(this.rename(data))
-    this.rename(data)
-  }
-
   async saveButton () {
     /* this.flashMessage(['info', 'Waiting', 'Waiting for response from server'])
     this.flashMessage(await this.save()) */
     await this.save()
     await this.start()
-  }
-
-  async deleteDataButton (data: TreeData) {
-    /* this.flashMessage(['info', 'Waiting', 'Checking if this data is used somewhere else'])
-    this.flashMessage(await this.deleteData(data)) */
-    await this.deleteData()
   }
 
   attemptToGoBack () {
@@ -523,7 +469,6 @@ export default class PermissionsTree extends Vue {
     console.log('beforeUnmount')
     if (this.change) {
       const saveChanges = confirm('There are unsaved changes. Do you want to save them?')
-      alert(saveChanges) // true if OK is pressed
       console.log(saveChanges)
       if (saveChanges) {
         this.save()
