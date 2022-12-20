@@ -22,27 +22,28 @@ import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTempl
 import { Manager } from '@/interface/manager/mechanics/listMechanic'
 import { MechanicAbstract } from '@/interface/manager/mechanics/mechanicAbstract'
 import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatTypeEnum, StatType, ObjectType, RegionType } from '@/interface/manager/events/types/index'
+import { Watch } from 'vue-property-decorator'
 @Options({
   props: {
-    msg: String
+    title: String
   }
 })
 export default class ListComponent extends Vue {
-  msg!: string
   mechanic: MechanicAbstract = new Manager.Mechanic.ListMechanic()
   renderComponent= false
   objectTemplates!: ObjectTemplate[]
-
+  title!: string
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
   }
 
-  created () {
+  @Watch('title')
+  onDataChanged (value: any, oldValue: string) {
     this.Init()
   }
 
   async Init () {
-    this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'entity'))
+    this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'search/' + this.title))
     this.renderComponent = true
   }
 

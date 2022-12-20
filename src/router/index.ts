@@ -3,7 +3,6 @@ import Home from '../views/Home.vue'
 import Show from '../views/Show.vue'
 import DeviceAppend from '../views/DeviceAppend.vue'
 import DeviceCabinet from '../views/DeviceCabinet.vue'
-import Search from '@/views/Search.vue'
 import PermissionsTree from '@/views/PermissionsTree.vue'
 import Form from '@/views/Form.vue'
 const routes: Array<RouteRecordRaw> = [
@@ -139,14 +138,6 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: DeviceCabinet
-  },
-  {
-    path: '/search',
-    name: 'Search',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: Search
   }
 ]
 

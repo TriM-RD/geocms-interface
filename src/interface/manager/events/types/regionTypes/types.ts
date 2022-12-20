@@ -64,4 +64,18 @@ export namespace Manager.Events.Type{
         [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button()
       }
   }
+
+  export class List extends RegionAbstract {
+    public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
+      {
+        [ObjectTypeEnum.ListRow]: new ObjectTypeAbstract.Events.Type.ListRow()
+      }
+  }
+
+  export class ListRow extends RegionAbstract {
+    public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
+      {
+        [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button()
+      }
+  }
 }

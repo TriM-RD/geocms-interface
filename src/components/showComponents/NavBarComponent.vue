@@ -9,11 +9,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
         <div class="flex-grow-1 d-flex">
-          <form class="form-inline flex-nowrap bg-light mx-0 mx-lg-auto rounded p-1">
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username" aria-describedby="button-addon2">
-            </div>
-          </form>
+          <Search/>
         </div>
         <ul class="d-flex">
           <li class="nav-item">
@@ -39,7 +35,9 @@ import { Options, Vue } from 'vue-class-component'
 import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
 import { ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, RegionEnum } from '@/interface/manager/events/types'
 import http from '@/http-common'
+import Search from '@/components/Search.vue'
 @Options({
+  components: { Search },
   props: {
     object: ObjectTemplate
   }
@@ -51,6 +49,7 @@ export default class NavBarComponent extends Vue {
   regionType = RegionType
   regionEnum = RegionEnum
   object!: ObjectTemplate
+
   async logout () : Promise<void> {
     await http.get('http://blog.test/api/user/logout').then(response => {
       // success
