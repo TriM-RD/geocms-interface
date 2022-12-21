@@ -3,7 +3,7 @@
     <div class="input-group mb-3">
       <input v-model="title" @input="test()" class="form-control me-2" @keypress.enter.prevent type="search" placeholder="Search" aria-label="Search" >
     </div>
-    <ListComponent :title="title"/>
+    <ListComponent v-if="title !== ''" :title="title"/>
   </form>
 </template>
 

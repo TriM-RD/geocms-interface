@@ -2,7 +2,7 @@
   <div class="mb-3 row justify-content-md-center">
     <div class="col"></div>
     <div class="col input-group">
-      <label class="input-group-text" :hidden="specialCase()">{{object.Stats[statTypeEnum.Label].Data }}</label>
+      <label :title="`${object.Stats[statTypeEnum.Tooltip].Data}`" class="input-group-text" :hidden="specialCase()">{{object.Stats[statTypeEnum.Label].Data }}</label>
       <input class="form-control"
              :class="object.Stats[statTypeEnum.Design].Data"
              :type="`${object.Stats[statTypeEnum.ElementType] !== undefined?object.Stats[statTypeEnum.ElementType].Data:''}`"

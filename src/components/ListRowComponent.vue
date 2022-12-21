@@ -2,9 +2,7 @@
   <tr>
     <th scope="row"><img alt="arrow" width="27" src="../assets/arrow.png"></th>
     <td>{{object.Stats[statTypeEnum.Value].Data}}</td>
-    <td>{{object.Stats[statTypeEnum.Value].Data}}</td>
-    <td>{{object.Stats[statTypeEnum.Value].Data}}</td>
-    <td>{{object.Stats[statTypeEnum.Value].Data}}</td>
+    <td>{{object.Stats[statTypeEnum.Label].Data}}</td>
     <td>
       <component class="ms-3"  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'> </component>
     </td>

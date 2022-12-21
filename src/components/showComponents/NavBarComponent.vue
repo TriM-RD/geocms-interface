@@ -11,20 +11,20 @@
         <div class="flex-grow-1 d-flex">
           <Search/>
         </div>
-        <ul class="d-flex">
-          <li class="nav-item">
-            <ul class="nav-item dropdown padd">
-              <a class="nav-link dropdown-toggle boja" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                User name
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><button class="dropdown-item" type="button" v-on:click="logout()">Log out</button></li>
-              </ul>
-            </ul>
-          </li>
+
+      <!--ul class="d-flex">
+        <li class="nav-item">
+        <ul class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle boja" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            User name
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <router-link to="/account" class="dropdown-item">Profile</router-link>
+            <li><button class="dropdown-item" type="button" v-on:click="logout()">Log out</button></li>
+          </ul>
         </ul>
+        </ul-->
       </div>
     </div>
   </nav>
@@ -83,7 +83,5 @@ li{
 .d-flex{
   display:contents !important;
 }
-ul.padd{
-  padding-inline-start: 0 !important;
-}
+
 </style>

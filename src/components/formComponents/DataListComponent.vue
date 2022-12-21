@@ -3,7 +3,7 @@
     <div class="col"></div>
     <div class="col">
   <div class="input-group">
-    <label for="exampleDataList" class="input-group-text">{{object.Stats[statTypeEnum.Label].Data }}</label>
+    <label :title="`${object.Stats[statTypeEnum.Tooltip].Data}`" for="exampleDataList" class="input-group-text">{{object.Stats[statTypeEnum.Label].Data }}</label>
     <input class="form-control" list="datalistOptions"
            :type="`${object.Stats[statTypeEnum.ElementType] !== undefined?object.Stats[statTypeEnum.ElementType].Data:''}`"
            :value="object.Stats[statTypeEnum.Value].Data"

@@ -2,12 +2,7 @@
   <table class="table" v-if="renderComponent">
     <thead class="table-light">
     <tr>
-      <th scope="col"></th>
-      <th scope="col">Type</th>
       <th scope="col">Name</th>
-      <th scope="col">Category</th>
-      <th scope="col">Last Updated</th>
-      <th scope="col">Actions</th>
     </tr>
     </thead>
     <tbody>

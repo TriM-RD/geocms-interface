@@ -13,14 +13,18 @@ export namespace Manager.Mechanic{
     public async InitGet (_id = '-1', _route: string): Promise<ObjectTemplate[]> {
       this.ObjectTemplates = []
       const response = await http.get('http://blog.test/api/' + _route)
-      console.log(response)
-      return (this.ObjectTemplates = this.forEachElement(response.data))
+      if (Object.keys(response.data).length !== 0) {
+        this.ObjectTemplates = this.forEachElement(response.data)
+        return this.ObjectTemplates
+      } else {
+        return []
+      }
     }
 
     private forEachElement (data: any) : ObjectTemplate[] {
       let _temp: ObjectTemplate[] = []
       data.forEach((_list: any) => {
-        _temp = _temp.concat(_list.filter((_object : ObjectTemplate) => { return _object.Stats[StatTypeEnum.Tag].Data === 'code' }).map((_object: any) => {
+        _temp = _temp.concat(_list.filter((_object : ObjectTemplate) => { return _object.Stats[StatTypeEnum.Tag].Data === 'name' }).map((_object: any) => {
           return new ObjectTemplate(RegionEnum.List, ObjectTypeEnum.ListRow, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, this.reStructure(_object.Stats))
         }))
       })

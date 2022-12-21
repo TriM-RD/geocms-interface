@@ -5,6 +5,11 @@ import DeviceAppend from '../views/DeviceAppend.vue'
 import DeviceCabinet from '../views/DeviceCabinet.vue'
 import PermissionsTree from '@/views/PermissionsTree.vue'
 import Form from '@/views/Form.vue'
+import AccountProfile from '@/views/AccountProfile.vue'
+
+type MyRouteRecord = RouteRecordRaw & {
+  beforeRouteLeave: string;
+}
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -62,8 +67,9 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: PermissionsTree
-  },
+    component: PermissionsTree,
+    beforeRouteLeave: 'beforeRouteLeave'
+  } as MyRouteRecord,
   {
     path: '/division',
     name: 'Division',
@@ -138,6 +144,14 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: DeviceCabinet
+  },
+  {
+    path: '/account',
+    name: 'AccountProfile',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: AccountProfile
   }
 ]
 
