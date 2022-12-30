@@ -18,6 +18,7 @@ import { Manager } from '@/interface/manager/mechanics/listMechanic'
 import { MechanicAbstract } from '@/interface/manager/mechanics/mechanicAbstract'
 import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatTypeEnum, StatType, ObjectType, RegionType } from '@/interface/manager/events/types/index'
 import { Watch } from 'vue-property-decorator'
+
 @Options({
   props: {
     title: String
@@ -28,13 +29,19 @@ export default class ListComponent extends Vue {
   renderComponent= false
   objectTemplates!: ObjectTemplate[]
   title!: string
+  timeout!: number
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
   }
 
   @Watch('title')
   onDataChanged (value: any, oldValue: string) {
-    this.Init()
+    if (this.timeout) {
+      clearTimeout(this.timeout)
+    }
+    this.timeout = setTimeout(() => {
+      this.Init()
+    }, 800)
   }
 
   async Init () {

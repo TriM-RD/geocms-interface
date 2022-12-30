@@ -9,9 +9,20 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
         <div class="flex-grow-1 d-flex">
-          <Search/>
+          <Search data-bs-toggle="modal" data-bs-target="#exampleModal"/>
         </div>
-
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <Search />
+              </div>
+            </div>
+          </div>
+        </div>
       <!--ul class="d-flex">
         <li class="nav-item">
         <ul class="nav-item dropdown">
