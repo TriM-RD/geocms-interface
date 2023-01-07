@@ -29,19 +29,8 @@ export default class ListComponent extends Vue {
   renderComponent= false
   objectTemplates!: ObjectTemplate[]
   title!: string
-  timeout!: number
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
-  }
-
-  @Watch('title')
-  onDataChanged (value: any, oldValue: string) {
-    if (this.timeout) {
-      clearTimeout(this.timeout)
-    }
-    this.timeout = setTimeout(() => {
-      this.Init()
-    }, 800)
   }
 
   async Init () {
