@@ -35,7 +35,7 @@ export default class SelectListComponent extends Vue {
   renderComponent= true
 
   check (id : string) {
-    if (this.object.Stats[this.statTypeEnum.Value] === undefined) { return false }
+    if (this.object.Stats[this.statTypeEnum.Value] === undefined || id === undefined) { return false }
     return this.object.Stats[this.statTypeEnum.Value].Data === id.toString()
   }
 
