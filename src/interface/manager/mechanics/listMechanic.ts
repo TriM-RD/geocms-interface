@@ -15,6 +15,7 @@ export namespace Manager.Mechanic{
       const response = await http.get('http://blog.test/api/' + _route)
       if (Object.keys(response.data).length !== 0) {
         this.ObjectTemplates = this.forEachElement(response.data)
+        console.log(this.ObjectTemplates)
         return this.ObjectTemplates
       } else {
         return []
@@ -25,7 +26,7 @@ export namespace Manager.Mechanic{
       let _temp: ObjectTemplate[] = []
       data.forEach((_list: any) => {
         _temp = _temp.concat(_list.filter((_object : ObjectTemplate) => { return _object.Stats[StatTypeEnum.Tag].Data === 'name' }).map((_object: any) => {
-          return new ObjectTemplate(RegionEnum.List, ObjectTypeEnum.ListRow, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, this.reStructure(_object.Stats))
+          return new ObjectTemplate(RegionEnum.List, ObjectTypeEnum.ListRow, SubObjectTypeEnum.ParentObject, _object.ActionEnum, this.reStructure(_object.Stats))
         }))
       })
       return _temp

@@ -92,5 +92,11 @@ li{
 .d-flex{
   display:contents !important;
 }
-
+ul{
+  padding-inline-start: 0 !important;
+}
+.dropdown-content {
+  right: 0 !important;
+  left: auto !important;
+}
 </style>
