@@ -1,16 +1,10 @@
 <template>
-  <!--
-  <h1>Basic</h1>
-  <button @click="logData"> log permissionsTreeData</button>
-  <div>
-    <blocks-tree :data="permissionsTreeData" :horizontal="treeOrientation=='1'"  :collapsable="true" ></blocks-tree>
-  </div>
-  -->
-  <!--FlashMessage position="right top" strategy="single" /-->
+  <Loading v-model:active="renderComponent"
+           :can-cancel="false"
+           :is-full-page="false"/>
   <button class="btn btn-primary btn-lg " @click="saveButton">Save changes</button>
-  <h1>Current tree</h1>
-  <div>
-    <blocks-tree   @node-click="show"  :data="permissionsTreeData" :horizontal="treeOrientation=='1'" :collapsable="false" :props="{
+  <div v-if="!renderComponent">
+    <blocks-tree @node-click="show" :data="permissionsTreeData" :horizontal="treeOrientation==='1'" :collapsable="false" :props="{
         label: 'label', expand: 'expand', children: 'children',  key:'some_id', permission: 'permission'}">
       <template class="test"  #node="{data}">
         <div class="container justify-content-center">
@@ -21,7 +15,7 @@
           </div>
           <div v-show="data.expand" class="input-group mb-3" style="width: 280px" >
             <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroup-sizing-default" >Rename</span>
+              <span class="input-group-text" id="inputGroup-sizing-default-1" >Rename</span>
             </div>
             <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" v-model="data.rename" style="width: 100px">
             <div class="input-group-append">
@@ -30,11 +24,11 @@
           </div>
           <div v-show="data.expand" class="input-group mb-3" style="width: 280px" >
             <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroup-sizing-default" >Child name</span>
+              <span class="input-group-text" id="inputGroup-sizing-default-2" >Child name</span>
             </div>
             <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" v-model="data.newChildName" style="width: 100px">
             <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button" id="inputGroup-sizing-default" @click="addChildButton(data)" >Create</button>
+              <button class="btn btn-outline-secondary" type="button" id="inputGroup-sizing-default-3" @click="addChildButton(data)" >Create</button>
             </div>
           </div>
           <!--
@@ -124,12 +118,18 @@ import { reactive, ref } from 'vue'
 import permission, { TreeData } from '@/components/tree/Permission'
 import http from '@/http-common'
 import { v4 as uuidv4 } from 'uuid'
-import { Vue } from 'vue-class-component'
-
+import { Options, Vue } from 'vue-class-component'
+import Loading from 'vue-loading-overlay'
+@Options({
+  components: {
+    Loading
+  }
+})
 export default class PermissionsTree extends Vue {
   index = uuidv4()
   preorderNumber = 0
   treeOrientation = ref('0')
+  renderComponent = true
   permissionsTreeData = reactive <TreeData>(
     {
       label: 'root',
@@ -215,14 +215,13 @@ export default class PermissionsTree extends Vue {
   async save () {
     this.newDatabaseData.length = 0
     this.addToNewDatabseData(this.permissionsTreeData)
-    console.log('old data')
-    console.log(this.databaseData)
+    /* console.log('old data')
+    console.log(this.databaseData) */
     this.updateOldData(this.permissionsTreeData)
-    console.log('old data but edited')
+    /* console.log('old data but edited')
     console.log(this.databaseData)
     console.log('new data')
-    console.log(this.newDatabaseData)
-
+    console.log(this.newDatabaseData) */
     // sending to  backend  newDatabaseData
     // edit old
     http.post('http://blog.test/api/editAll/permission', this.databaseData)
@@ -401,11 +400,10 @@ export default class PermissionsTree extends Vue {
       this.permissionsTreeData.children.splice(0)
     }
     this.init(response)
-    console.log(response)
+    // console.log(response)
   }
 
   init (response: any) : void {
-    console.log('WADUHEK!!')
     const temp = JSON.parse(JSON.stringify(response.data))
 
     if (this.databaseData.length > 0) {
@@ -447,6 +445,7 @@ export default class PermissionsTree extends Vue {
         }
       }
     }
+    this.renderComponent = false
   }
 
   addChildButton (data: TreeData) : void {
@@ -480,8 +479,6 @@ export default class PermissionsTree extends Vue {
   beforeUnmount () {
     console.log('beforeUnmount')
     window.addEventListener('beforeunload', event => {
-      console.log('FUCKING ULOAD ALREDY!!!')
-      alert('BRUWWWWW')
       event.returnValue = 'Are you sure you want to leave?'
     })
     this.hell()
