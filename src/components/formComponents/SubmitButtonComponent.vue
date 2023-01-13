@@ -23,8 +23,9 @@ export default class SubmitButtonComponent extends Vue {
 
   specialCase () {
     if (this.object !== undefined) {
-      if (this.object.Stats[this.statTypeEnum.Tooltip] === undefined) { return false }
-      return this.object.Stats[this.statTypeEnum.Tooltip].Data
+      if (this.object.Stats[this.statTypeEnum.Tooltip] !== undefined) {
+        return this.object.Stats[this.statTypeEnum.Tooltip].Data
+      }
     }
   }
 }

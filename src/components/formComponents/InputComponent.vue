@@ -2,7 +2,7 @@
   <div class="mb-3 row justify-content-md-center">
     <div class="col"></div>
     <div class="col input-group">
-      <label :title="`${object.Stats[statTypeEnum.Tooltip].Data}`" class="input-group-text" :hidden="specialCase()">{{object.Stats[statTypeEnum.Label].Data }}</label>
+      <label :title="tooltipCase()" class="input-group-text" :hidden="specialCase()">{{object.Stats[statTypeEnum.Label].Data }}</label>
       <input class="form-control"
              :class="object.Stats[statTypeEnum.Design].Data"
              :type="`${object.Stats[statTypeEnum.ElementType] !== undefined?object.Stats[statTypeEnum.ElementType].Data:''}`"
@@ -35,6 +35,14 @@ export default class InputComponent extends Vue {
   specialCase () : boolean {
     if (this.object.Stats[this.statTypeEnum.ElementType] === undefined) { return false }
     return this.object.Stats[this.statTypeEnum.ElementType].Data === 'hidden'
+  }
+
+  tooltipCase () : string | undefined {
+    if (this.object !== undefined) {
+      if (this.object.Stats[this.statTypeEnum.Tooltip] !== undefined) {
+        return this.object.Stats[this.statTypeEnum.Tooltip].Data
+      }
+    }
   }
 }
 </script>
