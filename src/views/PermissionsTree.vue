@@ -2,7 +2,6 @@
   <Loading v-model:active="renderComponent"
            :can-cancel="false"
            :is-full-page="false"/>
-  <button class="btn btn-primary btn-lg " @click="saveButton">Save changes</button>
   <div v-if="!renderComponent">
     <blocks-tree @node-click="show" :data="permissionsTreeData" :horizontal="treeOrientation==='1'" :collapsable="false" :props="{
         label: 'label', expand: 'expand', children: 'children',  key:'some_id', permission: 'permission'}">
@@ -10,7 +9,7 @@
         <div class="container justify-content-center">
           <div class="row">
               <label  style=" padding-bottom: 10px">
-                  {{data.permission.lft}} {{data.label}} {{data.permission.rgt}}
+                  {{data.label}}
               </label>
           </div>
           <div v-show="data.expand" class="input-group mb-3" style="width: 280px" >
@@ -53,12 +52,13 @@
     </blocks-tree>
   </div>
 
-  <h1>Change orientation</h1>
+  <h4>Change orientation</h4>
   <select v-model="treeOrientation">
     <option value="0">Vertical</option>
     <option value="1">Horizontal</option>
   </select>
-
+  <br>
+  <button class="btn btn-primary" @click="saveButton">Save changes</button>
   <!--modal-->
 
   <div class="modal fade" v-bind="deleteCheckData" id="delete-modal" ref="delete-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">

@@ -39,27 +39,32 @@ export namespace Manager.Mechanic{
     }
 
     protected SubscribeConditions (): void {
-      RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
+      RegionType.RegionTypes[RegionEnum.List].ObjectTypes[ObjectTypeEnum.ListRow].SubscribeLogic(this.Button.bind(this))
     }
 
     public UnsubscribeConditions () {
-      RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
+      RegionType.RegionTypes[RegionEnum.List].ObjectTypes[ObjectTypeEnum.ListRow].NullifyLogic()
     }
 
     protected Button (eventHandler: EventHandlerType): void {
-      console.log('test')
       // const _id = this.ObjectTemplates[0].Stats[StatTypeEnum.Id].Data
       const _id = eventHandler.payload.Stats[StatTypeEnum.Id].Data
+      const _label = eventHandler.payload.Stats[StatTypeEnum.Label].Data
       switch (eventHandler.subObjectType) {
-        case SubObjectTypeEnum.Left:// Izbriši
-          http.delete('http://blog.test/api/entity/' + _id)
-            .then(response => (router.go(0)))
-          break
-        case SubObjectTypeEnum.Middle: // Uredi
-          router.push({ name: 'Edit', params: { id: _id } })
-          break
-        case SubObjectTypeEnum.Right: // Pregledaj
-          router.push({ name: 'Show', params: { id: _id } })
+        case SubObjectTypeEnum.ParentObject:
+          switch (_label) {
+            case 'Group':
+              router.push({ name: 'GroupEdit', params: { id: _id } })
+              break
+            case 'Division':
+              router.push({ name: 'DivisionEdit', params: { id: _id } })
+              break
+            case 'Device':
+              router.push({ name: 'DeviceEdit', params: { id: _id } })
+              break
+            default:
+              break
+          }
           break
         default:
           break

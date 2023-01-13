@@ -9,18 +9,18 @@
           <span class="input-group-text" id="basic-addon2">Email</span>
           <span class="form-control">{{ $store.state.email }}</span>
           </div>
-          <TableComponent />
+          <ListComponent :use-routes="true"/>
     </div>
   </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import TableComponent from '@/components/TableComponent.vue'
-import createStore from '@/store/index'
+import ListComponent from '@/components/ListComponent.vue'
+// import createStore from '@/store/index'
 
 @Options({
   components: {
-    TableComponent
+    ListComponent
   }
 })
 export default class AccountProfile extends Vue {
