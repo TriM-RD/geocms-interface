@@ -3,7 +3,7 @@
         <div class="col"></div>
         <div class="col">
       <div class="input-group">
-        <label :title="`${object.Stats[statTypeEnum.Tooltip].Data}`" for="exampleDataList" class="input-group-text">{{object.Stats[statTypeEnum.Label].Data }}</label>
+        <label :title="specialCase()" for="exampleDataList" class="input-group-text">{{object.Stats[statTypeEnum.Label].Data }}</label>
         <select class="form-select" aria-label="Default select example"
         @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, $event.target.value)">
           <option :selected="object.Stats[statTypeEnum.Value] === undefined" hidden>Select a type.</option>
@@ -35,8 +35,16 @@ export default class SelectListComponent extends Vue {
   renderComponent= true
 
   check (id : string) {
-    if (this.object.Stats[this.statTypeEnum.Value] === undefined) { return false }
+    if (this.object.Stats[this.statTypeEnum.Value] === undefined || id === undefined) { return false }
     return this.object.Stats[this.statTypeEnum.Value].Data === id.toString()
+  }
+
+  specialCase () {
+    if (this.object !== undefined) {
+      if (this.object.Stats[this.statTypeEnum.Tooltip] !== undefined) {
+        return this.object.Stats[this.statTypeEnum.Tooltip].Data
+      }
+    }
   }
 }
 </script>
