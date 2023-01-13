@@ -26,16 +26,22 @@ import { Watch } from 'vue-property-decorator'
 })
 export default class ListComponent extends Vue {
   mechanic: MechanicAbstract = new Manager.Mechanic.ListMechanic()
-  renderComponent= false
+  renderComponent = false
   objectTemplates!: ObjectTemplate[]
   title!: string
+  count = 0
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
   }
 
   async Init () {
-    this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'search/' + this.title))
-    this.renderComponent = true
+    this.count = (this.title.match(/group:/g) || []).length
+    if (this.count < 2) {
+      this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'search/' + this.title))
+      this.renderComponent = true
+    } else {
+      window.alert('Groups can only be listed once in a search!')
+    }
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {
