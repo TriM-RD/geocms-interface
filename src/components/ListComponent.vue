@@ -33,7 +33,7 @@ export default class ListComponent extends Vue {
   title!: string
   count = 0
   useRoutes = false
-  headers!: string[]
+  headers: string[] = []
 
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()

@@ -9,13 +9,13 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
         <div class="flex-grow-1 d-flex">
-          <Search data-bs-toggle="modal" data-bs-target="#exampleModal"/>
+          <Search data-bs-toggle="modal" data-bs-target="#searchModal"/>
         </div>
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" ref="modalRef" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" id="searchModalClose" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 <Search />
@@ -45,6 +45,7 @@ import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTempl
 import { ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, RegionEnum } from '@/interface/manager/events/types'
 import http from '@/http-common'
 import Search from '@/components/Search.vue'
+import { Watch } from 'vue-property-decorator'
 @Options({
   components: { Search },
   props: {
@@ -58,6 +59,14 @@ export default class NavBarComponent extends Vue {
   regionType = RegionType
   regionEnum = RegionEnum
   object!: ObjectTemplate
+
+  @Watch('$route')
+  onDataChanged (value: any, oldValue: string) {
+    const temp = document.getElementById('searchModalClose')
+    if (temp !== null) {
+      temp.click()
+    }
+  }
 
   async logout () : Promise<void> {
     await http.get('http://blog.test/api/user/logout').then(response => {

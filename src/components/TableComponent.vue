@@ -31,7 +31,7 @@ import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatType
   }
 })
 export default class TableComponent extends Vue {
-  headers!: string[]
+  headers: string[] = []
   regionEnum = RegionEnum
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
