@@ -60,7 +60,7 @@ export namespace Manager.Mechanic{
             case SubObjectTypeEnum.Left:// Izbriši
               http.delete('http://blog.test/api/entity/' + _id)
                 .then(response => (router.push({ name: 'Device' })))
-              router.push({ name: 'Group' })
+              router.replace({ name: 'Group' })
               break
             case SubObjectTypeEnum.Middle: // Uredi
               router.push({ name: 'DeviceEdit', params: { id: _id } })
@@ -77,7 +77,7 @@ export namespace Manager.Mechanic{
             case SubObjectTypeEnum.Left:// Izbriši
               http.delete('http://blog.test/api/group/' + _id)
                 .then(response => (router.push({ name: 'Group' })))
-              router.push({ name: 'Device' })
+              router.replace({ name: 'Device' })
               break
             case SubObjectTypeEnum.Middle: // Uredi
               router.push({ name: 'GroupEdit', params: { id: _id } })
@@ -92,9 +92,9 @@ export namespace Manager.Mechanic{
         case 'GroupEdit':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:// Izbriši
-              http.delete('http://blog.test/api/group/' + _id)
-                .then(response => (router.push({ name: 'Group' })))
-              router.push({ name: 'Device' })
+              http.delete('http://blog.test/api/attribute/' + _id)
+                .then(response => (router.go(-1)))
+              router.replace({ name: 'Device' })
               break
             case SubObjectTypeEnum.Middle: // Pregledaj
               router.push({ name: 'AttributeEdit', params: { parentId: router.currentRoute.value.params.id, id: _id } })
@@ -111,7 +111,7 @@ export namespace Manager.Mechanic{
             case SubObjectTypeEnum.Left:// Izbriši
               http.delete('http://blog.test/api/division/' + _id)
                 .then(response => (router.push({ name: 'Division' })))
-              router.push({ name: 'Device' })
+              router.replace({ name: 'Device' })
               break
             case SubObjectTypeEnum.Middle: // Uredi
               router.push({ name: 'DivisionEdit', params: { id: _id } })

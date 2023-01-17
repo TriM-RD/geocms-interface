@@ -157,7 +157,9 @@ export namespace Manager.Mechanic{
               }
               break
             case SubObjectTypeEnum.Right:
-              router.back()
+              await router.push({
+                name: 'Device'
+              })
               break
             default:
               break
@@ -179,7 +181,9 @@ export namespace Manager.Mechanic{
               await router.push({ name: 'AttributeAdd', params: { parentId: this.id } })
               break
             case SubObjectTypeEnum.Right:
-              router.back()
+              await router.push({
+                name: 'Group'
+              })
               break
             default:
               break
@@ -211,7 +215,9 @@ export namespace Manager.Mechanic{
               this.refreshPage()
               break
             case SubObjectTypeEnum.Right:
-              router.back()
+              await router.push({
+                name: 'Division'
+              })
               break
             case SubObjectTypeEnum.Down:
               this.refreshPage()
@@ -248,7 +254,10 @@ export namespace Manager.Mechanic{
               this.refreshPage()
               break
             case SubObjectTypeEnum.Right:
-              router.back()
+              await router.push({
+                name: 'GroupEdit',
+                params: { id: router.currentRoute.value.params.parentId }
+              })
               break
             case SubObjectTypeEnum.Down:
               this.refreshPage()
@@ -266,7 +275,9 @@ export namespace Manager.Mechanic{
         case 'AdministrationEdit':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Right:
-              router.back()
+              await router.push({
+                name: 'Administration'
+              })
               break
             case SubObjectTypeEnum.Left:
               if (this.inEdit) {
