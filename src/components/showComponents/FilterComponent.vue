@@ -8,7 +8,7 @@
     <input type="text" class="form-control" placeholder="Device type" aria-label="Username" aria-describedby="basic-addon1">
   </div>
   <div class="input-group mb-3 col-lg-4">
-    <span class="input-group-text" id="basic-addon1" title="Use a category of device to filter results.">Category</span>
+    <span class="input-group-text" id="basic-addon2" title="Use a category of device to filter results.">Category</span>
     <input type="text" class="form-control" placeholder="Device category" aria-label="Username" aria-describedby="basic-addon1">
   </div>
 </div>
