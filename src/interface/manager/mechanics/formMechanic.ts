@@ -215,9 +215,8 @@ export namespace Manager.Mechanic{
               break
             case SubObjectTypeEnum.Down:
               this.refreshPage()
-              // eslint-disable-next-line no-case-declarations
-              const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
-              this.ObjectTemplates.splice(temp, 1)
+              this.ObjectTemplates.splice(this.ObjectTemplates.findIndex(
+                element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data), 1)
               this.refreshPage()
               break
             default:
@@ -255,9 +254,8 @@ export namespace Manager.Mechanic{
               this.refreshPage()
               /* console.log(eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
               console.log(JSON.parse(JSON.stringify(this.ObjectTemplates))) */
-              // eslint-disable-next-line no-case-declarations
-              const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
-              this.ObjectTemplates.splice(temp, 1)
+              this.ObjectTemplates.splice(this.ObjectTemplates.findIndex(
+                element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data), 1)
               // console.log(this.ObjectTemplates)
               this.refreshPage()
               break
@@ -294,9 +292,8 @@ export namespace Manager.Mechanic{
               break
             case SubObjectTypeEnum.Down:
               this.refreshPage()
-              // eslint-disable-next-line no-case-declarations
-              const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
-              this.ObjectTemplates.splice(temp, 1)
+              this.ObjectTemplates.splice(this.ObjectTemplates.findIndex(
+                element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data), 1)
               this.refreshPage()
               break
             default:
