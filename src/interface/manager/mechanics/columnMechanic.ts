@@ -51,8 +51,8 @@ export namespace Manager.Mechanic{
     protected Button (eventHandler: EventHandlerType): void {
       console.log('test')
       // const _id = this.ObjectTemplates[0].Stats[StatTypeEnum.Id].Data
-      const _id = eventHandler.payload.Stats[StatTypeEnum.Id].Data
-      switch (eventHandler.subObjectType) {
+      // const _id = eventHandler.payload.Stats[StatTypeEnum.Id].Data
+      /* switch (eventHandler.subObjectType) {
         case SubObjectTypeEnum.Left:// Izbriši
           http.delete('http://blog.test/api/entity/' + _id)
             .then(response => (router.go(0)))
@@ -65,7 +65,7 @@ export namespace Manager.Mechanic{
           break
         default:
           break
-      }
+      } */
     }
   }
 

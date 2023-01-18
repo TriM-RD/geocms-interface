@@ -52,10 +52,10 @@ export namespace Manager.Mechanic{
       switch (router.currentRoute.value.name) {
         case 'Device':
           switch (eventHandler.subObjectType) {
-            case SubObjectTypeEnum.Left:// Izbriši
+            case SubObjectTypeEnum.Left:
               router.push({ name: 'Show' })
               break
-            case SubObjectTypeEnum.Right: // Pregledaj
+            case SubObjectTypeEnum.Right:
               router.push({ name: 'DeviceAdd' })
               break
             default:
@@ -64,10 +64,10 @@ export namespace Manager.Mechanic{
           break
         case 'Group':
           switch (eventHandler.subObjectType) {
-            case SubObjectTypeEnum.Left:// Izbriši
+            case SubObjectTypeEnum.Left:
               router.push({ name: 'Show' })
               break
-            case SubObjectTypeEnum.Right: // Pregledaj
+            case SubObjectTypeEnum.Right:
               router.push({ name: 'GroupAdd' })
               break
             default:
@@ -76,10 +76,10 @@ export namespace Manager.Mechanic{
           break
         case 'Division':
           switch (eventHandler.subObjectType) {
-            case SubObjectTypeEnum.Left:// Izbriši
+            case SubObjectTypeEnum.Left:
               router.push({ name: 'Show' })
               break
-            case SubObjectTypeEnum.Right: // Pregledaj
+            case SubObjectTypeEnum.Right:
               router.push({ name: 'DivisionAdd' })
               break
             default:

@@ -69,6 +69,9 @@ export default class TableComponent extends Vue {
       case 'AccountProfile':
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'permissions/user'))
         break
+      case 'Administration':
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'users'))
+        break
     }
     if (Object.keys(this.objectTemplates).length === 0) {
       this.renderComponent = false
