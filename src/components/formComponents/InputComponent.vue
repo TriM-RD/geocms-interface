@@ -42,6 +42,7 @@ export default class InputComponent extends Vue {
 
   attributeCheck (statType : number) : boolean | string {
     if (this.object.Stats[statType] === undefined) { return false }
+    if (this.object.Stats[statType].Data === '') { return false }
     return this.object.Stats[statType].Data
   }
 
