@@ -92,8 +92,10 @@ export namespace Manager.Mechanic{
         case 'GroupEdit':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:// Izbriši
+              // eslint-disable-next-line no-case-declarations
+              const tempParam = router.currentRoute.value.params.id
               http.delete('http://blog.test/api/attribute/' + _id)
-                .then(response => (router.go(-1)))
+                .then(response => (router.push({ name: 'GroupEdit', params: { id: tempParam } })))
               router.replace({ name: 'Device' })
               break
             case SubObjectTypeEnum.Middle: // Pregledaj
