@@ -26,6 +26,7 @@ export namespace Manager.Events.Type{
 
     export class Insert extends MethodTypeAbstract {
       public Act (_object: ObjectTemplate, _data : any, _invokeLogic: LogicDelegate): boolean {
+        console.log(_data)
         this.Enact(_data).then(response => (_object.Stats[StatTypeEnum.Value].Data = response))
         return true
       }
