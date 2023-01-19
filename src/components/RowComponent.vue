@@ -14,11 +14,13 @@ import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatType
 @Options({
   props: {
     entity: Array,
-    index: Number
+    index: Number,
+    rerender: Function
   }
 })
 export default class RowComponent extends Vue {
-  mechanic: MechanicAbstract = Manager.Mechanic.RowMechanic.getInstance(this.reRender.bind(this))
+  rerender!: () => void
+  mechanic: MechanicAbstract = Manager.Mechanic.RowMechanic.getInstance(this.rerender.bind(this))
   regionEnum = RegionEnum
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
@@ -27,10 +29,6 @@ export default class RowComponent extends Vue {
   entity!: ObjectTemplate[]
   objectTemplates!: ObjectTemplate[]
   index!: number
-
-  reRender (test = false) {
-    this.renderComponent = !this.renderComponent
-  }
 
   mounted () {
     this.objectTemplates = this.mechanic.InitSet(this.entity)

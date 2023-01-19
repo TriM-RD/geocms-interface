@@ -12,8 +12,7 @@
     </tr>
   </thead>
   <tbody>
-    <!--component  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate' :index='key'></component-->
-    <component  v-for="(entity, key, index) in entities" :key="`${ key }-${ index }-${ Math.random().toString(36).slice(2, 7) }`" :is="getComponent(regionEnum.Table, objectTypeEnum.Row)" :entity='entity' :index='key'></component>
+    <component :rerender="changeRender"  v-for="(entity, key, index) in entities" :key="`${ key }-${ index }-${ Math.random().toString(36).slice(2, 7) }`" :is="getComponent(regionEnum.Table, objectTypeEnum.Row)" :entity='entity' :index='key'></component>
   </tbody>
 </table>
 </template>
@@ -49,6 +48,18 @@ export default class TableComponent extends Vue {
     this.Init()
   }
 
+  changeRender () {
+    if (this.renderComponent) {
+      this.entities = []
+      this.objectTemplates = []
+      this.headers = []
+      this.mechanic = new Manager.Mechanic.TableMechanic()
+      this.Init()
+    } else {
+      this.renderComponent = true
+    }
+  }
+
   async Init () {
     switch (this.$route.name) {
       case 'Device':
@@ -73,6 +84,7 @@ export default class TableComponent extends Vue {
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'users'))
         break
     }
+    console.log(this.objectTemplates)
     if (Object.keys(this.objectTemplates).length === 0) {
       this.renderComponent = false
       return
@@ -83,9 +95,10 @@ export default class TableComponent extends Vue {
       if (element.Stats[StatTypeEnum.Id].Data === tempId) {
         tempObjectTemplates.push(JSON.parse(JSON.stringify(element)))
       } else {
-        if (this.entities === undefined && tempObjectTemplates.length > 0) {
+        console.log(tempObjectTemplates.length > 0)
+        if ((this.entities === undefined || this.entities.length < 1) && tempObjectTemplates.length > 0) {
           this.entities = [tempObjectTemplates]
-        } else if (this.entities !== undefined) {
+        } else if (this.entities !== undefined && tempObjectTemplates.length > 0) {
           this.entities.push(JSON.parse(JSON.stringify(tempObjectTemplates)))
         }
         tempObjectTemplates = []
@@ -98,6 +111,7 @@ export default class TableComponent extends Vue {
     } else {
       this.entities[this.entities.length] = tempObjectTemplates
     }
+    console.log(this.entities)
     this.getHeaders()
     this.renderComponent = false
   }

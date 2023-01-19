@@ -65,6 +65,7 @@ export namespace Manager.Mechanic{
         case 'Device':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:// Izbriši
+              this.refreshPage()
               http.delete('http://blog.test/api/entity/' + _id)
                 .then(response => (this.refreshPage()))
               break
@@ -81,6 +82,7 @@ export namespace Manager.Mechanic{
         case 'Group':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:// Izbriši
+              this.refreshPage()
               http.delete('http://blog.test/api/group/' + _id)
                 .then(response => (this.refreshPage()))
               break
@@ -97,8 +99,7 @@ export namespace Manager.Mechanic{
         case 'GroupEdit':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:// Izbriši
-              // eslint-disable-next-line no-case-declarations
-              const tempParam = router.currentRoute.value.params.id
+              this.refreshPage()
               http.delete('http://blog.test/api/attribute/' + _id)
                 .then(response => (this.refreshPage()))
               break
@@ -115,6 +116,7 @@ export namespace Manager.Mechanic{
         case 'Division':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:// Izbriši
+              this.refreshPage()
               http.delete('http://blog.test/api/division/' + _id)
                 .then(response => (this.refreshPage()))
               break
@@ -151,8 +153,8 @@ export namespace Manager.Mechanic{
     static getInstance (_mechanicCallback: MechanicDelegate | null = null): MechanicAbstract {
       if (!MechanicAbstract.instance) {
         MechanicAbstract.instance = new RowMechanic()
+        MechanicAbstract.instance.SubscribeToVueComponent(_mechanicCallback)
       }
-      MechanicAbstract.instance.SubscribeToVueComponent(_mechanicCallback)
       return MechanicAbstract.instance
     }
   }
