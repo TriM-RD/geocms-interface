@@ -1,7 +1,7 @@
 import { ObjectTemplate } from '../containerClasses/objectTemplate'
 import { ObjectType, ObjectTypeEnum } from '../events/types/objectType'
 import { SubObjectTypeEnum } from '../events/types/subObjectType'
-import { MechanicAbstract } from './mechanicAbstract'
+import { MechanicAbstract, MechanicDelegate } from './mechanicAbstract'
 import http from '@/http-common'
 import { StatType, StatTypeEnum } from '../events/types/statType'
 import { RegionEnum, ActionTypeEnum, RegionType } from '@/interface/manager/events/types/index'
@@ -35,6 +35,13 @@ export namespace Manager.Mechanic{
       return temp
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    refreshPage () {
+      if (this.mechanicInvoked !== null) {
+        this.mechanicInvoked.dispatch(true)
+      }
+    }
+
     public InitSet (_objectTemplates: ObjectTemplate[]): ObjectTemplate[] {
       this.ObjectTemplates = []
       for (const _object of _objectTemplates) {
@@ -59,8 +66,7 @@ export namespace Manager.Mechanic{
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:// Izbriši
               http.delete('http://blog.test/api/entity/' + _id)
-                .then(response => (router.push({ name: 'Device' })))
-              router.replace({ name: 'Group' })
+                .then(response => (this.refreshPage()))
               break
             case SubObjectTypeEnum.Middle: // Uredi
               router.push({ name: 'DeviceEdit', params: { id: _id } })
@@ -76,8 +82,7 @@ export namespace Manager.Mechanic{
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:// Izbriši
               http.delete('http://blog.test/api/group/' + _id)
-                .then(response => (router.push({ name: 'Group' })))
-              router.replace({ name: 'Device' })
+                .then(response => (this.refreshPage()))
               break
             case SubObjectTypeEnum.Middle: // Uredi
               router.push({ name: 'GroupEdit', params: { id: _id } })
@@ -95,8 +100,7 @@ export namespace Manager.Mechanic{
               // eslint-disable-next-line no-case-declarations
               const tempParam = router.currentRoute.value.params.id
               http.delete('http://blog.test/api/attribute/' + _id)
-                .then(response => (router.push({ name: 'GroupEdit', params: { id: tempParam } })))
-              router.replace({ name: 'Device' })
+                .then(response => (this.refreshPage()))
               break
             case SubObjectTypeEnum.Middle: // Pregledaj
               router.push({ name: 'AttributeEdit', params: { parentId: router.currentRoute.value.params.id, id: _id } })
@@ -112,8 +116,7 @@ export namespace Manager.Mechanic{
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:// Izbriši
               http.delete('http://blog.test/api/division/' + _id)
-                .then(response => (router.push({ name: 'Division' })))
-              router.replace({ name: 'Device' })
+                .then(response => (this.refreshPage()))
               break
             case SubObjectTypeEnum.Middle: // Uredi
               router.push({ name: 'DivisionEdit', params: { id: _id } })
@@ -145,11 +148,11 @@ export namespace Manager.Mechanic{
       }
     }
 
-    static getInstance (): MechanicAbstract {
+    static getInstance (_mechanicCallback: MechanicDelegate | null = null): MechanicAbstract {
       if (!MechanicAbstract.instance) {
         MechanicAbstract.instance = new RowMechanic()
       }
-
+      MechanicAbstract.instance.SubscribeToVueComponent(_mechanicCallback)
       return MechanicAbstract.instance
     }
   }
