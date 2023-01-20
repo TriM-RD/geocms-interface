@@ -83,6 +83,16 @@ export namespace Manager.Events.Type{
     }
   }
 
+  export class ItemList extends StatAbstract {
+    public CreateStat (): StatAbstract {
+      return new ItemList()
+    }
+
+    public CheckRequirements (_object: any): void {
+      alert(this.Data)
+    }
+  }
+
   export class Tooltip extends StatAbstract {
     public CreateStat (): StatAbstract {
       return new Tooltip()
@@ -93,13 +103,34 @@ export namespace Manager.Events.Type{
     }
   }
 
-  export class ItemList extends StatAbstract {
+  export class Required extends StatAbstract {
     public CreateStat (): StatAbstract {
-      return new ItemList()
+      return new Required()
     }
 
     public CheckRequirements (_object: any): void {
       alert(this.Data)
     }
   }
+
+  export class Disabled extends StatAbstract {
+    public CreateStat (): StatAbstract {
+      return new Disabled()
+    }
+
+    public CheckRequirements (_object: any): void {
+      alert(this.Data)
+    }
+  }
+
+  export class AutoComplete extends StatAbstract {
+    public CreateStat (): StatAbstract {
+      return new AutoComplete()
+    }
+
+    public CheckRequirements (_object: any): void {
+      alert(this.Data)
+    }
+  }
+
 }

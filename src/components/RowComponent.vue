@@ -1,6 +1,4 @@
 <template>
-    <!--th scope="row"><img alt="arrow" width="27" src="../assets/arrow.png"></th>
-    <td>{{object.Stats[statTypeEnum.Value].Data}}</td-->
   <tr v-if="renderComponent">
     <th scope="row"><img alt="arrow" width="27" src="../assets/arrow.png"></th>
     <component v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ Math.random().toString(36).slice(2, 7) }`"  :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'></component>
@@ -16,11 +14,13 @@ import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatType
 @Options({
   props: {
     entity: Array,
-    index: Number
+    index: Number,
+    rerender: Function
   }
 })
 export default class RowComponent extends Vue {
-  mechanic: MechanicAbstract = Manager.Mechanic.RowMechanic.getInstance()
+  rerender!: () => void
+  mechanic: MechanicAbstract = Manager.Mechanic.RowMechanic.getInstance(this.rerender.bind(this))
   regionEnum = RegionEnum
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum

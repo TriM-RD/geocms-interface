@@ -4,6 +4,9 @@
     <div class="col input-group">
       <label :title="tooltipCase()" class="input-group-text" :hidden="specialCase()">{{object.Stats[statTypeEnum.Label].Data }}</label>
       <input class="form-control"
+             :required="attributeCheck(statTypeEnum.Required)"
+             :disabled="attributeCheck(statTypeEnum.Disabled)"
+             :autocomplete="`${object.Stats[statTypeEnum.AutoComplete] !== undefined?object.Stats[statTypeEnum.AutoComplete].Data:''}`"
              :class="object.Stats[statTypeEnum.Design].Data"
              :type="`${object.Stats[statTypeEnum.ElementType] !== undefined?object.Stats[statTypeEnum.ElementType].Data:''}`"
              :value="object.Stats[statTypeEnum.Value].Data"
@@ -35,6 +38,12 @@ export default class InputComponent extends Vue {
   specialCase () : boolean {
     if (this.object.Stats[this.statTypeEnum.ElementType] === undefined) { return false }
     return this.object.Stats[this.statTypeEnum.ElementType].Data === 'hidden'
+  }
+
+  attributeCheck (statType : number) : boolean | string {
+    if (this.object.Stats[statType] === undefined) { return false }
+    if (this.object.Stats[statType].Data === '') { return false }
+    return this.object.Stats[statType].Data
   }
 
   tooltipCase () : string | undefined {

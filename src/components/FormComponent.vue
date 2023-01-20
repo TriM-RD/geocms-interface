@@ -72,6 +72,9 @@ export default class FormComponent extends Vue {
       case 'AttributeEdit':
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id === undefined ? '-1' : String(this.$route.params.id), 'attribute'))
         break
+      case 'AdministrationEdit':
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id === undefined ? '-1' : String(this.$route.params.id), 'user'))
+        break
     }
     this.renderComponent = false
   }

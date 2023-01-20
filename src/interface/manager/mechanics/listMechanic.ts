@@ -15,7 +15,6 @@ export namespace Manager.Mechanic{
       const response = await http.get('http://blog.test/api/' + _route)
       if (Object.keys(response.data).length !== 0) {
         this.ObjectTemplates = this.forEachElement(response.data)
-        console.log(this.ObjectTemplates)
         return this.ObjectTemplates
       } else {
         return []

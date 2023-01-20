@@ -1,15 +1,16 @@
 <template>
-  <div class="mb-3 justify-content-md-center">
-      <div class="form-check">
-        <label for="exampleDataList" class="form-label">{{object.Stats[statTypeEnum.Label].Data }}</label>
-        <div class="form-check" v-for="(item, key, index) in JSON.parse(object.Stats[statTypeEnum.ItemList].Data)" :key="`${ key }-${ index }`">
-          <input class="form-check-input" type="radio" :value="item" name="flexRadioDefault" id="flexRadioDefault1">
-          <label class="form-check-label" for="flexRadioDefault1">
-            {{item}}
-          </label>
-        </div>
-
+  <div class="mb-3 row justify-content-md-center" >
+    <div class="col"></div>
+    <div class="col"></div>
+    <div class="col input-group" v-for="(item, key, index) in JSON.parse(object.Stats[statTypeEnum.ItemList].Data)" :key="`${ key }-${ index }`">
+      <div class="input-group-text">
+        <input class="form-check-input mt-0" :name="object.Stats[statTypeEnum.Label].Data" :value="item.id" type="radio" :checked="object.Stats[statTypeEnum.Value].Data===item.id"
+               @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, $event.target.value)">
       </div>
+      <input disabled type="text" :value="item.name" class="form-control" aria-label="Text input with radio button">
+    </div>
+    <div class="col"></div>
+    <div class="col"></div>
   </div>
 </template>
 

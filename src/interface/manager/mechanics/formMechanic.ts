@@ -157,7 +157,9 @@ export namespace Manager.Mechanic{
               }
               break
             case SubObjectTypeEnum.Right:
-              router.back()
+              await router.push({
+                name: 'Device'
+              })
               break
             default:
               break
@@ -179,7 +181,9 @@ export namespace Manager.Mechanic{
               await router.push({ name: 'AttributeAdd', params: { parentId: this.id } })
               break
             case SubObjectTypeEnum.Right:
-              router.back()
+              await router.push({
+                name: 'Group'
+              })
               break
             default:
               break
@@ -211,13 +215,14 @@ export namespace Manager.Mechanic{
               this.refreshPage()
               break
             case SubObjectTypeEnum.Right:
-              router.back()
+              await router.push({
+                name: 'Division'
+              })
               break
             case SubObjectTypeEnum.Down:
               this.refreshPage()
-              // eslint-disable-next-line no-case-declarations
-              const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
-              this.ObjectTemplates.splice(temp, 1)
+              this.ObjectTemplates.splice(this.ObjectTemplates.findIndex(
+                element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data), 1)
               this.refreshPage()
               break
             default:
@@ -249,16 +254,57 @@ export namespace Manager.Mechanic{
               this.refreshPage()
               break
             case SubObjectTypeEnum.Right:
-              router.back()
+              await router.push({
+                name: 'GroupEdit',
+                params: { id: router.currentRoute.value.params.parentId }
+              })
               break
             case SubObjectTypeEnum.Down:
               this.refreshPage()
-              console.log(eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
-              console.log(JSON.parse(JSON.stringify(this.ObjectTemplates)))
-              // eslint-disable-next-line no-case-declarations
-              const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
-              this.ObjectTemplates.splice(temp, 1)
-              console.log(this.ObjectTemplates)
+              /* console.log(eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+              console.log(JSON.parse(JSON.stringify(this.ObjectTemplates))) */
+              this.ObjectTemplates.splice(this.ObjectTemplates.findIndex(
+                element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data), 1)
+              // console.log(this.ObjectTemplates)
+              this.refreshPage()
+              break
+            default:
+              break
+          }
+          break
+        case 'AdministrationEdit':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Right:
+              await router.push({
+                name: 'Administration'
+              })
+              break
+            case SubObjectTypeEnum.Left:
+              if (this.inEdit) {
+                await http.patch('http://blog.test/api/user/' + this.id, this.ObjectTemplates)
+                  .then(response => (router.push({ name: 'AdministrationEdit', params: { id: response.data.id } })))
+              }/* else {
+                await http.post('http://blog.test/api/division', this.ObjectTemplates)
+                  .then(response => (router.push({ name: 'DivisionEdit', params: { id: response.data.id } })))
+              } */
+              break
+            case SubObjectTypeEnum.Middle:
+              this.refreshPage()
+              this.ObjectTemplates = this.Append([
+                new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.SelectButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
+                  [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.ItemList].Data),
+                  [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Permission'),
+                  [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(Math.random().toString(36).slice(2, 7).toString()),
+                  [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(''),
+                  [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.Id].Data)
+                })
+              ])
+              this.refreshPage()
+              break
+            case SubObjectTypeEnum.Down:
+              this.refreshPage()
+              this.ObjectTemplates.splice(this.ObjectTemplates.findIndex(
+                element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data), 1)
               this.refreshPage()
               break
             default:

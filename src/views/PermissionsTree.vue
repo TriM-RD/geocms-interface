@@ -496,7 +496,7 @@ export default class PermissionsTree extends Vue {
     }
   }
 
-  protected beforeRouteLeave (to:any, from:any, next:any) {
+  beforeRouteLeave (to:any, from:any, next:any) {
     console.log('EYYYYYYYYYY')
     // called before the route that renders this component is navigated away from
   }

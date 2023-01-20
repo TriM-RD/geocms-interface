@@ -9,7 +9,10 @@ export enum StatTypeEnum {
   ElementType,
   Placeholder,
   ItemList,
-  Tooltip
+  Tooltip,
+  Required,
+  Disabled,
+  AutoComplete
 }
 
 export class StatType {
@@ -23,6 +26,9 @@ export class StatType {
    [StatTypeEnum.ElementType]: new Manager.Events.Type.ElementType().CreateStat,
    [StatTypeEnum.Placeholder]: new Manager.Events.Type.Placeholder().CreateStat,
    [StatTypeEnum.ItemList]: new Manager.Events.Type.ItemList().CreateStat,
-   [StatTypeEnum.Tooltip]: new Manager.Events.Type.Tooltip().CreateStat
+   [StatTypeEnum.Tooltip]: new Manager.Events.Type.Tooltip().CreateStat,
+   [StatTypeEnum.Required]: new Manager.Events.Type.Tooltip().CreateStat,
+   [StatTypeEnum.Disabled]: new Manager.Events.Type.Tooltip().CreateStat,
+   [StatTypeEnum.AutoComplete]: new Manager.Events.Type.Tooltip().CreateStat
  }
 }
