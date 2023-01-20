@@ -32,6 +32,7 @@ export default class ListComponent extends Vue {
   statTypeEnum = StatTypeEnum
   title!: string
   count = 0
+  countDevice = 0
   useRoutes = false
   headers!: string[]
 
@@ -44,10 +45,16 @@ export default class ListComponent extends Vue {
   }
 
   async Init () {
-    // this.count = (this.title.match(/group:/g) || []).length
+    this.count = (this.title.match(/group:/g) || []).length
     if (this.count >= 2) {
       window.alert('Groups can only be listed once in a search!')
+      this.renderComponent = false
       return
+    }
+    this.countDevice = (this.title.match(/device:/g) || []).length
+    if (this.countDevice >= 2) {
+      window.alert('Groups can only be listed once in a search!')
+      this.renderComponent = false
     }
     this.renderComponent = false
     if (!this.useRoutes) {
