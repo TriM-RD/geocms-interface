@@ -23,28 +23,23 @@ export namespace Manager.Mechanic{
     }
 
     private forEachElement (data: any) : ObjectTemplate[] {
-      console.log(data)
       let _temp: ObjectTemplate[] = []
       data.forEach((_list: any) => {
-        _temp = _temp.concat(_list/* .filter((_object : ObjectTemplate) => { return _object.Stats[StatTypeEnum.Tag].Data === 'code' }) */.map((_object: any) => {
-          return new ObjectTemplate(RegionEnum.ECabinetRow, ObjectTypeEnum.ECabinetColumn, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, this.reStructure(_object.Stats))
+        _temp = _temp.concat(_list.map((_object: any) => {
+          return new ObjectTemplate(RegionEnum.ECabinet, ObjectTypeEnum.ECabinetRow, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, this.reStructure(_object.Stats))
         }))
       })
-      // console.log(_temp)
       return _temp
     }
 
     private reStructure (stats: any, append: any = null): any {
       let temp = {}
-      // console.log(stats)
-      // stats.forEach((_stat : any, _index: number) => { if (_stat !== undefined) temp = Object.assign(temp, { [_index]: StatType.StatTypes[_index]().CreateStat().InitData(_stat.Data != null ? _stat.Data : '') }) })
       for (let i = 0; i < Object.keys(StatType.StatTypes).length; i++) {
         if (stats[i] !== undefined) {
           temp = Object.assign(temp, { [i]: StatType.StatTypes[i]().CreateStat().InitData(stats[i].Data != null ? stats[i].Data : '') })
         }
       }
       if (append !== null) { temp = Object.assign(temp, append) }
-      // console.log(temp)
       return temp
     }
 

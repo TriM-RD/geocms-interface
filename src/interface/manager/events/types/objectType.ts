@@ -15,7 +15,9 @@ export enum ObjectTypeEnum {
   ColumnButton,
   FieldButton,
   SelectButton,
-  ListRow
+  ListRow,
+  ECabinetRow,
+  ECabinetColumn
 }
 
 export class ObjectType {

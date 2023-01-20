@@ -12,6 +12,8 @@ import DataListComponent from '@/components/formComponents/DataListComponent.vue
 import SelectListComponent from '@/components/formComponents/SelectListComponent.vue'
 import RadioComponent from '@/components/formComponents/RadioComponent.vue'
 import ColumnComponent from '@/components/ColumnComponent.vue'
+import ECabinetColumnComponent from '@/components/ECabinetColumnComponent.vue'
+import ECabinetRowComponent from '@/components/ECabinetRowComponent.vue'
 import ColumnButtonComponent from '@/components/ColumnButtonComponent.vue'
 import FieldButtonComponent from '@/components/FieldButtonComponent.vue'
 import SelectButtonComponent from '@/components/SelectButtonComponent.vue'
@@ -166,6 +168,18 @@ export namespace Manager.Events.Type{
   export class ListRow extends IChangeStat {
     public GetVueComponent () {
       return ListRowComponent
+    }
+  }
+
+  export class ECabinetRow extends IChangeStat {
+    public GetVueComponent () {
+      return ECabinetRowComponent
+    }
+  }
+
+  export class ECabinetColumn extends IChangeStat {
+    public GetVueComponent () {
+      return ECabinetColumnComponent
     }
   }
 }

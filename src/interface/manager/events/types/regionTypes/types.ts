@@ -78,4 +78,18 @@ export namespace Manager.Events.Type{
         [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button()
       }
   }
+
+  export class ECabinet extends RegionAbstract {
+    public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
+      {
+        [ObjectTypeEnum.ECabinetRow]: new ObjectTypeAbstract.Events.Type.ECabinetRow()
+      }
+  }
+
+  export class ECabinetRow extends RegionAbstract {
+    public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
+      {
+        [ObjectTypeEnum.ECabinetColumn]: new ObjectTypeAbstract.Events.Type.ECabinetColumn()
+      }
+  }
 }

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
 import Show from '../views/Show.vue'
-import ECabinet from '../views/ECabinetComponent.vue'
+import ECabinet from '../components/ECabinetComponent.vue'
 import PermissionsTree from '@/views/PermissionsTree.vue'
 import Form from '@/views/Form.vue'
 import AccountProfile from '@/views/AccountProfile.vue'

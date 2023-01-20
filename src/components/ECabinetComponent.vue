@@ -1,16 +1,6 @@
 <template>
   <div class="container">
-    <div class="d-flex flex-wrap overflow-auto w-auto">
-      <div class="row d-flex flex-nowrap row-cols-auto">
-        <div class="col">
-          <div class="input-group">
-            <label class="input-group-text" for="button-addon2">Osig_3</label>
-            <button class="btn btn-outline-secondary" type="button" id="button-addon2">Edit</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <hr>
+    <component :rerender="changeRender"  v-for="(entity, key, index) in entities" :key="`${ key }-${ index }-${ Math.random().toString(36).slice(2, 7) }`" :is="getComponent(regionEnum.Table, objectTypeEnum.Row)" :entity='entity' :index='key'></component>
   </div>
 </template>
 
@@ -20,7 +10,7 @@ import { Options, Vue } from 'vue-class-component'
 import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
 import { Manager } from '@/interface/manager/mechanics/tableMechanic'
 import { MechanicAbstract } from '@/interface/manager/mechanics/mechanicAbstract'
-import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatTypeEnum, StatType, ObjectType, RegionType } from '@/interface/manager/events/types/index'
+import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatTypeEnum, StatType, ObjectType, RegionType } from '@/interface/manager/events/types'
 @Options({
   components: {
     Loading
@@ -59,37 +49,18 @@ export default class ECabinetComponent extends Vue {
 
   async Init () {
     switch (this.$route.name) {
-      case 'Device':
+      case 'DeviceEdit':
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'entity'))
         break
-      case 'Group':
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'group'))
-        break
-      case 'Division':
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'division'))
-        break
-      case 'GroupEdit':
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'filter/attribute/' + this.$route.params.id))
-        break
-      case 'GroupAdd':
-        this.renderComponent = false
-        return
-      case 'AccountProfile':
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'permissions/user'))
-        break
-      case 'Administration':
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'users'))
-        break
     }
-    console.log(this.objectTemplates)
     if (Object.keys(this.objectTemplates).length === 0) {
       this.renderComponent = false
       return
     }
-    let tempId = null
+    let tempTag = null
     let tempObjectTemplates = []
     for (const element of this.objectTemplates) {
-      if (element.Stats[StatTypeEnum.Id].Data === tempId) {
+      if (element.Stats[StatTypeEnum.Tag].Data === tempTag) {
         tempObjectTemplates.push(JSON.parse(JSON.stringify(element)))
       } else {
         console.log(tempObjectTemplates.length > 0)
@@ -101,7 +72,7 @@ export default class ECabinetComponent extends Vue {
         tempObjectTemplates = []
         tempObjectTemplates.push(JSON.parse(JSON.stringify(element)))
       }
-      tempId = element.Stats[StatTypeEnum.Id].Data
+      tempTag = element.Stats[StatTypeEnum.Tag].Data
     }
     if (this.entities === undefined) {
       this.entities = [tempObjectTemplates]

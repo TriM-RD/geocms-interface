@@ -1,6 +1,10 @@
 <template>
-    <!--th scope="row"><img alt="arrow" width="27" src="../assets/arrow.png"></th-->
-    <td>{{object.Stats[statTypeEnum.Value].Data}}</td>
+  <div class="col">
+    <div class="input-group">
+      <label class="input-group-text" for="button-addon2">Osig_3</label>
+      <button class="btn btn-outline-secondary" type="button" id="button-addon2">Edit</button>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
