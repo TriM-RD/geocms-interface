@@ -31,7 +31,6 @@
             <ul class="dropdown-menu dropdown-content">
               <router-link to="/account" class="dropdown-item">Profile</router-link>
               <router-link to="/administration" class="dropdown-item">Administration</router-link>
-              <router-link to="/ecabinet" class="dropdown-item">ECabinet</router-link>
               <li><button class="dropdown-item" type="button" v-on:click="logout()">Log out</button></li>
             </ul>
           </li>

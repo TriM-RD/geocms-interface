@@ -64,20 +64,13 @@ export namespace Manager.Mechanic{
       switch (router.currentRoute.value.name) {
         case 'DeviceEdit':
           switch (eventHandler.subObjectType) {
-            case SubObjectTypeEnum.Left:// Izbriši
-              this.refreshPage()
-              http.delete('http://blog.test/api/entity/' + _id)
-                .then(response => (this.refreshPage()))
-              break
             case SubObjectTypeEnum.Middle: // Uredi
+              console.log('here')
               // eslint-disable-next-line no-case-declarations
               const temp = document.getElementById('formModalOpen')
               if (temp !== null) {
                 temp.click()
               }
-              break
-            case SubObjectTypeEnum.Right: // Pregledaj
-              router.push({ name: 'DeviceEdit', params: { id: _id } })
               break
             default:
               break

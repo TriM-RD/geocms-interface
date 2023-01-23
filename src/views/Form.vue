@@ -2,8 +2,6 @@
   <div class="container">
     <FormComponent/>
     <TableComponent v-if="renderTable" />
-    <ECabinetComponent v-if="renderECabinet" />
-    <!--ModalFormComponent /-->
   </div>
 </template>
 
@@ -13,13 +11,9 @@ import FormComponent from '@/components/FormComponent.vue'
 import TableComponent from '@/components/TableComponent.vue'
 import http from '@/http-common'
 import router from '@/router'
-import ECabinetComponent from '@/components/ECabinetComponent.vue'
-import ModalFormComponent from '@/components/ModalFormComponent.vue'
 
 @Options({
   components: {
-    ModalFormComponent,
-    ECabinetComponent,
     FormComponent,
     TableComponent
   }

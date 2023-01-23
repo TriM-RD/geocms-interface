@@ -143,6 +143,7 @@ export namespace Manager.Mechanic{
     }
 
     protected async Button (eventHandler: EventHandlerType): Promise<void> {
+      console.log('Test')
       switch (router.currentRoute.value.name) {
         case 'DeviceAdd':
         case 'DeviceEdit':
@@ -160,6 +161,18 @@ export namespace Manager.Mechanic{
               await router.push({
                 name: 'Device'
               })
+              break
+            case SubObjectTypeEnum.Up:
+              this.refreshPage()
+              this.ObjectTemplates = this.Append([
+                new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.ECabinetRow, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
+                  [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Permission'),
+                  [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(Math.random().toString(36).slice(2, 7).toString())
+                  /* [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(''),
+                  [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.Id].Data) */
+                })
+              ])
+              this.refreshPage()
               break
             default:
               break

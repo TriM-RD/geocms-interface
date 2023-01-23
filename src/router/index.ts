@@ -4,7 +4,6 @@ import Show from '../views/Show.vue'
 import PermissionsTree from '@/views/PermissionsTree.vue'
 import Form from '@/views/Form.vue'
 import AccountProfile from '@/views/AccountProfile.vue'
-import ECabinetComponent from '@/components/ECabinetComponent.vue'
 
 type MyRouteRecord = RouteRecordRaw & {
   beforeRouteLeave: string;
@@ -14,11 +13,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'Home',
     component: Home
-  },
-  {
-    path: '/ecabinet',
-    name: 'Ecabinet',
-    component: ECabinetComponent
   },
   {
     path: '/device',
