@@ -10,7 +10,7 @@ import router from '@/router'
 
 export namespace Manager.Mechanic{
 
-  export class TableMechanic extends MechanicAbstract {
+  export class ECabinetMechanic extends MechanicAbstract {
     public async InitGet (_id: string, _api: string): Promise<ObjectTemplate[]> {
       this.ObjectTemplates = []
       const response = await http.get('http://blog.test/api/' + _api)

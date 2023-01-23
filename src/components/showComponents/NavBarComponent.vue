@@ -11,7 +11,7 @@
         <div class="flex-grow-1 d-flex">
           <Search data-bs-toggle="modal" data-bs-target="#searchModal"/>
         </div>
-        <div class="modal fade" ref="modalRef" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+        <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">

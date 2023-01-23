@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
 import Show from '../views/Show.vue'
-import ECabinet from '../components/ECabinetComponent.vue'
 import PermissionsTree from '@/views/PermissionsTree.vue'
 import Form from '@/views/Form.vue'
 import AccountProfile from '@/views/AccountProfile.vue'
+import ECabinetComponent from '@/components/ECabinetComponent.vue'
 
 type MyRouteRecord = RouteRecordRaw & {
   beforeRouteLeave: string;
@@ -18,7 +18,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/ecabinet',
     name: 'Ecabinet',
-    component: ECabinet
+    component: ECabinetComponent
   },
   {
     path: '/device',

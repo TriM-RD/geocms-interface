@@ -24,7 +24,8 @@ export namespace Manager.Events.Type{
       [ObjectTypeEnum.SelectList]: new ObjectTypeAbstract.Events.Type.SelectList(),
       [ObjectTypeEnum.Radio]: new ObjectTypeAbstract.Events.Type.Radio(),
       [ObjectTypeEnum.FieldButton]: new ObjectTypeAbstract.Events.Type.FieldButton(),
-      [ObjectTypeEnum.SelectButton]: new ObjectTypeAbstract.Events.Type.SelectButton()
+      [ObjectTypeEnum.SelectButton]: new ObjectTypeAbstract.Events.Type.SelectButton(),
+      [ObjectTypeEnum.ECabinetColumn]: new ObjectTypeAbstract.Events.Type.ECabinetColumn()
     }
   }
 
@@ -82,6 +83,7 @@ export namespace Manager.Events.Type{
   export class ECabinet extends RegionAbstract {
     public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
       {
+        [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button(),
         [ObjectTypeEnum.ECabinetRow]: new ObjectTypeAbstract.Events.Type.ECabinetRow()
       }
   }
@@ -89,7 +91,9 @@ export namespace Manager.Events.Type{
   export class ECabinetRow extends RegionAbstract {
     public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
       {
-        [ObjectTypeEnum.ECabinetColumn]: new ObjectTypeAbstract.Events.Type.ECabinetColumn()
+        [ObjectTypeEnum.ECabinetColumn]: new ObjectTypeAbstract.Events.Type.ECabinetColumn(),
+        [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button(),
+        [ObjectTypeEnum.ModalForm]: new ObjectTypeAbstract.Events.Type.ModalForm()
       }
   }
 }

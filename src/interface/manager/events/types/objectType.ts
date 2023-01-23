@@ -17,7 +17,8 @@ export enum ObjectTypeEnum {
   SelectButton,
   ListRow,
   ECabinetRow,
-  ECabinetColumn
+  ECabinetColumn,
+  ModalForm
 }
 
 export class ObjectType {

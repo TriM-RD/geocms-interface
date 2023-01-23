@@ -10,8 +10,8 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
-import { Manager } from '@/interface/manager/mechanics/rowMechanic'
 import { MechanicAbstract } from '@/interface/manager/mechanics/mechanicAbstract'
+import { Manager } from '@/interface/manager/mechanics/formMechanic'
 import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatTypeEnum, StatType, ObjectType, RegionType } from '@/interface/manager/events/types/index'
 @Options({
   props: {
@@ -20,6 +20,7 @@ import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatType
   }
 })
 export default class ColumnComponent extends Vue {
+  mechanic: MechanicAbstract = new Manager.Mechanic.FormMechanic()
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType
