@@ -58,7 +58,6 @@ export namespace Manager.Mechanic{
         }
       }
       if (append !== null) { temp = Object.assign(temp, append) }
-      console.log(temp)
       return temp
     }
 
@@ -72,6 +71,7 @@ export namespace Manager.Mechanic{
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectList].SubscribeLogic(this.SelectList.bind(this))
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Field].SubscribeLogic(this.FieldButton.bind(this))
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectList].SubscribeLogic(this.FieldButton.bind(this))
+      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.ECabinetRow].SubscribeLogic(this.ECabinetRow.bind(this))
     }
 
     public UnsubscribeConditions (): void {
@@ -79,6 +79,7 @@ export namespace Manager.Mechanic{
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectList].NullifyLogic()
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Field].NullifyLogic()
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectList].NullifyLogic()
+      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.ECabinetRow].NullifyLogic()
       MechanicAbstract.instance = null
     }
 
@@ -99,6 +100,11 @@ export namespace Manager.Mechanic{
         }
       }
       return answer
+    }
+
+    protected async ECabinetRow (eventHandler: EventHandlerType): Promise<void> {
+      this.ObjectTemplates = []
+      this.refreshPage()
     }
 
     protected async FieldButton (eventHandler: EventHandlerType): Promise<void> {
@@ -143,7 +149,8 @@ export namespace Manager.Mechanic{
     }
 
     protected async Button (eventHandler: EventHandlerType): Promise<void> {
-      console.log('Test')
+      let rowCount = 0
+      let rowsExist = false
       switch (router.currentRoute.value.name) {
         case 'DeviceAdd':
         case 'DeviceEdit':
@@ -164,10 +171,22 @@ export namespace Manager.Mechanic{
               break
             case SubObjectTypeEnum.Up:
               this.refreshPage()
+              for (const row of this.ObjectTemplates) {
+                if (row.Stats[StatTypeEnum.Tag].Data === 'row') {
+                  if (rowCount < Number(row.Stats[StatTypeEnum.Value].Data)) {
+                    rowCount = Number(row.Stats[StatTypeEnum.Value].Data)
+                    rowsExist = true
+                    console.log(rowCount)
+                  }
+                }
+              }
+              if (rowsExist) { rowCount += 1 }
               this.ObjectTemplates = this.Append([
                 new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.ECabinetRow, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
-                  [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Permission'),
-                  [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(Math.random().toString(36).slice(2, 7).toString())
+                  [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Row'),
+                  [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('row'),
+                  [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(rowCount.toString()),
+                  [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData('')
                   /* [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(''),
                   [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.Id].Data) */
                 })

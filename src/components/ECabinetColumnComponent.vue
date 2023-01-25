@@ -1,7 +1,7 @@
 <template>
   <div class="col">
     <div class="input-group">
-      <label class="input-group-text" for="button-addon2">Osig_3</label>
+      <label class="input-group-text" for="button-addon2">{{object.Stats[statTypeEnum.Label].Data }}</label>
       <button class="btn btn-outline-secondary" type="button" id="button-addon2">Edit</button>
     </div>
   </div>
@@ -10,8 +10,6 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
-import { MechanicAbstract } from '@/interface/manager/mechanics/mechanicAbstract'
-import { Manager } from '@/interface/manager/mechanics/formMechanic'
 import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatTypeEnum, StatType, ObjectType, RegionType } from '@/interface/manager/events/types/index'
 @Options({
   props: {
@@ -20,7 +18,6 @@ import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatType
   }
 })
 export default class ColumnComponent extends Vue {
-  mechanic: MechanicAbstract = new Manager.Mechanic.FormMechanic()
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType

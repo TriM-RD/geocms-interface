@@ -72,7 +72,7 @@ export namespace Manager.Mechanic{
 
     public UnsubscribeConditions (): void {
       RegionType.RegionTypes[RegionEnum.ModalForm].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
-      MechanicAbstract.instance = null
+      this.ObjectTemplates = []
     }
 
     refreshPage () {
@@ -82,8 +82,7 @@ export namespace Manager.Mechanic{
     }
 
     protected async Button (eventHandler: EventHandlerType): Promise<void> {
-      console.log('test')
-      const temp = document.getElementById('formModalClose')
+      const temp = document.getElementById('formModalSubmit' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)
       switch (eventHandler.subObjectType) {
         case SubObjectTypeEnum.Left:
           if (this.inEdit) {

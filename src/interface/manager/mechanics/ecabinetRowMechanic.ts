@@ -52,11 +52,18 @@ export namespace Manager.Mechanic{
 
     public SubscribeConditions (): void {
       RegionType.RegionTypes[RegionEnum.ECabinetRow].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
+      RegionType.RegionTypes[RegionEnum.ECabinetRow].ObjectTypes[ObjectTypeEnum.ModalForm].SubscribeLogic(this.ModalForm.bind(this))
     }
 
-    public UnsubscribeConditions () {
+    public UnsubscribeConditions (): void {
       RegionType.RegionTypes[RegionEnum.ECabinetRow].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
+      RegionType.RegionTypes[RegionEnum.ECabinetRow].ObjectTypes[ObjectTypeEnum.ModalForm].NullifyLogic()
       MechanicAbstract.instance = null
+    }
+
+    protected ModalForm (eventHandler: EventHandlerType): void {
+      const _id = eventHandler.payload.Stats[StatTypeEnum.Id].Data
+      this.refreshPage()
     }
 
     protected Button (eventHandler: EventHandlerType): void {
@@ -65,9 +72,8 @@ export namespace Manager.Mechanic{
         case 'DeviceEdit':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Middle: // Uredi
-              console.log('here')
               // eslint-disable-next-line no-case-declarations
-              const temp = document.getElementById('formModalOpen')
+              const temp = document.getElementById('formModalOpen' + eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
               if (temp !== null) {
                 temp.click()
               }

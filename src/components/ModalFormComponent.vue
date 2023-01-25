@@ -1,18 +1,22 @@
 <template>
   <div>
-    <Loading v-model:active="renderComponent"
-             :can-cancel="false"
-             :is-full-page="false"/>
-    <button type="button" style="display: none" data-bs-toggle="modal" data-bs-target="#formModal" id="formModalOpen"></button>
-    <form v-if="!renderComponent">
-      <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+    <button @click="startMechanic()" type="button" style="display: none" data-bs-toggle="modal" :data-bs-target="`${'#formModal'+object.Stats[statTypeEnum.Tag].Data}`" :id="`${'formModalOpen'+object.Stats[statTypeEnum.Tag].Data}`"></button>
+    <form>
+      <div @click="test($event.target)" class="modal fade" :id="`${'formModal'+object.Stats[statTypeEnum.Tag].Data}`" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="btn-close" id="formModalClose" data-bs-dismiss="modal" aria-label="Close"></button>
+              {{object.Stats[statTypeEnum.Tag].Data}}
+              <button type="button" class="btn-close" :id="`${'formModalClose'+object.Stats[statTypeEnum.Tag].Data}`" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" hidden class="btn-close" :id="`${'formModalSubmit'+object.Stats[statTypeEnum.Tag].Data}`" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+              <Loading v-model:active="renderComponent"
+                       :can-cancel="false"
+                       :is-full-page="false"/>
+              <div v-if="!renderComponent">
               <component  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ _objectTemplate.Stats[statTypeEnum.Tag].Data }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'> </component>
+              </div>
             </div>
           </div>
         </div>
@@ -36,23 +40,45 @@ import {
 import Loading from 'vue-loading-overlay'
 import router from '@/router'
 @Options({
+  props: {
+    object: ObjectTemplate
+  },
   components: {
     Loading
   }
 })
 export default class ModalFormComponent extends Vue {
   msg!: string
-  mechanic: MechanicAbstract = new Manager.Mechanic.ModalFormMechanic(this.reRender.bind(this))
+  mechanic!: MechanicAbstract
   renderComponent= true
   objectTemplates!: ObjectTemplate[]
   statTypeEnum = StatTypeEnum
+  object!: ObjectTemplate
+  regionType = RegionType
+  conditionsUnsubed = false
 
   beforeUnmount () {
-    this.mechanic.UnsubscribeConditions()
+    if (this.mechanic !== undefined) {
+      this.mechanic.UnsubscribeConditions()
+    }
   }
 
-  created () {
+  startMechanic () {
+    this.mechanic = new Manager.Mechanic.ModalFormMechanic(this.reRender.bind(this))
     this.Init()
+  }
+
+  test (target : any) {
+    if (target.id === 'formModal' + this.object.Stats[StatTypeEnum.Tag].Data || target.id === 'formModalClose' + this.object.Stats[StatTypeEnum.Tag].Data) {
+      console.log('unsubed')
+      this.mechanic.UnsubscribeConditions()
+      this.conditionsUnsubed = true
+      this.objectTemplates = []
+      this.renderComponent = !this.renderComponent
+    } else if (target.id === 'formModalSubmit' + this.object.Stats[StatTypeEnum.Tag].Data) {
+      this.mechanic.UnsubscribeConditions()
+      this.regionType.RegionTypes[this.object.Region].ObjectTypes[this.object.ObjectEnum].ChooseSubType(this.object)
+    }
   }
 
   async Init () {
@@ -61,6 +87,15 @@ export default class ModalFormComponent extends Vue {
       case 'DeviceAdd':
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'entity'))
         this.objectTemplates = this.mechanic.Append([
+          new ObjectTemplate(RegionEnum.ModalForm, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
+            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Row'),
+            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('row'),
+            [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Tag].Data),
+            [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('me-2 readonly'),
+            [StatTypeEnum.ElementType]: StatType.StatTypes[StatTypeEnum.ElementType]().CreateStat().InitData('hidden'),
+            [StatTypeEnum.Placeholder]: StatType.StatTypes[StatTypeEnum.Placeholder]().CreateStat().InitData(''),
+            [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.objectTemplates[0].Stats[StatTypeEnum.Id].Data)
+          }),
           new ObjectTemplate(RegionEnum.ModalForm, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Belongs'),
             [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('belongs'),
@@ -74,6 +109,7 @@ export default class ModalFormComponent extends Vue {
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Submit'),
             [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('submit'),
             [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('me-2 btn btn-success'),
+            [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Tag].Data),
             [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.objectTemplates[0].Stats[StatTypeEnum.Id].Data)
           })
         ])
@@ -89,7 +125,7 @@ export default class ModalFormComponent extends Vue {
       case 'AttributeAdd':
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id === undefined ? '-1' : String(this.$route.params.id), 'attribute'))
         this.objectTemplates = this.mechanic.Append([
-          new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
+          new ObjectTemplate(RegionEnum.ModalForm, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Group'),
             [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('group'),
             [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(this.$route.params.parentId.toString()),

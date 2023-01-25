@@ -38,7 +38,6 @@ export default class SelectListComponent extends Vue {
   renderComponent= true
 
   attributeCheck (statType : number) : boolean | string {
-    console.log(this.object)
     if (this.object.Stats[statType] === undefined) { return false }
     if (this.object.Stats[statType].Data === '') { return false }
     return this.object.Stats[statType].Data
