@@ -17,9 +17,9 @@ export namespace Manager.Mechanic{
     public async InitGet (_id: string, _route: string): Promise<ObjectTemplate[]> {
       this.id = _id
       if (this.id === '-1') {
-        this.id = (await http.get('http://blog.test/api/' + _route + '/' + this.id)).data
+        this.id = (await http.get(process.env.VUE_APP_BASE_URL + _route + '/' + this.id)).data
         console.log(this.id)
-        const response = await http.get('http://blog.test/api/form/' + _route)
+        const response = await http.get(process.env.VUE_APP_BASE_URL + 'form/' + _route)
         return (this.ObjectTemplates = response.data.map((_object: any) => {
           return new ObjectTemplate(_object.Region, _object.ObjectEnum,
             _object.SubObjectEnum, _object.ActionEnum, this.reStructure(_object.Stats,
@@ -29,7 +29,7 @@ export namespace Manager.Mechanic{
               }))
         }))
       }
-      const response = await http.get('http://blog.test/api/' + _route + '/' + this.id)
+      const response = await http.get(process.env.VUE_APP_BASE_URL + _route + '/' + this.id)
       this.inEdit = true
       return (this.ObjectTemplates = response.data.map((_object: any) => {
         return new ObjectTemplate(_object.Region, _object.ObjectEnum,
@@ -86,10 +86,10 @@ export namespace Manager.Mechanic{
       switch (eventHandler.subObjectType) {
         case SubObjectTypeEnum.Left:
           if (this.inEdit) {
-            await http.patch('http://blog.test/api/entity/' + this.id, this.ObjectTemplates)
+            await http.patch(process.env.VUE_APP_BASE_URL + 'entity/' + this.id, this.ObjectTemplates)
               .then(response => (temp?.click()))
           } else {
-            await http.post('http://blog.test/api/entity', this.ObjectTemplates)
+            await http.post(process.env.VUE_APP_BASE_URL + 'entity', this.ObjectTemplates)
               .then(response => (temp?.click()))
           }
           break

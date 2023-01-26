@@ -13,7 +13,7 @@ export namespace Manager.Mechanic{
   export class ColumnMechanic extends MechanicAbstract {
     public async InitGet (_id: string): Promise<ObjectTemplate[]> {
       this.ObjectTemplates = []
-      const response = await http.get('http://blog.test/api/entity')
+      const response = await http.get(process.env.VUE_APP_BASE_URL + 'entity')
       return (this.ObjectTemplates = this.forEachElement(response.data))
     }
 

@@ -70,7 +70,7 @@ export default class NavBarComponent extends Vue {
   }
 
   async logout () : Promise<void> {
-    await http.get('http://blog.test/api/user/logout').then(response => {
+    await http.get(process.env.VUE_APP_BASE_URL + 'user/logout').then(response => {
       // success
       window.location.reload()
     }, response => {

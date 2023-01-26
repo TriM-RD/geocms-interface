@@ -12,7 +12,7 @@ export namespace Manager.Mechanic{
   export class ListMechanic extends MechanicAbstract {
     public async InitGet (_id = '-1', _route: string): Promise<ObjectTemplate[]> {
       this.ObjectTemplates = []
-      const response = await http.get('http://blog.test/api/' + _route)
+      const response = await http.get(process.env.VUE_APP_BASE_URL + _route)
       if (Object.keys(response.data).length !== 0) {
         this.ObjectTemplates = this.forEachElement(response.data)
         return this.ObjectTemplates

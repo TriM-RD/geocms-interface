@@ -14,7 +14,7 @@ export namespace Manager.Mechanic{
   export class RowMechanic extends MechanicAbstract {
     public async InitGet (_id: string): Promise<ObjectTemplate[]> {
       this.ObjectTemplates = []
-      const response = await http.get('http://blog.test/api/entity')
+      const response = await http.get(process.env.VUE_APP_BASE_URL)
       return (this.ObjectTemplates = this.forEachElement(response.data))
     }
 
@@ -66,7 +66,7 @@ export namespace Manager.Mechanic{
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:// Izbriši
               this.refreshPage()
-              http.delete('http://blog.test/api/entity/' + _id)
+              http.delete(process.env.VUE_APP_BASE_URL + 'entity/' + _id)
                 .then(response => (this.refreshPage()))
               break
             case SubObjectTypeEnum.Middle: // Uredi
@@ -83,7 +83,7 @@ export namespace Manager.Mechanic{
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:// Izbriši
               this.refreshPage()
-              http.delete('http://blog.test/api/group/' + _id)
+              http.delete(process.env.VUE_APP_BASE_URL + 'group/' + _id)
                 .then(response => (this.refreshPage()))
               break
             case SubObjectTypeEnum.Middle: // Uredi
@@ -100,7 +100,7 @@ export namespace Manager.Mechanic{
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:// Izbriši
               this.refreshPage()
-              http.delete('http://blog.test/api/attribute/' + _id)
+              http.delete(process.env.VUE_APP_BASE_URL + 'attribute/' + _id)
                 .then(response => (this.refreshPage()))
               break
             case SubObjectTypeEnum.Middle: // Pregledaj
@@ -117,7 +117,7 @@ export namespace Manager.Mechanic{
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:// Izbriši
               this.refreshPage()
-              http.delete('http://blog.test/api/division/' + _id)
+              http.delete(process.env.VUE_APP_BASE_URL + 'division/' + _id)
                 .then(response => (this.refreshPage()))
               break
             case SubObjectTypeEnum.Middle: // Uredi

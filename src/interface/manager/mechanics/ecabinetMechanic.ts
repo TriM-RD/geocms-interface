@@ -13,7 +13,7 @@ export namespace Manager.Mechanic{
   export class ECabinetMechanic extends MechanicAbstract {
     public async InitGet (_id: string, _api: string): Promise<ObjectTemplate[]> {
       this.ObjectTemplates = []
-      const response = await http.get('http://blog.test/api/' + _api)
+      const response = await http.get(process.env.VUE_APP_BASE_URL + _api)
       if (Object.keys(response.data).length !== 0) {
         this.ObjectTemplates = this.forEachElement(response.data)
         return this.ObjectTemplates

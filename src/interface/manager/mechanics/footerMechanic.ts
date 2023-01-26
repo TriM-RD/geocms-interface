@@ -13,7 +13,7 @@ export namespace Manager.Mechanic{
   export class FooterMechanic extends MechanicAbstract {
     public async InitGet (_id = '-1'): Promise<ObjectTemplate[]> {
       this.ObjectTemplates = []
-      const response = await http.get('http://blog.test/api/entity')
+      const response = await http.get(process.env.VUE_APP_BASE_URL + 'entity')
       return (this.ObjectTemplates = this.forEachElement(response.data))
     }
 

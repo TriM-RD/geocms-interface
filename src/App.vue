@@ -48,7 +48,7 @@ export default class App extends Vue {
   }
 
   async checkBearer () : Promise<void> {
-    await http.get('http://blog.test/api/user').then(response => {
+    await http.get(process.env.VUE_APP_BASE_URL + 'user').then(response => {
       // success
       this.$store.state.name = response.data.name
       this.$store.state.email = response.data.email

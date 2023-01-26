@@ -242,7 +242,7 @@ export default class WelcomeComponent extends Vue {
         regionEnum = RegionEnum
         object!: ObjectTemplate
         login (): void {
-          window.location.href = 'http://blog.test/oauth/redirect'
+          window.location.href = process.env.VUE_APP_URL + 'oauth/redirect'
         }
 }
 </script>

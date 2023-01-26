@@ -13,7 +13,7 @@ export namespace Manager.Mechanic{
   export class ShowMechanic extends MechanicAbstract {
     public async InitGet (_id: string): Promise<ObjectTemplate[]> {
       this.ObjectTemplates = []
-      const response = await http.get('http://blog.test/api/entity/' + _id)
+      const response = await http.get(process.env.VUE_APP_BASE_URL + _id)
       return (this.ObjectTemplates = response.data.map((_object: any) => {
         return new ObjectTemplate(RegionEnum.Show, ObjectTypeEnum.ShowResolve, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, this.reStructure(_object.Stats))
       }))
