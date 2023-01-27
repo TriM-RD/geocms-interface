@@ -173,11 +173,8 @@ export namespace Manager.Mechanic{
               this.refreshPage()
               for (const row of this.ObjectTemplates) {
                 if (row.Stats[StatTypeEnum.Tag].Data === 'row') {
-                  if (rowCount < Number(row.Stats[StatTypeEnum.Value].Data)) {
-                    rowCount = Number(row.Stats[StatTypeEnum.Value].Data)
-                    rowsExist = true
-                    console.log(rowCount)
-                  }
+                  rowCount = Number(row.Stats[StatTypeEnum.Value].Data)
+                  rowsExist = true
                 }
               }
               if (rowsExist) { rowCount += 1 }
