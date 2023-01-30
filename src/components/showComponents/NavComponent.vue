@@ -1,6 +1,5 @@
 <template>
     <div class="navbar-light bg-light">
-        <hr>
 <div class="container">
   <ul class="nav nav-pills nav-fill">
   <li class="nav-item border">

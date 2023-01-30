@@ -26,7 +26,7 @@
         <ul class="d-flex">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle boja" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              User name
+              {{ $store.state.name }}
             </a>
             <ul class="dropdown-menu dropdown-content">
               <router-link to="/account" class="dropdown-item">Profile</router-link>
