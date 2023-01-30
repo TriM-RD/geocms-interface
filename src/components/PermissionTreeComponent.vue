@@ -58,7 +58,7 @@
     <option value="1">Horizontal</option>
   </select>
   <br>
-  <button class="btn btn-primary" @click="saveButton">Save changes</button>
+  <!--button class="btn btn-primary" @click="saveButton">Save changes</button-->
   <!--modal-->
 
   <div class="modal fade" v-bind="deleteCheckData" id="delete-modal" ref="delete-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
@@ -120,12 +120,15 @@ import http from '@/http-common'
 import { v4 as uuidv4 } from 'uuid'
 import { Options, Vue } from 'vue-class-component'
 import Loading from 'vue-loading-overlay'
+import { MechanicAbstract } from '@/interface/manager/mechanics/mechanicAbstract'
+import { Manager } from '@/interface/manager/mechanics/permissionMechanic'
 @Options({
   components: {
     Loading
   }
 })
-export default class PermissionsTree extends Vue {
+export default class PermissionTreeComponent extends Vue {
+  mechanic: MechanicAbstract = new Manager.Mechanic.PermissionMechanic(this.saveButton.bind(this))
   index = uuidv4()
   preorderNumber = 0
   treeOrientation = ref('0')
@@ -154,7 +157,7 @@ export default class PermissionsTree extends Vue {
 
   addChild (data: TreeData) {
     if (data.newChildName === '') {
-      this.$toast.error('Childs name cannot be empty.')
+      // this.$toast.error('Childs name cannot be empty.')
       return
     }
     this.change = true
@@ -200,7 +203,7 @@ export default class PermissionsTree extends Vue {
 
   rename (data:TreeData) {
     if (data.rename === '') {
-      this.$toast.error('New name cannot be empty')
+      // this.$toast.error('New name cannot be empty')
       return
     }
     this.change = true
@@ -230,12 +233,12 @@ export default class PermissionsTree extends Vue {
         if (response.status === 200) {
           this.$toast.success('Edited old data successfuly')
         } else {
-          this.$toast.error('Something went wrong during editing')
+          // this.$toast.error('Something went wrong during editing')
         }
       })
       .catch((error) => {
         console.log(error)
-        this.$toast.error('Something went wrong during editing')
+        // this.$toast.error('Something went wrong during editing')
       })
 
     await new Promise(resolve => setTimeout(resolve, 500))
@@ -247,12 +250,12 @@ export default class PermissionsTree extends Vue {
         if (response.status === 200) {
           this.$toast.success('Saved new data successfuly')
         } else {
-          this.$toast.error('Something went wrong during saving')
+          // this.$toast.error('Something went wrong during saving')
         }
       })
       .catch((error) => {
         console.log(error)
-        this.$toast.error('Something went wrong during saving')
+        // this.$toast.error('Something went wrong during saving')
       })
 
     this.change = false
@@ -318,13 +321,13 @@ export default class PermissionsTree extends Vue {
         if (response.status === 200) {
           this.$toast.success('Delete was successful')
         } else {
-          this.$toast.error('Something went wrong during deleting')
+          // this.$toast.error('Something went wrong during deleting')
         }
         return response.data
       })
       .catch((error) => {
         console.log(error)
-        this.$toast.error('Something went wrong during deleting')
+        // this.$toast.error('Something went wrong during deleting')
       })
 
     console.log(deleteTest)
@@ -354,7 +357,7 @@ export default class PermissionsTree extends Vue {
   // this function only checks if the data can be deleted and sets the proper true or false statment
   async deleteCheck (data: TreeData) {
     if (data.parent === undefined) {
-      this.$toast.error('Cant delete this')
+      // this.$toast.error('Cant delete this')
       return
     }
     //

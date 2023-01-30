@@ -17,6 +17,9 @@
   <li class="nav-item border">
     <router-link to="/division" class="nav-link boja">Divisions</router-link>
   </li>
+  <li class="nav-item border">
+    <router-link to="/map" class="nav-link boja">Map</router-link>
+  </li>
 </ul>
 </div>
 </div>
