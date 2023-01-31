@@ -6,57 +6,45 @@
     <blocks-tree @node-click="show" :data="permissionsTreeData" :horizontal="treeOrientation==='1'" :collapsable="false" :props="{
         label: 'label', expand: 'expand', children: 'children',  key:'some_id', permission: 'permission'}">
       <template class="test"  #node="{data}">
-        <div class="container justify-content-center">
-          <div class="row">
-              <label  style=" padding-bottom: 10px">
+        <div class="container">
+            <div class="input-group-text mb-3 text-center">
                   {{data.label}}
-              </label>
+              </div>
           </div>
           <div v-show="data.expand" class="input-group mb-3" style="width: 280px" >
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroup-sizing-default-1" >Rename</span>
+            <div class="input-group-text">
+              <span id="inputGroup-sizing-default-1" >Rename</span>
             </div>
             <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" v-model="data.rename" style="width: 100px">
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary" @click="renameButton(data)" type="button" id="inputGroup-sizing-default" >Rename</button>
-            </div>
+            <button class="btn btn-outline-secondary" @click="renameButton(data)" type="button" id="inputGroup-sizing-default" >Rename</button>
           </div>
           <div v-show="data.expand" class="input-group mb-3" style="width: 280px" >
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroup-sizing-default-2" >Child name</span>
+            <div class="input-group-text">
+              <span id="inputGroup-sizing-default-2" >Child name</span>
             </div>
             <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" v-model="data.newChildName" style="width: 100px">
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button" id="inputGroup-sizing-default-3" @click="addChildButton(data)" >Create</button>
-            </div>
+            <button class="btn btn-outline-secondary" type="button" id="inputGroup-sizing-default-3" @click="addChildButton(data)" >Create</button>
           </div>
-          <!--
-            <div class="row" v-show="data.expand">
-              <label  >Rename:</label>
-              <input class="m-1"  type="text" v-model="data.rename" style="width: 100px"/>
-              <button type="button" class="btn btn-primary m-1"  @click="renameButton(data)" > Rename</button>
-            </div>
-            <div class="row" v-show="data.expand">
-              <label  >Child name:</label>
-              <input class="m-1"  type="text" v-model="data.newChildName" style="width: 100px"/>
-              <button type="button" class="btn btn-primary m-1"  @click="addChildButton(data)" > Add child</button>
-            </div>
-            -->
             <div  v-show="data.expand">
-                <button  v-show="showDelete(data)" style="width: 100px" type="button" data-bs-toggle="modal" data-bs-target="#delete-modal" class="btn btn-danger m-1"  @click="deleteCheck(data)" > Delete this</button>
+                <button  v-show="showDelete(data)" style="width: 100px" type="button" data-bs-toggle="modal" data-bs-target="#delete-modal" class="btn btn-danger m-1"  @click="deleteCheck(data)" >Delete</button>
 
             </div>
-        </div>
 
       </template>
     </blocks-tree>
   </div>
 
-  <h4>Change orientation</h4>
-  <select v-model="treeOrientation">
-    <option value="0">Vertical</option>
-    <option value="1">Horizontal</option>
-  </select>
+  <div class="mb-3 row justify-content-md-center">
+    <div class="col"></div>
+    <div class="col input-group mb-3">
+      <label class="input-group-text" for="inputGroupSelect01">Change orientation</label>
+      <select class="form-select" id="inputGroupSelect01" v-model="treeOrientation">
+        <option value="0">Vertical</option>
+        <option value="1">Horizontal</option>
+      </select>
+    </div>
+    <div class="col"></div>
+  </div>
   <br>
   <!--button class="btn btn-primary" @click="saveButton">Save changes</button-->
   <!--modal-->
@@ -73,8 +61,8 @@
           <p>By clicking the yes button you will delete "{{ deleteCheckData.permission.name }}" from the database.</p>
         </div>
         <div class="modal-footer">
-          <span class="form-control-static pull-left">Delete {{ deleteCheckData.permission.name }}</span>
-          <button class="btn btn-primary mr-auto" data-bs-dismiss="modal" @click="deleteData()">Yes</button>
+          <!--span class="form-control-static pull-left">Delete {{ deleteCheckData.permission.name }}</span-->
+          <button class="btn btn-danger mr-auto" data-bs-dismiss="modal" @click="deleteData()">Yes</button>
           <button class="btn btn-primary" data-bs-dismiss="modal">No</button>
         </div>
       </div>
@@ -505,3 +493,11 @@ export default class PermissionTreeComponent extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.input-group-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>

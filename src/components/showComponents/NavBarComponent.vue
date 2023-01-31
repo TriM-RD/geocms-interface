@@ -9,12 +9,13 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
         <div class="flex-grow-1 d-flex">
-          <Search data-bs-toggle="modal" data-bs-target="#searchModal"/>
+          <Search data-bs-toggle="modal" data-bs-target="#searchModal" :placeholder="'Search'"/>
         </div>
         <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
+                <h5 class="modal-title">Search</h5>
                 <button type="button" class="btn-close" id="searchModalClose" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
@@ -24,14 +25,15 @@
           </div>
         </div>
         <ul class="d-flex">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle boja" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <li class="nav-item dropdown nav-justified">
+            <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               {{ $store.state.name }}
-            </a>
+            </button>
             <ul class="dropdown-menu dropdown-content">
-              <router-link to="/account" class="dropdown-item">Profile</router-link>
-              <router-link to="/administration" class="dropdown-item">Administration</router-link>
-              <li><button class="dropdown-item" type="button" v-on:click="logout()">Log out</button></li>
+              <router-link to="/account" class="dropdown-item opacity-75">Profile</router-link>
+              <router-link to="/administration" class="dropdown-item opacity-75">Administration</router-link>
+              <li class="opacity-50"><hr class="dropdown-divider"></li>
+              <li><button class="dropdown-item opacity-75" type="button" v-on:click="logout()">Log out</button></li>
             </ul>
           </li>
         </ul>
@@ -82,22 +84,8 @@ export default class NavBarComponent extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-a{
-  color:#868b90;
-}
-a.boja:hover{
-  background-color:#969b9f;
-  color:#fff
-}
-a.boja:focus{
-  background-color:#606467;
-  color: #fff;
-}
 li{
   list-style-type: none;
-}
-.container{
-  margin-bottom: 1%;
 }
 .d-flex{
   display:contents !important;
@@ -108,5 +96,8 @@ ul{
 .dropdown-content {
   right: 0 !important;
   left: auto !important;
+}
+.dropdown-divider {
+  opacity: 0.5;
 }
 </style>

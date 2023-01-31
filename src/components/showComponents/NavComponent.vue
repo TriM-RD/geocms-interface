@@ -1,29 +1,21 @@
 <template>
-    <div class="navbar-light bg-light">
-<div class="container">
-  <ul class="nav nav-pills nav-fill">
-  <li class="nav-item border">
-    <router-link to="/" class="nav-link boja">Map/Home</router-link>
-  </li>
-  <li class="nav-item border">
-    <router-link to="/device" class="nav-link boja">Devices</router-link>
-  </li>
-  <li class="nav-item border">
-    <router-link to="/permission" class="nav-link boja">Permissions</router-link>
-  </li>
-  <li class="nav-item border">
-    <router-link to="/group" class="nav-link boja">Groups</router-link>
-  </li>
-  <li class="nav-item border">
-    <router-link to="/division" class="nav-link boja">Divisions</router-link>
-  </li>
-  <li class="nav-item border">
-    <router-link to="/map" class="nav-link boja">Map</router-link>
-  </li>
-</ul>
-</div>
-</div>
-<!--router-view/-->
+  <ul class="nav nav-pills nav-fill border mb-5">
+    <li class="nav-item border-end border-secondary border-opacity-10">
+      <router-link to="/" class="nav-link rounded-1" :class="{active: $route.path === '/'}">Map/Home</router-link>
+    </li>
+    <li class="nav-item border-end border-secondary border-opacity-10">
+      <router-link to="/device" class="nav-link rounded-1" :class="{active: $route.path === '/device'}">Devices</router-link>
+    </li>
+    <li class="nav-item border-end border-secondary border-opacity-10">
+      <router-link to="/permission" class="nav-link rounded-1" :class="{active: $route.path === '/permission'}">Permissions</router-link>
+    </li>
+    <li class="nav-item border-end border-secondary border-opacity-10">
+      <router-link to="/group" class="nav-link rounded-1" :class="{active: $route.path === '/group'}">Groups</router-link>
+    </li>
+    <li class="nav-item border-end border-secondary border-opacity-10">
+      <router-link to="/division" class="nav-link rounded-1" :class="{active: $route.path === '/division'}">Divisions</router-link>
+    </li>
+  </ul>
 </template>
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
@@ -46,44 +38,18 @@ export default class NavComponent extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-a{
-  color:#868b90;
+.nav-pills>li>a,
+.nav-pills>li>a:focus{
+  color: gray;
 }
-a.boja:hover{
-  background-color:#969b9f;
-  color:#fff
+.nav-pills>li>a:hover {
+  color:  #fff;
+  background-color: darkgray;
 }
-a.boja:focus{
-  background-color:#606467;
+.nav-pills>li>a.active,
+.nav-pills>li>a.active:focus,
+.nav-pills>li>a.active:hover {
   color: #fff;
-}
-
-a.bojaa:focus{
-  background-color:#969b9f;
-  color: #fff;
-  border-radius: 5%;
-}
-a.bojaaa:active{
-  background-color:#969b9f;
-  color: #fff;
-}
-.container{
-padding-bottom: 1%;
-padding-top: 1%;
-}
-li{
-  list-style-type: none;
-}
-hr{
-margin-top:-1.5% !important;
-}
-.container{
-margin-bottom: 1%;
-}
-.d-flex{
-  display:contents !important;
-}
-ul.padd{
-  padding-inline-start: 0 !important;
+  background-color: gray;
 }
 </style>
