@@ -2,7 +2,7 @@
   <Loading v-model:active="renderComponent"
            :can-cancel="false"
            :is-full-page="false"/>
-  <form v-if="!renderComponent">
+  <form v-if="!renderComponent" class="needs-validation" novalidate>
     <component :rerender="changeRender"  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ _objectTemplate.Stats[statTypeEnum.Tag].Data }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'> </component>
   </form>
 </template>

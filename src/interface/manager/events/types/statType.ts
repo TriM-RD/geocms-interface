@@ -12,7 +12,10 @@ export enum StatTypeEnum {
   Tooltip,
   Required,
   Disabled,
-  AutoComplete
+  AutoComplete,
+  BelongsTo,
+  ErrorMessage,
+  IsValid
 }
 
 export class StatType {
@@ -27,8 +30,11 @@ export class StatType {
    [StatTypeEnum.Placeholder]: new Manager.Events.Type.Placeholder().CreateStat,
    [StatTypeEnum.ItemList]: new Manager.Events.Type.ItemList().CreateStat,
    [StatTypeEnum.Tooltip]: new Manager.Events.Type.Tooltip().CreateStat,
-   [StatTypeEnum.Required]: new Manager.Events.Type.Tooltip().CreateStat,
-   [StatTypeEnum.Disabled]: new Manager.Events.Type.Tooltip().CreateStat,
-   [StatTypeEnum.AutoComplete]: new Manager.Events.Type.Tooltip().CreateStat
+   [StatTypeEnum.Required]: new Manager.Events.Type.Required().CreateStat,
+   [StatTypeEnum.Disabled]: new Manager.Events.Type.Disabled().CreateStat,
+   [StatTypeEnum.AutoComplete]: new Manager.Events.Type.AutoComplete().CreateStat,
+   [StatTypeEnum.BelongsTo]: new Manager.Events.Type.BelongsTo().CreateStat,
+   [StatTypeEnum.ErrorMessage]: new Manager.Events.Type.ErrorMessage().CreateStat,
+   [StatTypeEnum.IsValid]: new Manager.Events.Type.IsValid().CreateStat
  }
 }

@@ -1,7 +1,6 @@
 <template>
   <div class="container" v-if="($store.state.requiresAuth === 2)">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <FormComponent msg="Welcome to Your Vue.js + TypeScript App"/>
+    <MapComponent/>
   </div>
   <div v-if="($store.state.requiresAuth === 1)">
     <WelcomeComponent />
@@ -14,9 +13,11 @@ import FormComponent from '@/components/FormComponent.vue'
 import WelcomeComponent from '@/components/WelcomeComponent.vue' // @ is an alias to /src
 import http from '@/http-common' // @ is an alias to /src
 import createStore from '@/store/index'
+import MapComponent from '@/components/MapComponent.vue'
 
 @Options({
   components: {
+    MapComponent,
     WelcomeComponent,
     FormComponent
   }

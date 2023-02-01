@@ -1,28 +1,154 @@
 <template>
-    <div class="ratio ratio-4x3">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13273.804734261268!2d-73.97103194633222!3d40.780925390178616!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2588f046ee661%3A0xa0b3281fcecc08c!2sManhattan%2C%20New%20York%2C%20Sjedinjene%20Ameri%C4%8Dke%20Dr%C5%BEave!5e0!3m2!1shr!2shr!4v1668073453650!5m2!1shr!2shr" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 p-0">
+        <div id="map" style="height: 75vh"/>
+      </div>
     </div>
+  </div>
+
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
-import { ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, RegionEnum } from '@/interface/manager/events/types'
-@Options({
-  props: {
-    object: ObjectTemplate
-  }
-})
-export default class MapComponent extends Vue {
-    statTypeEnum = StatTypeEnum
-    objectTypeEnum = ObjectTypeEnum
-    objectType = ObjectType
-    regionType = RegionType
-    regionEnum = RegionEnum
-    object!: ObjectTemplate
-}
-</script>
+import 'mapbox-gl/dist/mapbox-gl.css'
+import mapboxgl from 'mapbox-gl'
+import http from '@/http-common'
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+export default class MapComponent extends Vue {
+  longitude = 0
+  latitude = 0
+  trigger!: boolean
+  indexMode = false
+  map!: any
+  entities: any
+  mounted () {
+    mapboxgl.accessToken =
+      'pk.eyJ1Ijoiam9zbyIsImEiOiJjbDBpN3NnbWMwMDJlM2ptcng2bGIxazJjIn0.xuMyew046jayaAFfWnsfJQ'
+    this.map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/light-v10'
+    })
+    this.test()
+  }
+
+  async test () {
+    const response = await http.get(process.env.VUE_APP_BASE_URL + 'map')
+    this.entities = response.data.data
+    this.generateMap()
+  }
+
+  generateMap () {
+    this.map.on('load', () => {
+      this.map.addSource('entities', {
+        type: 'geojson',
+        data: this.entities,
+        cluster: true,
+        clusterMaxZoom: 14, // Max zoom to cluster points on
+        clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+      })
+      this.map.addLayer({
+        id: 'clusters',
+        source: 'entities',
+        type: 'circle',
+        filter: ['has', 'point_count'],
+        paint: {
+          'circle-color': [
+            'step',
+            ['get', 'point_count'],
+            '#51bbd6',
+            100,
+            '#f1f075',
+            750,
+            '#f28cb1'
+          ],
+          'circle-radius': [
+            'step',
+            ['get', 'point_count'],
+            20,
+            100,
+            30,
+            750,
+            40
+          ]
+        }
+      })
+      this.map.addLayer({
+        id: 'cluster-count',
+        type: 'symbol',
+        source: 'entities',
+        filter: ['has', 'point_count'],
+        layout: {
+          'text-field': '{point_count_abbreviated}',
+          'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+          'text-size': 12
+        }
+      })
+      this.map.addLayer({
+        id: 'unclustered-point',
+        type: 'circle',
+        source: 'entities',
+        filter: ['!', ['has', 'point_count']],
+        paint: {
+          'circle-color': '#11b4da',
+          'circle-radius': 6,
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#fff'
+        }
+      })
+      this.map.on('click', 'clusters', (e: any) => {
+        const features = this.map.queryRenderedFeatures(e.point, {
+          layers: ['clusters']
+        })
+        const clusterId = features[0].properties.cluster_id
+        this.map.getSource('physicalObjects').getClusterExpansionZoom(
+          clusterId,
+          (err: any, zoom: any) => {
+            if (err) return
+            this.map.easeTo({
+              center: features[0].geometry.coordinates,
+              zoom: zoom
+            })
+          }
+        )
+      })
+      this.map.on('click', 'unclustered-point', (e: any) => {
+        const coordinates = e.features[0].geometry.coordinates.slice()
+        const code = e.features[0].properties.code
+        const id = e.features[0].properties.id
+        // Ensure that if the map is zoomed out such that
+        // multiple copies of the feature are visible, the
+        // popup appears over the copy being pointed to.
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
+        }
+        new mapboxgl.Popup()
+          .setLngLat(coordinates)
+          .setHTML(
+            // `magnitude: ${mag}<br>Was there a tsunami?: ${tsunami}`
+            `code: ${code}<br><button class="btn btn-secondary btn-sm open-popup" >Open</button>`
+          )
+          .addTo(this.map)
+        const btn = document.getElementsByClassName('open-popup')[0]
+        btn.addEventListener('click', () => {
+          this.$router.push({ name: 'DeviceEdit', params: { id: id } })
+        })
+      })
+    })
+    if (this.entities.features.count > 0) {
+      const bounds = new mapboxgl.LngLatBounds()
+      for (const element of this.entities.features) {
+        bounds.extend(element.geometry.coordinates)
+      }
+      this.map.fitBounds(bounds, {
+        padding: 20,
+        maxZoom: 5
+      })
+    }
+  }
+}
+
+</script>
 <style scoped>
+
 </style>

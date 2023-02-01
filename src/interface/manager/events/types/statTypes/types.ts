@@ -133,4 +133,34 @@ export namespace Manager.Events.Type{
     }
   }
 
+  export class BelongsTo extends StatAbstract {
+    public CreateStat (): StatAbstract {
+      return new BelongsTo()
+    }
+
+    public CheckRequirements (_object: any): void {
+      alert(this.Data)
+    }
+  }
+
+  export class ErrorMessage extends StatAbstract {
+    public CreateStat (): StatAbstract {
+      return new ErrorMessage()
+    }
+
+    public CheckRequirements (_object: any): void {
+      alert(this.Data)
+    }
+  }
+
+  export class IsValid extends StatAbstract {
+    public CreateStat (): StatAbstract {
+      return new IsValid()
+    }
+
+    public CheckRequirements (_object: any): void {
+      alert(this.Data)
+    }
+  }
+
 }

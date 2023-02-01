@@ -119,9 +119,7 @@ export namespace Manager.Mechanic{
         case 'DeviceAdd':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Middle:
-              while (this.ObjectTemplates.length > 3) {
-                this.ObjectTemplates.pop()
-              }
+              this.removeElementFromArray(this.ObjectTemplates, 'group')
               this.refreshPage()
               this.ObjectTemplates = this.Append((await http.get(process.env.VUE_APP_BASE_URL + 'form/entity/' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
               this.refreshPage()
@@ -134,9 +132,7 @@ export namespace Manager.Mechanic{
         case 'AttributeEdit':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Middle:
-              while (this.ObjectTemplates.length > 3) {
-                this.ObjectTemplates.pop()
-              }
+              this.removeElementFromArray(this.ObjectTemplates, 'attributeType')
               this.refreshPage()
               this.ObjectTemplates = this.Append((await http.get(process.env.VUE_APP_BASE_URL + 'form/attribute/' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
               this.refreshPage()
@@ -156,12 +152,31 @@ export namespace Manager.Mechanic{
         case 'DeviceEdit':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:
-              if (this.inEdit) {
-                await http.patch(process.env.VUE_APP_BASE_URL + 'entity/' + this.id, this.ObjectTemplates)
-                  .then(response => (router.push({ name: 'DeviceEdit', params: { id: response.data.id } })))
-              } else {
-                await http.post(process.env.VUE_APP_BASE_URL + 'entity', this.ObjectTemplates)
-                  .then(response => (router.push({ name: 'DeviceEdit', params: { id: response.data.id } })))
+              for (const form of document.getElementsByClassName('needs-validation')) {
+                if (!(form as HTMLFormElement).checkValidity()) {
+                  form.classList.add('was-validated')
+                } else {
+                  if (this.inEdit) {
+                    await http.patch(process.env.VUE_APP_BASE_URL + 'entity/' + this.id, this.ObjectTemplates)
+                      .then(response => (router.push({ name: 'DeviceEdit', params: { id: response.data.id } })))
+                  } else {
+                    await http.post(process.env.VUE_APP_BASE_URL + 'entity', this.ObjectTemplates)
+                      .then((response) => {
+                        if (response.data.id !== false) {
+                          router.push({
+                            name: 'DeviceEdit',
+                            params: { id: response.data.id }
+                          })
+                        } else {
+                          this.refreshPage()
+                          form.classList.remove('was-validated')
+                          this.ObjectTemplates.length = 0
+                          this.ObjectTemplates = this.Append(response.data.entities)
+                          this.refreshPage()
+                        }
+                      })
+                  }
+                }
               }
               break
             case SubObjectTypeEnum.Right:
@@ -341,6 +356,19 @@ export namespace Manager.Mechanic{
           }
           break
       }
+    }
+
+    removeElementFromArray (arr: Array<any>, belongsTo: string) {
+      (() => {
+        // Perform the array update
+        for (let i = arr.length - 1; i >= 0; i--) {
+          if (arr[i].Stats[StatTypeEnum.BelongsTo] !== undefined) {
+            if (arr[i].Stats[StatTypeEnum.BelongsTo].Data === belongsTo) {
+              arr.splice(i, 1)
+            }
+          }
+        }
+      })()
     }
 
     static getInstance (_mechanicCallback: MechanicDelegate | null = null): MechanicAbstract {

@@ -4,15 +4,17 @@
     <div class="col input-group">
       <label :title="tooltipCase()" class="input-group-text" :hidden="specialCase()">{{object.Stats[statTypeEnum.Label].Data }}</label>
       <input class="form-control"
+             :id="object.Stats[statTypeEnum.Tag].Data"
              :required="attributeCheck(statTypeEnum.Required)"
              :disabled="attributeCheck(statTypeEnum.Disabled)"
              :autocomplete="`${object.Stats[statTypeEnum.AutoComplete] !== undefined?object.Stats[statTypeEnum.AutoComplete].Data:''}`"
-             :class="object.Stats[statTypeEnum.Design].Data"
+             :class="object.Stats[statTypeEnum.Design].Data+' '+validate()"
              :type="`${object.Stats[statTypeEnum.ElementType] !== undefined?object.Stats[statTypeEnum.ElementType].Data:''}`"
              :value="object.Stats[statTypeEnum.Value].Data"
              :placeholder="`${object.Stats[statTypeEnum.Placeholder].Data}`"
              @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, $event.target.value)">
       <slot></slot>
+      <div class="invalid-feedback">{{ `${object.Stats[statTypeEnum.ErrorMessage] !== undefined?object.Stats[statTypeEnum.ErrorMessage].Data:''}` }}</div>
     </div>
     <div class="col"></div>
   </div>
@@ -34,6 +36,13 @@ export default class InputComponent extends Vue {
   regionType = RegionType
   regionEnum = RegionEnum
   object!: ObjectTemplate
+
+  validate () : string {
+    if (this.object.Stats[this.statTypeEnum.IsValid] === undefined) { return '' }
+    if (this.object.Stats[this.statTypeEnum.IsValid].Data) { return 'is-valid' }
+    if (this.object.Stats[this.statTypeEnum.ErrorMessage].Data !== '') { return 'is-invalid' }
+    return ''
+  }
 
   specialCase () : boolean {
     if (this.object.Stats[this.statTypeEnum.ElementType] === undefined) { return false }

@@ -4,7 +4,6 @@ import Show from '../views/Show.vue'
 import PermissionTree from '@/views/PermissionTree.vue'
 import Form from '@/views/Form.vue'
 import AccountProfile from '@/views/AccountProfile.vue'
-import Map from '@/views/Map.vue'
 
 type MyRouteRecord = RouteRecordRaw & {
   beforeRouteLeave: string;
@@ -104,11 +103,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/administration/edit/:id',
     name: 'AdministrationEdit',
     component: Form
-  },
-  {
-    path: '/map',
-    name: 'Map',
-    component: Map
   }
 ]
 

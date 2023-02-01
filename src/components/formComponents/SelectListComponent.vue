@@ -5,14 +5,16 @@
       <div class="input-group">
         <label :title="specialCase()" for="exampleDataList" class="input-group-text">{{object.Stats[statTypeEnum.Label].Data }}</label>
         <select class="form-select" aria-label="Default select example"
+                :class="validate()"
                 :required="attributeCheck(statTypeEnum.Required)"
                 :disabled="attributeCheck(statTypeEnum.Disabled)"
                 :autocomplete="`${object.Stats[statTypeEnum.AutoComplete] !== undefined?object.Stats[statTypeEnum.AutoComplete].Data:''}`"
         @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, $event.target.value)">
-          <option :selected="object.Stats[statTypeEnum.Value] === undefined" hidden>Select a type.</option>
+          <option value="" :selected="object.Stats[statTypeEnum.Value] === undefined" hidden>Select a type.</option>
           <option v-for="(item, key, index) in JSON.parse(object.Stats[statTypeEnum.ItemList].Data)" :selected="check(item.id)" :key="`${ key }-${ index }`" :value="item.id">{{item.name}}</option>
         </select>
         <slot></slot>
+        <div class="invalid-feedback">{{ `${object.Stats[statTypeEnum.ErrorMessage] !== undefined?object.Stats[statTypeEnum.ErrorMessage].Data:''}` }}</div>
       </div>
       </div>
       <div class="col"></div>
@@ -36,6 +38,13 @@ export default class SelectListComponent extends Vue {
   regionEnum = RegionEnum
   object!: ObjectTemplate
   renderComponent= true
+
+  validate () : string {
+    if (this.object.Stats[this.statTypeEnum.IsValid] === undefined) { return '' }
+    if (this.object.Stats[this.statTypeEnum.IsValid].Data) { return 'is-valid' }
+    if (this.object.Stats[this.statTypeEnum.ErrorMessage].Data !== '') { return 'is-invalid' }
+    return ''
+  }
 
   attributeCheck (statType : number) : boolean | string {
     if (this.object.Stats[statType] === undefined) { return false }
