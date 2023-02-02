@@ -152,32 +152,7 @@ export namespace Manager.Mechanic{
         case 'DeviceEdit':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:
-              for (const form of document.getElementsByClassName('needs-validation')) {
-                if (!(form as HTMLFormElement).checkValidity()) {
-                  form.classList.add('was-validated')
-                } else {
-                  if (this.inEdit) {
-                    await http.patch(process.env.VUE_APP_BASE_URL + 'entity/' + this.id, this.ObjectTemplates)
-                      .then(response => (router.push({ name: 'DeviceEdit', params: { id: response.data.id } })))
-                  } else {
-                    await http.post(process.env.VUE_APP_BASE_URL + 'entity', this.ObjectTemplates)
-                      .then((response) => {
-                        if (response.data.id !== false) {
-                          router.push({
-                            name: 'DeviceEdit',
-                            params: { id: response.data.id }
-                          })
-                        } else {
-                          this.refreshPage()
-                          form.classList.remove('was-validated')
-                          this.ObjectTemplates.length = 0
-                          this.ObjectTemplates = this.Append(response.data.entities)
-                          this.refreshPage()
-                        }
-                      })
-                  }
-                }
-              }
+              await this.validateForm('entity', 'DeviceEdit')
               break
             case SubObjectTypeEnum.Right:
               await router.push({
@@ -213,13 +188,7 @@ export namespace Manager.Mechanic{
         case 'GroupEdit':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:
-              if (this.inEdit) {
-                await http.patch(process.env.VUE_APP_BASE_URL + 'group/' + this.id, this.ObjectTemplates)
-                  .then(response => (router.push({ name: 'GroupEdit', params: { id: response.data.id } })))
-              } else {
-                await http.post(process.env.VUE_APP_BASE_URL + 'group', this.ObjectTemplates)
-                  .then(response => (router.push({ name: 'GroupEdit', params: { id: response.data.id } })))
-              }
+              await this.validateForm('group', 'GroupEdit')
               break
             case SubObjectTypeEnum.Middle:
               await router.push({ name: 'AttributeAdd', params: { parentId: this.id } })
@@ -237,13 +206,7 @@ export namespace Manager.Mechanic{
         case 'DivisionEdit':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:
-              if (this.inEdit) {
-                await http.patch(process.env.VUE_APP_BASE_URL + 'division/' + this.id, this.ObjectTemplates)
-                  .then(response => (router.push({ name: 'DivisionEdit', params: { id: response.data.id } })))
-              } else {
-                await http.post(process.env.VUE_APP_BASE_URL + 'division', this.ObjectTemplates)
-                  .then(response => (router.push({ name: 'DivisionEdit', params: { id: response.data.id } })))
-              }
+              await this.validateForm('division', 'DivisionEdit')
               break
             case SubObjectTypeEnum.Middle:
               this.refreshPage()
@@ -253,7 +216,8 @@ export namespace Manager.Mechanic{
                   [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Permission'),
                   [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(Math.random().toString(36).slice(2, 7).toString()),
                   [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(''),
-                  [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.Id].Data)
+                  [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.Id].Data),
+                  [StatTypeEnum.ErrorMessage]: StatType.StatTypes[StatTypeEnum.ErrorMessage]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.ErrorMessage].Data)
                 })
               ])
               this.refreshPage()
@@ -277,13 +241,7 @@ export namespace Manager.Mechanic{
         case 'AttributeEdit':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:
-              if (this.inEdit) {
-                await http.patch(process.env.VUE_APP_BASE_URL + 'attribute/' + this.id, this.ObjectTemplates)
-                  .then(response => (router.push({ name: 'AttributeEdit', params: { id: response.data.id } })))
-              } else {
-                await http.post(process.env.VUE_APP_BASE_URL + 'attribute', this.ObjectTemplates)
-                  .then(response => (router.push({ name: 'AttributeEdit', params: { id: response.data.id } })))
-              }
+              await this.validateForm('attribute', 'AttributeEdit')
               break
             case SubObjectTypeEnum.Middle:
               this.refreshPage()
@@ -377,6 +335,48 @@ export namespace Manager.Mechanic{
       }
       MechanicAbstract.instance.SubscribeToVueComponent(_mechanicCallback)
       return MechanicAbstract.instance
+    }
+
+    private async validateForm (route: string, redirectTo: string) {
+      for (const form of document.getElementsByClassName('needs-validation')) {
+        if (!(form as HTMLFormElement).checkValidity()) {
+          form.classList.add('was-validated')
+        } else {
+          if (this.inEdit) {
+            await http.patch(process.env.VUE_APP_BASE_URL + route + '/' + this.id, this.ObjectTemplates)
+              .then((response) => {
+                if (response.data.id !== false) {
+                  router.push({
+                    name: redirectTo,
+                    params: { id: response.data.id }
+                  })
+                } else {
+                  this.refreshPage()
+                  form.classList.remove('was-validated')
+                  this.ObjectTemplates.length = 0
+                  this.ObjectTemplates = this.Append(response.data.entities)
+                  this.refreshPage()
+                }
+              })
+          } else {
+            await http.post(process.env.VUE_APP_BASE_URL + route, this.ObjectTemplates)
+              .then((response) => {
+                if (response.data.id !== false) {
+                  router.push({
+                    name: redirectTo,
+                    params: { id: response.data.id }
+                  })
+                } else {
+                  this.refreshPage()
+                  form.classList.remove('was-validated')
+                  this.ObjectTemplates.length = 0
+                  this.ObjectTemplates = this.Append(response.data.entities)
+                  this.refreshPage()
+                }
+              })
+          }
+        }
+      }
     }
   }
 
