@@ -18,16 +18,15 @@ export namespace Manager.Mechanic{
     public async InitGet (_id: string, _route: string): Promise<ObjectTemplate[]> {
       this.id = _id
       if (this.id === '-1') {
-        this.id = (await http.get(process.env.VUE_APP_BASE_URL + _route + '/' + this.id)).data
-        console.log(this.id)
+        // this.id = (await http.get(process.env.VUE_APP_BASE_URL + _route + '/' + this.id)).data
         const response = await http.get(process.env.VUE_APP_BASE_URL + 'form/' + _route)
         return (this.ObjectTemplates = response.data.map((_object: any) => {
           return new ObjectTemplate(_object.Region, _object.ObjectEnum,
-            _object.SubObjectEnum, _object.ActionEnum, this.reStructure(_object.Stats,
-              {
+            _object.SubObjectEnum, _object.ActionEnum, this.reStructure(_object.Stats
+              /* {
                 [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat()
                   .InitData(String(this.id))
-              }))
+              } */))
         }))
       }
       const response = await http.get(process.env.VUE_APP_BASE_URL + _route + '/' + this.id)
@@ -346,10 +345,10 @@ export namespace Manager.Mechanic{
             await http.patch(process.env.VUE_APP_BASE_URL + route + '/' + this.id, this.ObjectTemplates)
               .then((response) => {
                 if (response.data.id !== false) {
-                  router.push({
-                    name: redirectTo,
-                    params: { id: response.data.id }
-                  })
+                  this.refreshPage()
+                  this.ObjectTemplates.length = 0
+                  this.ObjectTemplates = this.Append(response.data.entities)
+                  this.refreshPage()
                 } else {
                   this.refreshPage()
                   form.classList.remove('was-validated')
