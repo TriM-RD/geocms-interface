@@ -15,6 +15,9 @@
     <li class="nav-item border-end border-secondary border-opacity-10">
       <router-link to="/division" class="nav-link rounded-1" :class="{active: $route.path === '/division'}">Divisions</router-link>
     </li>
+    <li class="nav-item border-end border-secondary border-opacity-10">
+      <router-link to="/map" class="nav-link rounded-1" :class="{active: $route.path === '/map'}">Map</router-link>
+    </li>
   </ul>
 </template>
 <script lang="ts">

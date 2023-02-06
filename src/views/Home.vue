@@ -11,8 +11,6 @@
 import { Options, Vue } from 'vue-class-component'
 import FormComponent from '@/components/FormComponent.vue'
 import WelcomeComponent from '@/components/WelcomeComponent.vue' // @ is an alias to /src
-import http from '@/http-common' // @ is an alias to /src
-import createStore from '@/store/index'
 import MapComponent from '@/components/MapComponent.vue'
 
 @Options({

@@ -4,11 +4,17 @@ import Show from '../views/Show.vue'
 import PermissionTree from '@/views/PermissionTree.vue'
 import Form from '@/views/Form.vue'
 import AccountProfile from '@/views/AccountProfile.vue'
+import Map from '@/views/Map.vue'
 
 type MyRouteRecord = RouteRecordRaw & {
   beforeRouteLeave: string;
 }
 const routes: Array<RouteRecordRaw> = [
+  {
+    path: '/map',
+    name: 'Map',
+    component: Map
+  },
   {
     path: '/',
     name: 'Home',

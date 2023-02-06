@@ -18,7 +18,8 @@ export enum ObjectTypeEnum {
   ListRow,
   ECabinetRow,
   ECabinetColumn,
-  ModalForm
+  ModalForm,
+  MapPicker
 }
 
 export class ObjectType {

@@ -25,7 +25,8 @@ export namespace Manager.Events.Type{
       [ObjectTypeEnum.Radio]: new ObjectTypeAbstract.Events.Type.Radio(),
       [ObjectTypeEnum.FieldButton]: new ObjectTypeAbstract.Events.Type.FieldButton(),
       [ObjectTypeEnum.SelectButton]: new ObjectTypeAbstract.Events.Type.SelectButton(),
-      [ObjectTypeEnum.ECabinetRow]: new ObjectTypeAbstract.Events.Type.ECabinetRow()
+      [ObjectTypeEnum.ECabinetRow]: new ObjectTypeAbstract.Events.Type.ECabinetRow(),
+      [ObjectTypeEnum.MapPicker]: new ObjectTypeAbstract.Events.Type.MapPicker()
     }
   }
 
@@ -94,6 +95,14 @@ export namespace Manager.Events.Type{
         [ObjectTypeEnum.ECabinetColumn]: new ObjectTypeAbstract.Events.Type.ECabinetColumn(),
         [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button(),
         [ObjectTypeEnum.ModalForm]: new ObjectTypeAbstract.Events.Type.ModalForm()
+      }
+  }
+
+  export class MapPicker extends RegionAbstract {
+    public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
+      {
+        [ObjectTypeEnum.Field]: new ObjectTypeAbstract.Events.Type.Field(),
+        [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button()
       }
   }
 
