@@ -101,7 +101,7 @@ export default class MapComponent extends Vue {
           layers: ['clusters']
         })
         const clusterId = features[0].properties.cluster_id
-        this.map.getSource('physicalObjects').getClusterExpansionZoom(
+        this.map.getSource('entities').getClusterExpansionZoom(
           clusterId,
           (err: any, zoom: any) => {
             if (err) return
@@ -135,7 +135,7 @@ export default class MapComponent extends Vue {
         })
       })
     })
-    if (this.entities.features.count > 0) {
+    if (this.entities.features.length > 0) {
       const bounds = new mapboxgl.LngLatBounds()
       for (const element of this.entities.features) {
         bounds.extend(element.geometry.coordinates)

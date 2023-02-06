@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="row mb-3">
       <div class="col-12 p-0">
         <mapbox-map
           style="height: 50vh"
@@ -26,7 +26,6 @@
         </mapbox-map>
       </div>
     </div>
-    <div style="height: 10vh"></div>
   </div>
 
 </template>
