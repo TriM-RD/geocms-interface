@@ -1,6 +1,6 @@
 <template>
   <div class="mb-3 row justify-content-md-center">
-    <div class="col"></div>
+    <div class="col-lg"></div>
     <div class="col input-group">
       <label :title="tooltipCase()" class="input-group-text" :hidden="specialCase()">{{object.Stats[statTypeEnum.Label].Data }}</label>
       <input class="form-control"
@@ -16,7 +16,7 @@
       <slot></slot>
       <div class="invalid-feedback">{{ `${object.Stats[statTypeEnum.ErrorMessage] !== undefined?object.Stats[statTypeEnum.ErrorMessage].Data:''}` }}</div>
     </div>
-    <div class="col"></div>
+    <div class="col-lg"></div>
   </div>
 </template>
 

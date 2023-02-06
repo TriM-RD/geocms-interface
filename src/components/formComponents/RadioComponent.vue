@@ -1,7 +1,7 @@
 <template>
   <div class="mb-3 row justify-content-md-center" >
-    <div class="col"></div>
-    <div class="col"></div>
+    <div class="col-lg"></div>
+    <div class="col-lg"></div>
     <div class="col input-group" v-for="(item, key, index) in JSON.parse(object.Stats[statTypeEnum.ItemList].Data)" :key="`${ key }-${ index }`">
       <div class="input-group-text">
         <input class="form-check-input mt-0" :name="object.Stats[statTypeEnum.Label].Data" :value="item.id" type="radio" :checked="object.Stats[statTypeEnum.Value].Data===item.id"
@@ -9,8 +9,8 @@
       </div>
       <input disabled type="text" :value="item.name" class="form-control" aria-label="Text input with radio button">
     </div>
-    <div class="col"></div>
-    <div class="col"></div>
+    <div class="col-lg"></div>
+    <div class="col-lg"></div>
   </div>
 </template>
 

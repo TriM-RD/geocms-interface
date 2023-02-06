@@ -1,6 +1,6 @@
 <template>
   <div v-if="renderComponent" class="mb-3 row justify-content-md-center">
-        <div class="col"></div>
+        <div class="col-lg"></div>
         <div class="col">
       <div class="input-group">
         <label :title="specialCase()" for="exampleDataList" class="input-group-text">{{object.Stats[statTypeEnum.Label].Data }}</label>
@@ -17,7 +17,7 @@
         <div class="invalid-feedback">{{ `${object.Stats[statTypeEnum.ErrorMessage] !== undefined?object.Stats[statTypeEnum.ErrorMessage].Data:''}` }}</div>
       </div>
       </div>
-      <div class="col"></div>
+      <div class="col-lg"></div>
   </div>
 </template>
 

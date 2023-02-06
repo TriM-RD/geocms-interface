@@ -1,6 +1,6 @@
 <template>
   <div class="mb-3 row justify-content-md-center">
-    <div class="col"></div>
+    <div class="col-lg"></div>
     <div class="col">
   <div class="input-group">
     <label :title="`${object.Stats[statTypeEnum.Tooltip].Data}`" for="exampleDataList" class="input-group-text">{{object.Stats[statTypeEnum.Label].Data }}</label>
@@ -16,7 +16,7 @@
 
   </div>
   </div>
-  <div class="col"></div>
+  <div class="col-lg"></div>
   </div>
 </template>
 

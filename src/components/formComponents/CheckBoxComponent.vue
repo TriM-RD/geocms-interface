@@ -1,6 +1,6 @@
 <template>
   <div class="mb-3 row justify-content-md-center">
-    <div class="col"></div>
+    <div class="col-lg"></div>
     <div class="col input-group mb-3">
       <div class="input-group-text">
         <input class="form-check-input mt-0" type="checkbox" :checked="object.Stats[statTypeEnum.Value].Data"
@@ -8,7 +8,7 @@
       </div>
       <input disabled :value="object.Stats[statTypeEnum.Label].Data" type="text" class="form-control" aria-label="Text input with checkbox">
     </div>
-    <div class="col"></div>
+    <div class="col-lg"></div>
   </div>
 </template>
 
