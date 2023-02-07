@@ -76,8 +76,7 @@
         </div>
 
         <div class="modal-body">
-          <p>Cannot delete "{{ deleteCheckData.permission.name }}" from the database.</p>
-          <p>Because a user or a division is connected to it.</p>
+          <p>Deleting the "{{ deleteCheckData.permission.name }}" record from the database is not possible as it is associated with either a user or a division.</p>
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
