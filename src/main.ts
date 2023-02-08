@@ -6,14 +6,29 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
 import VueBlocksTree from 'vue3-blocks-tree'
 import 'vue3-blocks-tree/dist/vue3-blocks-tree.css'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import Toaster from '@meforma/vue-toaster'
-const defaultoptions = { treeName: 'blocks-tree' }
+import Toast, { PluginOptions, POSITION } from 'vue-toastification'
+import 'vue-toastification/dist/index.css'
+
+const defaultOptions = { treeName: 'blocks-tree' }
+
+const options: PluginOptions = {
+  position: POSITION.TOP_RIGHT,
+  timeout: 5000,
+  closeOnClick: true,
+  pauseOnFocusLoss: true,
+  pauseOnHover: true,
+  draggable: true,
+  draggablePercent: 0.6,
+  showCloseButtonOnHover: true,
+  hideProgressBar: false,
+  closeButton: 'button',
+  icon: true,
+  rtl: false
+}
 
 createApp(App)
   .use(store)
   .use(router)
-  .use(VueBlocksTree, defaultoptions)
-  .use(Toaster, { position: 'top-right', duration: 3500 })
+  .use(VueBlocksTree, defaultOptions)
+  .use(Toast, options)
   .mount('#app')

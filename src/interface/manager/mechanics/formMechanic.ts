@@ -276,13 +276,7 @@ export namespace Manager.Mechanic{
               })
               break
             case SubObjectTypeEnum.Left:
-              if (this.inEdit) {
-                await http.patch(process.env.VUE_APP_BASE_URL + 'user/' + this.id, this.ObjectTemplates)
-                  .then(response => (router.push({ name: 'AdministrationEdit', params: { id: response.data.id } })))
-              }/* else {
-                await http.post('http://blog.test/api/division', this.ObjectTemplates)
-                  .then(response => (router.push({ name: 'DivisionEdit', params: { id: response.data.id } })))
-              } */
+              await this.validateForm('user', 'AdministrationEdit')
               break
             case SubObjectTypeEnum.Middle:
               this.refreshPage()

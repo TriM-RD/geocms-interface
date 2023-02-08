@@ -8,6 +8,8 @@ import { RegionEnum, ActionTypeEnum, RegionType } from '@/interface/manager/even
 import router from '@/router'
 import { EventHandlerType } from '../events/types/objectTypes/types'
 import { routerKey, useRouter } from 'vue-router'
+import { useToast, TYPE } from 'vue-toastification'
+import ToastComponent from '@/components/ToastComponent.vue'
 
 export namespace Manager.Mechanic{
 
@@ -59,21 +61,25 @@ export namespace Manager.Mechanic{
       MechanicAbstract.instance = null
     }
 
-    protected Button (eventHandler: EventHandlerType): void {
+    protected async Button (eventHandler: EventHandlerType): Promise<void> {
       const _id = eventHandler.payload.Stats[StatTypeEnum.Id].Data
       switch (router.currentRoute.value.name) {
         case 'Device':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:// Izbriši
-              this.refreshPage()
-              http.delete(process.env.VUE_APP_BASE_URL + 'entity/' + _id)
-                .then(response => (this.refreshPage()))
+              await this.validateForm('entity', _id)
               break
             case SubObjectTypeEnum.Middle: // Uredi
-              router.push({ name: 'DeviceEdit', params: { id: _id } })
+              await router.push({
+                name: 'DeviceEdit',
+                params: { id: _id }
+              })
               break
             case SubObjectTypeEnum.Right: // Pregledaj
-              router.push({ name: 'DeviceEdit', params: { id: _id } })
+              await router.push({
+                name: 'DeviceEdit',
+                params: { id: _id }
+              })
               break
             default:
               break
@@ -82,15 +88,19 @@ export namespace Manager.Mechanic{
         case 'Group':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:// Izbriši
-              this.refreshPage()
-              http.delete(process.env.VUE_APP_BASE_URL + 'group/' + _id)
-                .then(response => (this.refreshPage()))
+              await this.validateForm('group', _id)
               break
             case SubObjectTypeEnum.Middle: // Uredi
-              router.push({ name: 'GroupEdit', params: { id: _id } })
+              await router.push({
+                name: 'GroupEdit',
+                params: { id: _id }
+              })
               break
             case SubObjectTypeEnum.Right: // Pregledaj
-              router.push({ name: 'GroupEdit', params: { id: _id } })
+              await router.push({
+                name: 'GroupEdit',
+                params: { id: _id }
+              })
               break
             default:
               break
@@ -99,15 +109,22 @@ export namespace Manager.Mechanic{
         case 'GroupEdit':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:// Izbriši
-              this.refreshPage()
-              http.delete(process.env.VUE_APP_BASE_URL + 'attribute/' + _id)
-                .then(response => (this.refreshPage()))
+              await this.validateForm('attribute', _id)
               break
             case SubObjectTypeEnum.Middle: // Pregledaj
-              router.push({ name: 'AttributeEdit', params: { parentId: router.currentRoute.value.params.id, id: _id } })
+              await router.push({
+                name: 'AttributeEdit',
+                params: {
+                  parentId: router.currentRoute.value.params.id,
+                  id: _id
+                }
+              })
               break
             case SubObjectTypeEnum.Right: // Pregledaj
-              router.push({ name: 'AttributeEdit', params: { id: _id } })
+              await router.push({
+                name: 'AttributeEdit',
+                params: { id: _id }
+              })
               break
             default:
               break
@@ -116,15 +133,19 @@ export namespace Manager.Mechanic{
         case 'Division':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:// Izbriši
-              this.refreshPage()
-              http.delete(process.env.VUE_APP_BASE_URL + 'division/' + _id)
-                .then(response => (this.refreshPage()))
+              await this.validateForm('division', _id)
               break
             case SubObjectTypeEnum.Middle: // Uredi
-              router.push({ name: 'DivisionEdit', params: { id: _id } })
+              await router.push({
+                name: 'DivisionEdit',
+                params: { id: _id }
+              })
               break
             case SubObjectTypeEnum.Right: // Pregledaj
-              router.push({ name: 'DivisionEdit', params: { id: _id } })
+              await router.push({
+                name: 'DivisionEdit',
+                params: { id: _id }
+              })
               break
             default:
               break
@@ -132,16 +153,17 @@ export namespace Manager.Mechanic{
           break
         case 'Administration':
           switch (eventHandler.subObjectType) {
-            /* case SubObjectTypeEnum.Left:// Izbriši
-              http.delete('http://blog.test/api/division/' + _id)
-                .then(response => (router.push({ name: 'Division' })))
-              router.push({ name: 'Device' })
-              break */
             case SubObjectTypeEnum.Middle: // Uredi
-              router.push({ name: 'AdministrationEdit', params: { id: _id } })
+              await router.push({
+                name: 'AdministrationEdit',
+                params: { id: _id }
+              })
               break
             case SubObjectTypeEnum.Right: // Pregledaj
-              router.push({ name: 'AdministrationEdit', params: { id: _id } })
+              await router.push({
+                name: 'AdministrationEdit',
+                params: { id: _id }
+              })
               break
             default:
               break
@@ -156,6 +178,22 @@ export namespace Manager.Mechanic{
         MechanicAbstract.instance.SubscribeToVueComponent(_mechanicCallback)
       }
       return MechanicAbstract.instance
+    }
+
+    private async validateForm (route: string, _id: string) {
+      this.refreshPage()
+      http.delete(process.env.VUE_APP_BASE_URL + route + '/' + _id)
+        .then((response) => {
+          useToast()({
+            component: ToastComponent,
+            props: {
+              msg: response.data.msg
+            }
+          }, {
+            type: response.data.status as TYPE
+          })
+          this.refreshPage()
+        })
     }
   }
 

@@ -139,7 +139,6 @@ export default class PermissionTreeComponent extends Vue {
 
   databaseData = reactive<permission[]>([])
   newDatabaseData = reactive<permission[]>([])
-  $toast: any
   change = false
 
   addChild (data: TreeData) {
@@ -153,7 +152,7 @@ export default class PermissionTreeComponent extends Vue {
     data.newChildName = ''
     data.children.push(newChild)
     this.startPreorder()
-    this.$toast.success(`Child " ${newChild.label} " successfuly added to " ${data.label} "`)
+    // this.$toast.success(`Child " ${newChild.label} " successfuly added to " ${data.label} "`)
   }
 
   newPermission (data: TreeData):TreeData {
@@ -199,7 +198,7 @@ export default class PermissionTreeComponent extends Vue {
     data.permission.name = data.rename
     data.rename = ''
 
-    this.$toast.success(`Renamed " ${temp} " to " ${data.label} "`)
+    // this.$toast.success(`Renamed " ${temp} " to " ${data.label} "`)
   }
 
   async save () {
@@ -218,7 +217,7 @@ export default class PermissionTreeComponent extends Vue {
       .then(response => {
         console.log(response)
         if (response.status === 200) {
-          this.$toast.success('Edited old data successfuly')
+          // this.$toast.success('Edited old data successfuly')
         } else {
           // this.$toast.error('Something went wrong during editing')
         }
@@ -235,7 +234,7 @@ export default class PermissionTreeComponent extends Vue {
       .then(response => {
         console.log(response)
         if (response.status === 200) {
-          this.$toast.success('Saved new data successfuly')
+          // this.$toast.success('Saved new data successfuly')
         } else {
           // this.$toast.error('Something went wrong during saving')
         }
@@ -306,7 +305,7 @@ export default class PermissionTreeComponent extends Vue {
       .then(response => {
         console.log(response)
         if (response.status === 200) {
-          this.$toast.success('Delete was successful')
+          // this.$toast.success('Delete was successful')
         } else {
           // this.$toast.error('Something went wrong during deleting')
         }
