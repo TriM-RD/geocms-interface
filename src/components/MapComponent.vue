@@ -114,21 +114,17 @@ export default class MapComponent extends Vue {
       })
       this.map.on('click', 'unclustered-point', (e: any) => {
         const coordinates = e.features[0].geometry.coordinates.slice()
-        const code = e.features[0].properties.code
         const id = e.features[0].properties.id
-        // Ensure that if the map is zoomed out such that
-        // multiple copies of the feature are visible, the
-        // popup appears over the copy being pointed to.
-        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
-        }
-        new mapboxgl.Popup()
+        const code = e.features[0].properties.code
+        // Find all the devices with the same coordinates
+        const devicesWithSameCoordinates = this.entities.features.filter((device: { geometry: { coordinates: any[] } }) => {
+          return device.geometry.coordinates[0] === coordinates[0] && device.geometry
+            .coordinates[1] === coordinates[1]
+        })
+        const popup = new mapboxgl.Popup({ closeOnClick: false })
           .setLngLat(coordinates)
-          .setHTML(
-            // `magnitude: ${mag}<br>Was there a tsunami?: ${tsunami}`
-            `code: ${code}<br><button class="btn btn-secondary btn-sm open-popup" >Open</button>`
-          )
-          .addTo(this.map)
+          .setHTML(`<p>Code: ${code}</p><br><button class="btn btn-secondary btn-sm open-popup" >Open</button><br><p>Devices with same coordinates: ${devicesWithSameCoordinates.length}</p>`)
+        popup.addTo(this.map)
         const btn = document.getElementsByClassName('open-popup')[0]
         btn.addEventListener('click', () => {
           this.$router.push({ name: 'DeviceEdit', params: { id: id } })
