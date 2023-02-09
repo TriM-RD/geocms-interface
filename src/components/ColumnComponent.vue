@@ -1,6 +1,6 @@
 <template>
     <!--th scope="row"><img alt="arrow" width="27" src="../assets/arrow.png"></th-->
-    <td>{{object.Stats[statTypeEnum.Value].Data}}</td>
+    <td class="text-truncate" style="max-width: 80px;">{{object.Stats[statTypeEnum.Value].Data}}</td>
 </template>
 
 <script lang="ts">

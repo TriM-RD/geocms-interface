@@ -23,7 +23,17 @@ const options: PluginOptions = {
   hideProgressBar: false,
   closeButton: 'button',
   icon: true,
-  rtl: false
+  rtl: false,
+  filterBeforeCreate: (toast, toasts) => {
+    if (toasts.filter(
+      t => t.type === toast.type
+    ).length !== 0) {
+      // Returning false discards the toast
+      return false
+    }
+    // You can modify the toast if you want
+    return toast
+  }
 }
 
 createApp(App)
