@@ -1,12 +1,14 @@
 import { ObjectTemplate } from '../containerClasses/objectTemplate'
-import { ObjectType, ObjectTypeEnum } from '../events/types/objectType'
+import { ObjectTypeEnum } from '../events/types/objectType'
 import { SubObjectTypeEnum } from '../events/types/subObjectType'
 import { MechanicAbstract } from './mechanicAbstract'
 import http from '@/http-common'
-import { StatType, StatTypeEnum } from '../events/types/statType'
-import { RegionEnum, ActionTypeEnum, RegionType } from '@/interface/manager/events/types/index'
+import { StatType } from '../events/types/statType'
+import { ActionTypeEnum, RegionEnum, RegionType } from '@/interface/manager/events/types/index'
 import router from '@/router'
 import { EventHandlerType } from '../events/types/objectTypes/types'
+import { TYPE, useToast } from 'vue-toastification'
+import ToastComponent from '@/components/ToastComponent.vue'
 
 export namespace Manager.Mechanic{
 
@@ -53,7 +55,22 @@ export namespace Manager.Mechanic{
         case 'Device':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:
-              router.push({ name: 'Show' })
+              if (navigator.userAgent.indexOf('geocms') !== -1) {
+                window.location.href = 'geocms://'
+              } else {
+                console.error('GeoCMS is not supported on this platform.')
+                useToast()({
+                  component: ToastComponent,
+                  props: {
+                    msg: {
+                      title: 'Unsupported platform.',
+                      info: 'GeoCMS Scanner is missing or not supported on this platform.'
+                    }
+                  }
+                }, {
+                  type: TYPE.ERROR
+                })
+              }
               break
             case SubObjectTypeEnum.Right:
               router.push({ name: 'DeviceAdd' })
