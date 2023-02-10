@@ -54,19 +54,38 @@ export namespace Manager.Mechanic{
       switch (router.currentRoute.value.name) {
         case 'Device':
           switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.ParentObject:
+              break
+            case SubObjectTypeEnum.Middle:
+              break
             case SubObjectTypeEnum.Left:
-              if (navigator.userAgent.indexOf('geocms') !== -1) {
-                window.location.href = 'geocms://'
+              if (window.innerWidth <= 760 && window.innerHeight <= 760) {
+                const iframe = document.createElement('iframe')
+                let installed = false
+                iframe.style.display = 'none'
+                iframe.src = 'geocms://'
+                document.body.appendChild(iframe)
+                iframe.onload = function () {
+                  console.log('first')
+                  installed = true
+                }
+                setTimeout(() => {
+                  if (installed) {
+                    console.log('second')
+                    window.location.href = 'geocms://'
+                  } else {
+                    useToast()({
+                      component: ToastComponent,
+                      props: { msg: { title: 'App is missing.', info: 'GeoCMS Scanner is missing from your device.' } }
+                    }, {
+                      type: TYPE.ERROR
+                    })
+                  }
+                }, 1000)
               } else {
-                console.error('GeoCMS is not supported on this platform.')
                 useToast()({
                   component: ToastComponent,
-                  props: {
-                    msg: {
-                      title: 'Unsupported platform.',
-                      info: 'GeoCMS Scanner is missing or not supported on this platform.'
-                    }
-                  }
+                  props: { msg: { title: 'Unsupported platform.', info: 'GeoCMS Scanner is not supported on this platform.' } }
                 }, {
                   type: TYPE.ERROR
                 })
@@ -74,6 +93,10 @@ export namespace Manager.Mechanic{
               break
             case SubObjectTypeEnum.Right:
               router.push({ name: 'DeviceAdd' })
+              break
+            case SubObjectTypeEnum.Up:
+              break
+            case SubObjectTypeEnum.Down:
               break
             default:
               break
