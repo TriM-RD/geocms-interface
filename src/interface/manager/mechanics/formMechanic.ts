@@ -111,6 +111,7 @@ export namespace Manager.Mechanic{
     protected async SelectList (eventHandler: EventHandlerType): Promise<void> {
       switch (router.currentRoute.value.name) {
         case 'DeviceAdd':
+        case 'DeviceEdit':// TODO add regex to check if id is uuid
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Middle:
               this.removeElementFromArray(this.ObjectTemplates, 'group')
@@ -330,7 +331,7 @@ export namespace Manager.Mechanic{
         if (!(form as HTMLFormElement).checkValidity()) {
           form.classList.add('was-validated')
         } else {
-          if (this.inEdit) {
+          if (this.inEdit && !(!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(this.id))) {
             await http.patch(process.env.VUE_APP_BASE_URL + route + '/' + this.id, this.ObjectTemplates)
               .then((response) => {
                 if (response.data.id !== false) {
