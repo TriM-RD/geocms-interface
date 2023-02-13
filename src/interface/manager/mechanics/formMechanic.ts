@@ -25,6 +25,14 @@ export namespace Manager.Mechanic{
         }))
       }
       const response = await http.get(process.env.VUE_APP_BASE_URL + _route + '/' + this.id)
+      if (response.data.id !== undefined) {
+        console.log(response.data.id)
+        await router.push({
+          name: 'DeviceEdit',
+          params: { id: response.data.id }
+        })
+        return []
+      }
       this.inEdit = true
       return (this.ObjectTemplates = response.data.map((_object: any) => {
         return new ObjectTemplate(_object.Region, _object.ObjectEnum,

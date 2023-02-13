@@ -43,6 +43,7 @@ export default class SelectListComponent extends Vue {
     if (this.object.Stats[this.statTypeEnum.IsValid] === undefined) { return '' }
     if (this.object.Stats[this.statTypeEnum.IsValid].Data === '') { return '' }
     if (this.object.Stats[this.statTypeEnum.IsValid].Data) { return 'is-valid' }
+    if (this.object.Stats[this.statTypeEnum.ErrorMessage].Data === null) { return '' }
     if (this.object.Stats[this.statTypeEnum.ErrorMessage].Data !== '') { return 'is-invalid' }
     return ''
   }

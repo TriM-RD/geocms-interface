@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
 import VueBlocksTree from 'vue3-blocks-tree'
 import 'vue3-blocks-tree/dist/vue3-blocks-tree.css'
-import Toast, { PluginOptions, POSITION } from 'vue-toastification'
+import Toast, { PluginOptions, POSITION, TYPE } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 
 const defaultOptions = { treeName: 'blocks-tree' }
@@ -26,7 +26,7 @@ const options: PluginOptions = {
   rtl: false,
   filterBeforeCreate: (toast, toasts) => {
     if (toasts.filter(
-      t => t.type === toast.type
+      t => t.type === TYPE.INFO
     ).length !== 0) {
       // Returning false discards the toast
       return false
