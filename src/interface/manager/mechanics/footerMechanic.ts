@@ -60,28 +60,7 @@ export namespace Manager.Mechanic{
               break
             case SubObjectTypeEnum.Left:
               if (window.innerWidth <= 760 && window.innerHeight <= 760) {
-                const iframe = document.createElement('iframe')
-                let installed = false
-                iframe.style.display = 'none'
-                iframe.src = 'geocms://'
-                document.body.appendChild(iframe)
-                iframe.onload = function () {
-                  console.log('first')
-                  installed = true
-                }
-                setTimeout(() => {
-                  if (installed) {
-                    console.log('second')
-                    window.location.href = 'geocms://'
-                  } else {
-                    useToast()({
-                      component: ToastComponent,
-                      props: { msg: { title: 'App is missing.', info: 'GeoCMS Scanner is missing from your device.' } }
-                    }, {
-                      type: TYPE.ERROR
-                    })
-                  }
-                }, 1000)
+                window.location.href = 'geocms://'
               } else {
                 useToast()({
                   component: ToastComponent,
