@@ -2,7 +2,7 @@
   <div class="col">
     <div class="input-group">
       <label class="input-group-text" for="button-addon2">{{object.Stats[statTypeEnum.Label].Data }}</label>
-      <button class="btn btn-outline-secondary" type="button" id="button-addon2">Edit</button>
+      <button class="btn btn-outline-secondary" type="button" id="button-addon2" @click.prevent="edit">Edit</button>
     </div>
   </div>
 </template>
@@ -11,6 +11,7 @@
 import { Options, Vue } from 'vue-class-component'
 import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
 import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatTypeEnum, StatType, ObjectType, RegionType } from '@/interface/manager/events/types/index'
+import router from '@/router'
 @Options({
   props: {
     object: ObjectTemplate,
@@ -26,6 +27,13 @@ export default class ColumnComponent extends Vue {
 
   beforeUnmount () {
     // this.mechanic.UnsubscribeConditions()
+  }
+
+  edit () {
+    router.push({
+      name: 'DeviceEdit',
+      params: { id: this.object.Stats[this.statTypeEnum.Id].Data }
+    })
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {

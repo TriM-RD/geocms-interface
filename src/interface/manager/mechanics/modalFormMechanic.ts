@@ -62,10 +62,12 @@ export namespace Manager.Mechanic{
 
     protected SubscribeConditions (): void {
       RegionType.RegionTypes[RegionEnum.ModalForm].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
+      RegionType.RegionTypes[RegionEnum.ModalForm].ObjectTypes[ObjectTypeEnum.SelectList].SubscribeLogic(this.SelectList.bind(this))
     }
 
     public UnsubscribeConditions (): void {
       RegionType.RegionTypes[RegionEnum.ModalForm].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
+      RegionType.RegionTypes[RegionEnum.ModalForm].ObjectTypes[ObjectTypeEnum.SelectList].NullifyLogic()
       this.ObjectTemplates = []
     }
 
@@ -75,17 +77,29 @@ export namespace Manager.Mechanic{
       }
     }
 
+    protected async SelectList (eventHandler: EventHandlerType): Promise<void> {
+      switch (router.currentRoute.value.name) {
+        case 'DeviceAdd':
+        case 'DeviceEdit':// TODO add regex to check if id is uuid
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Middle:
+              this.removeElementFromArray(this.ObjectTemplates, 'group')
+              this.refreshPage()
+              this.ObjectTemplates = this.Append((await http.get(process.env.VUE_APP_BASE_URL + 'form/entity/' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
+              this.refreshPage()
+              break
+            default:
+              break
+          }
+          break
+      }
+    }
+
     protected async Button (eventHandler: EventHandlerType): Promise<void> {
       const temp = document.getElementById('formModalSubmit' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)
       switch (eventHandler.subObjectType) {
         case SubObjectTypeEnum.Left:
-          if (this.inEdit) {
-            await http.patch(process.env.VUE_APP_BASE_URL + 'entity/' + this.id, this.ObjectTemplates)
-              .then(response => (temp?.click()))
-          } else {
-            await http.post(process.env.VUE_APP_BASE_URL + 'entity', this.ObjectTemplates)
-              .then(response => (temp?.click()))
-          }
+          this.validateForm('entity', temp)
           break
         default:
           break
@@ -98,6 +112,47 @@ export namespace Manager.Mechanic{
       }
       MechanicAbstract.instance.SubscribeToVueComponent(_mechanicCallback)
       return MechanicAbstract.instance
+    }
+
+    private async validateForm (route: string, temp: any) {
+      for (const form of document.getElementsByClassName('needs-validation')) {
+        if (!(form as HTMLFormElement).checkValidity()) {
+          form.classList.add('was-validated')
+        } else {
+          /* if (this.inEdit && !(!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(this.id))) {
+            await http.patch(process.env.VUE_APP_BASE_URL + route + '/' + this.id, this.ObjectTemplates)
+              .then((response) => {
+                if (response.data.id !== false) {
+                  this.refreshPage()
+                  this.ObjectTemplates.length = 0
+                  this.ObjectTemplates = this.Append(response.data.entities)
+                  this.refreshPage()
+                } else {
+                  this.refreshPage()
+                  form.classList.remove('was-validated')
+                  this.ObjectTemplates.length = 0
+                  this.ObjectTemplates = this.Append(response.data.entities)
+                  this.refreshPage()
+                }
+              })
+          } else { */
+          console.log(this.ObjectTemplates)
+          await http.post(process.env.VUE_APP_BASE_URL + route, this.ObjectTemplates)
+            .then((response) => {
+              if (response.data.id !== false) {
+                  // eslint-disable-next-line no-unused-expressions
+                  temp?.click()
+              } else {
+                this.refreshPage()
+                form.classList.remove('was-validated')
+                this.ObjectTemplates.length = 0
+                this.ObjectTemplates = this.Append(response.data.entities)
+                this.refreshPage()
+              }
+            })
+          // }
+        }
+      }
     }
   }
 

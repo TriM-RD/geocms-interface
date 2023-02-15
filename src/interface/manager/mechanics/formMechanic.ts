@@ -148,6 +148,7 @@ export namespace Manager.Mechanic{
     }
 
     protected async Button (eventHandler: EventHandlerType): Promise<void> {
+      console.log('testButton')
       let rowCount = 0
       let rowsExist = false
       switch (router.currentRoute.value.name) {
@@ -165,7 +166,7 @@ export namespace Manager.Mechanic{
             case SubObjectTypeEnum.Up:
               this.refreshPage()
               for (const row of this.ObjectTemplates) {
-                if (row.Stats[StatTypeEnum.Tag].Data === 'row') {
+                if (row.Stats[StatTypeEnum.Tag].Data === 'ecabinetRow') {
                   rowCount = Number(row.Stats[StatTypeEnum.Value].Data)
                   rowsExist = true
                 }
@@ -174,13 +175,19 @@ export namespace Manager.Mechanic{
               this.ObjectTemplates = this.Append([
                 new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.ECabinetRow, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
                   [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Row'),
-                  [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('row'),
+                  [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('ecabinetRow'),
                   [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(rowCount.toString()),
                   [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData('')
                   /* [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(''),
                   [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.Id].Data) */
                 })
               ])
+              this.refreshPage()
+              break
+            case SubObjectTypeEnum.Down:
+              this.refreshPage()
+              this.ObjectTemplates.splice(this.ObjectTemplates.findIndex(
+                element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data), 1)
               this.refreshPage()
               break
             default:
@@ -313,19 +320,6 @@ export namespace Manager.Mechanic{
       }
     }
 
-    removeElementFromArray (arr: Array<any>, belongsTo: string) {
-      (() => {
-        // Perform the array update
-        for (let i = arr.length - 1; i >= 0; i--) {
-          if (arr[i].Stats[StatTypeEnum.BelongsTo] !== undefined) {
-            if (arr[i].Stats[StatTypeEnum.BelongsTo].Data === belongsTo) {
-              arr.splice(i, 1)
-            }
-          }
-        }
-      })()
-    }
-
     static getInstance (_mechanicCallback: MechanicDelegate | null = null): MechanicAbstract {
       if (!MechanicAbstract.instance) {
         MechanicAbstract.instance = new FormMechanic()
@@ -356,6 +350,7 @@ export namespace Manager.Mechanic{
                 }
               })
           } else {
+            console.log(this.ObjectTemplates)
             await http.post(process.env.VUE_APP_BASE_URL + route, this.ObjectTemplates)
               .then((response) => {
                 if (response.data.id !== false) {

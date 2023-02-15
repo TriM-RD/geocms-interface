@@ -45,7 +45,6 @@ export default class ECabinetRowComponent extends Vue {
     if (this.object.Stats[StatTypeEnum.ItemList].Data !== '') {
       this.values = this.object.Stats[StatTypeEnum.ItemList].Data
     }
-    console.log(this.object.Stats[StatTypeEnum.Value].Data)
     this.objectTemplates = this.mechanic.InitSet([
       new ObjectTemplate(RegionEnum.ECabinetRow, ObjectTypeEnum.ModalForm, SubObjectTypeEnum.ParentObject, ActionTypeEnum.Click, {
         [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Form'),

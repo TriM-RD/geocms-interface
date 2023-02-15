@@ -2,12 +2,6 @@
   <button type="button" class="list-group-item list-group-item-action" aria-current="true" @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object)'>
     {{object.Stats[statTypeEnum.Value].Data}}
   </button>
-  <!--tr>
-    <td>{{object.Stats[statTypeEnum.Value].Data}}</td>
-    <td>
-      <component class="ms-3"  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'> </component>
-    </td>
-  </tr-->
 </template>
 
 <script lang="ts">

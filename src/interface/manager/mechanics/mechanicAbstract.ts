@@ -2,6 +2,7 @@ import { ObjectTemplate } from '../containerClasses/objectTemplate'
 import { EventHandlerType } from '../events/types/objectTypes/types'
 import { SubObjectTypeEnum } from '../events/types/subObjectType'
 import { SimpleEventDispatcher } from 'ste-simple-events'
+import { StatTypeEnum } from '@/interface/manager/events/types'
 
 export type MechanicDelegate = (eventHandler: boolean) => void;
 
@@ -34,6 +35,19 @@ export abstract class MechanicAbstract {
       this.ObjectTemplates.push(element)
     }
     return this.ObjectTemplates
+  }
+
+  protected removeElementFromArray (arr: Array<any>, belongsTo: string) {
+    (() => {
+      // Perform the array update
+      for (let i = arr.length - 1; i >= 0; i--) {
+        if (arr[i].Stats[StatTypeEnum.BelongsTo] !== undefined) {
+          if (arr[i].Stats[StatTypeEnum.BelongsTo].Data === belongsTo) {
+            arr.splice(i, 1)
+          }
+        }
+      }
+    })()
   }
 
   public ObjectTemplates!: ObjectTemplate[];

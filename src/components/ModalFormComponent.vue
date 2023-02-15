@@ -6,7 +6,6 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              {{object.Stats[statTypeEnum.Tag].Data}}
               <button type="button" class="btn-close" :id="`${'formModalClose'+object.Stats[statTypeEnum.Tag].Data}`" data-bs-dismiss="modal" aria-label="Close"></button>
               <button type="button" hidden class="btn-close" :id="`${'formModalSubmit'+object.Stats[statTypeEnum.Tag].Data}`" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -85,11 +84,11 @@ export default class ModalFormComponent extends Vue {
     switch (router.currentRoute.value.name) {
       case 'DeviceEdit':
       case 'DeviceAdd':
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'entity'))
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'entity_modal'))
         this.objectTemplates = this.mechanic.Append([
           new ObjectTemplate(RegionEnum.ModalForm, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Row'),
-            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('row'),
+            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('ecabinetRowChild'),
             [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Tag].Data),
             [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('me-2 readonly'),
             [StatTypeEnum.ElementType]: StatType.StatTypes[StatTypeEnum.ElementType]().CreateStat().InitData('hidden'),
