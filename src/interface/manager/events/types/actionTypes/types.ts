@@ -97,4 +97,27 @@ export namespace Manager.Events.Type{
       return await _data
     }
   }
+
+  export class SelectIdFromName extends MethodTypeAbstract {
+    public Act (_object: ObjectTemplate, _data : any, _invokeLogic: LogicDelegate): boolean {
+      const options = JSON.parse(_object.Stats[StatTypeEnum.ItemList].Data)
+      const selectedOption = options.find((option: any) => option.name === _data)
+      this.Enact([selectedOption, _data]).then((response) => {
+        _object.Stats[StatTypeEnum.Value].Data = response
+        _invokeLogic({ subObjectType: _object.SubObjectEnum, payload: _object })
+      })
+      return true
+    }
+
+    public async Enact (_data : any): Promise<any> {
+      if (_data[0] !== undefined) {
+        return await _data[0]
+      } else {
+        return {
+          id: null,
+          name: _data[1]
+        }
+      }
+    }
+  }
 }

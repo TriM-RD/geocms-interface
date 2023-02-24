@@ -1,7 +1,19 @@
 <template>
-    <!--th scope="row"><img alt="arrow" width="27" src="../assets/arrow.png"></th-->
   <td>
-  <component v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ Math.random().toString(36).slice(2, 7) }`"  :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'></component>
+    <div class="btn-group d-none d-md-flex justify-content-center">
+      <component v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ Math.random().toString(36).slice(2, 7) }`"  :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'></component>
+    </div>
+    <div class="dropdown d-md-none">
+      <button type="button" class="btn btn-outline-secondary" data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="bi-chevron-down"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ Math.random().toString(36).slice(2, 7) }-'li'`"
+            class="dropdown-item btn-group justify-content-center">
+          <component :key="`${ key }-${ index }-${ Math.random().toString(36).slice(2, 7) }`"  :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'></component>
+        </li>
+      </ul>
+    </div>
   </td>
 </template>
 

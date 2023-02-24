@@ -17,6 +17,9 @@
               <component  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ _objectTemplate.Stats[statTypeEnum.Tag].Data }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'> </component>
               </div>
             </div>
+            <div class="modal-footer">
+              <component :is="getSubmitButtonComponent()" :object='submitButton'> </component>
+            </div>
           </div>
         </div>
       </div>
@@ -53,8 +56,18 @@ export default class ModalFormComponent extends Vue {
   objectTemplates!: ObjectTemplate[]
   statTypeEnum = StatTypeEnum
   object!: ObjectTemplate
+  regionEnum = RegionEnum
+  objectTypeEnum = ObjectTypeEnum
+  actionTypeEnum = ActionTypeEnum
+  subObjectTypeEnum = SubObjectTypeEnum
   regionType = RegionType
   conditionsUnsubed = false
+  submitButton = new ObjectTemplate(this.regionEnum.ModalForm, this.objectTypeEnum.Button, this.subObjectTypeEnum.Left, this.actionTypeEnum.Click, {
+    [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Submit'),
+    [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('submitFormButton'),
+    [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('me-2 btn btn-success'),
+    [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(this.object.Stats[this.statTypeEnum.Tag].Data)
+  })
 
   beforeUnmount () {
     if (this.mechanic !== undefined) {
@@ -103,13 +116,6 @@ export default class ModalFormComponent extends Vue {
             [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.objectTemplates[0].Stats[StatTypeEnum.Id].Data),
             [StatTypeEnum.ElementType]: StatType.StatTypes[StatTypeEnum.ElementType]().CreateStat().InitData('hidden'),
             [StatTypeEnum.Placeholder]: StatType.StatTypes[StatTypeEnum.Placeholder]().CreateStat().InitData('')
-          }),
-          new ObjectTemplate(RegionEnum.ModalForm, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
-            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Submit'),
-            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('submitFormButton'),
-            [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('me-2 btn btn-success'),
-            [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Tag].Data),
-            [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.objectTemplates[0].Stats[StatTypeEnum.Id].Data)
           })
         ])
         break
@@ -151,6 +157,10 @@ export default class ModalFormComponent extends Vue {
 
   getComponent (_regionEnum : number, _objectEnum: number) {
     return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetVueComponent()
+  }
+
+  getSubmitButtonComponent () {
+    return RegionType.RegionTypes[RegionEnum.ModalForm].ObjectTypes[ObjectTypeEnum.Button].GetVueComponent()
   }
 }
 </script>

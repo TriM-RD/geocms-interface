@@ -74,6 +74,7 @@ export namespace Manager.Mechanic{
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Field].SubscribeLogic(this.FieldButton.bind(this))
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectList].SubscribeLogic(this.FieldButton.bind(this))
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.ECabinetRow].SubscribeLogic(this.ECabinetRow.bind(this))
+      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.DataList].SubscribeLogic(this.DataList.bind(this))
     }
 
     public UnsubscribeConditions (): void {
@@ -104,16 +105,25 @@ export namespace Manager.Mechanic{
       return answer
     }
 
+    protected async DataList (eventHandler: EventHandlerType): Promise<void> {
+      this.refreshPage()
+      const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+      if (eventHandler.payload.Stats[StatTypeEnum.Value].Data.id !== null) {
+        this.ObjectTemplates[temp].Stats[StatTypeEnum.Value].Data = eventHandler.payload.Stats[StatTypeEnum.Value].Data.id
+      } else {
+        this.ObjectTemplates[temp].Stats[StatTypeEnum.Value].Data = ''
+      }
+      this.refreshPage()
+    }
+
     protected async ECabinetRow (eventHandler: EventHandlerType): Promise<void> {
       this.ObjectTemplates = []
       this.refreshPage()
     }
 
     protected async FieldButton (eventHandler: EventHandlerType): Promise<void> {
-      console.log(eventHandler.payload.Stats[StatTypeEnum.Value].Data)
       const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
       this.ObjectTemplates[temp].Stats[StatTypeEnum.Value].Data = eventHandler.payload.Stats[StatTypeEnum.Value].Data
-      console.log(this.ObjectTemplates)
     }
 
     protected async SelectList (eventHandler: EventHandlerType): Promise<void> {

@@ -26,7 +26,9 @@ export namespace Manager.Events.Type{
       [ObjectTypeEnum.FieldButton]: new ObjectTypeAbstract.Events.Type.FieldButton(),
       [ObjectTypeEnum.SelectButton]: new ObjectTypeAbstract.Events.Type.SelectButton(),
       [ObjectTypeEnum.ECabinetRow]: new ObjectTypeAbstract.Events.Type.ECabinetRow(),
-      [ObjectTypeEnum.MapPicker]: new ObjectTypeAbstract.Events.Type.MapPicker()
+      [ObjectTypeEnum.MapPicker]: new ObjectTypeAbstract.Events.Type.MapPicker(),
+      [ObjectTypeEnum.FieldCode]: new ObjectTypeAbstract.Events.Type.FieldCode(),
+      [ObjectTypeEnum.DataSelect]: new ObjectTypeAbstract.Events.Type.DataSelect()
     }
   }
 

@@ -9,7 +9,7 @@
                 :required="attributeCheck(statTypeEnum.Required)"
                 :disabled="attributeCheck(statTypeEnum.Disabled)"
                 :autocomplete="`${object.Stats[statTypeEnum.AutoComplete] !== undefined?object.Stats[statTypeEnum.AutoComplete].Data:''}`"
-        @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, $event.target.value)">
+                @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, $event.target.value)">
           <option value="" :selected="object.Stats[statTypeEnum.Value] === undefined" hidden>Select a type.</option>
           <option v-for="(item, key, index) in JSON.parse(object.Stats[statTypeEnum.ItemList].Data)" :selected="check(item.id)" :key="`${ key }-${ index }`" :value="item.id">{{item.name}}</option>
         </select>

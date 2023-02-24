@@ -20,6 +20,8 @@ import SelectButtonComponent from '@/components/SelectButtonComponent.vue'
 import ListRowComponent from '@/components/ListRowComponent.vue'
 import ModalFormComponent from '@/components/ModalFormComponent.vue'
 import MapPickerComponent from '@/components/MapPickerComponent.vue'
+import FieldCodeComponent from '@/components/FieldCodeComponent.vue'
+import DataSelectComponent from '@/components/DataSelectComponent.vue'
 import { StatTypeEnum } from '../statType'
 import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
 
@@ -194,6 +196,18 @@ export namespace Manager.Events.Type{
   export class MapPicker extends IChangeStat {
     public GetVueComponent () {
       return MapPickerComponent
+    }
+  }
+
+  export class FieldCode extends IChangeStat {
+    public GetVueComponent () {
+      return FieldCodeComponent
+    }
+  }
+
+  export class DataSelect extends IChangeStat {
+    public GetVueComponent () {
+      return DataSelectComponent
     }
   }
 }

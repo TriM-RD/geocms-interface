@@ -8,6 +8,7 @@ export enum ActionTypeEnum {
   InsertClick,
   InsertNumber,
   Check,
+  SelectIdFromName
 }
 
 export class ActionType {
@@ -18,6 +19,7 @@ export class ActionType {
    [ActionTypeEnum.InsertUrl]: new Manager.Events.Type.InsertUrl(),
    [ActionTypeEnum.InsertClick]: new Manager.Events.Type.InsertClick(),
    [ActionTypeEnum.InsertNumber]: new Manager.Events.Type.InsertNumber(),
-   [ActionTypeEnum.Check]: new Manager.Events.Type.Check()
+   [ActionTypeEnum.Check]: new Manager.Events.Type.Check(),
+   [ActionTypeEnum.SelectIdFromName]: new Manager.Events.Type.SelectIdFromName()
  }
 }
