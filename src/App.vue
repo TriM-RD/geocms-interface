@@ -2,7 +2,6 @@
   <div v-if="($store.state.requiresAuth === 2)">
     <NavBarComponent/>
     <NavComponent />
-    <FooterComponent />
   </div>
   <router-view :key="$route.fullPath"/>
 </template>

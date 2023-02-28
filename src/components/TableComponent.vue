@@ -40,7 +40,7 @@ export default class TableComponent extends Vue {
   renderComponent= true
   loadingComponents = true
   objectTemplates!: ObjectTemplate[]
-  entities!: ObjectTemplate[][]
+  entities: ObjectTemplate[][] = []
   currentPage = 1
 
   beforeUnmount () {
@@ -62,14 +62,18 @@ export default class TableComponent extends Vue {
     }
   }
 
-  reRender () {
-    if (this.loadingComponents) {
-      this.entities = []
-      this.objectTemplates = []
-      this.headers = []
-      this.Init()
+  reRender (reverseOrder: boolean) {
+    if (reverseOrder) {
+      this.reverseEntities()
     } else {
-      this.loadingComponents = true
+      if (this.loadingComponents) {
+        this.entities = []
+        this.objectTemplates = []
+        this.headers = []
+        this.Init()
+      } else {
+        this.loadingComponents = true
+      }
     }
   }
 
@@ -133,7 +137,7 @@ export default class TableComponent extends Vue {
       }
       tempId = element.Stats[StatTypeEnum.Id].Data
     }
-    if (this.entities === undefined) {
+    if (this.entities === undefined || this.entities.length < 1) {
       this.entities = [tempObjectTemplates]
     } else {
       this.entities[this.entities.length] = tempObjectTemplates
@@ -141,7 +145,14 @@ export default class TableComponent extends Vue {
     this.getHeaders()
     this.renderComponent = false
     this.loadingComponents = false
+
     console.log(performance.now())
+  }
+
+  reverseEntities () {
+    this.renderComponent = true
+    this.entities.reverse()
+    this.renderComponent = false
   }
 
   getHeaders () : void { // TODO Needs to be reworked. @JosoMarich

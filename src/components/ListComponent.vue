@@ -45,19 +45,19 @@ export default class ListComponent extends Vue {
   }
 
   async Init () {
-    this.count = (this.title.match(/group:/g) || []).length
-    if (this.count >= 2) {
-      window.alert('Groups can only be listed once in a search!')
-      this.renderComponent = false
-      return
-    }
-    this.countDevice = (this.title.match(/device:/g) || []).length
-    if (this.countDevice >= 2) {
-      window.alert('Groups can only be listed once in a search!')
-      this.renderComponent = false
-    }
-    this.renderComponent = false
     if (!this.useRoutes) {
+      this.count = (this.title.match(/group:/g) || []).length
+      if (this.count >= 2) {
+        window.alert('Groups can only be listed once in a search!')
+        this.renderComponent = false
+        return
+      }
+      this.countDevice = (this.title.match(/device:/g) || []).length
+      if (this.countDevice >= 2) {
+        window.alert('Groups can only be listed once in a search!')
+        this.renderComponent = false
+      }
+      this.renderComponent = false
       this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'search/' + this.title))
       console.log(this.objectTemplates)
     } else {

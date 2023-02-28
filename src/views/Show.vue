@@ -4,15 +4,18 @@
       <TableComponent />
     </div>
   </div>
+  <FooterComponent />
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import TableComponent from '@/components/TableComponent.vue' // @ is an alias to /src
+import FooterComponent from '@/components/showComponents/FooterComponent.vue' // @ is an alias to /src
 
 @Options({
   components: {
-    TableComponent
+    TableComponent,
+    FooterComponent
   }
 })
 export default class Show extends Vue {}

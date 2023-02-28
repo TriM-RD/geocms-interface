@@ -4,23 +4,25 @@ import { SubObjectTypeEnum } from '../events/types/subObjectType'
 import { MechanicAbstract } from './mechanicAbstract'
 import http from '@/http-common'
 import { StatType } from '../events/types/statType'
-import { ActionTypeEnum, RegionEnum } from '@/interface/manager/events/types/index'
+import { ActionTypeEnum, RegionEnum, RegionType } from '@/interface/manager/events/types/index'
 import { EventHandlerType } from '../events/types/objectTypes/types'
 import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
+import router from '@/router'
 
 export namespace Manager.Mechanic{
 
   export class TableMechanic extends MechanicAbstract {
     private page = 0
+    private reverseOrder = false
     private lastPageReached = false
     public async InitGet (_id: string, _api: string): Promise<ObjectTemplate[]> {
       if (this.lastPageReached) { return [] }
-      if (this.page > 0) { this.refreshPage() }
+      if (this.page > 0) { this.loadNextPage() }
       this.page++
       this.ObjectTemplates = []
       console.log(performance.now())
-      const response = await http.get(`${process.env.VUE_APP_BASE_URL + _api}?page=${this.page}`)
+      const response = await http.get(`${process.env.VUE_APP_BASE_URL + _api}?page=${this.page}&order=asc`)
       console.log(response)
       if (Object.keys(response.data).length !== 0) {
         console.log(performance.now())
@@ -28,7 +30,6 @@ export namespace Manager.Mechanic{
         console.log(performance.now())
         return this.ObjectTemplates
       } else {
-        console.log('test')
         this.lastPageReached = true
         return []
       }
@@ -61,7 +62,6 @@ export namespace Manager.Mechanic{
         }
       }
       if (append !== null) { temp = Object.assign(temp, append) }
-      // console.log(temp)
       return temp
     }
 
@@ -70,30 +70,51 @@ export namespace Manager.Mechanic{
       return this.ObjectTemplates
     }
 
+    loadNextPage () {
+      useToast()({
+        component: ToastComponent,
+        props: {
+          msg: { info: 'Loading next set of data.' }
+        }
+      }, {
+        type: TYPE.INFO
+      })
+      this.refreshPage()
+    }
+
     refreshPage () {
       if (this.mechanicInvoked !== null) {
-        useToast()({
-          component: ToastComponent,
-          props: {
-            msg: { info: 'Loading next set of data.' }
-          }
-        }, {
-          type: TYPE.INFO
-        })
-        this.mechanicInvoked.dispatch(true)
+        this.mechanicInvoked.dispatch(this.reverseOrder)
+        this.reverseOrder = false
       }
     }
 
     protected SubscribeConditions (): void {
-      // RegionType.RegionTypes[RegionEnum.Table].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
+      RegionType.RegionTypes[RegionEnum.Footer].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
     }
 
     public UnsubscribeConditions () {
-      // RegionType.RegionTypes[RegionEnum.Table].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
+      RegionType.RegionTypes[RegionEnum.Footer].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
     }
 
     protected Button (_eventHandler: EventHandlerType): void {
-      console.log('not implemented')
+      switch (router.currentRoute.value.name) {
+        case 'Group':
+        case 'Division':
+          switch (_eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Middle:
+              this.reverseOrder = true
+              useToast()({
+                component: ToastComponent,
+                props: { msg: { title: 'Resorting...', info: 'Re-sorted names in table.' } }
+              }, {
+                type: TYPE.INFO
+              })
+              this.refreshPage()
+              break
+          }
+          break
+      }
     }
   }
 
