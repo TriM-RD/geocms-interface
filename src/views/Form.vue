@@ -11,7 +11,6 @@ import { Options, Vue } from 'vue-class-component'
 import FormComponent from '@/components/FormComponent.vue'
 import TableComponent from '@/components/TableComponent.vue'
 import FooterComponent from '@/components/showComponents/FooterComponent.vue'
-import http from '@/http-common'
 import router from '@/router'
 
 @Options({
@@ -23,13 +22,9 @@ import router from '@/router'
 })
 export default class Form extends Vue {
   renderTable = false
-  renderECabinet = false
 
   mounted () {
     switch (router.currentRoute.value.name) {
-      case 'DeviceEdit':
-        this.renderECabinet = true
-        break
       case 'GroupEdit':
       case 'GroupAdd':
         this.renderTable = true

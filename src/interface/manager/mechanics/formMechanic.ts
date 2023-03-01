@@ -26,7 +26,6 @@ export namespace Manager.Mechanic{
       }
       const response = await http.get(process.env.VUE_APP_BASE_URL + _route + '/' + this.id)
       if (response.data.id !== undefined) {
-        console.log(response.data.id)
         await router.push({
           name: 'DeviceEdit',
           params: { id: response.data.id }
@@ -38,29 +37,6 @@ export namespace Manager.Mechanic{
         return new ObjectTemplate(_object.Region, _object.ObjectEnum,
           _object.SubObjectEnum, _object.ActionEnum, this.reStructure(_object.Stats))
       }))
-    }
-
-    private forEachElement (data: any) : ObjectTemplate[] {
-      let _temp: ObjectTemplate[] = []
-      data.forEach((_list: any) => {
-        _temp = _temp.concat(_list.map((_object: any) => {
-          return new ObjectTemplate(_object.Region, _object.ObjectEnum, _object.SubObjectEnum, _object.ActionEnum, this.reStructure(_object.Stats))
-        }))
-      })
-      return _temp
-    }
-
-    private reStructure (stats: any, append: any = null): any {
-      let temp = {}
-      // console.log(stats)
-      // stats.forEach((_stat : any, _index: number) => { if (_stat !== undefined) temp = Object.assign(temp, { [_index]: StatType.StatTypes[_index]().CreateStat().InitData(_stat.Data != null ? _stat.Data : '') }) })
-      for (let i = 0; i < Object.keys(StatType.StatTypes).length; i++) {
-        if (stats[i] !== undefined) {
-          temp = Object.assign(temp, { [i]: StatType.StatTypes[i]().CreateStat().InitData(stats[i].Data != null ? stats[i].Data : '') })
-        }
-      }
-      if (append !== null) { temp = Object.assign(temp, append) }
-      return temp
     }
 
     public InitSet (_objectTemplates: ObjectTemplate[]): ObjectTemplate[] {
@@ -84,25 +60,6 @@ export namespace Manager.Mechanic{
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectList].NullifyLogic()
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.ECabinetRow].NullifyLogic()
       MechanicAbstract.instance = null
-    }
-
-    refreshPage () {
-      if (this.mechanicInvoked !== null) {
-        this.mechanicInvoked.dispatch(true)
-      }
-    }
-
-    private compare (objectToCompare: ObjectTemplate): number {
-      let answer = -1
-      for (let i = 0; i < this.ObjectTemplates.length; i++) {
-        if (this.ObjectTemplates[i].Stats[StatTypeEnum.Value] !== undefined) {
-          if (this.ObjectTemplates[i].Stats[StatTypeEnum.Value].Data === objectToCompare.Stats[StatTypeEnum.Value].Data) {
-            answer = i
-            return answer
-          }
-        }
-      }
-      return answer
     }
 
     protected async DataList (eventHandler: EventHandlerType): Promise<void> {
@@ -158,7 +115,6 @@ export namespace Manager.Mechanic{
     }
 
     protected async Button (eventHandler: EventHandlerType): Promise<void> {
-      console.log('testButton')
       let rowCount = 0
       let rowsExist = false
       switch (router.currentRoute.value.name) {
@@ -188,8 +144,6 @@ export namespace Manager.Mechanic{
                   [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('ecabinetRow'),
                   [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(rowCount.toString()),
                   [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData('')
-                  /* [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(''),
-                  [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.Id].Data) */
                 })
               ])
               this.refreshPage()
@@ -283,11 +237,8 @@ export namespace Manager.Mechanic{
               break
             case SubObjectTypeEnum.Down:
               this.refreshPage()
-              /* console.log(eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
-              console.log(JSON.parse(JSON.stringify(this.ObjectTemplates))) */
               this.ObjectTemplates.splice(this.ObjectTemplates.findIndex(
                 element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data), 1)
-              // console.log(this.ObjectTemplates)
               this.refreshPage()
               break
             default:

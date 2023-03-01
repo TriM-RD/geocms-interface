@@ -4,12 +4,13 @@ import { SubObjectTypeEnum } from '../events/types/subObjectType'
 import { MechanicAbstract } from './mechanicAbstract'
 import http from '@/http-common'
 import { StatType, StatTypeEnum } from '../events/types/statType'
-import { RegionEnum, ActionTypeEnum, RegionType } from '@/interface/manager/events/types/index'
+import { RegionEnum, ActionTypeEnum, RegionType } from '@/interface/manager/events/types'
 import { EventHandlerType } from '../events/types/objectTypes/types'
 
 export namespace Manager.Mechanic{
 
   export class ListMechanic extends MechanicAbstract {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public async InitGet (_id = '-1', _route: string): Promise<ObjectTemplate[]> {
       this.ObjectTemplates = []
       const response = await http.get(process.env.VUE_APP_BASE_URL + _route)
@@ -31,7 +32,7 @@ export namespace Manager.Mechanic{
       return _temp
     }
 
-    private reStructure (stats: any): any {
+    protected reStructure (stats: any): any {
       let temp = {}
       stats.forEach((_stat : any, _index: number) => { temp = Object.assign(temp, { [_index]: StatType.StatTypes[_index]().CreateStat().InitData(_stat.Data != null ? _stat.Data : '') }) })
       return temp
@@ -46,10 +47,11 @@ export namespace Manager.Mechanic{
       // RegionType.RegionTypes[RegionEnum.Table].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
     }
 
-    public UnsubscribeConditions () {
+    public UnsubscribeConditions (): void {
       // RegionType.RegionTypes[RegionEnum.Table].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     protected Button (_eventHandler: EventHandlerType): void {
       throw new Error('Method not implemented.')
     }

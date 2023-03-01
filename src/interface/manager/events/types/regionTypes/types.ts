@@ -35,7 +35,8 @@ export namespace Manager.Events.Type{
   export class Table extends RegionAbstract {
     public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
     {
-      [ObjectTypeEnum.Row]: new ObjectTypeAbstract.Events.Type.Row()
+      [ObjectTypeEnum.Row]: new ObjectTypeAbstract.Events.Type.Row(),
+      [ObjectTypeEnum.Button]: new ObjectTypeAbstract.Events.Type.Button()
     }
   }
 

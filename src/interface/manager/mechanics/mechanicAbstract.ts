@@ -2,15 +2,16 @@ import { ObjectTemplate } from '../containerClasses/objectTemplate'
 import { EventHandlerType } from '../events/types/objectTypes/types'
 import { SubObjectTypeEnum } from '../events/types/subObjectType'
 import { SimpleEventDispatcher } from 'ste-simple-events'
-import { StatTypeEnum } from '@/interface/manager/events/types'
+import { StatType, StatTypeEnum } from '@/interface/manager/events/types'
 
 export type MechanicDelegate = (eventHandler: boolean) => void;
 
 export abstract class MechanicAbstract {
+  public ObjectTemplates!: ObjectTemplate[];
   protected static instance: MechanicAbstract | null;
   protected mechanicInvoked: SimpleEventDispatcher<boolean> = new SimpleEventDispatcher<boolean>();
   protected abstract SubscribeConditions() : void;
-  public abstract UnsubscribeConditions() : any;
+  public abstract UnsubscribeConditions() : void;
   protected abstract Button(eventHandler: EventHandlerType) : void;
   constructor (_mechanicCallback: MechanicDelegate | null = null) {
     this.SubscribeToVueComponent(_mechanicCallback)
@@ -37,7 +38,7 @@ export abstract class MechanicAbstract {
     return this.ObjectTemplates
   }
 
-  protected removeElementFromArray (arr: Array<any>, belongsTo: string) {
+  protected removeElementFromArray (arr: Array<any>, belongsTo: string) : void {
     (() => {
       // Perform the array update
       for (let i = arr.length - 1; i >= 0; i--) {
@@ -50,5 +51,20 @@ export abstract class MechanicAbstract {
     })()
   }
 
-  public ObjectTemplates!: ObjectTemplate[];
+  protected reStructure (stats: any, append: any = null): any {
+    let temp = {}
+    for (let i = 0; i < Object.keys(StatType.StatTypes).length; i++) {
+      if (stats[i] !== undefined) {
+        temp = Object.assign(temp, { [i]: StatType.StatTypes[i]().CreateStat().InitData(stats[i].Data != null ? stats[i].Data : '') })
+      }
+    }
+    if (append !== null) { temp = Object.assign(temp, append) }
+    return temp
+  }
+
+  protected refreshPage (): void {
+    if (this.mechanicInvoked !== null) {
+      this.mechanicInvoked.dispatch(true)
+    }
+  }
 }

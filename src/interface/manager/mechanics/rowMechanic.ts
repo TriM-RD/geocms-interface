@@ -1,13 +1,12 @@
 import { ObjectTemplate } from '../containerClasses/objectTemplate'
-import { ObjectType, ObjectTypeEnum } from '../events/types/objectType'
+import { ObjectTypeEnum } from '../events/types/objectType'
 import { SubObjectTypeEnum } from '../events/types/subObjectType'
 import { MechanicAbstract, MechanicDelegate } from './mechanicAbstract'
 import http from '@/http-common'
 import { StatType, StatTypeEnum } from '../events/types/statType'
-import { RegionEnum, ActionTypeEnum, RegionType } from '@/interface/manager/events/types/index'
+import { RegionEnum, ActionTypeEnum, RegionType } from '@/interface/manager/events/types'
 import router from '@/router'
 import { EventHandlerType } from '../events/types/objectTypes/types'
-import { routerKey, useRouter } from 'vue-router'
 import { useToast, TYPE } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
 
@@ -30,18 +29,10 @@ export namespace Manager.Mechanic{
       return _temp
     }
 
-    private reStructure (stats: any): any {
+    protected reStructure (stats: any): any {
       let temp = {}
-      // temp = Object.assign(temp, { [_index]: StatType.StatTypes[_index]().CreateStat().InitData(_stat.Data != null ? _stat.Data : '') })
       stats.forEach((_stat : any, _index: number) => { temp = Object.assign(temp, { [_index]: StatType.StatTypes[_index]().CreateStat().InitData(_stat.Data != null ? _stat.Data : '') }) })
       return temp
-    }
-
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    refreshPage () {
-      if (this.mechanicInvoked !== null) {
-        this.mechanicInvoked.dispatch(true)
-      }
     }
 
     public InitSet (_objectTemplates: ObjectTemplate[]): ObjectTemplate[] {
@@ -56,7 +47,7 @@ export namespace Manager.Mechanic{
       RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
     }
 
-    public UnsubscribeConditions () {
+    public UnsubscribeConditions (): void {
       RegionType.RegionTypes[RegionEnum.TableColumn].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
       MechanicAbstract.instance = null
     }

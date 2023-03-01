@@ -3,8 +3,7 @@ import { ObjectTypeEnum } from '../events/types/objectType'
 import { SubObjectTypeEnum } from '../events/types/subObjectType'
 import { MechanicAbstract } from './mechanicAbstract'
 import http from '@/http-common'
-import { StatType } from '../events/types/statType'
-import { ActionTypeEnum, RegionEnum, RegionType } from '@/interface/manager/events/types/index'
+import { ActionTypeEnum, RegionEnum, RegionType } from '@/interface/manager/events/types'
 import { EventHandlerType } from '../events/types/objectTypes/types'
 import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
@@ -16,18 +15,15 @@ export namespace Manager.Mechanic{
     private page = 0
     private reverseOrder = false
     private lastPageReached = false
+
     public async InitGet (_id: string, _api: string): Promise<ObjectTemplate[]> {
       if (this.lastPageReached) { return [] }
       if (this.page > 0) { this.loadNextPage() }
       this.page++
       this.ObjectTemplates = []
-      console.log(performance.now())
       const response = await http.get(`${process.env.VUE_APP_BASE_URL + _api}?page=${this.page}&order=asc`)
-      console.log(response)
       if (Object.keys(response.data).length !== 0) {
-        console.log(performance.now())
         this.ObjectTemplates = await this.forEachElement(response.data)
-        console.log(performance.now())
         return this.ObjectTemplates
       } else {
         this.lastPageReached = true
@@ -52,25 +48,12 @@ export namespace Manager.Mechanic{
       })
     }
 
-    private reStructure (stats: any, append: any = null): any {
-      let temp = {}
-      // console.log(stats)
-      // stats.forEach((_stat : any, _index: number) => { if (_stat !== undefined) temp = Object.assign(temp, { [_index]: StatType.StatTypes[_index]().CreateStat().InitData(_stat.Data != null ? _stat.Data : '') }) })
-      for (let i = 0; i < Object.keys(StatType.StatTypes).length; i++) {
-        if (stats[i] !== undefined) {
-          temp = Object.assign(temp, { [i]: StatType.StatTypes[i]().CreateStat().InitData(stats[i].Data != null ? stats[i].Data : '') })
-        }
-      }
-      if (append !== null) { temp = Object.assign(temp, append) }
-      return temp
-    }
-
     public InitSet (_objectTemplates: ObjectTemplate[]): ObjectTemplate[] {
       this.ObjectTemplates = _objectTemplates
       return this.ObjectTemplates
     }
 
-    loadNextPage () {
+    loadNextPage (): void {
       useToast()({
         component: ToastComponent,
         props: {
@@ -82,7 +65,7 @@ export namespace Manager.Mechanic{
       this.refreshPage()
     }
 
-    refreshPage () {
+    refreshPage (): void {
       if (this.mechanicInvoked !== null) {
         this.mechanicInvoked.dispatch(this.reverseOrder)
         this.reverseOrder = false
@@ -90,11 +73,11 @@ export namespace Manager.Mechanic{
     }
 
     protected SubscribeConditions (): void {
-      RegionType.RegionTypes[RegionEnum.Footer].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
+      RegionType.RegionTypes[RegionEnum.Table].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
     }
 
-    public UnsubscribeConditions () {
-      RegionType.RegionTypes[RegionEnum.Footer].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
+    public UnsubscribeConditions (): void {
+      RegionType.RegionTypes[RegionEnum.Table].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
     }
 
     protected Button (_eventHandler: EventHandlerType): void {
@@ -102,7 +85,7 @@ export namespace Manager.Mechanic{
         case 'Group':
         case 'Division':
           switch (_eventHandler.subObjectType) {
-            case SubObjectTypeEnum.Middle:
+            case SubObjectTypeEnum.Left:
               this.reverseOrder = true
               useToast()({
                 component: ToastComponent,
