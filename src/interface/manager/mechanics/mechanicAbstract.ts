@@ -38,6 +38,13 @@ export abstract class MechanicAbstract {
     return this.ObjectTemplates
   }
 
+  public Splice (index: number, _objectTemplates: ObjectTemplate[]) : ObjectTemplate[] {
+    for (const element of _objectTemplates) {
+      this.ObjectTemplates.splice(index, 0, element)
+    }
+    return this.ObjectTemplates
+  }
+
   protected removeElementFromArray (arr: Array<any>, belongsTo: string) : void {
     (() => {
       // Perform the array update
