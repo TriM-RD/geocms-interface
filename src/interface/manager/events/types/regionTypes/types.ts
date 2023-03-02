@@ -1,5 +1,5 @@
 import { StatChangeDel } from '@/interface/manager/containerClasses/statChangeEventArgs'
-import { ObjectTypeEnum, ObjectType } from '../objectType'
+import { ObjectTypeEnum } from '../objectType'
 import { SubObjectTypeEnum } from '../subObjectType'
 import { Manager as ObjectTypeAbstract } from '../objectTypes/types'
 
@@ -52,14 +52,14 @@ export namespace Manager.Events.Type{
   export class Show extends RegionAbstract {
     public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
       {
-        [ObjectTypeEnum.ShowResolve]: new ObjectTypeAbstract.Events.Type.ShowResolve()
+        // [ObjectTypeEnum.ShowResolve]: new ObjectTypeAbstract.Events.Type.ShowResolve()
       }
   }
 
   export class TableRow extends RegionAbstract {
     public ObjectTypes: { [index: number]: ObjectTypeAbstract.Events.Type.ObjectTypeAbstract } =
       {
-        [ObjectTypeEnum.ShowResolve]: new ObjectTypeAbstract.Events.Type.ShowResolve()
+        // [ObjectTypeEnum.ShowResolve]: new ObjectTypeAbstract.Events.Type.ShowResolve()
       }
   }
 

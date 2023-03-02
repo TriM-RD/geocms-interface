@@ -1,10 +1,10 @@
 import { ObjectTemplate } from '../containerClasses/objectTemplate'
-import { ObjectType, ObjectTypeEnum } from '../events/types/objectType'
+import { ObjectTypeEnum } from '../events/types/objectType'
 import { SubObjectTypeEnum } from '../events/types/subObjectType'
 import { MechanicAbstract } from './mechanicAbstract'
 import http from '@/http-common'
 import { StatType, StatTypeEnum } from '../events/types/statType'
-import { RegionEnum, ActionTypeEnum, RegionType } from '@/interface/manager/events/types'
+import { RegionEnum } from '@/interface/manager/events/types'
 import { EventHandlerType } from '../events/types/objectTypes/types'
 
 export namespace Manager.Mechanic{

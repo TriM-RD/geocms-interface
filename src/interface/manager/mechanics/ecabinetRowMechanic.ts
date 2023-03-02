@@ -1,13 +1,11 @@
 import { ObjectTemplate } from '../containerClasses/objectTemplate'
-import { ObjectType, ObjectTypeEnum } from '../events/types/objectType'
+import { ObjectTypeEnum } from '../events/types/objectType'
 import { SubObjectTypeEnum } from '../events/types/subObjectType'
 import { MechanicAbstract, MechanicDelegate } from './mechanicAbstract'
-import http from '@/http-common'
-import { StatType, StatTypeEnum } from '../events/types/statType'
-import { RegionEnum, ActionTypeEnum, RegionType } from '@/interface/manager/events/types/index'
+import { StatTypeEnum } from '../events/types/statType'
+import { RegionEnum, RegionType } from '@/interface/manager/events/types'
 import router from '@/router'
 import { EventHandlerType } from '../events/types/objectTypes/types'
-import { routerKey, useRouter } from 'vue-router'
 
 export namespace Manager.Mechanic{
 

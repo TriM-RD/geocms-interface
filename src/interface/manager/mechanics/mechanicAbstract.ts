@@ -1,6 +1,5 @@
 import { ObjectTemplate } from '../containerClasses/objectTemplate'
 import { EventHandlerType } from '../events/types/objectTypes/types'
-import { SubObjectTypeEnum } from '../events/types/subObjectType'
 import { SimpleEventDispatcher } from 'ste-simple-events'
 import { StatType, StatTypeEnum } from '@/interface/manager/events/types'
 

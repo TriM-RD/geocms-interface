@@ -1,11 +1,6 @@
 import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
 import { LogicDelegate } from '../objectTypes/types'
 import { StatTypeEnum } from '../statType'
-import { SubObjectTypeEnum } from '../subObjectType'
-import http from '@/http-common'
-import router from '@/router'
-import { RegionEnum } from '../region'
-import { ObjectType } from '../objectType'
 
 export namespace Manager.Events.Type{
 
@@ -80,7 +75,7 @@ export namespace Manager.Events.Type{
 
     public async Enact (_data : any): Promise<any> {
       if (_data < 1 || _data > 100) {
-        alert('Broj uređaja mora biti veći od 1 i manji od 100')
+        // alert('Broj uređaja mora biti veći od 1 i manji od 100')
         return ''
       }
       return await _data

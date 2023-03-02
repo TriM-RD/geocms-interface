@@ -19,7 +19,7 @@ export namespace Manager.Events.Type{
       }
 
       public CheckRequirements (_object: any): void {
-        alert(this.Data)
+        console.log(this.Data)
       }
     }
 
@@ -39,7 +39,7 @@ export namespace Manager.Events.Type{
       }
 
       public CheckRequirements (_object: any): void {
-        alert(this.Data)
+        console.log(this.Data)
       }
     }
 
@@ -49,7 +49,7 @@ export namespace Manager.Events.Type{
       }
 
       public CheckRequirements (_object: any): void {
-        alert(this.Data)
+        console.log(this.Data)
       }
     }
 
@@ -59,7 +59,7 @@ export namespace Manager.Events.Type{
       }
 
       public CheckRequirements (_object: any): void {
-        alert(this.Data)
+        console.log(this.Data)
       }
     }
 
@@ -69,7 +69,7 @@ export namespace Manager.Events.Type{
     }
 
     public CheckRequirements (_object: any): void {
-      alert(this.Data)
+      console.log(this.Data)
     }
   }
 
@@ -79,7 +79,7 @@ export namespace Manager.Events.Type{
     }
 
     public CheckRequirements (_object: any): void {
-      alert(this.Data)
+      console.log(this.Data)
     }
   }
 
@@ -89,7 +89,7 @@ export namespace Manager.Events.Type{
     }
 
     public CheckRequirements (_object: any): void {
-      alert(this.Data)
+      console.log(this.Data)
     }
   }
 
@@ -99,7 +99,7 @@ export namespace Manager.Events.Type{
     }
 
     public CheckRequirements (_object: any): void {
-      alert(this.Data)
+      console.log(this.Data)
     }
   }
 
@@ -109,7 +109,7 @@ export namespace Manager.Events.Type{
     }
 
     public CheckRequirements (_object: any): void {
-      alert(this.Data)
+      console.log(this.Data)
     }
   }
 
@@ -119,7 +119,7 @@ export namespace Manager.Events.Type{
     }
 
     public CheckRequirements (_object: any): void {
-      alert(this.Data)
+      console.log(this.Data)
     }
   }
 
@@ -129,7 +129,7 @@ export namespace Manager.Events.Type{
     }
 
     public CheckRequirements (_object: any): void {
-      alert(this.Data)
+      console.log(this.Data)
     }
   }
 
@@ -139,7 +139,7 @@ export namespace Manager.Events.Type{
     }
 
     public CheckRequirements (_object: any): void {
-      alert(this.Data)
+      console.log(this.Data)
     }
   }
 
@@ -149,7 +149,7 @@ export namespace Manager.Events.Type{
     }
 
     public CheckRequirements (_object: any): void {
-      alert(this.Data)
+      console.log(this.Data)
     }
   }
 
@@ -159,7 +159,7 @@ export namespace Manager.Events.Type{
     }
 
     public CheckRequirements (_object: any): void {
-      alert(this.Data)
+      console.log(this.Data)
     }
   }
 
