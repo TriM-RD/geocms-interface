@@ -10,4 +10,4 @@ export class StatChangeEventArgs {
     }
 }
 
-export type StatChangeDel = (e: StatChangeEventArgs) => void;
+export type StatChangeDel = (e: StatChangeEventArgs) => void

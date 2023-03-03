@@ -6,8 +6,8 @@ import { RegionEnum, RegionType } from '../events/types/region'
 import { StatChangeEventArgs } from './statChangeEventArgs'
 
 export class ObjectTemplate {
-  public Region!: RegionEnum;
-  public ObjectEnum!: ObjectTypeEnum;
+  public Region!: RegionEnum
+  public ObjectEnum!: ObjectTypeEnum
   public SubObjectEnum!: SubObjectTypeEnum
   public ActionEnum!: ActionTypeEnum
   public Stats: { [index: number]: Manager.Events.Type.StatAbstract } = { }

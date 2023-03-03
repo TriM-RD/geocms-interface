@@ -1,4 +1,4 @@
-import { StatChangeDel } from '@/interface/manager/containerClasses/statChangeEventArgs'
+import { StatChangeDel } from '../../../containerClasses/statChangeEventArgs'
 import { ObjectTypeEnum } from '../objectType'
 import { SubObjectTypeEnum } from '../subObjectType'
 import { Manager as ObjectTypeAbstract } from '../objectTypes/types'

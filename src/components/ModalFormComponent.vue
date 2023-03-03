@@ -29,16 +29,16 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
 import { Manager } from '@/interface/manager/mechanics/modalFormMechanic'
-import { MechanicAbstract } from '@/interface/manager/mechanics/mechanicAbstract'
 import {
-  ActionTypeEnum,
+  ObjectTemplate,
+  MechanicAbstract,
+  StatTypeEnum,
   ObjectTypeEnum,
+  RegionType,
   RegionEnum,
-  RegionType, StatType, StatTypeEnum,
-  SubObjectTypeEnum
-} from '@/interface/manager/events/types'
+  SubObjectTypeEnum, ActionTypeEnum, StatType
+} from 'cyber-interface'
 import Loading from 'vue-loading-overlay'
 import router from '@/router'
 @Options({

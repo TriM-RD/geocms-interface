@@ -1,4 +1,4 @@
-import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
+import { ObjectTemplate } from '../../../containerClasses/objectTemplate'
 import { LogicDelegate } from '../objectTypes/types'
 import { StatTypeEnum } from '../statType'
 

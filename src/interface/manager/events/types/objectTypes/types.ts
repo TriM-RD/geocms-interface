@@ -1,26 +1,26 @@
 import { SubObjectTypeEnum, SubObjectType } from '../subObjectType'
-import { StatChangeDel, StatChangeEventArgs } from '@/interface/manager/containerClasses/statChangeEventArgs'
+import { StatChangeDel, StatChangeEventArgs } from '../../../containerClasses/statChangeEventArgs'
 import { SimpleEventDispatcher } from 'ste-simple-events'
 import { StatTypeEnum } from '../statType'
-import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
+import { ObjectTemplate } from '../../../containerClasses/objectTemplate'
 
 export type EventHandlerType = {subObjectType: SubObjectTypeEnum, payload: any}
-export type LogicDelegate = (eventHandler: EventHandlerType) => void;
-export type ComponentDelegate = (getVueComponent: () => any) => void;
+export type LogicDelegate = (eventHandler: EventHandlerType) => void
+// export type ComponentDelegate = (getVueComponent: () => any) => void
 
 export namespace Manager.Events.Type{
 
     export abstract class ObjectTypeAbstract {
-       private LogicInvoked: SimpleEventDispatcher<EventHandlerType> = new SimpleEventDispatcher<EventHandlerType>();
-       protected static getVueComponent: () => any
+       private LogicInvoked: SimpleEventDispatcher<EventHandlerType> = new SimpleEventDispatcher<EventHandlerType>()
+       public static getVueComponent: () => any
        public static SetComponent (getVueComponent: () => any): void {
          throw new Error('Function not implemented')
        }
 
-       public abstract GetVueComponent (): any;
+       public abstract GetVueComponent (): any
 
       // protected abstract SubscribeCondition(sender: () => void) : void;
-      public abstract Subscribe(subObjectType:SubObjectTypeEnum, statChangeDel:StatChangeDel) : void;
+      public abstract Subscribe(subObjectType:SubObjectTypeEnum, statChangeDel:StatChangeDel) : void
 
       public InvokeStatChange (_statType: StatTypeEnum, _amount: any): void {
         throw new Error('Method not implemented.')
@@ -58,7 +58,7 @@ export namespace Manager.Events.Type{
    }
 
    abstract class IChangeStat extends ObjectTypeAbstract {
-    private StatChangeEvent:SimpleEventDispatcher<StatChangeEventArgs> = new SimpleEventDispatcher<StatChangeEventArgs>();
+    private StatChangeEvent:SimpleEventDispatcher<StatChangeEventArgs> = new SimpleEventDispatcher<StatChangeEventArgs>()
 
     public InvokeStatChange (_statType: StatTypeEnum, _amount: any) : void{
       this.StatChangeEvent.dispatch(new StatChangeEventArgs(_statType, _amount))

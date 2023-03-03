@@ -1,5 +1,5 @@
-import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
-import { StatChangeDel } from '@/interface/manager/containerClasses/statChangeEventArgs'
+import { ObjectTemplate } from '../../../containerClasses/objectTemplate'
+import { StatChangeDel } from '../../../containerClasses/statChangeEventArgs'
 import { ActionType } from '../actionType'
 import { LogicDelegate } from '../objectTypes/types'
 

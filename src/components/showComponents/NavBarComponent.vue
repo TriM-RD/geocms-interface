@@ -44,8 +44,14 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
-import { ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, RegionEnum } from '@/interface/manager/events/types'
+import {
+  ObjectTemplate,
+  ObjectType,
+  StatTypeEnum,
+  ObjectTypeEnum,
+  RegionType,
+  RegionEnum
+} from 'cyber-interface'
 import http from '@/http-common'
 import Search from '@/components/Search.vue'
 import { Watch } from 'vue-property-decorator'

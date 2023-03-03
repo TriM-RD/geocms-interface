@@ -13,10 +13,13 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
 import { Manager } from '@/interface/manager/mechanics/listMechanic'
-import { MechanicAbstract } from '@/interface/manager/mechanics/mechanicAbstract'
-import { StatTypeEnum, RegionType } from '@/interface/manager/events/types'
+import {
+  ObjectTemplate,
+  MechanicAbstract,
+  StatTypeEnum,
+  RegionType
+} from 'cyber-interface'
 
 @Options({
   props: {

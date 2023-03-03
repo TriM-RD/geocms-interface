@@ -33,10 +33,16 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import { MapboxMap, MapboxMarker, MapboxGeolocateControl } from 'vue-mapbox-ts'
-import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
 import { Manager } from '@/interface/manager/mechanics/mapPickerMechanic'
-import { MechanicAbstract } from '@/interface/manager/mechanics/mechanicAbstract'
-import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatTypeEnum, StatType, ObjectType, RegionType } from '@/interface/manager/events/types/index'
+import {
+  ObjectTemplate,
+  MechanicAbstract,
+  ObjectType,
+  StatTypeEnum,
+  ObjectTypeEnum,
+  RegionType,
+  RegionEnum
+} from 'cyber-interface'
 import router from '@/router'
 import Loading from 'vue-loading-overlay'
 @Options({

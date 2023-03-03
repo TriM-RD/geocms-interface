@@ -13,8 +13,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
-import { ObjectType, StatTypeEnum, ObjectTypeEnum } from '@/interface/manager/events/types/index'
+import { ObjectTemplate, ObjectType, StatTypeEnum, ObjectTypeEnum } from 'cyber-interface'
 @Options({
   props: {
     object: ObjectTemplate

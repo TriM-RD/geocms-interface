@@ -1,18 +1,18 @@
 import { ObjectTemplate } from '../containerClasses/objectTemplate'
 import { EventHandlerType } from '../events/types/objectTypes/types'
 import { SimpleEventDispatcher } from 'ste-simple-events'
-import { StatType, StatTypeEnum } from '@/interface/manager/events/types'
+import { StatType, StatTypeEnum } from '../events/types'
 
-export type MechanicDelegate = (eventHandler: boolean) => void;
+export type MechanicDelegate = (eventHandler: boolean) => void
 
 export abstract class MechanicAbstract {
-  public ObjectTemplates!: ObjectTemplate[];
-  protected static instance: MechanicAbstract | null;
-  protected mechanicInvoked: SimpleEventDispatcher<boolean> = new SimpleEventDispatcher<boolean>();
-  protected abstract SubscribeConditions() : void;
-  public abstract UnsubscribeConditions() : void;
-  protected abstract Button(eventHandler: EventHandlerType) : void;
-  constructor (_mechanicCallback: MechanicDelegate | null = null) {
+  public ObjectTemplates!: ObjectTemplate[]
+  protected static instance: MechanicAbstract | null
+  protected mechanicInvoked: SimpleEventDispatcher<boolean> = new SimpleEventDispatcher<boolean>()
+  protected abstract SubscribeConditions() : void
+  public abstract UnsubscribeConditions() : void
+  protected abstract Button(eventHandler: EventHandlerType) : void
+  public constructor (_mechanicCallback: MechanicDelegate | null = null) {
     this.SubscribeToVueComponent(_mechanicCallback)
     this.SubscribeConditions()
   }
@@ -26,9 +26,9 @@ export abstract class MechanicAbstract {
     return null
   }
 
-  public abstract InitGet (_id: string, _api: string): Promise<ObjectTemplate[]>;
+  public abstract InitGet (_id: string, _api: string): Promise<ObjectTemplate[]>
 
-  public abstract InitSet(_objectTemplates: ObjectTemplate[]) : ObjectTemplate[];
+  public abstract InitSet(_objectTemplates: ObjectTemplate[]) : ObjectTemplate[]
 
   public Append (_objectTemplates: ObjectTemplate[]) : ObjectTemplate[] {
     for (const element of _objectTemplates) {

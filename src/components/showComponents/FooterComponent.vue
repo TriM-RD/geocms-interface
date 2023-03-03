@@ -9,18 +9,17 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import { Watch } from 'vue-property-decorator'
-import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
 import {
+  ObjectTemplate,
+  MechanicAbstract,
   ObjectType,
   StatTypeEnum,
   ObjectTypeEnum,
   RegionType,
   RegionEnum,
   SubObjectTypeEnum, ActionTypeEnum, StatType
-} from '@/interface/manager/events/types'
-import { MechanicAbstract } from '@/interface/manager/mechanics/mechanicAbstract'
+} from 'cyber-interface'
 import { Manager } from '@/interface/manager/mechanics/footerMechanic'
-import router from '@/router'
 @Options({
   props: {
     object: ObjectTemplate

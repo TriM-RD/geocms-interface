@@ -1,6 +1,4 @@
-import { ObjectTemplate } from '../containerClasses/objectTemplate'
-import { MechanicAbstract } from './mechanicAbstract'
-import { EventHandlerType } from '../events/types/objectTypes/types'
+import { MechanicAbstract, ObjectTemplate, EventHandlerType } from 'cyber-interface'
 
 export namespace Manager.Mechanic{
 

@@ -107,7 +107,7 @@ import http from '@/http-common'
 import { v4 as uuidv4 } from 'uuid'
 import { Options, Vue } from 'vue-class-component'
 import Loading from 'vue-loading-overlay'
-import { MechanicAbstract } from '@/interface/manager/mechanics/mechanicAbstract'
+import { MechanicAbstract } from 'cyber-interface'
 import { Manager } from '@/interface/manager/mechanics/permissionMechanic'
 @Options({
   components: {

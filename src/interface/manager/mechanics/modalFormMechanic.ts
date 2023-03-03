@@ -1,11 +1,5 @@
-import { ObjectTemplate } from '../containerClasses/objectTemplate'
-import { ObjectTypeEnum } from '../events/types/objectType'
-import { SubObjectTypeEnum } from '../events/types/subObjectType'
-import { MechanicAbstract, MechanicDelegate } from './mechanicAbstract'
 import http from '@/http-common'
-import { StatTypeEnum } from '../events/types/statType'
-import { RegionEnum, RegionType } from '../events/types/region'
-import { EventHandlerType } from '../events/types/objectTypes/types'
+import { EventHandlerType, ObjectTemplate, ObjectTypeEnum, SubObjectTypeEnum, MechanicAbstract, MechanicDelegate, StatTypeEnum, RegionEnum, RegionType } from 'cyber-interface'
 import router from '@/router'
 
 export namespace Manager.Mechanic{

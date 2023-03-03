@@ -8,7 +8,6 @@ import VueBlocksTree from 'vue3-blocks-tree'
 import 'vue3-blocks-tree/dist/vue3-blocks-tree.css'
 import Toast, { PluginOptions, POSITION, TYPE } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
-import { ObjectType, ObjectTypeEnum } from '@/interface/manager/events/types'
 import InputComponent from '@/components/formComponents/InputComponent.vue'
 import SubmitButtonComponent from '@/components/formComponents/SubmitButtonComponent.vue'
 import RowComponent from '@/components/RowComponent.vue'
@@ -29,9 +28,12 @@ import ModalFormComponent from '@/components/ModalFormComponent.vue'
 import MapPickerComponent from '@/components/MapPickerComponent.vue'
 import FieldCodeComponent from '@/components/FieldCodeComponent.vue'
 import DataSelectComponent from '@/components/DataSelectComponent.vue'
+import { RegionEnum, RegionType, ObjectType, ObjectTypeEnum } from '@/interface'
 
 const defaultOptions = { treeName: 'blocks-tree' }
+
 ObjectType.ObjectTypes[ObjectTypeEnum.Field](() => InputComponent)
+console.log(ObjectType.ObjectTypes[ObjectTypeEnum.Field])
 ObjectType.ObjectTypes[ObjectTypeEnum.Button](() => SubmitButtonComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.Row](() => RowComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.Text](() => TextAreaComponent)
@@ -51,6 +53,9 @@ ObjectType.ObjectTypes[ObjectTypeEnum.ModalForm](() => ModalFormComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.MapPicker](() => MapPickerComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.FieldCode](() => FieldCodeComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.DataSelect](() => DataSelectComponent)
+console.log(RegionType.RegionTypes[RegionEnum.Footer].ObjectTypes[ObjectTypeEnum.Button].GetVueComponent)
+console.log(RegionType.RegionTypes[RegionEnum.Footer].ObjectTypes[ObjectTypeEnum.Button].GetVueComponent)
+console.log(RegionType.RegionTypes[RegionEnum.Footer].ObjectTypes[ObjectTypeEnum.Button].GetVueComponent())
 
 const options: PluginOptions = {
   position: POSITION.TOP_RIGHT,

@@ -18,6 +18,9 @@
     "paths": {
       "@/*": [
         "src/*"
+      ],
+      "cyber-interface": [
+        "src/interface/index.ts"
       ]
     },
     "lib": [

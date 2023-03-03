@@ -6,10 +6,17 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { ObjectTemplate } from '@/interface/manager/containerClasses/objectTemplate'
 import { Manager } from '@/interface/manager/mechanics/listRowMechanic'
-import { MechanicAbstract } from '@/interface/manager/mechanics/mechanicAbstract'
-import { RegionEnum, ObjectTypeEnum, SubObjectTypeEnum, ActionTypeEnum, StatTypeEnum, StatType, ObjectType, RegionType } from '@/interface/manager/events/types/index'
+import {
+  ObjectTemplate,
+  MechanicAbstract,
+  ObjectType,
+  StatTypeEnum,
+  ObjectTypeEnum,
+  RegionType,
+  RegionEnum,
+  SubObjectTypeEnum, ActionTypeEnum, StatType
+} from 'cyber-interface'
 @Options({
   props: {
     object: ObjectTemplate,

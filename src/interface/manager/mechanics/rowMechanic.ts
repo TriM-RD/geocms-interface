@@ -1,12 +1,6 @@
-import { ObjectTemplate } from '../containerClasses/objectTemplate'
-import { ObjectTypeEnum } from '../events/types/objectType'
-import { SubObjectTypeEnum } from '../events/types/subObjectType'
-import { MechanicAbstract, MechanicDelegate } from './mechanicAbstract'
 import http from '@/http-common'
-import { StatType, StatTypeEnum } from '../events/types/statType'
-import { RegionEnum, ActionTypeEnum, RegionType } from '@/interface/manager/events/types'
 import router from '@/router'
-import { EventHandlerType } from '../events/types/objectTypes/types'
+import { EventHandlerType, RegionEnum, ActionTypeEnum, RegionType, StatType, StatTypeEnum, MechanicAbstract, MechanicDelegate, SubObjectTypeEnum, ObjectTypeEnum, ObjectTemplate } from 'cyber-interface'
 import { useToast, TYPE } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
 
