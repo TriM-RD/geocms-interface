@@ -51,7 +51,7 @@ import {
   ObjectTypeEnum,
   RegionType,
   RegionEnum
-} from 'cyber-interface'
+} from '@cybertale/interface'
 import http from '@/http-common'
 import Search from '@/components/Search.vue'
 import { Watch } from 'vue-property-decorator'

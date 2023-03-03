@@ -29,7 +29,7 @@ import {
   RegionType,
   RegionEnum,
   SubObjectTypeEnum, ActionTypeEnum, StatType
-} from 'cyber-interface'
+} from '@cybertale/interface'
 @Options({
   props: {
     object: ObjectTemplate,

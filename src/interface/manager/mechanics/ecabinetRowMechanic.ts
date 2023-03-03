@@ -1,4 +1,4 @@
-import { MechanicAbstract, MechanicDelegate, RegionEnum, RegionType, StatTypeEnum, EventHandlerType, SubObjectTypeEnum, ObjectTypeEnum, ObjectTemplate } from 'cyber-interface'
+import { MechanicAbstract, MechanicDelegate, RegionEnum, RegionType, StatTypeEnum, EventHandlerType, SubObjectTypeEnum, ObjectTypeEnum, ObjectTemplate } from '@cybertale/interface'
 import router from '@/router'
 
 export namespace Manager.Mechanic{

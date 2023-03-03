@@ -28,7 +28,7 @@ import ModalFormComponent from '@/components/ModalFormComponent.vue'
 import MapPickerComponent from '@/components/MapPickerComponent.vue'
 import FieldCodeComponent from '@/components/FieldCodeComponent.vue'
 import DataSelectComponent from '@/components/DataSelectComponent.vue'
-import { ObjectType, ObjectTypeEnum } from 'cyber-interface'
+import { ObjectType, ObjectTypeEnum } from '@cybertale/interface'
 
 const defaultOptions = { treeName: 'blocks-tree' }
 

@@ -19,7 +19,7 @@ import {
   MechanicAbstract,
   StatTypeEnum,
   RegionType
-} from 'cyber-interface'
+} from '@cybertale/interface'
 
 @Options({
   props: {

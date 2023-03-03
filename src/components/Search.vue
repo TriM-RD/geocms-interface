@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { ObjectTemplate } from 'cyber-interface'
+import { ObjectTemplate } from '@cybertale/interface'
 import ListComponent from '@/components/ListComponent.vue'
 @Options({
   components: { ListComponent },

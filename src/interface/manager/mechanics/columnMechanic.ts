@@ -1,4 +1,4 @@
-import { MechanicAbstract, ObjectTemplate, EventHandlerType } from 'cyber-interface'
+import { MechanicAbstract, ObjectTemplate, EventHandlerType } from '@cybertale/interface'
 
 export namespace Manager.Mechanic{
 

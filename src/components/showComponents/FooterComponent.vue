@@ -18,7 +18,7 @@ import {
   RegionType,
   RegionEnum,
   SubObjectTypeEnum, ActionTypeEnum, StatType
-} from 'cyber-interface'
+} from '@cybertale/interface'
 import { Manager } from '@/interface/manager/mechanics/footerMechanic'
 @Options({
   props: {

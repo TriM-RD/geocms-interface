@@ -1,4 +1,4 @@
-import { MechanicAbstract, StatType, StatTypeEnum, RegionEnum, EventHandlerType, SubObjectTypeEnum, ObjectTypeEnum, ObjectTemplate } from 'cyber-interface'
+import { MechanicAbstract, StatType, StatTypeEnum, RegionEnum, EventHandlerType, SubObjectTypeEnum, ObjectTypeEnum, ObjectTemplate } from '@cybertale/interface'
 import http from '@/http-common'
 
 export namespace Manager.Mechanic{

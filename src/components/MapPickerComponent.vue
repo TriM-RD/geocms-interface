@@ -42,7 +42,7 @@ import {
   ObjectTypeEnum,
   RegionType,
   RegionEnum
-} from 'cyber-interface'
+} from '@cybertale/interface'
 import router from '@/router'
 import Loading from 'vue-loading-overlay'
 @Options({

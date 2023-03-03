@@ -1,5 +1,5 @@
 import http from '@/http-common'
-import { EventHandlerType, ObjectTemplate, ObjectTypeEnum, SubObjectTypeEnum, MechanicAbstract, MechanicDelegate, StatTypeEnum, RegionEnum, RegionType } from 'cyber-interface'
+import { EventHandlerType, ObjectTemplate, ObjectTypeEnum, SubObjectTypeEnum, MechanicAbstract, MechanicDelegate, StatTypeEnum, RegionEnum, RegionType } from '@cybertale/interface'
 import router from '@/router'
 
 export namespace Manager.Mechanic{

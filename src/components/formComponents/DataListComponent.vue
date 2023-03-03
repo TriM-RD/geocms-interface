@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { ObjectTemplate, ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, RegionEnum } from 'cyber-interface'
+import { ObjectTemplate, ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, RegionEnum } from '@cybertale/interface'
 
 interface Option {
   id: number;

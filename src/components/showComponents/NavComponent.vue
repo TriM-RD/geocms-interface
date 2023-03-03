@@ -26,7 +26,7 @@ import {
   ObjectTypeEnum,
   RegionType,
   RegionEnum
-} from 'cyber-interface'
+} from '@cybertale/interface'
 @Options({
   props: {
     object: ObjectTemplate

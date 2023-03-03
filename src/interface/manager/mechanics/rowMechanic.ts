@@ -1,6 +1,6 @@
 import http from '@/http-common'
 import router from '@/router'
-import { EventHandlerType, RegionEnum, ActionTypeEnum, RegionType, StatType, StatTypeEnum, MechanicAbstract, MechanicDelegate, SubObjectTypeEnum, ObjectTypeEnum, ObjectTemplate } from 'cyber-interface'
+import { EventHandlerType, RegionEnum, ActionTypeEnum, RegionType, StatType, StatTypeEnum, MechanicAbstract, MechanicDelegate, SubObjectTypeEnum, ObjectTypeEnum, ObjectTemplate } from '@cybertale/interface'
 import { useToast, TYPE } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
 

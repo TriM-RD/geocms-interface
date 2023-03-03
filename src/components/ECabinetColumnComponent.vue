@@ -15,7 +15,7 @@ import {
   StatTypeEnum,
   ObjectTypeEnum,
   RegionType
-} from 'cyber-interface'
+} from '@cybertale/interface'
 import router from '@/router'
 @Options({
   props: {

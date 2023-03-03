@@ -1,4 +1,4 @@
-import { MechanicAbstract, MechanicDelegate, ActionTypeEnum, StatType, StatTypeEnum, RegionEnum, RegionType, EventHandlerType, SubObjectTypeEnum, ObjectTypeEnum, ObjectTemplate } from 'cyber-interface'
+import { MechanicAbstract, MechanicDelegate, ActionTypeEnum, StatType, StatTypeEnum, RegionEnum, RegionType, EventHandlerType, SubObjectTypeEnum, ObjectTypeEnum, ObjectTemplate } from '@cybertale/interface'
 import http from '@/http-common'
 import router from '@/router'
 

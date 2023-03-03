@@ -18,7 +18,7 @@ import {
   ObjectType,
   StatTypeEnum,
   ObjectTypeEnum
-} from 'cyber-interface'
+} from '@cybertale/interface'
 @Options({
   props: {
     object: ObjectTemplate

@@ -38,7 +38,7 @@ import {
   RegionType,
   RegionEnum,
   SubObjectTypeEnum, ActionTypeEnum, StatType
-} from 'cyber-interface'
+} from '@cybertale/interface'
 import Loading from 'vue-loading-overlay'
 import router from '@/router'
 @Options({
