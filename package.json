@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "cyber-interface": "C:/Users/10Administrator/Documents/NPM Packages/cyber-interface",
     "bootstrap": "^5.2.3",
     "core-js": "^3.6.5",
     "d3": "^7.6.1",
