@@ -5,9 +5,9 @@ import PermissionTree from '@/views/PermissionTree.vue'
 import Form from '@/views/Form.vue'
 import AccountProfile from '@/views/AccountProfile.vue'
 
-type MyRouteRecord = RouteRecordRaw & {
+/* type MyRouteRecord = RouteRecordRaw & {
   beforeRouteLeave: string;
-}
+} */
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -51,9 +51,9 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/permission',
     name: 'Permission',
-    component: PermissionTree,
-    beforeRouteLeave: 'beforeRouteLeave'
-  } as MyRouteRecord,
+    component: PermissionTree
+    // beforeRouteLeave: 'beforeRouteLeave'
+  }, // as MyRouteRecord,
   {
     path: '/division',
     name: 'Division',

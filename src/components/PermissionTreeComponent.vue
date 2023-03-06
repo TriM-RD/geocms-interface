@@ -219,12 +219,6 @@ export default class PermissionTreeComponent extends Vue {
         console.log(response)
         if (response.status === 200) {
           // this.$toast.success('Edited old data successfuly')
-          useToast()({
-            component: ToastComponent,
-            props: { msg: { title: '', info: 'Form submitted.' } }
-          }, {
-            type: TYPE.SUCCESS
-          })
         } else {
           // this.$toast.error('Something went wrong during editing')
         }
@@ -480,22 +474,22 @@ export default class PermissionTreeComponent extends Vue {
 
   attemptToGoBack () {
     console.log('it got unmunted')
-    window.alert()
+    // window.alert()
   }
 
   beforeUnmount () {
     console.log('beforeUnmount')
-    window.addEventListener('beforeunload', event => {
+    /* window.addEventListener('beforeunload', event => {
       event.returnValue = 'Are you sure you want to leave?'
-    })
+    }) */
     this.hell()
+    this.mechanic.UnsubscribeConditions()
   }
 
   hell () {
     console.log('beforeUnmount')
     if (this.change) {
       const saveChanges = confirm('There are unsaved changes. Do you want to save them?')
-      alert(saveChanges) // true if OK is pressed
       console.log(saveChanges)
       if (saveChanges) {
         this.save()
@@ -503,10 +497,10 @@ export default class PermissionTreeComponent extends Vue {
     }
   }
 
-  beforeRouteLeave (to:any, from:any, next:any) {
+  /* beforeRouteLeave (to:any, from:any, next:any) {
     console.log('EYYYYYYYYYY')
     // called before the route that renders this component is navigated away from
-  }
+  } */
 }
 </script>
 

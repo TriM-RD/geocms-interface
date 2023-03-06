@@ -9,15 +9,13 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import FormComponent from '@/components/FormComponent.vue'
 import WelcomeComponent from '@/components/WelcomeComponent.vue' // @ is an alias to /src
 import MapComponent from '@/components/MapComponent.vue'
 
 @Options({
   components: {
     MapComponent,
-    WelcomeComponent,
-    FormComponent
+    WelcomeComponent
   }
 })
 export default class Home extends Vue {}

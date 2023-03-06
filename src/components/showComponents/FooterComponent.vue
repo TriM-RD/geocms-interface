@@ -38,6 +38,8 @@ export default class FooterComponent extends Vue {
 
   @Watch('$route')
   onDataChanged (value: any, oldValue: string) {
+    this.mechanic.UnsubscribeConditions()
+    this.mechanic = new Manager.Mechanic.FooterMechanic()
     this.renderComponent = false
     this.openTab = value.name
     this.choose()
