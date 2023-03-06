@@ -109,6 +109,8 @@ import { Options, Vue } from 'vue-class-component'
 import Loading from 'vue-loading-overlay'
 import { MechanicAbstract } from '@cybertale/interface'
 import { Manager } from '@/interface/manager/mechanics/permissionMechanic'
+import { TYPE, useToast } from 'vue-toastification'
+import ToastComponent from '@/components/ToastComponent.vue'
 @Options({
   components: {
     Loading
@@ -197,7 +199,6 @@ export default class PermissionTreeComponent extends Vue {
     data.label = data.rename
     data.permission.name = data.rename
     data.rename = ''
-
     // this.$toast.success(`Renamed " ${temp} " to " ${data.label} "`)
   }
 
@@ -218,6 +219,12 @@ export default class PermissionTreeComponent extends Vue {
         console.log(response)
         if (response.status === 200) {
           // this.$toast.success('Edited old data successfuly')
+          useToast()({
+            component: ToastComponent,
+            props: { msg: { title: '', info: 'Form submitted.' } }
+          }, {
+            type: TYPE.SUCCESS
+          })
         } else {
           // this.$toast.error('Something went wrong during editing')
         }
@@ -235,6 +242,12 @@ export default class PermissionTreeComponent extends Vue {
         console.log(response)
         if (response.status === 200) {
           // this.$toast.success('Saved new data successfuly')
+          useToast()({
+            component: ToastComponent,
+            props: { msg: { title: '', info: 'Form submitted.' } }
+          }, {
+            type: TYPE.SUCCESS
+          })
         } else {
           // this.$toast.error('Something went wrong during saving')
         }
@@ -305,7 +318,12 @@ export default class PermissionTreeComponent extends Vue {
       .then(response => {
         console.log(response)
         if (response.status === 200) {
-          // this.$toast.success('Delete was successful')
+          useToast()({
+            component: ToastComponent,
+            props: { msg: { title: '', info: 'Delete submitted.' } }
+          }, {
+            type: TYPE.SUCCESS
+          })
         } else {
           // this.$toast.error('Something went wrong during deleting')
         }

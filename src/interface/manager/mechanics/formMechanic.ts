@@ -1,6 +1,8 @@
 import { MechanicAbstract, MechanicDelegate, ActionTypeEnum, StatType, StatTypeEnum, RegionEnum, RegionType, EventHandlerType, SubObjectTypeEnum, ObjectTypeEnum, ObjectTemplate } from '@cybertale/interface'
 import http from '@/http-common'
 import router from '@/router'
+import { TYPE, useToast } from 'vue-toastification'
+import ToastComponent from '@/components/ToastComponent.vue'
 
 export namespace Manager.Mechanic{
 
@@ -309,6 +311,12 @@ export namespace Manager.Mechanic{
                   this.ObjectTemplates.length = 0
                   this.ObjectTemplates = this.Append(response.data.entities)
                   this.refreshPage()
+                  useToast()({
+                    component: ToastComponent,
+                    props: { msg: { title: '', info: 'Form submitted.' } }
+                  }, {
+                    type: TYPE.SUCCESS
+                  })
                 } else {
                   this.refreshPage()
                   form.classList.remove('was-validated')
@@ -318,13 +326,18 @@ export namespace Manager.Mechanic{
                 }
               })
           } else {
-            console.log(this.ObjectTemplates)
             await http.post(process.env.VUE_APP_BASE_URL + route, this.ObjectTemplates)
               .then((response) => {
                 if (response.data.id !== false) {
                   router.push({
                     name: redirectTo,
                     params: { id: response.data.id }
+                  })
+                  useToast()({
+                    component: ToastComponent,
+                    props: { msg: { title: '', info: 'Form submitted.' } }
+                  }, {
+                    type: TYPE.SUCCESS
                   })
                 } else {
                   this.refreshPage()
