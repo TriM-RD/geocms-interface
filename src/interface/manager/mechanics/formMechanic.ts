@@ -58,6 +58,9 @@ export namespace Manager.Mechanic{
     }
 
     protected async DataList (eventHandler: EventHandlerType): Promise<void> {
+      if (eventHandler.payload.Stats[StatTypeEnum.Value].Data.id === null) {
+        return
+      }
       this.refreshPage()
       const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
       if (eventHandler.payload.Stats[StatTypeEnum.Value].Data.id !== null) {

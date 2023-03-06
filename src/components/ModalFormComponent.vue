@@ -3,13 +3,13 @@
     <button @click="startMechanic()" type="button" style="display: none" data-bs-toggle="modal" :data-bs-target="`${'#formModal'+object.Stats[statTypeEnum.Tag].Data}`" :id="`${'formModalOpen'+object.Stats[statTypeEnum.Tag].Data}`"></button>
     <form>
       <div @click="test($event.target)" class="modal fade" :id="`${'formModal'+object.Stats[statTypeEnum.Tag].Data}`" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-xl">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="btn-close" :id="`${'formModalClose'+object.Stats[statTypeEnum.Tag].Data}`" data-bs-dismiss="modal" aria-label="Close"></button>
               <button type="button" hidden class="btn-close" :id="`${'formModalSubmit'+object.Stats[statTypeEnum.Tag].Data}`" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body container-fluid">
               <Loading v-model:active="renderComponent"
                        :can-cancel="false"
                        :is-full-page="false"/>

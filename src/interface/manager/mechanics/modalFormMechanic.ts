@@ -59,7 +59,9 @@ export namespace Manager.Mechanic{
             case SubObjectTypeEnum.Middle:
               this.removeElementFromArray(this.ObjectTemplates, 'group')
               this.refreshPage()
-              this.ObjectTemplates = this.Append((await http.get(process.env.VUE_APP_BASE_URL + 'form/entity/' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
+              console.log(this.ObjectTemplates)
+              this.ObjectTemplates = this.AppendAndFilterDuplicate((await http.get(process.env.VUE_APP_BASE_URL + 'form/entity/' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
+              console.log(this.ObjectTemplates)
               this.refreshPage()
               break
             default:
