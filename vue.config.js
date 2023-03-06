@@ -1,7 +1,5 @@
-const config = {
+module.exports = {
   css: {
     extract: false
   }
 }
-
-module.exports = config
