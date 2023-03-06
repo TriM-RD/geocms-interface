@@ -2,7 +2,7 @@
         <nav class="navbar navbar-light bg-light static-top">
             <div class="container">
                 <a class="navbar-brand" href="/">
-                  <img src="../assets/logo.png" alt="Logo" width="85" class="d-inline-block align-text-top">
+                  <img src="../assets/LogoTriM.png" alt="Logo" width="85" class="d-inline-block align-text-top">
                 </a>
                 <button v-on:click="login()" class="btn btn-outline-secondary">Login</button>
             </div>
