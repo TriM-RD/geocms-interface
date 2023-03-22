@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { Manager } from '@/interface/manager/mechanics/ecabinetRowMechanic'
+import { Manager } from '@/mechanics/ecabinetRowMechanic'
 import {
   ObjectTemplate,
   MechanicAbstract,
@@ -89,7 +89,7 @@ export default class ECabinetRowComponent extends Vue {
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {
-    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetVueComponent()
+    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }
 }
 </script>

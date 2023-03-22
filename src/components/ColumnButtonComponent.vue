@@ -19,17 +19,20 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { Manager } from '@/interface/manager/mechanics/columnMechanic'
+import { Manager } from '@/mechanics/columnMechanic'
 import {
-  ObjectTemplate,
+  ActionTypeEnum,
   MechanicAbstract,
+  ObjectTemplate,
   ObjectType,
-  StatTypeEnum,
   ObjectTypeEnum,
-  RegionType,
   RegionEnum,
-  SubObjectTypeEnum, ActionTypeEnum, StatType
+  RegionType,
+  StatType,
+  StatTypeEnum,
+  SubObjectTypeEnum
 } from '@cybertale/interface'
+
 @Options({
   props: {
     object: ObjectTemplate,
@@ -61,7 +64,8 @@ export default class ColumnButtonComponent extends Vue {
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {
-    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetVueComponent()
+    this.object.ActionEnum = ActionTypeEnum.Click
+    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }
 }
 </script>

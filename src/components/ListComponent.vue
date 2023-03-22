@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { Manager } from '@/interface/manager/mechanics/listMechanic'
+import { Manager } from '@/mechanics/listMechanic'
 import {
   ObjectTemplate,
   MechanicAbstract,
@@ -76,7 +76,7 @@ export default class ListComponent extends Vue {
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {
-    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetVueComponent()
+    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }
 
   getHeaders () : void { // TODO Needs to be reworked. @JosoMarich

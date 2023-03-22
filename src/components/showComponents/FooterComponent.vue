@@ -19,7 +19,7 @@ import {
   RegionEnum,
   SubObjectTypeEnum, ActionTypeEnum, StatType
 } from '@cybertale/interface'
-import { Manager } from '@/interface/manager/mechanics/footerMechanic'
+import { Manager } from '@/mechanics/footerMechanic'
 @Options({
   props: {
     object: ObjectTemplate
@@ -55,7 +55,7 @@ export default class FooterComponent extends Vue {
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {
-    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetVueComponent()
+    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }
 
   choose () {

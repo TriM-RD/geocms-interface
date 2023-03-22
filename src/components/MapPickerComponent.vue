@@ -33,7 +33,7 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import { MapboxMap, MapboxMarker, MapboxGeolocateControl } from 'vue-mapbox-ts'
-import { Manager } from '@/interface/manager/mechanics/mapPickerMechanic'
+import { Manager } from '@/mechanics/mapPickerMechanic'
 import {
   ObjectTemplate,
   MechanicAbstract,
@@ -112,7 +112,7 @@ export default class MapPickerComponent extends Vue {
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {
-    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetVueComponent()
+    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }
 }
 

@@ -21,7 +21,7 @@
 <script lang="ts">
 import Loading from 'vue-loading-overlay'
 import { Options, Vue } from 'vue-class-component'
-import { Manager } from '@/interface/manager/mechanics/tableMechanic'
+import { Manager } from '@/mechanics/tableMechanic'
 import {
   ObjectTemplate,
   MechanicAbstract,
@@ -171,7 +171,7 @@ export default class TableComponent extends Vue {
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {
-    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetVueComponent()
+    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }
 }
 </script>

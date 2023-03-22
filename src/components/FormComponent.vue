@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { Manager } from '@/interface/manager/mechanics/formMechanic'
+import { Manager } from '@/mechanics/formMechanic'
 import {
   ObjectTemplate,
   MechanicAbstract,
@@ -93,7 +93,7 @@ export default class FormComponent extends Vue {
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {
-    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetVueComponent()
+    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }
 }
 </script>
