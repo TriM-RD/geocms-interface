@@ -8,7 +8,7 @@
       <th></th>
       <th v-for="(header, key) in headers" :key="`${ key }-${ header }-${ Math.random().toString(36).slice(2, 7) }`" scope="col">
         {{ header }}</th>
-      <th>Actions</th>
+      <!--th>Actions</th-->
     </tr>
   </thead>
   <tbody>
@@ -151,8 +151,6 @@ export default class TableComponent extends Vue {
     this.getHeaders()
     this.renderComponent = false
     this.loadingComponents = false
-
-    console.log(performance.now())
   }
 
   reverseEntities () {
@@ -164,7 +162,7 @@ export default class TableComponent extends Vue {
   getHeaders () : void { // TODO Needs to be reworked. @JosoMarich
     this.headers = []
     for (const header of this.objectTemplates) {
-      if (this.headers.indexOf(header.Stats[StatTypeEnum.Label].Data) === -1) {
+      if (this.headers.indexOf(header.Stats[StatTypeEnum.Label].Data) === -1 && header.Stats[StatTypeEnum.BelongsTo] === undefined) {
         this.headers[this.headers.length] = header.Stats[StatTypeEnum.Label].Data
       }
     }

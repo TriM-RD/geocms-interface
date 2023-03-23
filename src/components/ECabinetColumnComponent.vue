@@ -23,7 +23,7 @@ import router from '@/router'
     index: Number
   }
 })
-export default class ColumnComponent extends Vue {
+export default class ECabinetColumnComponent extends Vue {
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType

@@ -35,6 +35,7 @@ import {
 
 @Options({
   props: {
+    entity: Array,
     object: ObjectTemplate,
     index: Number
   }
@@ -45,26 +46,16 @@ export default class ColumnButtonComponent extends Vue {
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType
   object!: ObjectTemplate
+  entity!: ObjectTemplate[]
   index!: number
-  objectTemplates: ObjectTemplate[] = this.mechanic.InitSet([
-    new ObjectTemplate(RegionEnum.TableColumn, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
-      [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Delete'),
-      [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-danger me-2'),
-      [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Id].Data)
-    }),
-    new ObjectTemplate(RegionEnum.TableColumn, ObjectTypeEnum.Button, SubObjectTypeEnum.Middle, ActionTypeEnum.Click, {
-      [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Edit'),
-      [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-info me-2'),
-      [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Id].Data)
-    })
-  ])
+  objectTemplates: ObjectTemplate[] = this.mechanic.InitSet(this.entity)
+  renderComponent = false
 
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {
-    this.object.ActionEnum = ActionTypeEnum.Click
     return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }
 }

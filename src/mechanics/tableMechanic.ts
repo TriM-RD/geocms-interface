@@ -30,7 +30,7 @@ export namespace Manager.Mechanic{
       return new Promise((resolve) => {
         const promises = data.map((_list: any) => {
           return Promise.all(_list.map((_object: any) => {
-            return new ObjectTemplate(RegionEnum.ECabinetRow, ObjectTypeEnum.ECabinetColumn, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, this.reStructure(_object.Stats))
+            return new ObjectTemplate(_object.Region, _object.ObjectEnum, _object.SubObjectEnum, _object.ActionEnum, this.reStructure(_object.Stats))
           }))
         })
         Promise.all(promises).then((results: any[]) => {

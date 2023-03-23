@@ -1,7 +1,7 @@
 <template>
   <tr v-if="renderComponent">
     <th scope="row"><img alt="arrow" width="27" src="../assets/arrow.png"></th>
-    <component v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ Math.random().toString(36).slice(2, 7) }`"  :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'></component>
+    <component v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ Math.random().toString(36).slice(2, 7) }`"  :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :entity='resolveEntities(_objectTemplate)' :object='_objectTemplate'></component>
   </tr>
 </template>
 
@@ -36,23 +36,35 @@ export default class RowComponent extends Vue {
   entity!: ObjectTemplate[]
   objectTemplates!: ObjectTemplate[]
   index!: number
+  belongsTo: { [key: string]: ObjectTemplate[] } = {}
 
   mounted () {
-    this.objectTemplates = this.mechanic.InitSet(this.entity)
-    if (this.objectTemplates !== undefined) {
-      this.objectTemplates = this.mechanic.Append(
-        [
-          new ObjectTemplate(RegionEnum.TableColumn, ObjectTypeEnum.ColumnButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
-            [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.objectTemplates[0].Stats[StatTypeEnum.Id].Data)
-          })
-        ]
-      )
+    const itemsToDelete = []
+    for (const item of this.entity) {
+      if (item.Stats[StatTypeEnum.BelongsTo] !== undefined) {
+        const data = item.Stats[StatTypeEnum.BelongsTo].Data
+        this.belongsTo[data] = this.belongsTo[data] || []
+        this.belongsTo[data].push(item)
+        itemsToDelete.push(this.entity.indexOf(item))
+      }
     }
+    for (let i = itemsToDelete.length - 1; i >= 0; i--) {
+      this.entity.splice(itemsToDelete[i], 1)
+    }
+    this.objectTemplates = this.mechanic.InitSet(this.entity)
     this.renderComponent = true
   }
 
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
+  }
+
+  resolveEntities (_object: ObjectTemplate) {
+    for (const tag of Object.keys(this.belongsTo)) {
+      if (_object.Stats[StatTypeEnum.Tag].Data === tag) {
+        return this.belongsTo[tag]
+      }
+    }
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {

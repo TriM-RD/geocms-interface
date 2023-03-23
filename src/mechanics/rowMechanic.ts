@@ -32,7 +32,7 @@ export namespace Manager.Mechanic{
     public InitSet (_objectTemplates: ObjectTemplate[]): ObjectTemplate[] {
       this.ObjectTemplates = []
       for (const _object of _objectTemplates) {
-        this.ObjectTemplates.push(new ObjectTemplate(RegionEnum.TableColumn, ObjectTypeEnum.Column, SubObjectTypeEnum.ParentObject, ActionTypeEnum.Click, _object.Stats))
+        this.ObjectTemplates.push(new ObjectTemplate(_object.Region, _object.ObjectEnum, _object.SubObjectEnum, _object.ActionEnum, _object.Stats))
       }
       return this.ObjectTemplates
     }
