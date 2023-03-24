@@ -8,7 +8,6 @@
       <th></th>
       <th v-for="(header, key) in headers" :key="`${ key }-${ header }-${ Math.random().toString(36).slice(2, 7) }`" scope="col">
         {{ header }}</th>
-      <!--th>Actions</th-->
     </tr>
   </thead>
   <tbody>

@@ -36,9 +36,10 @@ export default class RowComponent extends Vue {
   entity!: ObjectTemplate[]
   objectTemplates!: ObjectTemplate[]
   index!: number
-  belongsTo: { [key: string]: ObjectTemplate[] } = {}
+  belongsTo!: { [key: string]: ObjectTemplate[] }
 
   mounted () {
+    this.belongsTo = {}
     const itemsToDelete = []
     for (const item of this.entity) {
       if (item.Stats[StatTypeEnum.BelongsTo] !== undefined) {
@@ -48,10 +49,11 @@ export default class RowComponent extends Vue {
         itemsToDelete.push(this.entity.indexOf(item))
       }
     }
+    const tempEntity = JSON.parse(JSON.stringify(this.entity)) // TODO find a better fix (One way would be to add stats to getComponent and to not show if belongs
     for (let i = itemsToDelete.length - 1; i >= 0; i--) {
-      this.entity.splice(itemsToDelete[i], 1)
+      tempEntity.splice(itemsToDelete[i], 1)
     }
-    this.objectTemplates = this.mechanic.InitSet(this.entity)
+    this.objectTemplates = this.mechanic.InitSet(tempEntity)
     this.renderComponent = true
   }
 

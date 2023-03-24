@@ -57,7 +57,7 @@ export namespace Manager.Mechanic{
       }, {
         type: TYPE.INFO
       })
-      this.refreshPage()
+      this.refreshPage() // TODO find out what is its use if any
     }
 
     refreshPage (): void {

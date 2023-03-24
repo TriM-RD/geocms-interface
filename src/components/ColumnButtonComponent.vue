@@ -51,6 +51,12 @@ export default class ColumnButtonComponent extends Vue {
   objectTemplates: ObjectTemplate[] = this.mechanic.InitSet(this.entity)
   renderComponent = false
 
+  /* mounted () {
+    if (this.entity !== undefined) {
+      this.objectTemplates = this.mechanic.InitSet(this.entity)
+    }
+  } */
+
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
   }
