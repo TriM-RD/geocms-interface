@@ -46,6 +46,10 @@ export default class ListComponent extends Vue {
     this.Init()
   }
 
+  base64UrlSafe (str: string) {
+    return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+  }
+
   async Init () {
     if (!this.useRoutes) {
       this.count = (this.title.match(/group:/g) || []).length
@@ -60,7 +64,7 @@ export default class ListComponent extends Vue {
         this.renderComponent = false
       }
       this.renderComponent = false
-      this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'search/' + this.title))
+      this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'search/' + this.base64UrlSafe(this.title)))
       console.log(this.objectTemplates)
     } else {
       this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'permissions/user'))
