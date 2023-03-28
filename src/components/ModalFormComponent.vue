@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { Manager } from '@/interface/manager/mechanics/modalFormMechanic'
+import { Manager } from '@/mechanics/modalFormMechanic'
 import {
   ObjectTemplate,
   MechanicAbstract,
@@ -165,11 +165,11 @@ export default class ModalFormComponent extends Vue {
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {
-    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetVueComponent()
+    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }
 
   getSubmitButtonComponent () {
-    return RegionType.RegionTypes[RegionEnum.ModalForm].ObjectTypes[ObjectTypeEnum.Button].GetVueComponent()
+    return RegionType.RegionTypes[RegionEnum.ModalForm].ObjectTypes[ObjectTypeEnum.Button].GetComponent()
   }
 }
 </script>

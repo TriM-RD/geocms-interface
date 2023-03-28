@@ -1,6 +1,6 @@
 <template>
     <!--th scope="row"><img alt="arrow" width="27" src="../assets/arrow.png"></th-->
-    <td class="text-truncate" style="max-width: 80px;">{{object.Stats[statTypeEnum.Value].Data}}</td>
+    <td class="text-truncate" style="max-width: 80px;">{{specialTruncate(object.Stats[statTypeEnum.Value].Data)}}</td>
 </template>
 
 <script lang="ts">
@@ -29,8 +29,19 @@ export default class ColumnComponent extends Vue {
     // this.mechanic.UnsubscribeConditions()
   }
 
+  specialTruncate (data: string) {
+    const regex = /^(http|https):\/\/[a-z0-9\-.]+\.[a-z]{2,}(:[0-9]{1,5})?(\/.*)?$/i
+    if (regex.test(data)) {
+      if (data.includes('?')) {
+        const parts = data.split('?')
+        return parts[1]
+      }
+    }
+    return data
+  }
+
   getComponent (_regionEnum : number, _objectEnum: number) {
-    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetVueComponent()
+    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }
 }
 </script>

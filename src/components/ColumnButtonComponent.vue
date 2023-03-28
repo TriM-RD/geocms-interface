@@ -19,19 +19,23 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { Manager } from '@/interface/manager/mechanics/columnMechanic'
+import { Manager } from '@/mechanics/columnMechanic'
 import {
-  ObjectTemplate,
+  ActionTypeEnum,
   MechanicAbstract,
+  ObjectTemplate,
   ObjectType,
-  StatTypeEnum,
   ObjectTypeEnum,
-  RegionType,
   RegionEnum,
-  SubObjectTypeEnum, ActionTypeEnum, StatType
+  RegionType,
+  StatType,
+  StatTypeEnum,
+  SubObjectTypeEnum
 } from '@cybertale/interface'
+
 @Options({
   props: {
+    entity: Array,
     object: ObjectTemplate,
     index: Number
   }
@@ -42,26 +46,23 @@ export default class ColumnButtonComponent extends Vue {
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType
   object!: ObjectTemplate
+  entity!: ObjectTemplate[]
   index!: number
-  objectTemplates: ObjectTemplate[] = this.mechanic.InitSet([
-    new ObjectTemplate(RegionEnum.TableColumn, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
-      [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Delete'),
-      [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-danger me-2'),
-      [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Id].Data)
-    }),
-    new ObjectTemplate(RegionEnum.TableColumn, ObjectTypeEnum.Button, SubObjectTypeEnum.Middle, ActionTypeEnum.Click, {
-      [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Edit'),
-      [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-info me-2'),
-      [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Id].Data)
-    })
-  ])
+  objectTemplates: ObjectTemplate[] = this.mechanic.InitSet(this.entity)
+  renderComponent = false
+
+  /* mounted () {
+    if (this.entity !== undefined) {
+      this.objectTemplates = this.mechanic.InitSet(this.entity)
+    }
+  } */
 
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {
-    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetVueComponent()
+    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }
 }
 </script>

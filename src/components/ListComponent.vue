@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { Manager } from '@/interface/manager/mechanics/listMechanic'
+import { Manager } from '@/mechanics/listMechanic'
 import {
   ObjectTemplate,
   MechanicAbstract,
@@ -46,6 +46,10 @@ export default class ListComponent extends Vue {
     this.Init()
   }
 
+  base64UrlSafe (str: string) {
+    return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+  }
+
   async Init () {
     if (!this.useRoutes) {
       this.count = (this.title.match(/group:/g) || []).length
@@ -60,7 +64,7 @@ export default class ListComponent extends Vue {
         this.renderComponent = false
       }
       this.renderComponent = false
-      this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'search/' + this.title))
+      this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'search/' + this.base64UrlSafe(this.title)))
       console.log(this.objectTemplates)
     } else {
       this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'permissions/user'))
@@ -76,7 +80,7 @@ export default class ListComponent extends Vue {
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {
-    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetVueComponent()
+    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }
 
   getHeaders () : void { // TODO Needs to be reworked. @JosoMarich

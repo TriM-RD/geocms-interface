@@ -108,7 +108,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { Options, Vue } from 'vue-class-component'
 import Loading from 'vue-loading-overlay'
 import { MechanicAbstract } from '@cybertale/interface'
-import { Manager } from '@/interface/manager/mechanics/permissionMechanic'
+import { Manager } from '@/mechanics/permissionMechanic'
 import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
 @Options({

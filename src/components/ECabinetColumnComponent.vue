@@ -23,7 +23,7 @@ import router from '@/router'
     index: Number
   }
 })
-export default class ColumnComponent extends Vue {
+export default class ECabinetColumnComponent extends Vue {
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType
@@ -42,7 +42,7 @@ export default class ColumnComponent extends Vue {
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {
-    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetVueComponent()
+    return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }
 }
 </script>
