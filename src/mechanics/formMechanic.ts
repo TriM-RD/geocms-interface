@@ -162,6 +162,7 @@ export namespace Manager.Mechanic{
               break
             case SubObjectTypeEnum.Down:
               this.refreshPage()
+              console.log(eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
               this.ObjectTemplates.splice(this.ObjectTemplates.findIndex(
                 element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data), 1)
               this.refreshPage()
