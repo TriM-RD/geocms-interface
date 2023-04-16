@@ -29,6 +29,7 @@ import MapPickerComponent from '@/components/MapPickerComponent.vue'
 import FieldCodeComponent from '@/components/FieldCodeComponent.vue'
 import DataSelectComponent from '@/components/DataSelectComponent.vue'
 import { ObjectType, ObjectTypeEnum } from '@cybertale/interface/src'
+import UppyComponent from '@/components/formComponents/UppyComponent.vue'
 
 const defaultOptions = { treeName: 'blocks-tree' }
 
@@ -36,7 +37,7 @@ ObjectType.ObjectTypes[ObjectTypeEnum.Field](() => InputComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.Button](() => SubmitButtonComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.Row](() => RowComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.Text](() => TextAreaComponent)
-ObjectType.ObjectTypes[ObjectTypeEnum.Alert](() => AlertComponent)
+// ObjectType.ObjectTypes[ObjectTypeEnum.Alert](() => AlertComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.CheckBox](() => CheckBoxComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.DataList](() => DataListComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.SelectList](() => SelectListComponent)
@@ -52,6 +53,7 @@ ObjectType.ObjectTypes[ObjectTypeEnum.ModalForm](() => ModalFormComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.MapPicker](() => MapPickerComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.FieldCode](() => FieldCodeComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.DataSelect](() => DataSelectComponent)
+ObjectType.ObjectTypes[ObjectTypeEnum.Alert](() => UppyComponent)
 
 const options: PluginOptions = {
   position: POSITION.TOP_RIGHT,
