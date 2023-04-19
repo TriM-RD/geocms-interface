@@ -1,28 +1,8 @@
 <template>
   <div class="mb-3 row justify-content-md-center">
     <div class="col-lg"></div>
-    <div class="col input-group">
-      <label
-        :title="tooltipCase()"
-        class="input-group-text"
-        :hidden="specialCase()"
-      >
-        {{ object.Stats[statTypeEnum.Label].Data }}
-      </label>
-      <div>
-        <button @click="openUppyDashboard">Upload Files</button>
-        <div id="uppyDashboard"></div>
-      </div>
-      <div class="form-control">
-        <slot></slot>
-      </div>
-      <div class="invalid-feedback">
-        {{
-          object.Stats[statTypeEnum.ErrorMessage]
-            ? object.Stats[statTypeEnum.ErrorMessage].Data
-            : ''
-        }}
-      </div>
+    <div class="col">
+      <div id="uppyDashboard"></div>
     </div>
     <div class="col-lg"></div>
   </div>
@@ -32,16 +12,13 @@
 import { Options, Vue } from 'vue-class-component'
 import Uppy from '@uppy/core'
 import Dashboard from '@uppy/dashboard'
-import Tus from '@uppy/tus'
-import {
-  ObjectTemplate,
-  StatTypeEnum,
-  ObjectTypeEnum,
-  RegionType,
-  RegionEnum,
-  ObjectType
-} from '@cybertale/interface'
-
+import { ObjectTemplate, ObjectType, ObjectTypeEnum, RegionEnum, RegionType, StatTypeEnum } from '@cybertale/interface'
+import '@uppy/core/dist/style.css'
+import '@uppy/dashboard/dist/style.css'
+import { v4 as uuidv4 } from 'uuid'
+interface FileNameWithData {
+  [key: string]: any;
+}
 @Options({
   props: {
     object: ObjectTemplate
@@ -55,6 +32,7 @@ export default class UppyComponent extends Vue {
   regionType = RegionType
   regionEnum = RegionEnum
   private uppy: Uppy | null = null
+  private filesData: Record<string, string> = {} // Store the file data
 
   mounted () {
     this.uppy = new Uppy({
@@ -70,10 +48,30 @@ export default class UppyComponent extends Vue {
       inline: true,
       target: '#uppyDashboard',
       showProgressDetails: true,
-      note: 'Images and PDFs only, 1–5 files, up to 1 MB'
+      hideUploadButton: true,
+      note: 'Images and PDFs only, 1–5 files, up to 1 MB. File-name must not contain "+"'
     })
 
-    this.uppy.use(Tus, { endpoint: '/upload' })
+    this.uppy.on('file-added', (file: { id: string; name: any; data: Blob }) => {
+      if (file.name.includes('+')) {
+        if (this.uppy) {
+          this.uppy.removeFile(file.id)
+        }
+        alert('The file name contains an illegal character.')
+        return
+      }
+      const reader = new FileReader()
+      reader.onload = () => {
+        this.filesData[file.name] = reader.result as string
+        this.onSubmit()
+      }
+      reader.readAsDataURL(file.data)
+    })
+
+    this.uppy.on('file-removed', (file: { name: any }) => {
+      Reflect.deleteProperty(this.filesData, file.name)
+      this.onSubmit()
+    })
   }
 
   beforeDestroy () {
@@ -82,7 +80,7 @@ export default class UppyComponent extends Vue {
     }
   }
 
-  openUppyDashboard () {
+  openUppyDashboard () : void {
     const dashboardPlugin = this.uppy?.getPlugin('Dashboard') as Dashboard | undefined
     if (dashboardPlugin) {
       dashboardPlugin.openModal()
@@ -103,8 +101,26 @@ export default class UppyComponent extends Vue {
     }
     return this.object.Stats[this.statTypeEnum.ElementType].Data === 'hidden'
   }
+
+  // This method should be called when the form is submitted
+  onSubmit (): void {
+    const temp : FileNameWithData = {}
+    for (const filename in this.filesData) {
+      const uniqueFilename = this.generateUniqueFilename(filename)
+      const fileData = this.filesData[filename]
+      const base64Data = btoa(fileData)
+      temp[uniqueFilename] = base64Data
+    }
+    this.object.Stats[this.statTypeEnum.Value].Data = JSON.stringify(temp)
+    console.log(temp)
+  }
+
+  generateUniqueFilename (originalFilename: string) : string {
+    const uuid = uuidv4()
+    const recordID = this.object.Stats[this.statTypeEnum.Id].Data
+    return `${recordID}+${uuid}+${originalFilename}`
+  }
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
