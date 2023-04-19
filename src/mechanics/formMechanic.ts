@@ -28,6 +28,7 @@ export namespace Manager.Mechanic{
         return []
       }
       this.inEdit = true
+      console.log(response.data)
       return (this.ObjectTemplates = response.data.map((_object: any) => {
         return new ObjectTemplate(_object.Region, _object.ObjectEnum,
           _object.SubObjectEnum, _object.ActionEnum, this.reStructure(_object.Stats))

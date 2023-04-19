@@ -78,6 +78,7 @@ export default class FormComponent extends Vue {
         break
     }
     this.renderComponent = false
+    console.log(this.objectTemplates)
   }
 
   reRender () {

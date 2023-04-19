@@ -3,6 +3,16 @@
     <div class="col-lg"></div>
     <div class="col">
       <div id="uppyDashboard"></div>
+      <fancybox-component ref="fancybox">
+        <a
+          v-for="(src, index) in images"
+          :key="index"
+          :href="src"
+          data-fancybox="gallery"
+          class="gallery-link"
+        ></a>
+        <button @click="openGallery" class="btn btn-primary">View Gallery</button>
+      </fancybox-component>
     </div>
     <div class="col-lg"></div>
   </div>
@@ -15,11 +25,15 @@ import Dashboard from '@uppy/dashboard'
 import { ObjectTemplate, ObjectType, ObjectTypeEnum, RegionEnum, RegionType, StatTypeEnum } from '@cybertale/interface'
 import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'
+import FancyboxComponent from '@/components/showComponents/FancyboxComponent.vue'
 import { v4 as uuidv4 } from 'uuid'
 interface FileNameWithData {
   [key: string]: any;
 }
 @Options({
+  components: {
+    FancyboxComponent
+  },
   props: {
     object: ObjectTemplate
   }
@@ -33,6 +47,18 @@ export default class UppyComponent extends Vue {
   regionEnum = RegionEnum
   private uppy: Uppy | null = null
   private filesData: Record<string, string> = {} // Store the file data
+
+  get images (): string[] {
+    return Object.values(this.filesData)
+  }
+
+  openGallery (): void {
+    const galleryElements = (this.$refs.fancybox as Vue).$el.querySelectorAll(
+      '[data-fancybox="gallery"]'
+    )
+    // eslint-disable-next-line no-unused-expressions
+    galleryElements[0]?.click()
+  }
 
   mounted () {
     this.uppy = new Uppy({
@@ -72,6 +98,8 @@ export default class UppyComponent extends Vue {
       Reflect.deleteProperty(this.filesData, file.name)
       this.onSubmit()
     })
+
+    this.displayFilesOnDashboard()
   }
 
   beforeDestroy () {
@@ -119,6 +147,35 @@ export default class UppyComponent extends Vue {
     const uuid = uuidv4()
     const recordID = this.object.Stats[this.statTypeEnum.Id].Data
     return `${recordID}+${uuid}+${originalFilename}`
+  }
+
+  displayFilesOnDashboard () {
+    const data = this.object.Stats[this.statTypeEnum.Value].Data
+    console.log(this.object)
+    if (data) {
+      console.log('test')
+      try {
+        const filesData = JSON.parse(data)
+        for (const filename in filesData) {
+          const base64Data = filesData[filename]
+          const byteCharacters = atob(base64Data)
+          const byteNumbers = new Array(byteCharacters.length)
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i)
+          }
+          const byteArray = new Uint8Array(byteNumbers)
+          const blob = new Blob([byteArray], { type: 'application/octet-stream' })
+          const file = {
+            name: filename,
+            data: blob
+          }
+          // eslint-disable-next-line no-unused-expressions
+          this.uppy?.addFile(file)
+        }
+      } catch (e) {
+        console.error('Error parsing JSON:', e)
+      }
+    }
   }
 }
 </script>
