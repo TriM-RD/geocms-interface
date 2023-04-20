@@ -1,8 +1,7 @@
 <template>
-  <div class="mb-3 row justify-content-md-center">
+  <div class="row justify-content-md-center">
     <div class="col-lg"></div>
-    <div class="col">
-      <div id="uppyDashboard"></div>
+    <div class="col-lg-6">
       <fancybox-component ref="fancybox">
         <a
           v-for="(src, index) in images"
@@ -11,8 +10,13 @@
           data-fancybox="gallery"
           class="gallery-link"
         ></a>
-        <button @click="openGallery" class="btn btn-primary">View Gallery</button>
+        <div class="row">
+          <div class="col px-0">
+            <button @click.prevent="openGallery" class="btn btn-outline-dark w-100 rounded-bottom">View Gallery</button>
+          </div>
+        </div>
       </fancybox-component>
+      <div id="uppyDashboard" style="width:100%;"></div>
     </div>
     <div class="col-lg"></div>
   </div>
@@ -27,6 +31,7 @@ import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'
 import FancyboxComponent from '@/components/showComponents/FancyboxComponent.vue'
 import { v4 as uuidv4 } from 'uuid'
+
 interface FileNameWithData {
   [key: string]: any;
 }
@@ -83,7 +88,7 @@ export default class UppyComponent extends Vue {
         if (this.uppy) {
           this.uppy.removeFile(file.id)
         }
-        alert('The file name contains an illegal character.')
+        alert('The file name contains an illegal character. Yay')
         return
       }
       const reader = new FileReader()
@@ -132,12 +137,10 @@ export default class UppyComponent extends Vue {
 
   // This method should be called when the form is submitted
   onSubmit (): void {
-    const temp : FileNameWithData = {}
+    const temp: FileNameWithData = {}
     for (const filename in this.filesData) {
       const uniqueFilename = this.generateUniqueFilename(filename)
-      const fileData = this.filesData[filename]
-      const base64Data = btoa(fileData)
-      temp[uniqueFilename] = base64Data
+      temp[uniqueFilename] = this.filesData[filename]
     }
     this.object.Stats[this.statTypeEnum.Value].Data = JSON.stringify(temp)
     console.log(temp)
@@ -149,35 +152,61 @@ export default class UppyComponent extends Vue {
     return `${recordID}+${uuid}+${originalFilename}`
   }
 
+  getOriginalFilename (filename: string): string {
+    const parts = filename.split('+')
+    return parts[parts.length - 1]
+  }
+
   displayFilesOnDashboard () {
     const data = this.object.Stats[this.statTypeEnum.Value].Data
-    console.log(this.object)
-    if (data) {
-      console.log('test')
-      try {
-        const filesData = JSON.parse(data)
-        for (const filename in filesData) {
-          const base64Data = filesData[filename]
-          const byteCharacters = atob(base64Data)
-          const byteNumbers = new Array(byteCharacters.length)
-          for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i)
-          }
-          const byteArray = new Uint8Array(byteNumbers)
-          const blob = new Blob([byteArray], { type: 'application/octet-stream' })
-          const file = {
-            name: filename,
-            data: blob
-          }
-          // eslint-disable-next-line no-unused-expressions
-          this.uppy?.addFile(file)
-        }
-      } catch (e) {
-        console.error('Error parsing JSON:', e)
+    if (!data) return
+
+    const files = JSON.parse(data)
+
+    for (const uniqueFilename in files) {
+      const base64Data = files[uniqueFilename]
+
+      const contentType = this.getMimeType(uniqueFilename)
+      const byteCharacters = atob(base64Data.split(',')[1]) // Remove the data URL prefix
+      const byteNumbers = new Array(byteCharacters.length)
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i)
       }
+      const byteArray = new Uint8Array(byteNumbers)
+      const blob = new Blob([byteArray], { type: contentType })
+
+      const originalFilename = this.getOriginalFilename(uniqueFilename)
+
+      // eslint-disable-next-line no-unused-expressions
+      this.uppy?.addFile({
+        source: 'Local',
+        name: originalFilename,
+        data: blob,
+        meta: {
+          fileType: contentType
+        }
+      })
+    }
+  }
+
+  getMimeType (filename: string): string {
+    const extension = filename.split('.').pop()?.toLowerCase() || ''
+    switch (extension) {
+      case 'png':
+        return 'image/png'
+      case 'jpg':
+      case 'jpeg':
+        return 'image/jpeg'
+      case 'gif':
+        return 'image/gif'
+      case 'pdf':
+        return 'application/pdf'
+      default:
+        return 'application/octet-stream'
     }
   }
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>
