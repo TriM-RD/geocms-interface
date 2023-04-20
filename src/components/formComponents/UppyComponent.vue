@@ -2,17 +2,34 @@
   <div class="row justify-content-md-center">
     <div class="col-lg"></div>
     <div class="col-lg-6">
-      <fancybox-component ref="fancybox">
+      <fancybox-component ref="fancyboxImages">
         <a
           v-for="(src, index) in images"
           :key="index"
           :href="src"
-          data-fancybox="gallery"
+          data-fancybox="images"
           class="gallery-link"
         ></a>
-        <div class="row">
+        <div class="row" v-if="images.length > 0">
           <div class="col px-0">
-            <button @click.prevent="openGallery" class="btn btn-outline-dark w-100 rounded-bottom">View Gallery</button>
+            <button @click.prevent="openGallery('image')" class="btn btn-outline-dark w-100 rounded-bottom">View Images</button>
+          </div>
+        </div>
+      </fancybox-component>
+      <fancybox-component ref="fancyboxPDFs">
+        <a
+          v-for="(src, index) in pdfs"
+          :key="'pdf-' + index"
+          :href="src"
+          data-fancybox="pdfs"
+          data-type="iframe"
+          data-options='{"iframe": {"preload": false}}'
+          class="gallery-link"
+        >
+        </a>
+        <div class="row" v-if="pdfs.length > 0">
+          <div class="col px-0">
+            <button @click.prevent="openGallery('pdf')" class="btn btn-outline-dark w-100 rounded-bottom">View PDFs</button>
           </div>
         </div>
       </fancybox-component>
@@ -51,18 +68,31 @@ export default class UppyComponent extends Vue {
   regionType = RegionType
   regionEnum = RegionEnum
   private uppy: Uppy | null = null
-  private filesData: Record<string, string> = {} // Store the file data
+  private imagesData: Record<string, string> = {} // Store the image data
+  private pdfsData: Record<string, string> = {} // Store the PDF data
 
   get images (): string[] {
-    return Object.values(this.filesData)
+    return Object.values(this.imagesData)
   }
 
-  openGallery (): void {
-    const galleryElements = (this.$refs.fancybox as Vue).$el.querySelectorAll(
-      '[data-fancybox="gallery"]'
-    )
-    // eslint-disable-next-line no-unused-expressions
-    galleryElements[0]?.click()
+  get pdfs (): string[] {
+    return Object.values(this.pdfsData)
+  }
+
+  openGallery (type: 'image' | 'pdf'): void {
+    if (type === 'image') {
+      const galleryElements = (this.$refs.fancyboxImages as Vue).$el.querySelectorAll(
+        '[data-fancybox="images"]'
+      )
+      // eslint-disable-next-line no-unused-expressions
+      galleryElements[0]?.click()
+    } else {
+      const galleryElements = (this.$refs.fancyboxPDFs as Vue).$el.querySelectorAll(
+        '[data-fancybox="pdfs"]'
+      )
+      // eslint-disable-next-line no-unused-expressions
+      galleryElements[0]?.click()
+    }
   }
 
   mounted () {
@@ -93,14 +123,22 @@ export default class UppyComponent extends Vue {
       }
       const reader = new FileReader()
       reader.onload = () => {
-        this.filesData[file.name] = reader.result as string
+        const result = reader.result as string
+        console.log(file)
+        const tempFileType = this.getMimeType(file.name)
+        if (tempFileType.startsWith('image/')) {
+          this.imagesData[file.name] = result
+        } else if (tempFileType === 'application/pdf') {
+          this.pdfsData[file.name] = result
+        }
         this.onSubmit()
       }
       reader.readAsDataURL(file.data)
     })
 
     this.uppy.on('file-removed', (file: { name: any }) => {
-      Reflect.deleteProperty(this.filesData, file.name)
+      Reflect.deleteProperty(this.imagesData, file.name)
+      Reflect.deleteProperty(this.pdfsData, file.name)
       this.onSubmit()
     })
 
@@ -137,13 +175,24 @@ export default class UppyComponent extends Vue {
 
   // This method should be called when the form is submitted
   onSubmit (): void {
-    const temp: FileNameWithData = {}
-    for (const filename in this.filesData) {
+    const tempImages: FileNameWithData = {}
+    const tempPdfs: FileNameWithData = {}
+    for (const filename in this.imagesData) {
       const uniqueFilename = this.generateUniqueFilename(filename)
-      temp[uniqueFilename] = this.filesData[filename]
+      tempImages[uniqueFilename] = this.imagesData[filename]
     }
-    this.object.Stats[this.statTypeEnum.Value].Data = JSON.stringify(temp)
-    console.log(temp)
+    for (const filename in this.pdfsData) {
+      const uniqueFilename = this.generateUniqueFilename(filename)
+      tempPdfs[uniqueFilename] = this.pdfsData[filename]
+    }
+    this.object.Stats[this.statTypeEnum.Value].Data = JSON.stringify({
+      images: tempImages,
+      pdfs: tempPdfs
+    })
+    console.log({
+      images: tempImages,
+      pdfs: tempPdfs
+    })
   }
 
   generateUniqueFilename (originalFilename: string) : string {
@@ -161,32 +210,37 @@ export default class UppyComponent extends Vue {
     const data = this.object.Stats[this.statTypeEnum.Value].Data
     if (!data) return
 
-    const files = JSON.parse(data)
+    const { images, pdfs } = JSON.parse(data)
 
-    for (const uniqueFilename in files) {
-      const base64Data = files[uniqueFilename]
+    const addFilesToDashboard = (files: FileNameWithData, type: string) => {
+      for (const uniqueFilename in files) {
+        const base64Data = files[uniqueFilename]
 
-      const contentType = this.getMimeType(uniqueFilename)
-      const byteCharacters = atob(base64Data.split(',')[1]) // Remove the data URL prefix
-      const byteNumbers = new Array(byteCharacters.length)
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i)
-      }
-      const byteArray = new Uint8Array(byteNumbers)
-      const blob = new Blob([byteArray], { type: contentType })
-
-      const originalFilename = this.getOriginalFilename(uniqueFilename)
-
-      // eslint-disable-next-line no-unused-expressions
-      this.uppy?.addFile({
-        source: 'Local',
-        name: originalFilename,
-        data: blob,
-        meta: {
-          fileType: contentType
+        const contentType = this.getMimeType(uniqueFilename)
+        const byteCharacters = atob(base64Data.split(',')[1]) // Remove the data URL prefix
+        const byteNumbers = new Array(byteCharacters.length)
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i)
         }
-      })
+        const byteArray = new Uint8Array(byteNumbers)
+        const blob = new Blob([byteArray], { type: contentType })
+
+        const originalFilename = this.getOriginalFilename(uniqueFilename)
+
+        // eslint-disable-next-line no-unused-expressions
+        this.uppy?.addFile({
+          source: 'Local',
+          name: originalFilename,
+          data: blob,
+          meta: {
+            fileType: contentType
+          }
+        })
+      }
     }
+
+    addFilesToDashboard(images, 'image')
+    addFilesToDashboard(pdfs, 'pdf')
   }
 
   getMimeType (filename: string): string {
