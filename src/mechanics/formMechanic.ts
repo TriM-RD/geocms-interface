@@ -1,4 +1,16 @@
-import { MechanicAbstract, MechanicDelegate, ActionTypeEnum, StatType, StatTypeEnum, RegionEnum, RegionType, EventHandlerType, SubObjectTypeEnum, ObjectTypeEnum, ObjectTemplate } from '@cybertale/interface'
+import {
+  ActionTypeEnum,
+  EventHandlerType,
+  MechanicAbstract,
+  MechanicDelegate,
+  ObjectTemplate,
+  ObjectTypeEnum,
+  RegionEnum,
+  RegionType,
+  StatType,
+  StatTypeEnum,
+  SubObjectTypeEnum
+} from '@cybertale/interface'
 import http from '@/http-common'
 import router from '@/router'
 import { TYPE, useToast } from 'vue-toastification'
@@ -110,6 +122,17 @@ export namespace Manager.Mechanic{
               break
           }
           break
+        case 'GroupAdd':
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Middle:
+              this.removeElementFromArray(this.ObjectTemplates, 'groupType')
+              this.refreshPage()
+              this.ObjectTemplates = this.Append((await http.get(process.env.VUE_APP_BASE_URL + 'form/group/' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
+              this.refreshPage()
+              break
+            default:
+              break
+          }
       }
     }
 
@@ -179,12 +202,33 @@ export namespace Manager.Mechanic{
               await this.validateForm('group', 'GroupEdit')
               break
             case SubObjectTypeEnum.Middle:
+              this.refreshPage()
+              this.ObjectTemplates = this.Splice(3, [// TODO while 2 is correct, it needs to be redone to make it programmatic
+                new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.SelectButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
+                  [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.ItemList].Data),
+                  [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Template'),
+                  [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(Math.random().toString(36).slice(2, 7).toString()),
+                  [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(''),
+                  [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.Id].Data),
+                  [StatTypeEnum.ErrorMessage]: StatType.StatTypes[StatTypeEnum.ErrorMessage]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.ErrorMessage].Data)
+                })
+              ])
+              this.refreshPage()
+              break
+            case SubObjectTypeEnum.Up:
               await router.push({ name: 'AttributeAdd', params: { parentId: this.id } })
               break
             case SubObjectTypeEnum.Right:
               await router.push({
                 name: 'Group'
               })
+              break
+            case SubObjectTypeEnum.Down:
+              this.refreshPage()
+              console.log(eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+              this.ObjectTemplates.splice(this.ObjectTemplates.findIndex(
+                element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data), 1)
+              this.refreshPage()
               break
             default:
               break
