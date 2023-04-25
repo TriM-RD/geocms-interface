@@ -84,6 +84,7 @@ export default class FooterComponent extends Vue {
         break
       case 'DeviceEdit':
       case 'DeviceAdd':
+      case 'DeviceReplace':
         this.objectTemplates = this.mechanic.InitSet(
           this.scaffoldButtons()
         )

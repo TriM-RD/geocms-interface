@@ -97,6 +97,7 @@ export namespace Manager.Mechanic{
     protected async SelectList (eventHandler: EventHandlerType): Promise<void> {
       switch (router.currentRoute.value.name) {
         case 'DeviceAdd':
+        case 'DeviceReplace':
         case 'DeviceEdit':// TODO add regex to check if id is uuid
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Middle:
@@ -141,9 +142,15 @@ export namespace Manager.Mechanic{
       let rowsExist = false
       switch (router.currentRoute.value.name) {
         case 'DeviceAdd':
+        case 'DeviceReplace':
         case 'DeviceEdit':
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Middle:
+              if (eventHandler.payload.Stats[StatTypeEnum.Tag].Data === 'replace') {
+                await router.push({
+                  name: 'DeviceReplace', params: { parentId: this.id }
+                })
+              }
               this.refreshPage()
               this.ObjectTemplates = this.Splice(2, [// TODO while 2 is correct, it needs to be redone to make it programmatic
                 new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.SelectButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {

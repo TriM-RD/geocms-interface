@@ -1,5 +1,12 @@
 <template v-if="renderComponent">
-  <button data-bs-toggle="tooltip" data-bs-placement="top" :data-bs-title="specialCase()" :class="`${object.Stats[statTypeEnum.Design].Data}`" @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object)'>{{object.Stats[statTypeEnum.Label].Data}}</button>
+  <button data-bs-toggle="tooltip" data-bs-placement="top"
+          :data-bs-title="tooltipCase()"
+          :hidden="specialCase()"
+          :disabled="attributeCheck(statTypeEnum.Disabled)"
+          :class="`${object.Stats[statTypeEnum.Design].Data}`"
+          @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object)'>
+    {{object.Stats[statTypeEnum.Label].Data}}
+  </button>
   <slot></slot>
 </template>
 
@@ -20,12 +27,23 @@ export default class SubmitButtonComponent extends Vue {
   object!: ObjectTemplate
   renderComponent= false
 
-  specialCase () {
+  tooltipCase () {
     if (this.object !== undefined) {
       if (this.object.Stats[this.statTypeEnum.Tooltip] !== undefined) {
         return this.object.Stats[this.statTypeEnum.Tooltip].Data
       }
     }
+  }
+
+  specialCase () : boolean {
+    if (this.object.Stats[this.statTypeEnum.ElementType] === undefined) { return false }
+    return this.object.Stats[this.statTypeEnum.ElementType].Data === 'hidden'
+  }
+
+  attributeCheck (statType : number) : boolean | string {
+    if (this.object.Stats[statType] === undefined) { return false }
+    if (this.object.Stats[statType].Data === '') { return false }
+    return this.object.Stats[statType].Data
   }
 }
 </script>

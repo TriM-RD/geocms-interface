@@ -2,6 +2,7 @@
   <div class="container">
     <FormComponent/>
     <TableComponent v-if="renderTable" />
+    <ListComponent v-if="renderList" :use-routes="true" />
   </div>
 </template>
 
@@ -10,21 +11,28 @@ import { Options, Vue } from 'vue-class-component'
 import FormComponent from '@/components/FormComponent.vue'
 import TableComponent from '@/components/TableComponent.vue'
 import router from '@/router'
+import ListComponent from '@/components/ListComponent.vue'
 
 @Options({
   components: {
+    ListComponent,
     FormComponent,
     TableComponent
   }
 })
 export default class Form extends Vue {
   renderTable = false
+  renderList = false
 
   mounted () {
     switch (router.currentRoute.value.name) {
       case 'GroupEdit':
       case 'GroupAdd':
         this.renderTable = true
+        break
+      case 'DeviceEdit':
+        console.log('test1')
+        this.renderList = true
         break
     }
   }

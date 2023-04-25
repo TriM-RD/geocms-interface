@@ -7,7 +7,15 @@ export namespace Manager.Mechanic{
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public async InitGet (_id = '-1', _route: string): Promise<ObjectTemplate[]> {
       this.ObjectTemplates = []
-      const response = await http.get(process.env.VUE_APP_BASE_URL + _route)
+
+      // Add a conditional to include the id in the request URL when it's not '-1'.
+      const requestUrl =
+        process.env.VUE_APP_BASE_URL +
+        _route +
+        (_id !== '-1' ? '/' + _id : '')
+
+      const response = await http.get(requestUrl)
+
       if (Object.keys(response.data).length !== 0) {
         this.ObjectTemplates = this.forEachElement(response.data)
         return this.ObjectTemplates

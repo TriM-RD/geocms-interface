@@ -260,7 +260,7 @@ export default class WelcomeComponent extends Vue {
       this.$store.commit('setCodeVerifier', codeChallengePair.codeVerifier)
       this.$store.commit('setCodeChallenge', codeChallengePair.codeChallenge)
     })
-    this.$store.commit('setClientId', '98db801c-3455-452e-b296-882a2080d025')
+    this.$store.commit('setClientId', '99040270-0a3c-4ee0-ae12-2d402a6e6496')
     this.$store.commit('setNonce', nonce)
   }
 

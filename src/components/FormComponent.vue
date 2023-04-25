@@ -48,6 +48,20 @@ export default class FormComponent extends Vue {
       case 'DeviceAdd':
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'entity'))
         break
+      case 'DeviceReplace':
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'replace/entity/' + this.$route.params.parentId.toString()))
+        this.objectTemplates = this.mechanic.Append([
+          new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
+            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('ReplacedDevice'),
+            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('replacedDevice'),
+            [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(this.$route.params.parentId.toString()),
+            [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('me-2 readonly'),
+            [StatTypeEnum.ElementType]: StatType.StatTypes[StatTypeEnum.ElementType]().CreateStat().InitData(/* 'hidden' */''),
+            [StatTypeEnum.Placeholder]: StatType.StatTypes[StatTypeEnum.Placeholder]().CreateStat().InitData(''),
+            [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.objectTemplates[0].Stats[StatTypeEnum.Id].Data)
+          })
+        ])
+        break
       case 'GroupAdd':
       case 'GroupEdit':
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'group'))

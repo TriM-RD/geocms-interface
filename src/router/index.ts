@@ -34,6 +34,11 @@ const routes: Array<RouteRecordRaw> = [
     component: Form
   },
   {
+    path: '/device/replace/:parentId',
+    name: 'DeviceReplace',
+    component: Form
+  },
+  {
     path: '/group',
     name: 'Group',
     component: Show

@@ -20,6 +20,7 @@ import {
   StatTypeEnum,
   RegionType
 } from '@cybertale/interface'
+import router from '@/router'
 
 @Options({
   props: {
@@ -65,10 +66,17 @@ export default class ListComponent extends Vue {
       }
       this.renderComponent = false
       this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'search/' + this.base64UrlSafe(this.title)))
-      console.log(this.objectTemplates)
     } else {
       this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'permissions/user'))
-      console.log(this.objectTemplates)
+      switch (this.$route.name) {
+        case 'AccountProfile':
+          this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'permissions/user'))
+          break
+        case 'DeviceEdit':
+          console.log('test')
+          this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id.toString(), 'replacement/entity'))
+          break
+      }
     }
     this.getHeaders()
     this.renderComponent = true
