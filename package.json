@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@cybertale/interface": "^1.0.3",
+    "@cybertale/interface": "^1.1.0",
     "@fancyapps/ui": "^5.0.16",
     "@uppy/core": "^3.1.2",
     "@uppy/dashboard": "^3.3.2",

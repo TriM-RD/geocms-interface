@@ -57,12 +57,14 @@ export default class TableComponent extends Vue {
   }
 
   mounted () {
-    window.onscroll = async () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop ===
-        document.documentElement.offsetHeight
-      ) {
-        await this.scroll()
+    if (this.$route.name !== 'GroupEdit') {
+      window.onscroll = async () => {
+        if (
+          window.innerHeight + document.documentElement.scrollTop ===
+          document.documentElement.offsetHeight
+        ) {
+          await this.scroll()
+        }
       }
     }
   }

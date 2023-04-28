@@ -35,6 +35,7 @@ export namespace Manager.Mechanic{
               router.push({ name: 'DivisionEdit', params: { id: _id } })
               break
             case 'Device':
+            case 'Replacement History':
               router.push({ name: 'DeviceEdit', params: { id: _id } })
               break
             default:
