@@ -147,10 +147,10 @@ export default class MapComponent extends Vue {
       },
       paint: {
         'line-color': '#ffff00',
-        'line-width': 6,
+        'line-width': 3,
         'line-opacity': 0.4
       }
-    })
+    }, 'icon-points')
 
     // Add a line layer with line-dasharray set to the first value in dashArraySequence
     this.map.addLayer({
@@ -163,10 +163,10 @@ export default class MapComponent extends Vue {
       },
       paint: {
         'line-color': '#ffff00',
-        'line-width': 6,
+        'line-width': 3,
         'line-dasharray': [0, 4, 3]
       }
-    })
+    }, 'icon-points')
   }
 
   async connectUnclusteredPoints (relationshipData: any[]): Promise<void> {
@@ -175,6 +175,7 @@ export default class MapComponent extends Vue {
 
     // Create a new array to store the LineString GeoJSON objects that should be added to the map
     const linesGeoJSON: any[] = []
+    const allIds: any[] = []
 
     // Iterate over the relationship data and check if any of the points are within a cluster
     for (const [end, start] of Object.entries(relationshipData)) {
@@ -188,6 +189,11 @@ export default class MapComponent extends Vue {
         // If either point is in a cluster, do not create the LineString and continue to the next relationship
         continue
       }
+
+      if (endFeature === undefined) { continue }
+      /* this.map.setFeatureState({ source: 'entities', id: endFeature.id }, { change_opacity: true })
+      console.log(this.map.getFeatureState({ source: 'entities', id: endFeature.id })) */
+      allIds.push(endFeature.id)
 
       const startCoordinates = startFeature.geometry.coordinates
       const endCoordinates = endFeature.geometry.coordinates
@@ -205,6 +211,14 @@ export default class MapComponent extends Vue {
     }
 
     this.addArrowLayer(linesGeoJSON)
+    this.map.setPaintProperty('icon-points', 'icon-opacity', [
+      'case',
+      ['in', ['get', 'id'], ['literal', allIds]],
+      1,
+      ['!=', ['get', 'iconType'], 'ico-sro'],
+      0.1,
+      1
+    ])
   }
 
   generateMap (mapUpdated = false) {
@@ -261,7 +275,23 @@ export default class MapComponent extends Vue {
         layout: {
           'icon-image': ['get', 'iconType'],
           'icon-allow-overlap': true,
-          'icon-size': 0.6
+          'icon-size': 0.6,
+          'symbol-sort-key': [
+            'case',
+            ['==', ['get', 'iconType'], 'ico-sro'],
+            9,
+            0
+          ]
+        },
+        paint: {
+          'icon-opacity': [
+            'case',
+            ['boolean', ['feature-state', 'change_opacity'], false],
+            1,
+            ['!=', ['get', 'iconType'], 'ico-sro'],
+            0.1,
+            1
+          ]
         }
       })
 
