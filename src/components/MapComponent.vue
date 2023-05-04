@@ -193,7 +193,7 @@ export default class MapComponent extends Vue {
       if (endFeature === undefined) { continue }
       /* this.map.setFeatureState({ source: 'entities', id: endFeature.id }, { change_opacity: true })
       console.log(this.map.getFeatureState({ source: 'entities', id: endFeature.id })) */
-      allIds.push(endFeature.id)
+      allIds.push(endFeature.properties.id)
 
       const startCoordinates = startFeature.geometry.coordinates
       const endCoordinates = endFeature.geometry.coordinates
@@ -211,14 +211,25 @@ export default class MapComponent extends Vue {
     }
 
     this.addArrowLayer(linesGeoJSON)
-    this.map.setPaintProperty('icon-points', 'icon-opacity', [
+    const iconSize = [
+      'case',
+      ['in', ['get', 'id'], ['literal', allIds]],
+      0.6,
+      ['==', ['get', 'iconType'], 'ico-sro'],
+      0.6,
+      0.3
+    ]
+
+    const iconOpacity = [
       'case',
       ['in', ['get', 'id'], ['literal', allIds]],
       1,
       ['!=', ['get', 'iconType'], 'ico-sro'],
       0.1,
       1
-    ])
+    ]
+    this.map.setLayoutProperty('icon-points', 'icon-size', iconSize)
+    this.map.setPaintProperty('icon-points', 'icon-opacity', iconOpacity)
   }
 
   generateMap (mapUpdated = false) {
@@ -275,7 +286,12 @@ export default class MapComponent extends Vue {
         layout: {
           'icon-image': ['get', 'iconType'],
           'icon-allow-overlap': true,
-          'icon-size': 0.6,
+          'icon-size': [
+            'case',
+            ['==', ['get', 'iconType'], 'ico-sro'],
+            0.6, // Set the size of the ico-sro icon to 1.5 times the default size
+            0.3 // Set the size of all other icons to the default size
+          ],
           'symbol-sort-key': [
             'case',
             ['==', ['get', 'iconType'], 'ico-sro'],
