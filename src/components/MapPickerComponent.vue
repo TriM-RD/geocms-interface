@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-lg-4"></div>
       <div class="col-lg-4">
-        <div class="input-group mb-3">
+        <div class="input-group mt-3 mb-1">
           <label class="input-group-text text-truncate">Longitude</label>
           <input type="text" class="form-control" placeholder="Longitude" v-model="lngLat[0]" aria-label="Longitude">
           <label class="input-group-text">Latitude</label>

@@ -2,18 +2,29 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12 p-0">
-        <div id="map" style="height: 75vh"/>
+        <div class="map-container" style="height: 75vh; position: relative; display: flex; align-items: center; justify-content: center;">
+          <Loading v-model:active="renderComponent"
+                   :can-cancel="false"
+                   :is-full-page="false"
+                   style="position: absolute;"/>
+          <div id="map" style="height: 100%; width: 100%;"/>
+        </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script lang="ts">
-import { Vue } from 'vue-class-component'
+import { Options, Vue } from 'vue-class-component'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import mapboxgl from 'mapbox-gl'
 import http from '@/http-common'
+import Loading from 'vue-loading-overlay'
+@Options({
+  components: {
+    Loading
+  }
+})
 
 export default class MapComponent extends Vue {
   longitude = 0
@@ -24,6 +35,7 @@ export default class MapComponent extends Vue {
   entities: any
   relData= []
   currentPopup: mapboxgl.Popup | null = null
+  renderComponent= true
   dashArraySequence = [
     [0, 4, 3],
     [0.5, 4, 2.5],
@@ -393,8 +405,11 @@ export default class MapComponent extends Vue {
           this.$router.push({ name: 'DeviceEdit', params: { id: id } })
         })
       })
-      this.map.on('move', () => {
-        this.connectUnclusteredPoints(this.relData)
+      /* this.map.on('move', () => {
+        // this.connectUnclusteredPoints(this.relData)
+      }) */
+      this.map.on('zoomend', () => {
+        this.handleZoomChange()
       })
     }
     if (this.entities.features.length > 0) {
@@ -410,6 +425,16 @@ export default class MapComponent extends Vue {
       }
 
       this.animateDashArray(0)
+      this.renderComponent = false
+    }
+  }
+
+  async handleZoomChange (): Promise<void> {
+    const zoomLevel = this.map.getZoom()
+
+    // Adjust the value 14 to the desired zoom level for clustered points to appear
+    if (zoomLevel <= 16) {
+      await this.connectUnclusteredPoints(this.relData)
     }
   }
 }

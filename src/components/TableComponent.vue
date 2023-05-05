@@ -177,7 +177,13 @@ export default class TableComponent extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.table{
+.table {
   margin-bottom: 5%;
+}
+
+@media (max-width: 767px) {
+  .table {
+    margin-bottom: calc(5% + 60px);
+  }
 }
 </style>
