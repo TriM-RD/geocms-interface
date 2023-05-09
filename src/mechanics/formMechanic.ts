@@ -40,7 +40,6 @@ export namespace Manager.Mechanic{
         return []
       }
       this.inEdit = true
-      console.log(response.data)
       return (this.ObjectTemplates = response.data.map((_object: any) => {
         return new ObjectTemplate(_object.Region, _object.ObjectEnum,
           _object.SubObjectEnum, _object.ActionEnum, this.reStructure(_object.Stats))
@@ -193,7 +192,7 @@ export namespace Manager.Mechanic{
               break
             case SubObjectTypeEnum.Down:
               this.refreshPage()
-              this.unlinkBelongs(eventHandler)
+              this.resolveButtonDown(eventHandler, eventHandler.payload.Stats[StatTypeEnum.Tag].Data.split('-'))
               this.refreshPage()
               break
             default:
@@ -230,7 +229,6 @@ export namespace Manager.Mechanic{
               break
             case SubObjectTypeEnum.Down:
               this.refreshPage()
-              console.log(eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
               this.ObjectTemplates.splice(this.ObjectTemplates.findIndex(
                 element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data), 1)
               this.refreshPage()
@@ -406,9 +404,9 @@ export namespace Manager.Mechanic{
       }
     }
 
-    private unlinkBelongs (eventHandler : EventHandlerType) {
+    private unlinkBelongs (eventHandler : EventHandlerType, tag : string) {
       const belongsIndex = this.ObjectTemplates.findIndex(
-        element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+        element => element.Stats[StatTypeEnum.Tag].Data === tag)
       if (this.ObjectTemplates[belongsIndex].Stats[StatTypeEnum.Disabled].Data === 'true') {
         this.ObjectTemplates[belongsIndex].Stats[StatTypeEnum.Disabled].Data = ''
         eventHandler.payload.Stats[StatTypeEnum.Label].Data = 'Un-Link'
@@ -417,6 +415,29 @@ export namespace Manager.Mechanic{
         this.ObjectTemplates[belongsIndex].Stats[StatTypeEnum.Disabled].Data = 'true'
         eventHandler.payload.Stats[StatTypeEnum.Label].Data = 'Link'
         eventHandler.payload.Stats[StatTypeEnum.Design].Data = 'btn btn-outline-info me-2'
+      }
+    }
+
+    private removeElementByTag (eventHandler : EventHandlerType, tag : string) {
+      const elementIndex = this.ObjectTemplates.findIndex(
+        element => element.Stats[StatTypeEnum.Tag].Data === tag)
+      this.ObjectTemplates.splice(elementIndex, 1)
+    }
+
+    private checkIfContains (str: string, word: string): boolean {
+      return str.includes(word)
+    }
+
+    private resolveButtonDown (eventHandler: EventHandlerType, strings: string[]) {
+      switch (strings[0]) {
+        case 'delete':
+          this.removeElementByTag(eventHandler, strings[1])
+          break
+        case 'link':
+          this.unlinkBelongs(eventHandler, strings[1])
+          break
+        default:
+          break
       }
     }
   }
