@@ -193,8 +193,7 @@ export namespace Manager.Mechanic{
               break
             case SubObjectTypeEnum.Down:
               this.refreshPage()
-              this.ObjectTemplates.splice(this.ObjectTemplates.findIndex(
-                element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data), 1)
+              this.unlinkBelongs(eventHandler)
               this.refreshPage()
               break
             default:
@@ -404,6 +403,20 @@ export namespace Manager.Mechanic{
               })
           }
         }
+      }
+    }
+
+    private unlinkBelongs (eventHandler : EventHandlerType) {
+      const belongsIndex = this.ObjectTemplates.findIndex(
+        element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+      if (this.ObjectTemplates[belongsIndex].Stats[StatTypeEnum.Disabled].Data === 'true') {
+        this.ObjectTemplates[belongsIndex].Stats[StatTypeEnum.Disabled].Data = ''
+        eventHandler.payload.Stats[StatTypeEnum.Label].Data = 'Un-Link'
+        eventHandler.payload.Stats[StatTypeEnum.Design].Data = 'btn btn-outline-danger me-2'
+      } else {
+        this.ObjectTemplates[belongsIndex].Stats[StatTypeEnum.Disabled].Data = 'true'
+        eventHandler.payload.Stats[StatTypeEnum.Label].Data = 'Link'
+        eventHandler.payload.Stats[StatTypeEnum.Design].Data = 'btn btn-outline-info me-2'
       }
     }
   }
