@@ -33,6 +33,8 @@
               <router-link to="/account" class="dropdown-item opacity-75">Profile</router-link>
               <router-link to="/administration" class="dropdown-item opacity-75">Administration</router-link>
               <li class="opacity-50"><hr class="dropdown-divider"></li>
+              <li><button class="dropdown-item opacity-75" type="button" v-on:click="openReport">Open Report</button></li>
+              <li class="opacity-50"><hr class="dropdown-divider"></li>
               <li><button class="dropdown-item opacity-75" type="button" v-on:click="logout()">Log out</button></li>
             </ul>
           </li>
@@ -84,6 +86,13 @@ export default class NavBarComponent extends Vue {
     }, response => {
       // error
     })
+  }
+
+  openReport () : void {
+    const today = new Date()
+    const date1 = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().split('T')[0]
+    const date2 = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().split('T')[0]
+    window.open('https://tri-m.app/ormari/api/report.php?datefrom=' + date1 + '&dateto=' + date2)
   }
 }
 </script>

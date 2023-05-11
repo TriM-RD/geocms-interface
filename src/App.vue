@@ -2,6 +2,16 @@
   <div v-if="($store.state.requiresAuth === 2)">
     <NavBarComponent/>
     <NavComponent />
+    <!-- TODO MAKE MODAL INTO A COMPONENT -->
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-body">
+            <iframe style="overflow: hidden;" id="yourIframeId" src="https://tri-m.app/ormari/modal.php" width="100%" height="500vh"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
     <FooterComponent />
   </div>
   <router-view :key="$route.fullPath"/>
@@ -65,3 +75,19 @@ export default class App extends Vue {
   }
 }
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+/* add this to your existing CSS */
+#iframe-container {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.custom-height{
+  min-height:100vh;
+}
+
+</style>
