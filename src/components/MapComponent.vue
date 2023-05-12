@@ -227,6 +227,8 @@ export default class MapComponent extends Vue {
       'case',
       ['in', ['get', 'id'], ['literal', allIds]],
       0.6,
+      ['==', ['get', 'iconType'], 'struja-idle'],
+      0.6,
       ['==', ['get', 'iconType'], 'ico-sro'],
       0.6,
       0.3
@@ -236,7 +238,7 @@ export default class MapComponent extends Vue {
       'case',
       ['in', ['get', 'id'], ['literal', allIds]],
       1,
-      ['!=', ['get', 'iconType'], 'ico-sro'],
+      ['all', ['!=', ['get', 'iconType'], 'ico-sro'], ['!=', ['get', 'iconType'], 'struja-idle']],
       0.1,
       1
     ]
@@ -301,12 +303,16 @@ export default class MapComponent extends Vue {
           'icon-size': [
             'case',
             ['==', ['get', 'iconType'], 'ico-sro'],
-            0.6, // Set the size of the ico-sro icon to 1.5 times the default size
-            0.3 // Set the size of all other icons to the default size
+            0.6,
+            ['==', ['get', 'iconType'], 'struja-idle'],
+            0.6,
+            0.3
           ],
           'symbol-sort-key': [
             'case',
             ['==', ['get', 'iconType'], 'ico-sro'],
+            9,
+            ['==', ['get', 'iconType'], 'struja-idle'],
             9,
             0
           ]
@@ -316,7 +322,7 @@ export default class MapComponent extends Vue {
             'case',
             ['boolean', ['feature-state', 'change_opacity'], false],
             1,
-            ['!=', ['get', 'iconType'], 'ico-sro'],
+            ['all', ['!=', ['get', 'iconType'], 'ico-sro'], ['!=', ['get', 'iconType'], 'struja-idle']],
             0.1,
             1
           ]
