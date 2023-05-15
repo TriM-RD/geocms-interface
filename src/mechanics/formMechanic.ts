@@ -411,6 +411,22 @@ export namespace Manager.Mechanic{
 
     private resolveButtonDown (eventHandler: EventHandlerType, strings: string[]) {
       switch (strings[0]) {
+        case 'destroy':
+          http.delete(process.env.VUE_APP_BASE_URL + 'entity' + '/' + this.id)
+            .then((response) => {
+              useToast()({
+                component: ToastComponent,
+                props: {
+                  msg: response.data.msg
+                }
+              }, {
+                type: response.data.status as TYPE
+              })
+              router.push({
+                name: 'Device'
+              })
+            })
+          break
         case 'delete':
           this.removeElementByTag(eventHandler, strings[1])
           break
