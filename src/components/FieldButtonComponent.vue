@@ -1,14 +1,16 @@
 <template>
+  <div v-if="!reRender && renderComponent">
   <!--component v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ _objectTemplate.Stats[statTypeEnum.Tag].Data }`"  :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'></component-->
   <component :key="`${ 0 }-${ objectTemplates[0].Stats[statTypeEnum.Tag].Data }`"  :is="getComponent(objectTemplates[0].Region, objectTemplates[0].ObjectEnum)" :object='objectTemplates[0]'>
     <component :key="`${ 0 }-${ objectTemplates[1].Stats[statTypeEnum.Tag].Data }`"  :is="getComponent(objectTemplates[0].Region, objectTemplates[1].ObjectEnum)" :object='objectTemplates[1]'>
     </component>
   </component>
+  </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { Manager } from '@/mechanics/columnMechanic'
+import { Manager } from '@/mechanics/helperFormMechanic'
 import {
   ObjectTemplate,
   MechanicAbstract,
@@ -22,11 +24,17 @@ import {
 @Options({
   props: {
     object: ObjectTemplate,
-    index: Number
+    index: Number,
+    pageRefresh: {
+      type: Boolean,
+      default: true
+    }
   }
 })
 export default class FieldButtonComponent extends Vue {
-  mechanic: MechanicAbstract = new Manager.Mechanic.ColumnMechanic()
+  pageRefresh!: boolean
+  renderComponent = true
+  mechanic: MechanicAbstract = new Manager.Mechanic.HelperFormMechanic(this.reRenderInternal.bind(this))
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType
@@ -50,11 +58,45 @@ export default class FieldButtonComponent extends Vue {
   ]
   )
 
+  get reRender () {
+    console.log(JSON.parse(JSON.stringify(this.objectTemplates)))
+    switch (this.object.Stats[StatTypeEnum.Tag].Data) {
+      case 'code':
+        this.objectTemplates = this.mechanic.InitSet([
+          new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.InsertClick, {
+            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Label].Data),
+            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Tag].Data),
+            [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Value].Data),
+            [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('me-2 readonly'),
+            [StatTypeEnum.Placeholder]: StatType.StatTypes[StatTypeEnum.Placeholder]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Placeholder].Data),
+            [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Id].Data)
+          }),
+          new ObjectTemplate(RegionEnum.MapPicker, ObjectTypeEnum.Button, SubObjectTypeEnum.Middle, ActionTypeEnum.Click, {
+            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Auto Generate'),
+            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('codeButton'),
+            [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-info me-2'),
+            [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Id].Data)
+          })
+        ]
+        )
+        break
+    }
+    return this.pageRefresh
+  }
+
+  reRenderInternal () {
+    if (!this.renderComponent) {
+      this.objectTemplates = []
+    }
+    this.renderComponent = !this.renderComponent
+  }
+
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {
+    console.log(JSON.parse(JSON.stringify(this.objectTemplates)))
     return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }
 }

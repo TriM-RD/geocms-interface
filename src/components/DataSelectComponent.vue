@@ -62,6 +62,7 @@ export default class DataSelectComponent extends Vue {
   )
 
   get reRender () {
+    console.log('test')
     this.objectTemplates = this.mechanic.InitSet([
       new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.DataList, SubObjectTypeEnum.ParentObject, ActionTypeEnum.SelectIdFromName, {
         [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Label].Data),

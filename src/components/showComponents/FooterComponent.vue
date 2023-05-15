@@ -82,9 +82,13 @@ export default class FooterComponent extends Vue {
           this.scaffoldButtons()
         )
         break
-      case 'DeviceEdit':
       case 'DeviceAdd':
       case 'DeviceReplace':
+        this.objectTemplates = this.mechanic.InitSet(
+          this.scaffoldButtons()
+        )
+        break
+      case 'DeviceEdit':
         this.objectTemplates = this.mechanic.InitSet([
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Save'),

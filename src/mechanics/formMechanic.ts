@@ -427,6 +427,11 @@ export namespace Manager.Mechanic{
               })
             })
           break
+        case 'codeButton':
+          this.generateCode(eventHandler, strings[0])
+          this.refreshPage()
+          this.refreshPage()
+          break
         case 'delete':
           this.removeElementByTag(eventHandler, strings[1])
           break
@@ -488,6 +493,25 @@ export namespace Manager.Mechanic{
         }
       }
       return data
+    }
+
+    generateRandomString (inputString: string): string {
+      const characters = inputString.split('')
+      for (let i = characters.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * i)
+        const temp = characters[i]
+        characters[i] = characters[j]
+        characters[j] = temp
+      }
+      return characters.join('')
+    }
+
+    private generateCode (eventHandler: EventHandlerType, string: string) {
+      const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === 'code')
+      console.log(this.ObjectTemplates[temp].Stats[StatTypeEnum.Label].Data)
+      console.log(this.ObjectTemplates[temp].Stats[StatTypeEnum.Value].Data)
+      this.ObjectTemplates[temp].Stats[StatTypeEnum.Value].Data = this.generateRandomString(this.ObjectTemplates[temp].Stats[StatTypeEnum.Id].Data)
+      console.log(this.ObjectTemplates[temp].Stats[StatTypeEnum.Value].Data)
     }
   }
 
