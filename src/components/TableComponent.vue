@@ -2,6 +2,23 @@
   <Loading v-model:active="renderComponent"
            :can-cancel="false"
            :is-full-page="false"/>
+  <div class="my-4" v-if="checkRoute()">
+    <div class="row">
+      <div class="col-12 col-sm-9 d-flex justify-content-between align-items-center">
+        <div></div> <!-- Empty div for alignment with first column -->
+        <input @change="handleFilterChange" v-model="filters.code" type="search" class="form-control flex-fill me-3" id="codeFilter" placeholder="Filter by code">
+        <input @change="handleFilterChange" v-model="filters.division" type="search" class="form-control flex-fill me-3" id="divisionFilter" placeholder="Filter by division">
+        <input @change="handleFilterChange" v-model="filters.group" type="search" class="form-control flex-fill me-3" id="groupFilter" placeholder="Filter by group">
+      </div>
+      <div class="col-12 col-sm-3 mt-3 mt-sm-0">
+        <select class="form-select" id="sortOrder">
+          <option selected value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+      </div>
+      <div></div> <!-- Empty div for alignment with last column -->
+    </div>
+  </div>
   <table class="table table-hover" v-if="!renderComponent">
   <thead class="table-light">
     <tr>
@@ -30,6 +47,7 @@ import {
   RegionType,
   RegionEnum
 } from '@cybertale/interface'
+import router from '@/router'
 @Options({
   components: {
     Loading
@@ -47,6 +65,8 @@ export default class TableComponent extends Vue {
   objectTemplates!: ObjectTemplate[]
   entities: ObjectTemplate[][] = []
   currentPage = 1
+  filters = { code: '', group: '', division: '' }
+  isInitRunning = false
 
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
@@ -100,10 +120,24 @@ export default class TableComponent extends Vue {
     await this.Init()
   }
 
+  handleFilterChange (): void {
+    if (!this.isInitRunning) {
+      this.renderComponent = true
+      this.changeRender()
+      this.Init()
+    }
+  }
+
+  checkRoute () {
+    return router.currentRoute.value.name === 'Device'
+  }
+
   async Init () {
-    switch (this.$route.name) {
+    this.isInitRunning = true
+    switch (router.currentRoute.value.name) {
       case 'Device':
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'entity'))
+        console.log(this.filters)
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', JSON.stringify({ api: 'entity', filters: this.filters })))
         break
       case 'Group':
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'group'))
@@ -152,6 +186,7 @@ export default class TableComponent extends Vue {
     this.getHeaders()
     this.renderComponent = false
     this.loadingComponents = false
+    this.isInitRunning = false
   }
 
   reverseEntities () {
@@ -184,6 +219,45 @@ export default class TableComponent extends Vue {
 @media (max-width: 767px) {
   .table {
     margin-bottom: calc(5% + 60px);
+  }
+}
+
+.to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  background-color: #000;
+  color: #fff;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.to-top:hover {
+  background-color: #444;
+}
+
+/* Show the button after scrolling down 200px */
+@media screen and (min-width: 768px) {
+  .to-top {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  /* For mobile: Full-width inputs, stacked vertically */
+  .container > .d-flex {
+    flex-direction: column;
+  }
+
+  .container > .d-flex > input,
+  .container > .d-flex > select {
+    margin-bottom: 10px;
   }
 }
 </style>

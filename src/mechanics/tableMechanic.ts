@@ -12,17 +12,40 @@ export namespace Manager.Mechanic{
     private lastPageReached = false
 
     public async InitGet (_id: string, _api: string): Promise<ObjectTemplate[]> {
-      if (this.lastPageReached) { return [] }
-      if (this.page > 0) { this.loadNextPage() }
-      this.page++
-      this.ObjectTemplates = []
-      const response = await http.get(`${process.env.VUE_APP_BASE_URL + _api}?page=${this.page}&order=asc`)
-      if (Object.keys(response.data).length !== 0) {
-        this.ObjectTemplates = await this.forEachElement(response.data)
-        return this.ObjectTemplates
-      } else {
-        this.lastPageReached = true
-        return []
+      try {
+        const query = JSON.parse(_api)
+        if (this.lastPageReached) { return [] }
+        if (this.page > 0) { this.loadNextPage() }
+        this.page++
+        this.ObjectTemplates = []
+        let url = `${process.env.VUE_APP_BASE_URL + query.api}?page=${this.page}&order=asc`
+        for (const filter in query.filters) {
+          url += `&${filter}=${query.filters[filter]}`
+          console.log(filter)
+          console.log(query)
+        }
+        console.log(url)
+        const response = await http.get(url)
+        if (Object.keys(response.data).length !== 0) {
+          this.ObjectTemplates = await this.forEachElement(response.data)
+          return this.ObjectTemplates
+        } else {
+          this.lastPageReached = true
+          return []
+        }
+      } catch (e) {
+        if (this.lastPageReached) { return [] }
+        if (this.page > 0) { this.loadNextPage() }
+        this.page++
+        this.ObjectTemplates = []
+        const response = await http.get(`${process.env.VUE_APP_BASE_URL + _api}?page=${this.page}&order=asc`)
+        if (Object.keys(response.data).length !== 0) {
+          this.ObjectTemplates = await this.forEachElement(response.data)
+          return this.ObjectTemplates
+        } else {
+          this.lastPageReached = true
+          return []
+        }
       }
     }
 
