@@ -1,5 +1,5 @@
 import http from '@/http-common'
-import { EventHandlerType, ActionTypeEnum, RegionEnum, RegionType, MechanicAbstract, SubObjectTypeEnum, ObjectTypeEnum, ObjectTemplate } from '@cybertale/interface'
+import { EventHandlerType, RegionEnum, RegionType, MechanicAbstract, SubObjectTypeEnum, ObjectTypeEnum, ObjectTemplate } from '@cybertale/interface'
 import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
 import router from '@/router'
@@ -18,13 +18,10 @@ export namespace Manager.Mechanic{
         if (this.page > 0) { this.loadNextPage() }
         this.page++
         this.ObjectTemplates = []
-        let url = `${process.env.VUE_APP_BASE_URL + query.api}?page=${this.page}&order=asc`
+        let url = `${process.env.VUE_APP_BASE_URL + query.api}?page=${this.page}&order=${query.order}`
         for (const filter in query.filters) {
           url += `&${filter}=${query.filters[filter]}`
-          console.log(filter)
-          console.log(query)
         }
-        console.log(url)
         const response = await http.get(url)
         if (Object.keys(response.data).length !== 0) {
           this.ObjectTemplates = await this.forEachElement(response.data)

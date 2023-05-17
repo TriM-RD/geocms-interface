@@ -11,7 +11,7 @@
         <input @change="handleFilterChange" v-model="filters.group" type="search" class="form-control flex-fill me-3" id="groupFilter" placeholder="Filter by group">
       </div>
       <div class="col-12 col-sm-3 mt-3 mt-sm-0">
-        <select class="form-select" id="sortOrder">
+        <select class="form-select" id="sortOrder" @change="handleFilterChange" v-model="orderBy">
           <option selected value="asc">Ascending</option>
           <option value="desc">Descending</option>
         </select>
@@ -67,6 +67,7 @@ export default class TableComponent extends Vue {
   currentPage = 1
   filters = { code: '', group: '', division: '' }
   isInitRunning = false
+  orderBy = 'asc'
 
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
@@ -136,8 +137,8 @@ export default class TableComponent extends Vue {
     this.isInitRunning = true
     switch (router.currentRoute.value.name) {
       case 'Device':
-        console.log(this.filters)
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', JSON.stringify({ api: 'entity', filters: this.filters })))
+        console.log(this.orderBy)
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', JSON.stringify({ api: 'entity', filters: this.filters, order: this.orderBy })))
         break
       case 'Group':
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'group'))
