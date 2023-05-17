@@ -166,19 +166,21 @@ export namespace Manager.Mechanic{
     }
 
     private async validateForm (route: string, _id: string) {
-      this.refreshPage()
-      http.delete(process.env.VUE_APP_BASE_URL + route + '/' + _id)
-        .then((response) => {
-          useToast()({
-            component: ToastComponent,
-            props: {
-              msg: response.data.msg
-            }
-          }, {
-            type: response.data.status as TYPE
+      if (window.confirm('Are you sure you want to delete this entity?')) {
+        this.refreshPage()
+        http.delete(process.env.VUE_APP_BASE_URL + route + '/' + _id)
+          .then((response) => {
+            useToast()({
+              component: ToastComponent,
+              props: {
+                msg: response.data.msg
+              }
+            }, {
+              type: response.data.status as TYPE
+            })
+            this.refreshPage()
           })
-          this.refreshPage()
-        })
+      }
     }
   }
 
