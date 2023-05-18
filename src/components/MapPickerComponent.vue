@@ -5,9 +5,9 @@
       <div class="col-lg-4">
         <div class="input-group mt-3 mb-1">
           <label class="input-group-text text-truncate">Longitude</label>
-          <input type="text" class="form-control" placeholder="Longitude" v-model="lngLat[0]" aria-label="Longitude">
+          <input type="text" class="form-control" placeholder="Longitude" @input="updateMarker(lngLat)" v-model="lngLat[0]" aria-label="Longitude">
           <label class="input-group-text">Latitude</label>
-          <input type="text" class="form-control" placeholder="Latitude" v-model="lngLat[1]" aria-label="Latitude">
+          <input type="text" class="form-control" placeholder="Latitude" @input="updateMarker(lngLat)" v-model="lngLat[1]" aria-label="Latitude">
           <button class="btn btn-outline-info" type="button" @click="geoLocate()">Get</button>
         </div>
       </div>

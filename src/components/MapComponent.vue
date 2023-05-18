@@ -1,8 +1,16 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-12 p-0">
-        <div class="map-container" style="height: 75vh; position: relative; display: flex; align-items: center; justify-content: center;">
+      <div class="col-12 p-0 position-relative">
+        <div class="map-container" style="height: 75vh; position: relative;">
+          <div class="map-legend position-absolute top-0 start-0 p-3 bg-white" style="z-index: 1; max-width: 200px;">
+            <div v-for="iconType in iconTypes" :key="iconType" class="form-check">
+              <input class="form-check-input" type="checkbox" :value="iconType" v-model="checkedIconTypes" @change="updateSymbolVisibility" :id="iconType" checked>
+              <label class="form-check-label" :for="iconType">
+                {{ iconType }}
+              </label>
+            </div>
+          </div>
           <Loading v-model:active="renderComponent"
                    :can-cancel="false"
                    :is-full-page="false"
@@ -20,6 +28,8 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import mapboxgl from 'mapbox-gl'
 import http from '@/http-common'
 import Loading from 'vue-loading-overlay'
+import { StatTypeEnum } from '@cybertale/interface'
+import { Modal } from 'bootstrap'
 @Options({
   components: {
     Loading
@@ -54,6 +64,8 @@ export default class MapComponent extends Vue {
   ];
 
   step = 0;
+  checkedIconTypes: string[] = ['ico-lamp', 'ico-sro', 'ico-ssro', 'struja-idle']
+  iconTypes: string[] = ['ico-lamp', 'ico-sro', 'ico-ssro', 'struja-idle']
 
   mounted () {
     mapboxgl.accessToken =
@@ -63,6 +75,17 @@ export default class MapComponent extends Vue {
       style: 'mapbox://styles/joso/clfv7rrii007101rpc2dhq56h/draft'
     })
     this.test()
+  }
+
+  updateSymbolVisibility () : void {
+    if (this.checkedIconTypes.includes('ico-lamp')) {
+      this.map.setLayoutProperty('clusters', 'visibility', 'visible')
+      this.map.setLayoutProperty('cluster-count', 'visibility', 'visible')
+    } else {
+      this.map.setLayoutProperty('clusters', 'visibility', 'none')
+      this.map.setLayoutProperty('cluster-count', 'visibility', 'none')
+    }
+    this.map.setFilter('icon-points', ['in', 'iconType', ...this.checkedIconTypes])
   }
 
   async test () {
@@ -246,12 +269,12 @@ export default class MapComponent extends Vue {
     this.map.setPaintProperty('icon-points', 'icon-opacity', iconOpacity)
   }
 
-  generateMap (mapUpdated = false) {
+  generateMap (mapUpdated = false, cluster = true) {
     if (!mapUpdated) {
       this.map.addSource('entities', {
         type: 'geojson',
         data: this.entities,
-        cluster: true,
+        cluster: cluster,
         clusterMaxZoom: 14, // Max zoom to cluster points on
         clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
       })
@@ -368,20 +391,60 @@ export default class MapComponent extends Vue {
 
         // Update the map with new data
         await this.updateMapData(id)
-
+        const precision = 1000000
         // Rest of the code
-        const devicesWithSameCoordinates = this.entities.features.filter((device: { geometry: { coordinates: any[] } }) => {
-          return device.geometry.coordinates[0] === coordinates[0] && device.geometry
-            .coordinates[1] === coordinates[1]
+        const devicesWithSameCoordinates = this.entities.features.filter((device: { geometry: { coordinates: any[] }, properties : { iconType: string, code: string } }) => {
+          return Math.round(parseFloat(device.geometry.coordinates[0]) * precision) === Math.round(parseFloat(coordinates[0]) * precision) &&
+            Math.round(parseFloat(device.geometry.coordinates[1]) * precision) === Math.round(parseFloat(coordinates[1]) * precision)
+        }).map((device: { properties: { iconType: string, code: string, id: string } }) => {
+          return {
+            code: device.properties.code,
+            iconType: device.properties.iconType,
+            id: device.properties.id
+          }
         })
+        let additionalButtons = ''
+        for (const device of devicesWithSameCoordinates) {
+          if (device.iconType === 'struja-idle') {
+            additionalButtons += `<button class="btn btn-secondary btn-sm controller-ncv-button" data-devicecode="${device.code}">View ormar ${device.code}</button><br>`
+          }
+          additionalButtons += `<button class="btn btn-secondary btn-sm additional-button" data-deviceid="${device.id}">Open ${device.code}</button><br>`
+        }
+
         const popup = new mapboxgl.Popup({ closeOnClick: false })
           .setLngLat(coordinates)
-          .setHTML(`<p>Code: ${code}</p><br><button class="btn btn-secondary btn-sm open-popup" >Open</button><br><p>Devices with same coordinates: ${devicesWithSameCoordinates.length}</p>`)
+          .setHTML(`<p>Code: ${code}</p><br>${additionalButtons}<p>Devices with same coordinates: ${devicesWithSameCoordinates.length}</p>`)
         popup.addTo(this.map)
         this.currentPopup = popup
-        const btn = document.getElementsByClassName('open-popup')[0]
-        btn.addEventListener('click', () => {
-          this.$router.push({ name: 'DeviceEdit', params: { id: id } })
+
+        const ncvBtns = document.getElementsByClassName('controller-ncv-button')
+        Array.from(ncvBtns).forEach(btn => {
+          btn.addEventListener('click', () => {
+            const deviceCode = btn.getAttribute('data-devicecode')
+            // eslint-disable-next-line no-case-declarations
+            const iframe = document.getElementById('yourIframeId') as HTMLIFrameElement
+            if (iframe !== null) {
+              if (iframe.contentWindow !== null) {
+                iframe.contentWindow.postMessage({ command: 'openModalOrmar', code: deviceCode }, '*')
+              }
+            }
+            // Open the modal
+            // eslint-disable-next-line no-case-declarations
+            const myModalElement = document.getElementById('myModal')
+            if (myModalElement !== null) {
+              const myModal = new Modal(myModalElement, {})
+              myModal.show()
+            }
+          })
+        })
+
+        const additionalBtns = document.getElementsByClassName('additional-button')
+        Array.from(additionalBtns).forEach(btn => {
+          btn.addEventListener('click', () => {
+            const deviceId = btn.getAttribute('data-deviceid')
+            console.log(deviceId)
+            if (deviceId) { this.$router.push({ name: 'DeviceEdit', params: { id: deviceId } }) }
+          })
         })
       })
 
