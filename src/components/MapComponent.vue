@@ -3,18 +3,21 @@
     <div class="row">
       <div class="col-12 p-0 position-relative">
         <div class="map-container" style="height: 75vh; position: relative;">
-          <div class="map-legend position-absolute top-0 start-0 p-3 bg-white" style="z-index: 1; max-width: 200px;">
-            <div v-for="iconType in iconTypes" :key="iconType" class="form-check">
-              <input class="form-check-input" type="checkbox" :value="iconType" v-model="checkedIconTypes" @change="updateSymbolVisibility" :id="iconType" checked>
-              <label class="form-check-label" :for="iconType">
-                {{ iconType }}
+          <div class="map-legend position-absolute top-0 start-0 bg-white" style="z-index: 1; max-width: 200px;">
+            <div class="list-group">
+              <label class="list-group-item rounded-0 d-flex align-items-center" v-for="iconType in iconTypes" :key="iconType">
+                <div class="d-flex align-items-center">
+                  <input class="form-check-input me-2 checkbox-lg" type="checkbox" :value="iconType" v-model="checkedIconTypes" @change="updateSymbolVisibility" :id="iconType" checked>
+                  <img class="mt-1" :src="getIconPath(iconType)" :alt="iconType" style="height: 24px; width: 24px;">
+                </div>
+                <div class="d-none d-sm-block ms-1" style="text-transform: uppercase;">{{iconType}}</div>
               </label>
             </div>
           </div>
           <Loading v-model:active="renderComponent"
                    :can-cancel="false"
                    :is-full-page="false"
-                   style="position: absolute;"/>
+                   style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"/>
           <div id="map" style="height: 100%; width: 100%;"/>
         </div>
       </div>
@@ -66,6 +69,10 @@ export default class MapComponent extends Vue {
   step = 0;
   checkedIconTypes: string[] = ['ico-lamp', 'ico-sro', 'ico-ssro', 'struja-idle']
   iconTypes: string[] = ['ico-lamp', 'ico-sro', 'ico-ssro', 'struja-idle']
+
+  getIconPath (iconType: string) {
+    return require('@/assets/map_files/' + iconType + '.svg')
+  }
 
   mounted () {
     mapboxgl.accessToken =
@@ -393,9 +400,12 @@ export default class MapComponent extends Vue {
         await this.updateMapData(id)
         const precision = 1000000
         // Rest of the code
-        const devicesWithSameCoordinates = this.entities.features.filter((device: { geometry: { coordinates: any[] }, properties : { iconType: string, code: string } }) => {
-          return Math.round(parseFloat(device.geometry.coordinates[0]) * precision) === Math.round(parseFloat(coordinates[0]) * precision) &&
-            Math.round(parseFloat(device.geometry.coordinates[1]) * precision) === Math.round(parseFloat(coordinates[1]) * precision)
+        const devicesWithSameCoordinates = this.entities.features.filter((device: { id: string, geometry: { coordinates: any[] }, properties : { iconType: string, code: string } }) => {
+          return device.id === id ||
+            (
+              Math.round(parseFloat(device.geometry.coordinates[0]) * precision) === Math.round(parseFloat(coordinates[0]) * precision) &&
+              Math.round(parseFloat(device.geometry.coordinates[1]) * precision) === Math.round(parseFloat(coordinates[1]) * precision)
+            )
         }).map((device: { properties: { iconType: string, code: string, id: string } }) => {
           return {
             code: device.properties.code,
@@ -403,17 +413,22 @@ export default class MapComponent extends Vue {
             id: device.properties.id
           }
         })
-        let additionalButtons = ''
+        let additionalButtons = '<div class="list-group">'
         for (const device of devicesWithSameCoordinates) {
           if (device.iconType === 'struja-idle') {
-            additionalButtons += `<button class="btn btn-secondary btn-sm controller-ncv-button" data-devicecode="${device.code}">View ormar ${device.code}</button><br>`
+            additionalButtons += `<button class="list-group-item list-group-item-action controller-ncv-button btn-outline-secondary btn-sm btn-fixed text-truncate w-100 small-font" title="View ormar ${device.code}" data-devicecode="${device.code}" style="width: 120px;">View ormar ${device.code}</button>`
           }
-          additionalButtons += `<button class="btn btn-secondary btn-sm additional-button" data-deviceid="${device.id}">Open ${device.code}</button><br>`
+          additionalButtons += `<button class="list-group-item list-group-item-action additional-button btn-outline-secondary btn-sm btn-fixed text-truncate w-100 small-font" title="Open ${device.code}" data-deviceid="${device.id}" data-devicecode="${device.code}" style="width: 120px;">Open ${device.code}</button>`
         }
+        additionalButtons += '</div>'
 
         const popup = new mapboxgl.Popup({ closeOnClick: false })
           .setLngLat(coordinates)
-          .setHTML(`<p>Code: ${code}</p><br>${additionalButtons}<p>Devices with same coordinates: ${devicesWithSameCoordinates.length}</p>`)
+          .setHTML(`<div class="d-flex flex-column h-100">
+      <p class="small-font">Code: ${code}</p>
+      ${additionalButtons}
+      <p class="small-font mt-3 mb-0">Devices with same coordinates: ${devicesWithSameCoordinates.length}</p>
+    </div>`)
         popup.addTo(this.map)
         this.currentPopup = popup
 
@@ -421,15 +436,12 @@ export default class MapComponent extends Vue {
         Array.from(ncvBtns).forEach(btn => {
           btn.addEventListener('click', () => {
             const deviceCode = btn.getAttribute('data-devicecode')
-            // eslint-disable-next-line no-case-declarations
             const iframe = document.getElementById('yourIframeId') as HTMLIFrameElement
             if (iframe !== null) {
               if (iframe.contentWindow !== null) {
                 iframe.contentWindow.postMessage({ command: 'openModalOrmar', code: deviceCode }, '*')
               }
             }
-            // Open the modal
-            // eslint-disable-next-line no-case-declarations
             const myModalElement = document.getElementById('myModal')
             if (myModalElement !== null) {
               const myModal = new Modal(myModalElement, {})
@@ -510,5 +522,12 @@ export default class MapComponent extends Vue {
 
 </script>
 <style scoped>
-
+.small-font {
+  font-size: 0.7rem;  /* Adjust as needed */
+}
+.checkbox-lg {
+  transform: scale(1.5);
+  margin-right: 10px;
+  cursor: pointer;
+}
 </style>
