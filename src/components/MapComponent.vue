@@ -2,12 +2,31 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12 p-0 position-relative">
+        <div class="device-code-input">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-search"></i></span>
+            <transition name="shake">
+              <input list="device-codes" :disabled="renderComponent" :value="deviceCode" @input="deviceCode = $event.target.value" :class="{'is-invalid': error, 'form-control shake': error, 'form-control': !error}" placeholder="Enter device code..." @change="zoomToDevice"/>
+            </transition>
+            <button class="btn btn-primary" type="button" @click="zoomToDevice">Search</button>
+            <datalist id="device-codes" v-if="deviceCode.length >= 2 && !renderComponent">
+              <option v-for="feature in entities.features" :value="feature.properties.code" :key="feature.properties.code"></option>
+            </datalist>
+            <div class="invalid-feedback">
+              Device not found
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 p-0 position-relative">
         <div class="map-container" style="height: 75vh; position: relative;">
           <div class="map-legend position-absolute top-0 start-0 bg-white" style="z-index: 1; max-width: 200px;">
             <div class="list-group">
               <label class="list-group-item rounded-0 d-flex align-items-center" v-for="iconType in iconTypes" :key="iconType">
                 <div class="d-flex align-items-center">
-                  <input class="form-check-input me-2 checkbox-lg" type="checkbox" :value="iconType" v-model="checkedIconTypes" @change="updateSymbolVisibility" :id="iconType" checked>
+                  <input :disabled="renderComponent" class="form-check-input me-2 checkbox-lg" type="checkbox" :value="iconType" v-model="checkedIconTypes" @change="updateSymbolVisibility" :id="iconType" checked>
                   <img class="mt-1" :src="getIconPath(iconType)" :alt="iconType" style="height: 24px; width: 24px;">
                 </div>
                 <div class="d-none d-sm-block ms-1" style="text-transform: uppercase;">{{iconType}}</div>
@@ -69,6 +88,8 @@ export default class MapComponent extends Vue {
   step = 0;
   checkedIconTypes: string[] = ['ico-lamp', 'ico-sro', 'ico-ssro', 'struja-idle']
   iconTypes: string[] = ['ico-lamp', 'ico-sro', 'ico-ssro', 'struja-idle']
+  deviceCode = ''
+  error = false
 
   getIconPath (iconType: string) {
     return require('@/assets/map_files/' + iconType + '.svg')
@@ -82,6 +103,114 @@ export default class MapComponent extends Vue {
       style: 'mapbox://styles/joso/clfv7rrii007101rpc2dhq56h/draft'
     })
     this.test()
+  }
+
+  async zoomToDevice () : Promise<void> {
+    // Your method to fetch the device data should go here, this is just a placeholder
+    const featureWithCode = this.entities.features.find((feature: any) => {
+      // Replace 'codeProperty' with the actual property name that contains the code in your feature object
+      const code = feature.properties.code
+      return code === this.deviceCode
+    })
+    if (featureWithCode) {
+      // Then you could zoom to the device location like this
+      this.map.flyTo({
+        center: [featureWithCode.geometry.coordinates[0], featureWithCode.geometry.coordinates[1]],
+        zoom: 18 // Set the zoom level to your preference
+      })
+
+      const allIds = [featureWithCode.properties.id]
+      const iconSize = [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        16, [
+          'case',
+          ['in', ['get', 'id'], ['literal', allIds]], 0.4,
+          ['==', ['get', 'iconType'], 'struja-idle'], 0.6,
+          ['==', ['get', 'iconType'], 'ico-sro'], 0.6,
+          0.3
+        ],
+        17, [
+          'case',
+          ['in', ['get', 'id'], ['literal', allIds]], 0.6,
+          ['==', ['get', 'iconType'], 'struja-idle'], 0.6,
+          ['==', ['get', 'iconType'], 'ico-sro'], 0.6,
+          0.3
+        ],
+        18, [
+          'case',
+          ['in', ['get', 'id'], ['literal', allIds]], 0.8,
+          ['==', ['get', 'iconType'], 'struja-idle'], 0.6,
+          ['==', ['get', 'iconType'], 'ico-sro'], 0.6,
+          0.3
+        ]
+      ]
+
+      const iconOpacity = [
+        'case',
+        ['in', ['get', 'id'], ['literal', allIds]],
+        1,
+        ['all', ['!=', ['get', 'iconType'], 'ico-sro'], ['!=', ['get', 'iconType'], 'struja-idle']],
+        0.1,
+        1
+      ]
+
+      this.map.setLayoutProperty('icon-points', 'icon-size', iconSize)
+      this.map.setPaintProperty('icon-points', 'icon-opacity', iconOpacity)
+
+      this.map.addSource('single-point', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: []
+        }
+      })
+      this.map.getSource('single-point').setData(featureWithCode)
+
+      // Initialize an index for cycling through the colors
+      let colorIndex = 0
+
+      // Define your colors
+      const colors = ['blue', 'lightblue']
+
+      // Set initial color and add the layer
+      this.map.addLayer({
+        id: 'circle-overlay',
+        type: 'circle',
+        source: 'single-point',
+        paint: {
+          'circle-radius': 30,
+          'circle-color': colors[colorIndex],
+          'circle-opacity': 0.5
+        }
+      })
+
+      // Create a function to update the color
+      const updateColor = () => {
+        // Update the color
+        this.map.setPaintProperty('circle-overlay', 'circle-color', colors[colorIndex])
+
+        // Update the index for the next color
+        colorIndex = (colorIndex + 1) % colors.length
+      }
+
+      // Call the function every 500 milliseconds (0.5 seconds)
+      const intervalId = setInterval(updateColor, 500)
+
+      // Clear the interval after 10 seconds
+      setTimeout(() => {
+        clearInterval(intervalId)
+
+        // Remove the circle layer
+        this.map.removeLayer('circle-overlay')
+        this.map.removeSource('single-point')
+      }, 30000)
+
+      this.error = false
+    } else {
+      this.error = true
+    }
   }
 
   updateSymbolVisibility () : void {
@@ -254,14 +383,30 @@ export default class MapComponent extends Vue {
 
     this.addArrowLayer(linesGeoJSON)
     const iconSize = [
-      'case',
-      ['in', ['get', 'id'], ['literal', allIds]],
-      0.6,
-      ['==', ['get', 'iconType'], 'struja-idle'],
-      0.6,
-      ['==', ['get', 'iconType'], 'ico-sro'],
-      0.6,
-      0.3
+      'interpolate',
+      ['linear'],
+      ['zoom'],
+      16, [
+        'case',
+        ['in', ['get', 'id'], ['literal', allIds]], 0.2,
+        ['==', ['get', 'iconType'], 'struja-idle'], 0.6,
+        ['==', ['get', 'iconType'], 'ico-sro'], 0.6,
+        0.3
+      ],
+      17, [
+        'case',
+        ['in', ['get', 'id'], ['literal', allIds]], 0.4,
+        ['==', ['get', 'iconType'], 'struja-idle'], 0.6,
+        ['==', ['get', 'iconType'], 'ico-sro'], 0.6,
+        0.3
+      ],
+      18, [
+        'case',
+        ['in', ['get', 'id'], ['literal', allIds]], 0.6,
+        ['==', ['get', 'iconType'], 'struja-idle'], 0.6,
+        ['==', ['get', 'iconType'], 'ico-sro'], 0.6,
+        0.3
+      ]
     ]
 
     const iconOpacity = [
@@ -530,4 +675,30 @@ export default class MapComponent extends Vue {
   margin-right: 10px;
   cursor: pointer;
 }
+
+.shake {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
 </style>
