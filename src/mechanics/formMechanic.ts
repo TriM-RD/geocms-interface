@@ -67,6 +67,7 @@ export namespace Manager.Mechanic{
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Field].NullifyLogic()
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectList].NullifyLogic()
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.ECabinetRow].NullifyLogic()
+      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.DataList].NullifyLogic()
       MechanicAbstract.instance = null
     }
 
@@ -451,6 +452,13 @@ export namespace Manager.Mechanic{
           await router.push({
             name: 'DeviceReplace',
             params: { parentId: this.id }
+          })
+          break
+        case 'viewParent':
+          console.log(eventHandler.payload.Stats[StatTypeEnum.Value].Data)
+          await router.push({
+            name: 'DeviceEdit',
+            params: { id: eventHandler.payload.Stats[StatTypeEnum.Value].Data }
           })
           break
         case 'showControllerButton':

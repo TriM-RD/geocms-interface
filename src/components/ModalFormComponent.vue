@@ -1,7 +1,7 @@
 <template>
   <div>
     <button @click="startMechanic()" type="button" style="display: none" data-bs-toggle="modal" :data-bs-target="`${'#formModal'+object.Stats[statTypeEnum.Tag].Data}`" :id="`${'formModalOpen'+object.Stats[statTypeEnum.Tag].Data}`"></button>
-    <form>
+    <form class="needs-validation" novalidate>
       <div @click="test($event.target)" class="modal fade" :id="`${'formModal'+object.Stats[statTypeEnum.Tag].Data}`" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
@@ -14,7 +14,7 @@
                        :can-cancel="false"
                        :is-full-page="false"/>
               <div v-if="!renderComponent">
-              <component  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ _objectTemplate.Stats[statTypeEnum.Tag].Data }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'> </component>
+                  <component :page-refresh="renderComponent" :rerender="changeRender"  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ _objectTemplate.Stats[statTypeEnum.Tag].Data }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'> </component>
               </div>
             </div>
             <div class="modal-footer">
@@ -124,7 +124,8 @@ export default class ModalFormComponent extends Vue {
             [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('belongs'),
             [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.objectTemplates[0].Stats[StatTypeEnum.Id].Data),
             [StatTypeEnum.ElementType]: StatType.StatTypes[StatTypeEnum.ElementType]().CreateStat().InitData('hidden'),
-            [StatTypeEnum.Placeholder]: StatType.StatTypes[StatTypeEnum.Placeholder]().CreateStat().InitData('')
+            [StatTypeEnum.Placeholder]: StatType.StatTypes[StatTypeEnum.Placeholder]().CreateStat().InitData(''),
+            [StatTypeEnum.Disabled]: StatType.StatTypes[StatTypeEnum.Disabled]().CreateStat().InitData('')
           })
         ])
         break
