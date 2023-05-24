@@ -7,7 +7,7 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-body">
-            <iframe style="overflow: hidden;" id="yourIframeId" src="https://tri-m.app/ormari/modal.php" width="100%" height="500vh"></iframe>
+            <iframe class="iframeModal" id="yourIframeId" src="https://tri-m.app/ormari/modal.php"></iframe>
           </div>
         </div>
       </div>
@@ -78,16 +78,19 @@ export default class App extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-/* add this to your existing CSS */
-#iframe-container {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+.iframeModal {
+  width: 100%;
+  height: 50vh;
+  overflow: hidden;
 }
 
-.custom-height{
-  min-height:100vh;
-}
+@media screen and (max-width: 768px) {
+  .modal-dialog {
+    max-width: 100%;
+  }
 
+  .iframeModal {
+    height: 50vh;
+  }
+}
 </style>
