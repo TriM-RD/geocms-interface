@@ -40,7 +40,7 @@ export default class DataSelectComponent extends Vue {
   object!: ObjectTemplate
   index!: number
   objectTemplates: ObjectTemplate[] = this.mechanic.InitSet([
-    new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.DataList, SubObjectTypeEnum.ParentObject, ActionTypeEnum.SelectIdFromName, {
+    new ObjectTemplate(this.object.Region, ObjectTypeEnum.DataList, SubObjectTypeEnum.ParentObject, ActionTypeEnum.SelectIdFromName, {
       [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Label].Data),
       [StatTypeEnum.Tooltip]: StatType.StatTypes[StatTypeEnum.Tooltip]().CreateStat().InitData(''),
       [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Tag].Data),
@@ -52,7 +52,7 @@ export default class DataSelectComponent extends Vue {
       [StatTypeEnum.ErrorMessage]: StatType.StatTypes[StatTypeEnum.ErrorMessage]().CreateStat().InitData(this.object.Stats[StatTypeEnum.ErrorMessage] !== undefined ? this.object.Stats[StatTypeEnum.ErrorMessage].Data : ''),
       [StatTypeEnum.IsValid]: StatType.StatTypes[StatTypeEnum.IsValid]().CreateStat().InitData(this.object.Stats[StatTypeEnum.IsValid] !== undefined ? this.object.Stats[StatTypeEnum.IsValid].Data : '')
     }),
-    new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Down, ActionTypeEnum.Click, {
+    new ObjectTemplate(this.object.Region, ObjectTypeEnum.Button, SubObjectTypeEnum.Down, ActionTypeEnum.Click, {
       [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData(this.resolveDisabledButtonLabel()),
       [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('link-' + this.object.Stats[StatTypeEnum.Tag].Data),
       [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData(this.resolveDisabledButtonDesign()),
@@ -64,7 +64,7 @@ export default class DataSelectComponent extends Vue {
   get reRender () {
     console.log('test')
     this.objectTemplates = this.mechanic.InitSet([
-      new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.DataList, SubObjectTypeEnum.ParentObject, ActionTypeEnum.SelectIdFromName, {
+      new ObjectTemplate(this.object.Region, ObjectTypeEnum.DataList, SubObjectTypeEnum.ParentObject, ActionTypeEnum.SelectIdFromName, {
         [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Label].Data),
         [StatTypeEnum.Tooltip]: StatType.StatTypes[StatTypeEnum.Tooltip]().CreateStat().InitData(''),
         [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Tag].Data),
@@ -76,7 +76,7 @@ export default class DataSelectComponent extends Vue {
         [StatTypeEnum.ErrorMessage]: StatType.StatTypes[StatTypeEnum.ErrorMessage]().CreateStat().InitData(this.object.Stats[StatTypeEnum.ErrorMessage] !== undefined ? this.object.Stats[StatTypeEnum.ErrorMessage].Data : ''),
         [StatTypeEnum.IsValid]: StatType.StatTypes[StatTypeEnum.IsValid]().CreateStat().InitData(this.object.Stats[StatTypeEnum.IsValid] !== undefined ? this.object.Stats[StatTypeEnum.IsValid].Data : '')
       }),
-      new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Down, ActionTypeEnum.Click, {
+      new ObjectTemplate(this.object.Region, ObjectTypeEnum.Button, SubObjectTypeEnum.Down, ActionTypeEnum.Click, {
         [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData(this.resolveDisabledButtonLabel()),
         [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('link-' + this.object.Stats[StatTypeEnum.Tag].Data),
         [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData(this.resolveDisabledButtonDesign()),

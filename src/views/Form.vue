@@ -3,6 +3,7 @@
     <FormComponent/>
     <TableComponent v-if="renderTable" />
     <ListComponent v-if="renderList" :use-routes="true" />
+    <div style="height: 10vh"></div>
   </div>
 </template>
 

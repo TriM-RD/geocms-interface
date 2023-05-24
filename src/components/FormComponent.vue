@@ -5,7 +5,6 @@
   <form v-if="!renderComponent" class="needs-validation" novalidate>
     <component :page-refresh="renderComponent" :rerender="changeRender"  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ _objectTemplate.Stats[statTypeEnum.Tag].Data }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'> </component>
   </form>
-  <div style="height: 10vh"></div>
 </template>
 
 <script lang="ts">

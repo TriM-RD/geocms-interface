@@ -36,6 +36,7 @@
 
 <script lang="ts">
 import Loading from 'vue-loading-overlay'
+import { nextTick } from 'vue'
 import { Options, Vue } from 'vue-class-component'
 import { Manager } from '@/mechanics/tableMechanic'
 import {
@@ -68,6 +69,7 @@ export default class TableComponent extends Vue {
   filters = { code: '', group: '', division: '' }
   isInitRunning = false
   orderBy = 'asc'
+  isLoading = false
 
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
@@ -80,11 +82,18 @@ export default class TableComponent extends Vue {
   mounted () {
     if (this.$route.name !== 'GroupEdit') {
       window.onscroll = async () => {
-        if (
-          window.innerHeight + document.documentElement.scrollTop ===
-          document.documentElement.offsetHeight
-        ) {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+        const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
+        // Check if isLoading is false and user is at the bottom of the page
+        if (!this.isLoading && !this.isInitRunning && !this.renderComponent && scrollHeight - window.innerHeight - scrollTop <= 5) {
+          // Set isLoading to true
+          this.isLoading = true
+
+          // Fetch new data
           await this.scroll()
+
+          // Set isLoading back to false
+          this.isLoading = false
         }
       }
     }
@@ -118,6 +127,7 @@ export default class TableComponent extends Vue {
   }
 
   async scroll () {
+    if (this.isInitRunning) { return }
     await this.Init()
   }
 
@@ -134,6 +144,7 @@ export default class TableComponent extends Vue {
   }
 
   async Init () {
+    if (this.isInitRunning) { return }
     this.isInitRunning = true
     switch (router.currentRoute.value.name) {
       case 'Device':

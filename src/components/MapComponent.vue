@@ -235,6 +235,7 @@ export default class MapComponent extends Vue {
     this.relData = response.data
     // Update the arrows with the relationship data
     await this.connectUnclusteredPoints(this.relData)
+    this.animateDashArray(0)
   }
 
   testingRadius (point: mapboxgl.MapboxGeoJSONFeature) {
@@ -632,7 +633,7 @@ export default class MapComponent extends Vue {
         })
       })
       /* this.map.on('move', () => {
-        // this.connectUnclusteredPoints(this.relData)
+        this.animateDashArray(0)
       }) */
       this.map.on('zoomend', () => {
         this.handleZoomChange()
@@ -649,8 +650,7 @@ export default class MapComponent extends Vue {
           maxZoom: 5
         })
       }
-
-      this.animateDashArray(0)
+      // this.animateDashArray(0)
       this.renderComponent = false
     }
   }
