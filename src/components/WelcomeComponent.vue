@@ -13,30 +13,18 @@
       <div class="row justify-content-center">
         <div class="col-xl-6">
           <div class="text-center text-white">
-            <!-- Page heading-->
-            <h1 class="mb-5">Generate more leads with a professional landing page!</h1>
-            <!-- Signup form-->
-            <!-- * * * * * * * * * * * * * * *-->
-            <!-- * * SB Forms Contact Form * *-->
-            <!-- * * * * * * * * * * * * * * *-->
-            <!-- This form is pre-integrated with SB Forms.-->
-            <!-- To make this form functional, sign up at-->
-            <!-- https://startbootstrap.com/solution/contact-forms-->
-            <!-- to get an API token!-->
-            <form class="form-subscribe" id="contactForm" data-sb-form-api-token="API_TOKEN">
-              <!-- Email address input-->
+            <h1 class="mb-5">Discover the Future of Smart Device Management</h1>
+            <p class="lead mb-5">Harness the power of digitization with our GeoCMS solution for a smarter, more efficient environment.</p>
+            <!--h2 class="mb-4">Ready to get started? Sign up now!</h2>
+            <form class="form-subscribe" id="contactFormFooter" data-sb-form-api-token="API_TOKEN">
               <div class="row">
                 <div class="col">
-                  <input class="form-control form-control-lg" id="emailAddress" type="email" placeholder="Email Address" data-sb-validations="required,email" />
-                  <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:required">Email Address is required.</div>
-                  <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:email">Email Address Email is not valid.</div>
+                  <input class="form-control form-control-lg" id="emailAddressBelow" type="email" placeholder="Email Address" data-sb-validations="required,email" />
+                  <div class="invalid-feedback text-white" data-sb-feedback="emailAddressBelow:required">Email Address is required.</div>
+                  <div class="invalid-feedback text-white" data-sb-feedback="emailAddressBelow:email">Email Address Email is not valid.</div>
                 </div>
-                <div class="col-auto"><button class="btn btn-secondary btn-lg " id="submitButton" type="submit">Submit</button></div>
+                <div class="col-auto"><button class="btn btn-secondary btn-lg" id="submitButton" type="submit">Submit</button></div>
               </div>
-              <!-- Submit success message-->
-              <!---->
-              <!-- This is what your users will see when the form-->
-              <!-- has successfully submitted-->
               <div class="d-none" id="submitSuccessMessage">
                 <div class="text-center mb-3">
                   <div class="fw-bolder">Form submission successful!</div>
@@ -44,73 +32,76 @@
                   <a class="text-white" href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
                 </div>
               </div>
-              <!-- Submit error message-->
-              <!---->
-              <!-- This is what your users will see when there is-->
-              <!-- an error submitting the form-->
               <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
-            </form>
+            </form-->
           </div>
         </div>
       </div>
     </div>
   </header>
-  <!-- Icons Grid-->
+  <!-- Product Features-->
   <section class="features-icons bg-light text-center">
     <div class="container">
+      <!--h2 class="mb-5">Digitize and Manage Your Infrastructure with GeoCMS</h2-->
       <div class="row">
         <div class="col-lg-4">
           <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-            <div class="features-icons-icon d-flex"><i class="bi-window m-auto text-secondary"></i></div>
-            <h3>Fully Responsive</h3>
-            <p class="lead mb-0">This theme will look great on any device, no matter the size!</p>
+            <div class="features-icons-icon d-flex"><i class="bi-lightbulb m-auto text-secondary"></i></div>
+            <h3>Smart Control & Custom IoT Solutions</h3>
+            <p class="lead mb-0">Tailored IoT solutions that meet your specific requirements and goals.</p>
           </div>
         </div>
         <div class="col-lg-4">
           <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-            <div class="features-icons-icon d-flex"><i class="bi-layers m-auto text-secondary"></i></div>
-            <h3>Bootstrap 5 Ready</h3>
-            <p class="lead mb-0">Featuring the latest build of the new Bootstrap 5 framework!</p>
+            <div class="features-icons-icon d-flex"><i class="bi-graph-up m-auto text-secondary"></i></div>
+            <h3>Data Analytics & Planning</h3>
+            <p class="lead mb-0">Use the app's analytics to make informed decisions and plan strategies effectively.</p>
           </div>
         </div>
         <div class="col-lg-4">
           <div class="features-icons-item mx-auto mb-0 mb-lg-3">
-            <div class="features-icons-icon d-flex"><i class="bi-terminal m-auto text-secondary"></i></div>
-            <h3>Easy to Use</h3>
-            <p class="lead mb-0">Ready to use with your own content, or customize the source files!</p>
+            <div class="features-icons-icon d-flex"><i class="bi-wrench m-auto text-secondary"></i></div>
+            <h3>Infrastructure Management</h3>
+            <p class="lead mb-0">Manage your IoT infrastructure, including the addition and administration of various features such as locations and streetlights, directly within the app.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
-  <!-- Image Showcases-->
+  <!-- Use cases -->
   <section class="showcase">
     <div class="container-fluid p-0">
       <div class="row g-0">
-        <div class="col-lg-6 order-lg-2 text-white showcase-img">
-          <img class="img-fluid" src="../assets/bg-showcase-1.jpg" alt="..." />
+        <div class="col-lg-2 order-md-1"></div>
+        <div class="col-lg-3 my-auto order-md-2 order-2 showcase-text oval-shape teal-bg">
+          <h2 class="title-text mt-1">Smart Cities</h2>
+          <p class="lead mb-0 content-text mt-4">Our solution facilitates the construction and management of efficient, sustainable smart cities.</p>
         </div>
-        <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-          <h2>Fully Responsive Design</h2>
-          <p class="lead mb-0">When you use a theme created by Start Bootstrap, you know that the theme will look great on any device, whether it's a phone, tablet, or desktop the page will behave responsively!</p>
-        </div>
-      </div>
-      <div class="row g-0">
-        <div class="col-lg-6 text-white showcase-img">
-          <img class="img-fluid" src="../assets/bg-showcase-2.jpg" alt="..." />
-        </div>
-        <div class="col-lg-6 my-auto showcase-text">
-          <h2>Updated For Bootstrap 5</h2>
-          <p class="lead mb-0">Newly improved, and full of great utility classes, Bootstrap 5 is leading the way in mobile responsive web development! All of the themes on Start Bootstrap are now using Bootstrap 5!</p>
+        <div class="col-lg-1 order-md-3"></div>
+        <div class="col-lg-6 order-md-4 order-1 text-white showcase-img">
+          <img class="img-fluid" src="../assets/smartCity_2.jpg" alt="..." />
         </div>
       </div>
       <div class="row g-0">
-        <div class="col-lg-6 order-lg-2 text-white showcase-img">
-          <img class="img-fluid" src="../assets/bg-showcase-3.jpg" alt="..." />
+        <div class="col-lg-6 order-1 text-white showcase-img">
+          <img class="img-fluid" src="../assets/smartCamp_1.jpg" alt="..." />
         </div>
-        <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-          <h2>Easy to Use & Customize</h2>
-          <p class="lead mb-0">Landing Page is just HTML and CSS with a splash of SCSS for users who demand some deeper customization options. Out of the box, just add your content and images, and your new landing page will be ready to go!</p>
+        <div class="col-lg-1 order-md-2"></div>
+        <div class="col-lg-3 order-md-3 order-2 my-auto showcase-text oval-shape deep-sea-blue-bg">
+          <h2 class="title-text mt-1">Smart Camps</h2>
+          <p class="lead mb-0 mt-4">Improve the organization and safety of camps with our advanced management system.</p>
+        </div>
+        <div class="col-lg-2 order-md-4"></div>
+      </div>
+      <div class="row g-0">
+        <div class="col-lg-2 order-md-1"></div>
+        <div class="col-lg-3 my-auto order-md-2 order-2 showcase-text oval-shape greenish-gray-bg">
+          <h2 class="title-text mt-2">Smart Infrastructure</h2>
+          <p class="lead mb-0 mt-4">Enhance infrastructure projects with efficient, data-driven planning and control.</p>
+        </div>
+        <div class="col-lg-1 order-md-3"></div>
+        <div class="col-lg-6 order-md-last order-md-4 order-1 text-white showcase-img">
+          <img class="img-fluid" src="../assets/smartInfrastructure_3.png" alt="..." />
         </div>
       </div>
     </div>
@@ -118,16 +109,16 @@
   <!-- Testimonials-->
   <section class="testimonials text-center bg-light">
     <div class="container">
-      <h2 class="mb-5">What people are saying...</h2>
+      <h2 class="mb-5">Meet Some of Our Clients...</h2>
       <div class="row">
         <div class="col-lg-4">
-          <div class="testimonial-item mx-auto mb-5 mb-lg-0">
-            <img class="img-fluid rounded-circle mb-3" src="../assets/testimonials-1.jpg" alt="..." />
-            <h5>Margaret E.</h5>
-            <p class="font-weight-light mb-0">"This is fantastic! Thanks so much guys!"</p>
+          <div class="mx-auto mb-5 mb-lg-0">
+            <img class="img-fluid mb-3" src="../assets/gradUmag.png" alt="Grad Umag" />
+            <h5>Grad Umag</h5>
+            <p class="font-weight-light mb-0">"Utilizing our platform for smart city solutions."</p>
           </div>
         </div>
-        <div class="col-lg-4">
+        <!--div class="col-lg-4">
           <div class="testimonial-item mx-auto mb-5 mb-lg-0">
             <img class="img-fluid rounded-circle mb-3" src="../assets/testimonials-2.jpg" alt="..." />
             <h5>Fred S.</h5>
@@ -140,7 +131,7 @@
             <h5>Sarah W.</h5>
             <p class="font-weight-light mb-0">"Thanks so much for making these free resources available to us!"</p>
           </div>
-        </div>
+        </div-->
       </div>
     </div>
   </section>
@@ -306,4 +297,33 @@ a {
 a:hover {
   color: #606467;
 }
+.oval-shape {
+  border-radius: 50%; /* Gives the oval shape */
+  padding: 20px; /* Adds some space inside the div */
+  border: 5px solid white; /* Adds a thick border */
+  box-shadow: 5px 5px 0px rgba(0,0,0,0.2); /* Adds a drop shadow */
+  color: white; /* Changes the color of the text */
+  font-family: 'Roboto', 'Arial', sans-serif; /* Changes the font */
+  height: 15rem;
+  align-items: center; /* Aligns content vertically */
+  justify-content: center;
+}
+
+.title-text {
+  color: yellow; /* Changes the color of the title text */
+  font-family: 'Cambria', sans-serif; /* Changes the font */
+}
+
+.teal-bg {
+  background: rgba(0, 128, 128, 0.5); /* Semi-transparent teal */
+}
+
+.deep-sea-blue-bg {
+  background: rgba(0, 0, 139, 0.5); /* Semi-transparent deep sea blue */
+}
+
+.greenish-gray-bg {
+  background: rgba(50, 125, 105, 0.7); /* Semi-transparent greenish gray */
+}
+
 </style>

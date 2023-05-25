@@ -1,7 +1,4 @@
 <template>
-  <Loading v-model:active="renderComponent"
-           :can-cancel="false"
-           :is-full-page="false"/>
   <div class="my-4" v-if="checkRoute()">
     <div class="row">
       <div class="col-12 col-sm-9 d-flex justify-content-between align-items-center">
@@ -19,6 +16,9 @@
       <div></div> <!-- Empty div for alignment with last column -->
     </div>
   </div>
+  <Loading v-model:active="renderComponent"
+           :can-cancel="false"
+           :is-full-page="false"/>
   <table class="table table-hover" v-if="!renderComponent">
   <thead class="table-light">
     <tr>
