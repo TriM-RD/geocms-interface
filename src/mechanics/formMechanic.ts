@@ -337,6 +337,12 @@ export namespace Manager.Mechanic{
         if (!(form as HTMLFormElement).checkValidity()) {
           form.classList.add('was-validated')
         } else {
+          const validatingToast = useToast()({
+            component: ToastComponent,
+            props: { msg: { title: '', info: 'Validating...' } }
+          }, {
+            type: TYPE.INFO
+          })
           if (this.inEdit && !(!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(this.id))) {
             await http.patch(process.env.VUE_APP_BASE_URL + route + '/' + this.id, this.ObjectTemplates)
               .then((response) => {
@@ -345,6 +351,7 @@ export namespace Manager.Mechanic{
                   this.ObjectTemplates.length = 0
                   this.ObjectTemplates = this.Append(response.data.entities)
                   this.refreshPage()
+                  useToast().dismiss(validatingToast)
                   useToast()({
                     component: ToastComponent,
                     props: { msg: { title: '', info: 'Form submitted.' } }
@@ -357,6 +364,13 @@ export namespace Manager.Mechanic{
                   this.ObjectTemplates.length = 0
                   this.ObjectTemplates = this.Append(response.data.entities)
                   this.refreshPage()
+                  useToast().dismiss(validatingToast)
+                  useToast()({
+                    component: ToastComponent,
+                    props: { msg: { title: '', info: 'Validation failed.' } }
+                  }, {
+                    type: TYPE.WARNING
+                  })
                 }
               })
           } else {
@@ -367,6 +381,7 @@ export namespace Manager.Mechanic{
                     name: redirectTo,
                     params: { id: response.data.id }
                   })
+                  useToast().dismiss(validatingToast)
                   useToast()({
                     component: ToastComponent,
                     props: { msg: { title: '', info: 'Form submitted.' } }
@@ -379,6 +394,13 @@ export namespace Manager.Mechanic{
                   this.ObjectTemplates.length = 0
                   this.ObjectTemplates = this.Append(response.data.entities)
                   this.refreshPage()
+                  useToast().dismiss(validatingToast)
+                  useToast()({
+                    component: ToastComponent,
+                    props: { msg: { title: '', info: 'Validation failed.' } }
+                  }, {
+                    type: TYPE.ERROR
+                  })
                 }
               })
           }
@@ -388,13 +410,14 @@ export namespace Manager.Mechanic{
 
     private unlinkBelongs (eventHandler : EventHandlerType, tag : string) {
       const belongsIndex = this.ObjectTemplates.findIndex(
-        element => element.Stats[StatTypeEnum.Tag].Data === tag)
-      if (this.ObjectTemplates[belongsIndex].Stats[StatTypeEnum.Disabled].Data === 'true') {
-        this.ObjectTemplates[belongsIndex].Stats[StatTypeEnum.Disabled].Data = ''
+        element => element.Stats[StatTypeEnum.Tag].Data.split('-')[0] === tag)
+      const tags = this.ObjectTemplates[belongsIndex].Stats[StatTypeEnum.Tag].Data.split('-')
+      if (tags[1] === 'true') {
+        this.ObjectTemplates[belongsIndex].Stats[StatTypeEnum.Tag].Data = tags[0] + ''
         eventHandler.payload.Stats[StatTypeEnum.Label].Data = 'Un-Link'
         eventHandler.payload.Stats[StatTypeEnum.Design].Data = 'btn btn-outline-danger me-2'
       } else {
-        this.ObjectTemplates[belongsIndex].Stats[StatTypeEnum.Disabled].Data = 'true'
+        this.ObjectTemplates[belongsIndex].Stats[StatTypeEnum.Tag].Data = tags[0] + '-true'
         eventHandler.payload.Stats[StatTypeEnum.Label].Data = 'Link'
         eventHandler.payload.Stats[StatTypeEnum.Design].Data = 'btn btn-outline-info me-2'
       }

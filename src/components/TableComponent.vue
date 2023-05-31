@@ -36,7 +36,6 @@
 
 <script lang="ts">
 import Loading from 'vue-loading-overlay'
-import { nextTick } from 'vue'
 import { Options, Vue } from 'vue-class-component'
 import { Manager } from '@/mechanics/tableMechanic'
 import {
@@ -49,6 +48,8 @@ import {
   RegionEnum
 } from '@cybertale/interface'
 import router from '@/router'
+import { TYPE, useToast } from 'vue-toastification'
+import ToastComponent from '@/components/ToastComponent.vue'
 @Options({
   components: {
     Loading
@@ -70,6 +71,7 @@ export default class TableComponent extends Vue {
   isInitRunning = false
   orderBy = 'asc'
   isLoading = false
+  groupTypeFilter: { [key: string]: string } = { group: 'group', template: 'template', all: '' }
 
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
@@ -152,7 +154,13 @@ export default class TableComponent extends Vue {
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', JSON.stringify({ api: 'entity', filters: this.filters, order: this.orderBy })))
         break
       case 'Group':
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'group'))
+        useToast()({
+          component: ToastComponent,
+          props: { msg: { title: 'Loading...', info: this.filters.group === '' ? 'Loading all.' : 'Loading ' + this.filters.group + ' only.' } }
+        }, {
+          type: TYPE.INFO
+        })
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', JSON.stringify({ api: 'group', filters: this.filters, order: this.orderBy })))
         break
       case 'Division':
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'division'))
@@ -202,9 +210,20 @@ export default class TableComponent extends Vue {
   }
 
   reverseEntities () {
-    this.renderComponent = true
-    this.entities.reverse()
-    this.renderComponent = false
+    console.log(this.filters.group)
+    if (!this.isInitRunning) {
+      const groupValues = Object.values(this.groupTypeFilter)
+      this.renderComponent = true
+      this.changeRender()
+      const currentGroupIndex = groupValues.indexOf(this.filters.group) + 1
+      console.log(currentGroupIndex)
+      if (currentGroupIndex >= groupValues.length && this.filters.group !== '') { // TODO something is not working (ORDER)
+        this.filters.group = groupValues[0]
+      } else {
+        this.filters.group = groupValues[currentGroupIndex]
+      }
+      this.Init()
+    }
   }
 
   getHeaders () : void { // TODO Needs to be reworked. @JosoMarich

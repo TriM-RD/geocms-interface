@@ -102,12 +102,12 @@ export namespace Manager.Mechanic{
           switch (_eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:
               this.reverseOrder = true
-              useToast()({
+              /* useToast()({
                 component: ToastComponent,
                 props: { msg: { title: 'Resorting...', info: 'Re-sorted names in table.' } }
               }, {
                 type: TYPE.INFO
-              })
+              }) */
               this.refreshPage()
               break
           }

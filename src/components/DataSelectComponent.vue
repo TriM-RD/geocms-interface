@@ -18,7 +18,6 @@ import {
   StatTypeEnum,
   ObjectTypeEnum,
   RegionType,
-  RegionEnum,
   SubObjectTypeEnum, ActionTypeEnum, StatType
 } from '@cybertale/interface'
 @Options({
@@ -48,21 +47,21 @@ export default class DataSelectComponent extends Vue {
       [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('me-2 readonly'),
       [StatTypeEnum.Placeholder]: StatType.StatTypes[StatTypeEnum.Placeholder]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Placeholder].Data),
       [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData(this.object.Stats[StatTypeEnum.ItemList].Data),
-      [StatTypeEnum.Required]: StatType.StatTypes[StatTypeEnum.Required]().CreateStat().InitData(this.resolveDisabledRequired()),
+      [StatTypeEnum.Required]: StatType.StatTypes[StatTypeEnum.Required]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Required] !== undefined ? this.object.Stats[StatTypeEnum.Required].Data : ''),
       [StatTypeEnum.ErrorMessage]: StatType.StatTypes[StatTypeEnum.ErrorMessage]().CreateStat().InitData(this.object.Stats[StatTypeEnum.ErrorMessage] !== undefined ? this.object.Stats[StatTypeEnum.ErrorMessage].Data : ''),
       [StatTypeEnum.IsValid]: StatType.StatTypes[StatTypeEnum.IsValid]().CreateStat().InitData(this.object.Stats[StatTypeEnum.IsValid] !== undefined ? this.object.Stats[StatTypeEnum.IsValid].Data : '')
     }),
     new ObjectTemplate(this.object.Region, ObjectTypeEnum.Button, SubObjectTypeEnum.Down, ActionTypeEnum.Click, {
-      [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData(this.resolveDisabledButtonLabel()),
+      [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData(this.resolveButtonLabel()),
       [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('link-' + this.object.Stats[StatTypeEnum.Tag].Data),
-      [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData(this.resolveDisabledButtonDesign()),
+      [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData(this.resolveButtonDesign()),
       [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Id].Data)
     })
   ]
   )
 
   get reRender () {
-    console.log('test')
+    const temp = this.object.Stats[StatTypeEnum.Tag].Data.split('-')
     this.objectTemplates = this.mechanic.InitSet([
       new ObjectTemplate(this.object.Region, ObjectTypeEnum.DataList, SubObjectTypeEnum.ParentObject, ActionTypeEnum.SelectIdFromName, {
         [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Label].Data),
@@ -72,14 +71,14 @@ export default class DataSelectComponent extends Vue {
         [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('me-2 readonly'),
         [StatTypeEnum.Placeholder]: StatType.StatTypes[StatTypeEnum.Placeholder]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Placeholder].Data),
         [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData(this.object.Stats[StatTypeEnum.ItemList].Data),
-        [StatTypeEnum.Required]: StatType.StatTypes[StatTypeEnum.Required]().CreateStat().InitData(this.resolveDisabledRequired()),
+        [StatTypeEnum.Required]: StatType.StatTypes[StatTypeEnum.Required]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Required] !== undefined ? this.object.Stats[StatTypeEnum.Required].Data : ''),
         [StatTypeEnum.ErrorMessage]: StatType.StatTypes[StatTypeEnum.ErrorMessage]().CreateStat().InitData(this.object.Stats[StatTypeEnum.ErrorMessage] !== undefined ? this.object.Stats[StatTypeEnum.ErrorMessage].Data : ''),
         [StatTypeEnum.IsValid]: StatType.StatTypes[StatTypeEnum.IsValid]().CreateStat().InitData(this.object.Stats[StatTypeEnum.IsValid] !== undefined ? this.object.Stats[StatTypeEnum.IsValid].Data : '')
       }),
       new ObjectTemplate(this.object.Region, ObjectTypeEnum.Button, SubObjectTypeEnum.Down, ActionTypeEnum.Click, {
-        [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData(this.resolveDisabledButtonLabel()),
-        [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('link-' + this.object.Stats[StatTypeEnum.Tag].Data),
-        [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData(this.resolveDisabledButtonDesign()),
+        [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData(this.resolveButtonLabel()),
+        [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('link-' + temp[0]),
+        [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData(this.resolveButtonDesign()),
         [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Id].Data)
       })
     ]
@@ -87,24 +86,19 @@ export default class DataSelectComponent extends Vue {
     return this.pageRefresh
   }
 
-  resolveDisabledRequired () { // TODO try to find a solution to enable required by choice
-    if (this.object.Stats[StatTypeEnum.Disabled] === undefined) { return 'true' }
-    if (this.object.Stats[StatTypeEnum.Disabled].Data === null) { return 'true' }
-    if (this.object.Stats[StatTypeEnum.Disabled].Data === '') { return 'true' }
-    return ''
-  }
-
-  resolveDisabledButtonLabel () {
-    if (this.object.Stats[StatTypeEnum.Disabled] === undefined) { return 'Un-Link' }
-    if (this.object.Stats[StatTypeEnum.Disabled].Data === null) { return 'Un-Link' }
-    if (this.object.Stats[StatTypeEnum.Disabled].Data === '') { return 'Un-Link' }
+  resolveButtonLabel () {
+    const temp = this.object.Stats[StatTypeEnum.Tag].Data.split('-')
+    if (temp[1] === undefined) { return 'Un-Link' }
+    if (temp[1] === null) { return 'Un-Link' }
+    if (temp[1] === '') { return 'Un-Link' }
     return 'Link'
   }
 
-  resolveDisabledButtonDesign () {
-    if (this.object.Stats[StatTypeEnum.Disabled] === undefined) { return 'btn btn-outline-danger me-2' }
-    if (this.object.Stats[StatTypeEnum.Disabled].Data === null) { return 'btn btn-outline-danger me-2' }
-    if (this.object.Stats[StatTypeEnum.Disabled].Data === '') { return 'btn btn-outline-danger me-2' }
+  resolveButtonDesign () {
+    const temp = this.object.Stats[StatTypeEnum.Tag].Data.split('-')
+    if (temp[1] === undefined) { return 'btn btn-outline-danger me-2' }
+    if (temp[1] === null) { return 'btn btn-outline-danger me-2' }
+    if (temp[1] === '') { return 'btn btn-outline-danger me-2' }
     return 'btn btn-outline-info me-2'
   }
 
