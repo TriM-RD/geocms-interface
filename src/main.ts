@@ -26,7 +26,6 @@ import SelectButtonComponent from '@/components/SelectButtonComponent.vue'
 import ListRowComponent from '@/components/ListRowComponent.vue'
 import ModalFormComponent from '@/components/ModalFormComponent.vue'
 import MapPickerComponent from '@/components/MapPickerComponent.vue'
-import FieldCodeComponent from '@/components/FieldCodeComponent.vue'
 import DataSelectComponent from '@/components/DataSelectComponent.vue'
 import { ObjectType, ObjectTypeEnum } from '@cybertale/interface/src'
 import UppyComponent from '@/components/formComponents/UppyComponent.vue'
@@ -51,7 +50,6 @@ ObjectType.ObjectTypes[ObjectTypeEnum.SelectButton](() => SelectButtonComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.ListRow](() => ListRowComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.ModalForm](() => ModalFormComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.MapPicker](() => MapPickerComponent)
-ObjectType.ObjectTypes[ObjectTypeEnum.FieldCode](() => FieldCodeComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.DataSelect](() => DataSelectComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.UploadFile](() => UppyComponent)
 

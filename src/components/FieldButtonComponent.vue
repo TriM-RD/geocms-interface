@@ -57,14 +57,13 @@ export default class FieldButtonComponent extends Vue {
       [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Tag].Data),
       [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-danger me-2'),
       [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Id].Data),
-      [StatTypeEnum.ElementType]: StatType.StatTypes[StatTypeEnum.ElementType]().CreateStat().InitData(this.object.Stats[StatTypeEnum.ElementType].Data),
+      [StatTypeEnum.ElementType]: StatType.StatTypes[StatTypeEnum.ElementType]().CreateStat().InitData(this.object.Stats[this.statTypeEnum.ElementType] !== undefined ? this.object.Stats[this.statTypeEnum.ElementType].Data : ''),
       [StatTypeEnum.Disabled]: StatType.StatTypes[StatTypeEnum.Disabled]().CreateStat().InitData(this.attributeCheck(this.statTypeEnum.Disabled))
     })
   ]
   )
 
   get reRender () {
-    console.log(JSON.parse(JSON.stringify(this.objectTemplates)))
     switch (this.object.Stats[StatTypeEnum.Tag].Data) {
       case 'code':
         this.objectTemplates = this.mechanic.InitSet([
@@ -84,7 +83,31 @@ export default class FieldButtonComponent extends Vue {
             [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('codeButton'),
             [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-info me-2'),
             [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Id].Data),
-            [StatTypeEnum.ElementType]: StatType.StatTypes[StatTypeEnum.ElementType]().CreateStat().InitData(this.object.Stats[StatTypeEnum.ElementType].Data),
+            // [StatTypeEnum.ElementType]: StatType.StatTypes[StatTypeEnum.ElementType]().CreateStat().InitData(this.object.Stats[StatTypeEnum.ElementType].Data),
+            [StatTypeEnum.Disabled]: StatType.StatTypes[StatTypeEnum.Disabled]().CreateStat().InitData(this.attributeCheck(this.statTypeEnum.Disabled))
+          })
+        ]
+        )
+        break
+      default:
+        this.objectTemplates = this.mechanic.InitSet([
+          new ObjectTemplate(this.object.Region, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.InsertClick, {
+            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Label].Data),
+            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Tag].Data),
+            [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Value].Data),
+            [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('me-2 readonly'),
+            [StatTypeEnum.Placeholder]: StatType.StatTypes[StatTypeEnum.Placeholder]().CreateStat().InitData('someValue'),
+            [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Id].Data),
+            [StatTypeEnum.Disabled]: StatType.StatTypes[StatTypeEnum.Disabled]().CreateStat().InitData(this.attributeCheck(this.statTypeEnum.Disabled)),
+            [StatTypeEnum.ErrorMessage]: StatType.StatTypes[StatTypeEnum.ErrorMessage]().CreateStat().InitData(this.object.Stats[StatTypeEnum.ErrorMessage] !== undefined ? this.object.Stats[StatTypeEnum.ErrorMessage].Data : ''),
+            [StatTypeEnum.IsValid]: StatType.StatTypes[StatTypeEnum.IsValid]().CreateStat().InitData(this.object.Stats[StatTypeEnum.IsValid] !== undefined ? this.object.Stats[StatTypeEnum.IsValid].Data : '')
+          }),
+          new ObjectTemplate(RegionEnum.MapPicker, ObjectTypeEnum.Button, SubObjectTypeEnum.Down, ActionTypeEnum.Click, {
+            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Delete'),
+            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Tag].Data),
+            [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-danger me-2'),
+            [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Id].Data),
+            [StatTypeEnum.ElementType]: StatType.StatTypes[StatTypeEnum.ElementType]().CreateStat().InitData(this.object.Stats[this.statTypeEnum.ElementType] !== undefined ? this.object.Stats[this.statTypeEnum.ElementType].Data : ''),
             [StatTypeEnum.Disabled]: StatType.StatTypes[StatTypeEnum.Disabled]().CreateStat().InitData(this.attributeCheck(this.statTypeEnum.Disabled))
           })
         ]
