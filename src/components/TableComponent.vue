@@ -67,14 +67,18 @@ export default class TableComponent extends Vue {
   objectTemplates!: ObjectTemplate[]
   entities: ObjectTemplate[][] = []
   currentPage = 1
-  filters = { code: '', group: '', division: '' }
   isInitRunning = false
   orderBy = 'asc'
   isLoading = false
-  groupTypeFilter: { [key: string]: string } = { group: 'group', template: 'template', all: '' }
+  groupTypeFilter: { [key: string]: string } = { all: '', group: 'group', template: 'template' }
+  filters = { code: '', group: '', division: '' }
+  onScroll: ((this: Window, ev: Event) => any) | null = null
 
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
+    if (this.onScroll) {
+      window.removeEventListener('scroll', this.onScroll)
+    }
   }
 
   created () {
@@ -82,8 +86,8 @@ export default class TableComponent extends Vue {
   }
 
   mounted () {
-    if (this.$route.name !== 'GroupEdit') {
-      window.onscroll = async () => {
+    if (this.$route.name !== 'GroupEdit' && this.$route.name !== 'Group') {
+      this.onScroll = async () => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop
         const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
         // Check if isLoading is false and user is at the bottom of the page
@@ -92,12 +96,15 @@ export default class TableComponent extends Vue {
           this.isLoading = true
 
           // Fetch new data
-          await this.scroll()
+          await this.scroll() // TODO scroll is disabling resorting on group
 
           // Set isLoading back to false
           this.isLoading = false
         }
       }
+
+      // Subscribe to the scroll event
+      window.addEventListener('scroll', this.onScroll)
     }
   }
 
@@ -154,12 +161,6 @@ export default class TableComponent extends Vue {
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', JSON.stringify({ api: 'entity', filters: this.filters, order: this.orderBy })))
         break
       case 'Group':
-        useToast()({
-          component: ToastComponent,
-          props: { msg: { title: 'Loading...', info: this.filters.group === '' ? 'Loading all.' : 'Loading ' + this.filters.group + ' only.' } }
-        }, {
-          type: TYPE.INFO
-        })
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', JSON.stringify({ api: 'group', filters: this.filters, order: this.orderBy })))
         break
       case 'Division':
@@ -210,11 +211,9 @@ export default class TableComponent extends Vue {
   }
 
   reverseEntities () {
-    console.log(this.filters.group)
     if (!this.isInitRunning) {
       const groupValues = Object.values(this.groupTypeFilter)
       this.renderComponent = true
-      this.changeRender()
       const currentGroupIndex = groupValues.indexOf(this.filters.group) + 1
       console.log(currentGroupIndex)
       if (currentGroupIndex >= groupValues.length && this.filters.group !== '') { // TODO something is not working (ORDER)
@@ -222,7 +221,13 @@ export default class TableComponent extends Vue {
       } else {
         this.filters.group = groupValues[currentGroupIndex]
       }
-      this.Init()
+      useToast()({
+        component: ToastComponent,
+        props: { msg: { title: 'Loading...', info: this.filters.group === '' ? 'Loading all.' : 'Loading ' + this.filters.group + ' only.' } }
+      }, {
+        type: TYPE.INFO
+      })
+      this.changeRender()
     }
   }
 

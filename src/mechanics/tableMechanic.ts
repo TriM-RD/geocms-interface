@@ -10,6 +10,8 @@ export namespace Manager.Mechanic{
     private page = 0
     private reverseOrder = false
     private lastPageReached = false
+    private groupTypeFilter: { [key: string]: string } = { all: '', group: 'group', template: 'template' }
+    private filters = { code: '', group: '', division: '' }
 
     public async InitGet (_id: string, _api: string): Promise<ObjectTemplate[]> {
       try {
@@ -98,16 +100,24 @@ export namespace Manager.Mechanic{
     protected Button (_eventHandler: EventHandlerType): void {
       switch (router.currentRoute.value.name) {
         case 'Group':
+          switch (_eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Left:
+              this.reverseOrder = true
+              // TODO try to find a way to be able to have toast here instead of TableComponent
+              this.refreshPage()
+              break
+          }
+          break
         case 'Division':
           switch (_eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:
               this.reverseOrder = true
-              /* useToast()({
+              useToast()({
                 component: ToastComponent,
                 props: { msg: { title: 'Resorting...', info: 'Re-sorted names in table.' } }
               }, {
                 type: TYPE.INFO
-              }) */
+              })
               this.refreshPage()
               break
           }

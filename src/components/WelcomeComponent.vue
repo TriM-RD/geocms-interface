@@ -152,12 +152,20 @@
           <form class="form-subscribe" id="contactFormFooter" data-sb-form-api-token="API_TOKEN">
             <!-- Email address input-->
             <div class="row">
-              <div class="col">
+              <!--div class="col">
                 <input class="form-control form-control-lg" id="emailAddressBelow" type="email" placeholder="Email Address" data-sb-validations="required,email" />
                 <div class="invalid-feedback text-white" data-sb-feedback="emailAddressBelow:required">Email Address is required.</div>
                 <div class="invalid-feedback text-white" data-sb-feedback="emailAddressBelow:email">Email Address Email is not valid.</div>
+              </div-->
+              <div class="col-12">
+                <button
+                  @click.prevent="redirectToRegistration()"
+                  class="btn btn-outline-info btn-lg register-button"
+                  id="submitButton"
+                  type="submit">
+                  Sign up!
+                </button>
               </div>
-              <div class="col-auto"><button class="btn btn-secondary btn-lg" id="submitButton" type="submit">Submit</button></div>
             </div>
             <!-- Submit success message-->
             <!---->
@@ -194,7 +202,7 @@
             <li class="list-inline-item">⋅</li>
             <li class="list-inline-item"><a href="#!">Privacy Policy</a></li>
           </ul>
-          <p class="text-muted small mb-4 mb-lg-0">&copy; Your Website 2022. All Rights Reserved.</p>
+          <p class="text-muted small mb-4 mb-lg-0">&copy; Your Website 2023. All Rights Reserved.</p>
         </div>
         <div class="col-lg-6 h-100 text-center text-lg-end my-auto">
           <ul class="list-inline mb-0">
@@ -266,6 +274,10 @@ export default class WelcomeComponent extends Vue {
     window.location.href = process.env.VUE_APP_URL + 'oauth/redirect?' + query
   }
 
+  redirectToRegistration () : void {
+    window.location.href = process.env.VUE_APP_URL + 'register'
+  }
+
   generateCodeChallengePair (): Promise<CodeChallengePair> {
     const codeVerifierBytes = new Uint8Array(64)
     crypto.getRandomValues(codeVerifierBytes)
@@ -324,6 +336,15 @@ a:hover {
 
 .greenish-gray-bg {
   background: rgba(50, 125, 105, 0.7); /* Semi-transparent greenish gray */
+}
+
+.register-button {
+  background-color: #F8F9FA;
+}
+
+.register-button:hover {
+  background-color: #17a2b8; /* This is the Bootstrap info color, change it as needed */
+  color: white;
 }
 
 </style>
