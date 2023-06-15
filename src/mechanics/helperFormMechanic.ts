@@ -32,7 +32,6 @@ export namespace Manager.Mechanic{
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     protected Button (eventHandler: EventHandlerType): void {
-      console.log('test')
       switch (eventHandler.subObjectType) {
         case SubObjectTypeEnum.Middle:
           this.generateCode(eventHandler, 'code')
@@ -54,12 +53,8 @@ export namespace Manager.Mechanic{
     }
 
     private generateCode (eventHandler: EventHandlerType, string: string) {
-      console.log('herer')
       const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === string)
-      console.log(this.ObjectTemplates[temp].Stats[StatTypeEnum.Label].Data)
-      console.log(this.ObjectTemplates[temp].Stats[StatTypeEnum.Value].Data)
       RegionType.RegionTypes[this.ObjectTemplates[temp].Region].ObjectTypes[this.ObjectTemplates[temp].ObjectEnum].ChooseSubType(this.ObjectTemplates[temp], this.generateRandomString(this.ObjectTemplates[temp].Stats[StatTypeEnum.Id].Data))
-      console.log(this.ObjectTemplates[temp].Stats[StatTypeEnum.Value].Data)
     }
   }
 

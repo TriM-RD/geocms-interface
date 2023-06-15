@@ -52,9 +52,9 @@ export default class FieldButtonComponent extends Vue {
       [StatTypeEnum.ErrorMessage]: StatType.StatTypes[StatTypeEnum.ErrorMessage]().CreateStat().InitData(this.object.Stats[StatTypeEnum.ErrorMessage] !== undefined ? this.object.Stats[StatTypeEnum.ErrorMessage].Data : ''),
       [StatTypeEnum.IsValid]: StatType.StatTypes[StatTypeEnum.IsValid]().CreateStat().InitData(this.object.Stats[StatTypeEnum.IsValid] !== undefined ? this.object.Stats[StatTypeEnum.IsValid].Data : '')
     }),
-    new ObjectTemplate(RegionEnum.MapPicker, ObjectTypeEnum.Button, SubObjectTypeEnum.Down, ActionTypeEnum.Click, {
+    new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Down, ActionTypeEnum.Click, {
       [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Delete'),
-      [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Tag].Data),
+      [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('delete-' + this.object.Stats[StatTypeEnum.Tag].Data),
       [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-danger me-2'),
       [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Id].Data),
       [StatTypeEnum.ElementType]: StatType.StatTypes[StatTypeEnum.ElementType]().CreateStat().InitData(this.object.Stats[this.statTypeEnum.ElementType] !== undefined ? this.object.Stats[this.statTypeEnum.ElementType].Data : ''),
@@ -64,6 +64,11 @@ export default class FieldButtonComponent extends Vue {
   )
 
   get reRender () {
+    this.chooseTagType()
+    return this.pageRefresh
+  }
+
+  chooseTagType () : void {
     switch (this.object.Stats[StatTypeEnum.Tag].Data) {
       case 'code':
         this.objectTemplates = this.mechanic.InitSet([
@@ -102,9 +107,9 @@ export default class FieldButtonComponent extends Vue {
             [StatTypeEnum.ErrorMessage]: StatType.StatTypes[StatTypeEnum.ErrorMessage]().CreateStat().InitData(this.object.Stats[StatTypeEnum.ErrorMessage] !== undefined ? this.object.Stats[StatTypeEnum.ErrorMessage].Data : ''),
             [StatTypeEnum.IsValid]: StatType.StatTypes[StatTypeEnum.IsValid]().CreateStat().InitData(this.object.Stats[StatTypeEnum.IsValid] !== undefined ? this.object.Stats[StatTypeEnum.IsValid].Data : '')
           }),
-          new ObjectTemplate(RegionEnum.MapPicker, ObjectTypeEnum.Button, SubObjectTypeEnum.Down, ActionTypeEnum.Click, {
+          new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Down, ActionTypeEnum.Click, {
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Delete'),
-            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Tag].Data),
+            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('delete-' + this.object.Stats[StatTypeEnum.Tag].Data),
             [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-danger me-2'),
             [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Id].Data),
             [StatTypeEnum.ElementType]: StatType.StatTypes[StatTypeEnum.ElementType]().CreateStat().InitData(this.object.Stats[this.statTypeEnum.ElementType] !== undefined ? this.object.Stats[this.statTypeEnum.ElementType].Data : ''),
@@ -114,7 +119,6 @@ export default class FieldButtonComponent extends Vue {
         )
         break
     }
-    return this.pageRefresh
   }
 
   attributeCheck (statType : number) : string {
@@ -123,9 +127,11 @@ export default class FieldButtonComponent extends Vue {
     return this.object.Stats[statType].Data
   }
 
-  reRenderInternal () {
+  reRenderInternal (): void {
     if (!this.renderComponent) {
       this.objectTemplates = []
+    } else {
+      this.chooseTagType()
     }
     this.renderComponent = !this.renderComponent
   }
@@ -135,7 +141,6 @@ export default class FieldButtonComponent extends Vue {
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {
-    console.log(JSON.parse(JSON.stringify(this.objectTemplates)))
     return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }
 }
