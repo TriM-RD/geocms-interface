@@ -50,8 +50,8 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import mapboxgl from 'mapbox-gl'
 import http from '@/http-common'
 import Loading from 'vue-loading-overlay'
-import { StatTypeEnum } from '@cybertale/interface'
 import { Modal } from 'bootstrap'
+
 @Options({
   components: {
     Loading
@@ -90,6 +90,7 @@ export default class MapComponent extends Vue {
   iconTypes: string[] = ['ico-lamp', 'ico-sro', 'ico-ssro', 'struja-idle']
   deviceCode = ''
   error = false
+  strujaFeatureIds: string[] = [];
 
   getIconPath (iconType: string) {
     return require('@/assets/map_files/' + iconType + '.svg')
@@ -642,16 +643,30 @@ export default class MapComponent extends Vue {
     if (this.entities.features.length > 0) {
       if (!mapUpdated) {
         const bounds = new mapboxgl.LngLatBounds()
+        const buffer = 0.0001 // The size of the buffer depends on your specific needs
+
         for (const element of this.entities.features) {
-          bounds.extend(element.geometry.coordinates)
+          const coordinates = element.geometry.coordinates
+          const lng = coordinates[0]
+          const lat = coordinates[1]
+
+          bounds.extend([
+            [lng - buffer, lat - buffer],
+            [lng + buffer, lat + buffer]
+          ])
         }
+
         this.map.fitBounds(bounds, {
           padding: 20,
           maxZoom: 5
         })
       }
+
       // this.animateDashArray(0)
       this.renderComponent = false
+      this.strujaFeatureIds = this.entities.features
+        .filter((feature: { properties: { iconType: string } }) => feature.properties.iconType === 'struja-idle')
+        .map((feature: { properties: { code: string } }) => feature.properties.code)
     }
   }
 
@@ -660,8 +675,21 @@ export default class MapComponent extends Vue {
 
     // Adjust the value 14 to the desired zoom level for clustered points to appear
     if (zoomLevel <= 16) {
+      this.changeIconTypeById()
       await this.connectUnclusteredPoints(this.relData)
     }
+  }
+
+  changeIconTypeById () {
+    // Define new icon images according to the newIconType
+    const newIconImage = [
+      'match',
+      ['get', 'code'],
+      ...this.strujaFeatureIds.flatMap(code => [code, 'struja-on']),
+      ['get', 'iconType'] // default value
+    ]
+
+    this.map.setLayoutProperty('icon-points', 'icon-image', newIconImage)
   }
 }
 

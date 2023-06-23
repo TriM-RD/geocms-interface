@@ -481,7 +481,6 @@ export namespace Manager.Mechanic{
           })
           break
         case 'viewParent':
-          console.log(eventHandler.payload.Stats[StatTypeEnum.Value].Data)
           await router.push({
             name: 'DeviceEdit',
             params: { id: eventHandler.payload.Stats[StatTypeEnum.Value].Data }
@@ -544,10 +543,7 @@ export namespace Manager.Mechanic{
 
     private generateCode (eventHandler: EventHandlerType, string: string) {
       const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === 'code')
-      console.log(this.ObjectTemplates[temp].Stats[StatTypeEnum.Label].Data)
-      console.log(this.ObjectTemplates[temp].Stats[StatTypeEnum.Value].Data)
       this.ObjectTemplates[temp].Stats[StatTypeEnum.Value].Data = this.generateRandomString(this.ObjectTemplates[temp].Stats[StatTypeEnum.Id].Data)
-      console.log(this.ObjectTemplates[temp].Stats[StatTypeEnum.Value].Data)
     }
   }
 
