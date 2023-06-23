@@ -150,7 +150,9 @@ export namespace Manager.Mechanic{
               await this.resolveButtonMiddle(eventHandler, eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
               break
             case SubObjectTypeEnum.Left:
-              await this.validateForm('entity', 'DeviceEdit')
+              // Add it to Stats
+              eventHandler.payload.Stats[StatTypeEnum.Disabled].Data = 'true'
+              await this.validateForm('entity', 'DeviceEdit', eventHandler.payload)
               break
             case SubObjectTypeEnum.Right:
               await router.push({
@@ -332,7 +334,7 @@ export namespace Manager.Mechanic{
       return MechanicAbstract.instance
     }
 
-    private async validateForm (route: string, redirectTo: string) {
+    private async validateForm (route: string, redirectTo: string, button: ObjectTemplate | null = null) {
       for (const form of document.getElementsByClassName('needs-validation')) {
         if (!(form as HTMLFormElement).checkValidity()) {
           form.classList.add('was-validated')
@@ -406,6 +408,7 @@ export namespace Manager.Mechanic{
           }
         }
       }
+      if (button) { button.Stats[StatTypeEnum.Disabled].Data = '' }
     }
 
     private unlinkBelongs (eventHandler : EventHandlerType, tag : string) {
