@@ -680,12 +680,13 @@ export default class MapComponent extends Vue {
     }
   }
 
-  changeIconTypeById () {
+  async changeIconTypeById (): Promise<void> {
+    const response = await http.get('https://tri-m.app/ormari/api/ormarOkCode.php')
     // Define new icon images according to the newIconType
     const newIconImage = [
       'match',
       ['get', 'code'],
-      ...this.strujaFeatureIds.flatMap(code => [code, 'struja-on']),
+      ...Object.entries(response.data).map(([key, value]) => ({ key, value })).flatMap(code => [code.key, code.value]),
       ['get', 'iconType'] // default value
     ]
 
