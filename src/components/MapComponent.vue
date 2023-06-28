@@ -121,44 +121,9 @@ export default class MapComponent extends Vue {
       })
 
       const allIds = [featureWithCode.properties.id]
-      const iconSize = [
-        'interpolate',
-        ['linear'],
-        ['zoom'],
-        16, [
-          'case',
-          ['in', ['get', 'id'], ['literal', allIds]], 0.4,
-          ['==', ['get', 'iconType'], 'struja-idle'], 0.6,
-          ['==', ['get', 'iconType'], 'ico-sro'], 0.6,
-          0.3
-        ],
-        17, [
-          'case',
-          ['in', ['get', 'id'], ['literal', allIds]], 0.6,
-          ['==', ['get', 'iconType'], 'struja-idle'], 0.6,
-          ['==', ['get', 'iconType'], 'ico-sro'], 0.6,
-          0.3
-        ],
-        18, [
-          'case',
-          ['in', ['get', 'id'], ['literal', allIds]], 0.8,
-          ['==', ['get', 'iconType'], 'struja-idle'], 0.6,
-          ['==', ['get', 'iconType'], 'ico-sro'], 0.6,
-          0.3
-        ]
-      ]
 
-      const iconOpacity = [
-        'case',
-        ['in', ['get', 'id'], ['literal', allIds]],
-        1,
-        ['all', ['!=', ['get', 'iconType'], 'ico-sro'], ['!=', ['get', 'iconType'], 'struja-idle']],
-        0.1,
-        1
-      ]
-
-      this.map.setLayoutProperty('icon-points', 'icon-size', iconSize)
-      this.map.setPaintProperty('icon-points', 'icon-opacity', iconOpacity)
+      this.map.setLayoutProperty('icon-points', 'icon-size', this.getIconSizes(allIds))
+      this.map.setPaintProperty('icon-points', 'icon-opacity', this.getIconOpacities(allIds))
 
       this.map.addSource('single-point', {
         type: 'geojson',
@@ -384,43 +349,8 @@ export default class MapComponent extends Vue {
     }
 
     this.addArrowLayer(linesGeoJSON)
-    const iconSize = [
-      'interpolate',
-      ['linear'],
-      ['zoom'],
-      16, [
-        'case',
-        ['in', ['get', 'id'], ['literal', allIds]], 0.2,
-        ['==', ['get', 'iconType'], 'struja-idle'], 0.6,
-        ['==', ['get', 'iconType'], 'ico-sro'], 0.6,
-        0.3
-      ],
-      17, [
-        'case',
-        ['in', ['get', 'id'], ['literal', allIds]], 0.4,
-        ['==', ['get', 'iconType'], 'struja-idle'], 0.6,
-        ['==', ['get', 'iconType'], 'ico-sro'], 0.6,
-        0.3
-      ],
-      18, [
-        'case',
-        ['in', ['get', 'id'], ['literal', allIds]], 0.6,
-        ['==', ['get', 'iconType'], 'struja-idle'], 0.6,
-        ['==', ['get', 'iconType'], 'ico-sro'], 0.6,
-        0.3
-      ]
-    ]
-
-    const iconOpacity = [
-      'case',
-      ['in', ['get', 'id'], ['literal', allIds]],
-      1,
-      ['all', ['!=', ['get', 'iconType'], 'ico-sro'], ['!=', ['get', 'iconType'], 'struja-idle']],
-      0.1,
-      1
-    ]
-    this.map.setLayoutProperty('icon-points', 'icon-size', iconSize)
-    this.map.setPaintProperty('icon-points', 'icon-opacity', iconOpacity)
+    this.map.setLayoutProperty('icon-points', 'icon-size', this.getIconSizes(allIds))
+    this.map.setPaintProperty('icon-points', 'icon-opacity', this.getIconOpacities(allIds))
   }
 
   generateMap (mapUpdated = false, cluster = true) {
@@ -488,7 +418,7 @@ export default class MapComponent extends Vue {
           'symbol-sort-key': [
             'case',
             ['==', ['get', 'iconType'], 'ico-sro'],
-            9,
+            8,
             ['==', ['get', 'iconType'], 'struja-idle'],
             9,
             0
@@ -562,7 +492,7 @@ export default class MapComponent extends Vue {
         })
         let additionalButtons = '<div class="list-group">'
         for (const device of devicesWithSameCoordinates) {
-          if (device.iconType === 'struja-idle') {
+          if (device.iconType.includes('struja')) {
             additionalButtons += `<button class="list-group-item list-group-item-action controller-ncv-button btn-outline-secondary btn-sm btn-fixed text-truncate w-100 small-font" title="View ormar ${device.code}" data-devicecode="${device.code}" style="width: 120px;">View ormar ${device.code}</button>`
           }
           additionalButtons += `<button class="list-group-item list-group-item-action additional-button btn-outline-secondary btn-sm btn-fixed text-truncate w-100 small-font" title="Open ${device.code}" data-deviceid="${device.id}" data-devicecode="${device.code}" style="width: 120px;">Open ${device.code}</button>`
@@ -601,7 +531,7 @@ export default class MapComponent extends Vue {
         Array.from(additionalBtns).forEach(btn => {
           btn.addEventListener('click', () => {
             const deviceId = btn.getAttribute('data-deviceid')
-            console.log(deviceId)
+            // console.log(deviceId)
             if (deviceId) { this.$router.push({ name: 'DeviceEdit', params: { id: deviceId } }) }
           })
         })
@@ -664,9 +594,11 @@ export default class MapComponent extends Vue {
 
       // this.animateDashArray(0)
       this.renderComponent = false
-      this.strujaFeatureIds = this.entities.features
-        .filter((feature: { properties: { iconType: string } }) => feature.properties.iconType === 'struja-idle')
-        .map((feature: { properties: { code: string } }) => feature.properties.code)
+      if (this.strujaFeatureIds.length === 0) {
+        this.strujaFeatureIds = this.entities.features
+          .filter((feature: { properties: { iconType: string } }) => feature.properties.iconType === 'struja-idle')
+          .map((feature: { properties: { code: string } }) => feature.properties.code)
+      }
     }
   }
 
@@ -675,7 +607,7 @@ export default class MapComponent extends Vue {
 
     // Adjust the value 14 to the desired zoom level for clustered points to appear
     if (zoomLevel <= 16) {
-      this.changeIconTypeById()
+      await this.changeIconTypeById()
       await this.connectUnclusteredPoints(this.relData)
     }
   }
@@ -691,6 +623,61 @@ export default class MapComponent extends Vue {
     ]
 
     this.map.setLayoutProperty('icon-points', 'icon-image', newIconImage)
+  }
+
+  getIconOpacities (allIds: any[]) {
+    return [
+      'case',
+      ['in', ['get', 'id'], ['literal', allIds]],
+      1,
+      [
+        'all', ['!=', ['get', 'iconType'], 'ico-sro'],
+        ['!=', ['get', 'iconType'], 'struja-idle'],
+        ['!=', ['get', 'iconType'], 'struja-on'],
+        ['!=', ['get', 'iconType'], 'struja-off'],
+        ['!=', ['get', 'iconType'], 'struja-warning']
+      ],
+      0.1,
+      1
+    ]
+  }
+
+  getIconSizes (allIds: any[]) {
+    return [
+      'interpolate',
+      ['linear'],
+      ['zoom'],
+      16, [
+        'case',
+        ['==', ['get', 'iconType'], 'struja-idle'], 0.6,
+        ['==', ['get', 'iconType'], 'struja-on'], 0.6,
+        ['==', ['get', 'iconType'], 'struja-off'], 0.6,
+        ['==', ['get', 'iconType'], 'struja-warning'], 0.6,
+        ['in', ['get', 'id'], ['literal', allIds]], 0.2,
+        ['==', ['get', 'iconType'], 'ico-sro'], 0.6,
+        0.3
+      ],
+      17, [
+        'case',
+        ['==', ['get', 'iconType'], 'struja-idle'], 0.6,
+        ['==', ['get', 'iconType'], 'struja-on'], 0.6,
+        ['==', ['get', 'iconType'], 'struja-off'], 0.6,
+        ['==', ['get', 'iconType'], 'struja-warning'], 0.6,
+        ['in', ['get', 'id'], ['literal', allIds]], 0.4,
+        ['==', ['get', 'iconType'], 'ico-sro'], 0.6,
+        0.3
+      ],
+      18, [
+        'case',
+        ['==', ['get', 'iconType'], 'struja-idle'], 0.6,
+        ['==', ['get', 'iconType'], 'struja-on'], 0.6,
+        ['==', ['get', 'iconType'], 'struja-off'], 0.6,
+        ['==', ['get', 'iconType'], 'struja-warning'], 0.6,
+        ['in', ['get', 'id'], ['literal', allIds]], 0.6,
+        ['==', ['get', 'iconType'], 'ico-sro'], 0.6,
+        0.3
+      ]
+    ]
   }
 }
 
