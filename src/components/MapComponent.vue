@@ -68,6 +68,7 @@ export default class MapComponent extends Vue {
   relData= []
   currentPopup: mapboxgl.Popup | null = null
   renderComponent= true
+  currentPopupIndex = -1
   dashArraySequence = [
     [0, 4, 3],
     [0.5, 4, 2.5],
@@ -359,7 +360,7 @@ export default class MapComponent extends Vue {
         type: 'geojson',
         data: this.entities,
         cluster: cluster,
-        clusterMaxZoom: 14, // Max zoom to cluster points on
+        clusterMaxZoom: 12, // Max zoom to cluster points on
         clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
       })
       this.map.addLayer({
@@ -466,75 +467,22 @@ export default class MapComponent extends Vue {
         )
       })
       this.map.on('click', 'icon-points', async (e: any) => {
-        if (this.currentPopup) {
-          this.currentPopup.remove()
-        }
-        const coordinates = e.features[0].geometry.coordinates.slice()
-        const id = e.features[0].properties.id
-        const code = e.features[0].properties.code
-
-        // Update the map with new data
-        await this.updateMapData(id)
-        const precision = 1000000
-        // Rest of the code
-        const devicesWithSameCoordinates = this.entities.features.filter((device: { id: string, geometry: { coordinates: any[] }, properties : { iconType: string, code: string } }) => {
-          return device.id === id ||
-            (
-              Math.round(parseFloat(device.geometry.coordinates[0]) * precision) === Math.round(parseFloat(coordinates[0]) * precision) &&
-              Math.round(parseFloat(device.geometry.coordinates[1]) * precision) === Math.round(parseFloat(coordinates[1]) * precision)
-            )
-        }).map((device: { properties: { iconType: string, code: string, id: string } }) => {
-          return {
-            code: device.properties.code,
-            iconType: device.properties.iconType,
-            id: device.properties.id
+        this.currentPopupIndex = -1
+        const clickedPoint = e.point
+        const clickedFeatures = this.map.queryRenderedFeatures(clickedPoint, { layers: ['icon-points'] })
+        // Check if there are any clicked features
+        if (clickedFeatures && clickedFeatures.length > 0) {
+          // Sort the clicked features based on their rendering order (symbol-sort-key)
+          const topmostFeature = this.getTopmostFeature(clickedFeatures, clickedPoint)
+          const feature = {
+            geometry: {
+              coordinates: topmostFeature.geometry.coordinates
+            },
+            properties: topmostFeature.properties
           }
-        })
-        let additionalButtons = '<div class="list-group">'
-        for (const device of devicesWithSameCoordinates) {
-          if (device.iconType.includes('struja')) {
-            additionalButtons += `<button class="list-group-item list-group-item-action controller-ncv-button btn-outline-secondary btn-sm btn-fixed text-truncate w-100 small-font" title="View ormar ${device.code}" data-devicecode="${device.code}" style="width: 120px;">View ormar ${device.code}</button>`
-          }
-          additionalButtons += `<button class="list-group-item list-group-item-action additional-button btn-outline-secondary btn-sm btn-fixed text-truncate w-100 small-font" title="Open ${device.code}" data-deviceid="${device.id}" data-devicecode="${device.code}" style="width: 120px;">Open ${device.code}</button>`
+          await this.handleIconPointsClick({ features: [feature] })
         }
-        additionalButtons += '</div>'
-
-        const popup = new mapboxgl.Popup({ closeOnClick: false })
-          .setLngLat(coordinates)
-          .setHTML(`<div class="d-flex flex-column h-100">
-      <p class="small-font">Code: ${code}</p>
-      ${additionalButtons}
-      <p class="small-font mt-3 mb-0">Devices with same coordinates: ${devicesWithSameCoordinates.length}</p>
-    </div>`)
-        popup.addTo(this.map)
-        this.currentPopup = popup
-
-        const ncvBtns = document.getElementsByClassName('controller-ncv-button')
-        Array.from(ncvBtns).forEach(btn => {
-          btn.addEventListener('click', () => {
-            const deviceCode = btn.getAttribute('data-devicecode')
-            const iframe = document.getElementById('yourIframeId') as HTMLIFrameElement
-            if (iframe !== null) {
-              if (iframe.contentWindow !== null) {
-                iframe.contentWindow.postMessage({ command: 'openModalOrmar', code: deviceCode }, '*')
-              }
-            }
-            const myModalElement = document.getElementById('myModal')
-            if (myModalElement !== null) {
-              const myModal = new Modal(myModalElement, {})
-              myModal.show()
-            }
-          })
-        })
-
-        const additionalBtns = document.getElementsByClassName('additional-button')
-        Array.from(additionalBtns).forEach(btn => {
-          btn.addEventListener('click', () => {
-            const deviceId = btn.getAttribute('data-deviceid')
-            // console.log(deviceId)
-            if (deviceId) { this.$router.push({ name: 'DeviceEdit', params: { id: deviceId } }) }
-          })
-        })
+        // await this.handleIconPointsClick(e)
       })
 
       this.map.on('click', 'unclustered-point', async (e: any) => {
@@ -678,6 +626,144 @@ export default class MapComponent extends Vue {
         0.3
       ]
     ]
+  }
+
+  getTopmostFeature (features: string | any[], clickedPoint: any) {
+    let topmostFeature = null
+    let topmostDistance = Infinity
+    for (let i = 0; i < features.length; i++) {
+      const clickedLatLng = this.map.unproject(clickedPoint)
+
+      const clickedPointCoordinates = {
+        latitude: clickedLatLng.lat,
+        longitude: clickedLatLng.lng
+      }
+      const currentFeature = features[i]
+      const currentDistance = this.getDistanceInMeters(
+        { latitude: currentFeature.geometry.coordinates[1], longitude: currentFeature.geometry.coordinates[0] },
+        clickedPointCoordinates)
+      const currentIconName = currentFeature.properties.iconType
+
+      if (currentDistance <= 500 && ['ico-sro', 'struja-idle', 'struja-on', 'struja-off', 'struja-warning'].includes(currentIconName)) {
+        if (currentDistance < topmostDistance) {
+          topmostFeature = currentFeature
+          topmostDistance = currentDistance
+        }
+      }
+    }
+    if (topmostFeature !== null) { return topmostFeature } else { return features[0] }
+  }
+
+  getDistanceInMeters (point1: any, point2: any) {
+    const earthRadius = 6371e3 // Radius of the Earth in meters
+    const { latitude: lat1, longitude: lon1 } = point1
+    const { latitude: lat2, longitude: lon2 } = point2
+
+    const latDelta = this.degToRad(lat2 - lat1)
+    const lonDelta = this.degToRad(lon2 - lon1)
+
+    const a =
+      Math.sin(latDelta / 2) * Math.sin(latDelta / 2) +
+      Math.cos(this.degToRad(lat1)) * Math.cos(this.degToRad(lat2)) *
+      Math.sin(lonDelta / 2) * Math.sin(lonDelta / 2)
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+    return earthRadius * c
+  }
+
+  degToRad (degrees: number) {
+    return degrees * (Math.PI / 180)
+  }
+
+  async handleIconPointsClick (e: any) {
+    if (this.currentPopup) {
+      this.currentPopup.remove()
+    }
+    const coordinates = e.features[0].geometry.coordinates.slice()
+    const id = e.features[0].properties.id
+    const code = e.features[0].properties.code
+
+    // Update the map with new data
+    await this.updateMapData(id)
+    const precision = 100000
+    // Rest of the code
+    const devicesWithSameCoordinates = this.entities.features.filter((device: { id: string, geometry: { coordinates: any[] }, properties : { iconType: string, code: string } }) => {
+      return device.id === id ||
+        (
+          Math.round(parseFloat(device.geometry.coordinates[0]) * precision) === Math.round(parseFloat(coordinates[0]) * precision) &&
+          Math.round(parseFloat(device.geometry.coordinates[1]) * precision) === Math.round(parseFloat(coordinates[1]) * precision)
+        )
+    }).map((device: { properties: { iconType: string, code: string, id: string } }) => {
+      return {
+        code: device.properties.code,
+        iconType: device.properties.iconType,
+        id: device.properties.id
+      }
+    })
+    let additionalButtons = '<div class="list-group">'
+    for (const device of devicesWithSameCoordinates) {
+      if (device.iconType.includes('struja')) {
+        additionalButtons += `<button class="list-group-item list-group-item-action controller-ncv-button btn-outline-secondary btn-sm btn-fixed text-truncate w-100 small-font" title="View ormar ${device.code}" data-devicecode="${device.code}" style="width: 120px;">View ormar ${device.code}</button>`
+      }
+      additionalButtons += `<button class="list-group-item list-group-item-action additional-button btn-outline-secondary btn-sm btn-fixed text-truncate w-100 small-font" title="Open ${device.code}" data-deviceid="${device.id}" data-devicecode="${device.code}" style="width: 120px;">Open ${device.code}</button>`
+    }
+    additionalButtons += '</div>'
+
+    const popup = new mapboxgl.Popup({ closeOnClick: false })
+      .setLngLat(coordinates)
+      .setHTML(`<div class="d-flex flex-column h-100">
+      <p class="small-font">Code: ${code}</p>
+      ${additionalButtons}
+      <p class="small-font mt-3 mb-0">Devices with same coordinates: ${devicesWithSameCoordinates.length}</p>
+      ${devicesWithSameCoordinates.length > 1 ? '<button id="nextButton" class="btn btn-primary mt-3">Next</button>' : ''}
+    </div>`)
+    popup.addTo(this.map)
+    this.currentPopup = popup
+    this.currentPopupIndex++
+    if (devicesWithSameCoordinates.length > 1) {
+      const nextButton = document.getElementById('nextButton')
+      if (nextButton) {
+        nextButton.addEventListener('click', () => {
+          if (this.currentPopupIndex >= devicesWithSameCoordinates.length) {
+            this.currentPopupIndex = 0
+          }
+          const nextFeature = devicesWithSameCoordinates[this.currentPopupIndex]
+          const feature = {
+            geometry: {
+              coordinates: coordinates
+            },
+            properties: nextFeature
+          }
+          this.handleIconPointsClick({ features: [feature] })
+        })
+      }
+    }
+
+    const ncvBtns = document.getElementsByClassName('controller-ncv-button')
+    Array.from(ncvBtns).forEach(btn => {
+      btn.addEventListener('click', () => {
+        const deviceCode = btn.getAttribute('data-devicecode')
+        const iframe = document.getElementById('yourIframeId') as HTMLIFrameElement
+        if (iframe !== null) {
+          if (iframe.contentWindow !== null) {
+            iframe.contentWindow.postMessage({ command: 'openModalOrmar', code: deviceCode }, '*')
+          }
+        }
+        const myModalElement = document.getElementById('myModal')
+        if (myModalElement !== null) {
+          const myModal = new Modal(myModalElement, {})
+          myModal.show()
+        }
+      })
+    })
+
+    const additionalBtns = document.getElementsByClassName('additional-button')
+    Array.from(additionalBtns).forEach(btn => {
+      btn.addEventListener('click', () => {
+        const deviceId = btn.getAttribute('data-deviceid')
+        // console.log(deviceId)
+        if (deviceId) { this.$router.push({ name: 'DeviceEdit', params: { id: deviceId } }) }
+      })
+    })
   }
 }
 
