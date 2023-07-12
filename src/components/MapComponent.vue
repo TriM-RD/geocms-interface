@@ -29,7 +29,7 @@
                   <input :disabled="renderComponent" class="form-check-input me-2 checkbox-lg" type="checkbox" :value="iconType" v-model="checkedIconTypes" @change="updateSymbolVisibility" :id="iconType" checked>
                   <img class="mt-1" :src="getIconPath(iconType)" :alt="iconType" style="height: 24px; width: 24px;">
                 </div>
-                <div class="d-none d-sm-block ms-1" style="text-transform: uppercase;">{{iconType}}</div>
+                <div class="d-none d-sm-block ms-1" style="text-transform: uppercase;">{{iconTypesLabels[iconType]}}</div>
               </label>
             </div>
           </div>
@@ -89,6 +89,13 @@ export default class MapComponent extends Vue {
   step = 0;
   checkedIconTypes: string[] = ['ico-lamp', 'ico-sro', 'ico-ssro', 'struja-idle']
   iconTypes: string[] = ['ico-lamp', 'ico-sro', 'ico-ssro', 'struja-idle']
+  iconTypesLabels = {
+    'ico-lamp': 'LAMP',
+    'ico-sro': 'SRO',
+    'ico-ssro': 'SSRO',
+    'struja-idle': 'NCV'
+  };
+
   deviceCode = ''
   error = false
   strujaFeatureIds: string[] = [];
