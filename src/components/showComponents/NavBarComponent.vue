@@ -34,6 +34,7 @@
               <router-link to="/administration" class="dropdown-item opacity-75">Administration</router-link>
               <li class="opacity-50"><hr class="dropdown-divider"></li>
               <li><button class="dropdown-item opacity-75" type="button" v-on:click="openReport">Open Report</button></li>
+              <li><button class="dropdown-item opacity-75" type="button" v-on:click="testMe">Test</button></li>
               <li class="opacity-50"><hr class="dropdown-divider"></li>
               <li><button class="dropdown-item opacity-75" type="button" v-on:click="logout()">Log out</button></li>
             </ul>
@@ -93,6 +94,11 @@ export default class NavBarComponent extends Vue {
     const date1 = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().split('T')[0]
     const date2 = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().split('T')[0]
     window.open('https://tri-m.app/ormari/api/report.php?datefrom=' + date1 + '&dateto=' + date2)
+  }
+
+  async testMe (): Promise<void> {
+    const response = await http.get('http://supblue.test/api/user')
+    console.log(response)
   }
 }
 </script>
