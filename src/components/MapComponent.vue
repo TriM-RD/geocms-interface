@@ -32,8 +32,8 @@
                 <div class="d-none d-sm-block ms-1" style="text-transform: uppercase;">{{iconTypesLabels[iconType]}}</div>
 
                 <!-- Radio input -->
-                <div class="form-check form-check-inline ms-auto">
-                  <input class="form-check-input ms-1" type="radio" name="clusterIconType" :value="iconType" v-model="this.selectedClusterIconType" @change="clusterIconChanged()">
+                <div class="form-check form-check-inline custom-margin pe-0 me-0">
+                  <input class="form-check-input" type="radio" name="clusterIconType" :value="iconType" v-model="this.selectedClusterIconType" @change="clusterIconChanged()">
                 </div>
               </label>
             </div>
@@ -92,9 +92,9 @@ export default class MapComponent extends Vue {
   ];
 
   step = 0;
-  checkedIconTypes: string[] = ['ico-lamp', 'ico-sro', 'ico-ssro', 'struja-idle']
-  iconTypes: string[] = ['ico-lamp', 'ico-sro', 'ico-ssro', 'struja-idle']
+  checkedIconTypes: string[] = ['ico-sro', 'ico-ssro', 'struja-idle']
   selectedClusterIconType = 'ico-sro'
+  iconTypes: string[] = ['ico-lamp', 'ico-sro', 'ico-ssro', 'struja-idle']
   iconTypesLabels = {
     'ico-lamp': 'LAMP',
     'ico-sro': 'SRO',
@@ -111,11 +111,19 @@ export default class MapComponent extends Vue {
   }
 
   clusterIconChanged () {
+    localStorage.setItem('selectedClusterIconType', JSON.stringify(this.selectedClusterIconType))
     const answer = { type: 'FeatureCollection', features: this.entities.features.filter((entity: { properties: { iconType: string } }) => entity.properties.iconType === this.selectedClusterIconType) }
     this.map.getSource('entity-clusters').setData(answer)
   }
 
   mounted () {
+    // Retrieving the values from local storage
+    const storedCheckedIconTypes = localStorage.getItem('checkedIconTypes')
+    const storedSelectedClusterIconType = localStorage.getItem('selectedClusterIconType')
+
+    // Parsing the retrieved values
+    this.checkedIconTypes = storedCheckedIconTypes ? JSON.parse(storedCheckedIconTypes) : ['ico-sro', 'ico-ssro', 'struja-idle']
+    this.selectedClusterIconType = storedSelectedClusterIconType ? JSON.parse(storedSelectedClusterIconType) : 'ico-sro'
     mapboxgl.accessToken =
       'pk.eyJ1Ijoiam9zbyIsImEiOiJjbDBpN3NnbWMwMDJlM2ptcng2bGIxazJjIn0.xuMyew046jayaAFfWnsfJQ'
     this.map = new mapboxgl.Map({
@@ -199,13 +207,7 @@ export default class MapComponent extends Vue {
   }
 
   updateSymbolVisibility () : void {
-    if (this.checkedIconTypes.includes('ico-lamp')) {
-      this.map.setLayoutProperty('clusters', 'visibility', 'visible')
-      this.map.setLayoutProperty('cluster-count', 'visibility', 'visible')
-    } else {
-      this.map.setLayoutProperty('clusters', 'visibility', 'none')
-      this.map.setLayoutProperty('cluster-count', 'visibility', 'none')
-    }
+    localStorage.setItem('checkedIconTypes', JSON.stringify(this.checkedIconTypes))
     this.map.setFilter('icon-points', ['in', 'iconType', ...this.checkedIconTypes])
   }
 
@@ -216,11 +218,13 @@ export default class MapComponent extends Vue {
   }
 
   async updateMapData (id: string) {
-    const response = await http.get(process.env.VUE_APP_BASE_URL + 'maprelation/' + id)
-    this.relData = response.data
-    // Update the arrows with the relationship data
-    await this.connectUnclusteredPoints(this.relData)
-    this.animateDashArray(0)
+    if (this.checkedIconTypes.includes('ico-lamp')) {
+      const response = await http.get(process.env.VUE_APP_BASE_URL + 'maprelation/' + id)
+      this.relData = response.data
+      // Update the arrows with the relationship data
+      await this.connectUnclusteredPoints(this.relData)
+      this.animateDashArray(0)
+    }
   }
 
   testingRadius (point: mapboxgl.MapboxGeoJSONFeature) {
@@ -482,7 +486,7 @@ export default class MapComponent extends Vue {
           layers: ['clusters']
         })
         const clusterId = features[0].properties.cluster_id
-        this.map.getSource('entities').getClusterExpansionZoom(
+        this.map.getSource('entity-clusters').getClusterExpansionZoom(
           clusterId,
           (err: any, zoom: any) => {
             if (err) return
@@ -574,6 +578,7 @@ export default class MapComponent extends Vue {
           .filter((feature: { properties: { iconType: string } }) => feature.properties.iconType === 'struja-idle')
           .map((feature: { properties: { code: string } }) => feature.properties.code)
       }
+      this.updateSymbolVisibility()
     }
   }
 
@@ -841,6 +846,21 @@ export default class MapComponent extends Vue {
 
   40%, 60% {
     transform: translate3d(4px, 0, 0);
+  }
+}
+
+@media (min-width: 768px) {
+  .custom-margin {
+    margin-left: auto !important;
+  }
+  .custom-margin input {
+    margin-left: 0.1rem !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .custom-margin {
+    margin-left: 0.5rem !important;
   }
 }
 
