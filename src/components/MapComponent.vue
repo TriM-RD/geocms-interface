@@ -33,7 +33,7 @@
 
                 <!-- Radio input -->
                 <div class="form-check form-check-inline custom-margin pe-0 me-0">
-                  <input class="form-check-input" type="radio" name="clusterIconType" :value="iconType" v-model="this.selectedClusterIconType" @change="clusterIconChanged()">
+                  <input :disabled="renderComponent" class="form-check-input" type="radio" name="clusterIconType" :value="iconType" v-model="this.selectedClusterIconType" @change="clusterIconChanged()">
                 </div>
               </label>
             </div>
