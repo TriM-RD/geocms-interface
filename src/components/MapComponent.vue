@@ -718,11 +718,16 @@ export default class MapComponent extends Vue {
     const popup = new mapboxgl.Popup({ closeOnClick: false })
       .setLngLat(coordinates)
       .setHTML(`<div class="d-flex flex-column h-100">
-      <p class="small-font">Code: ${code}</p>
-      ${additionalButtons}
-      <p class="small-font mt-3 mb-0">Devices with same coordinates: ${devicesWithSameCoordinates.length}</p>
-      ${devicesWithSameCoordinates.length > 1 ? '<button id="nextButton" class="btn btn-primary mt-3">Next</button>' : ''}
-    </div>`)
+    <div class="input-group input-group-sm mb-2">
+      <button id="navigationButton" class="btn btn-outline-secondary">
+        <span class="bi bi-geo-fill"></span>
+      </button>
+      <input type="text" class="form-control" readonly value="Code: ${code}">
+    </div>
+    ${additionalButtons}
+    <p class="small-font mt-3 mb-0">Devices with same coordinates: ${devicesWithSameCoordinates.length}</p>
+    ${devicesWithSameCoordinates.length > 1 ? '<button id="nextButton" class="btn btn-primary mt-3">Next</button>' : ''}
+  </div>`)
     popup.addTo(this.map)
     this.currentPopup = popup
     this.currentPopupIndex++
@@ -743,6 +748,15 @@ export default class MapComponent extends Vue {
           this.handleIconPointsClick({ features: [feature] })
         })
       }
+    }
+
+    const navigationButton = document.getElementById('navigationButton')
+    if (navigationButton) {
+      navigationButton.addEventListener('click', () => {
+        const destination = `${coordinates[1]},${coordinates[0]}` // Reversed order of coordinates for Google Maps
+        const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${destination}`
+        window.open(googleMapsUrl)
+      })
     }
 
     const ncvBtns = document.getElementsByClassName('controller-ncv-button')
