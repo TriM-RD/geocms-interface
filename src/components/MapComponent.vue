@@ -23,7 +23,7 @@
       <div class="col-12 p-0 position-relative">
         <div class="map-container" style="height: 75vh; position: relative;">
           <div class="map-legend position-absolute top-0 start-0 bg-white" style="z-index: 1; max-width: 200px;">
-            <div class="list-group">
+            <div class="list-group" v-show="showLegend">
               <label class="list-group-item rounded-0 d-flex align-items-center" v-for="iconType in iconTypes" :key="iconType">
                 <div class="d-flex align-items-center">
                   <input :disabled="renderComponent" class="form-check-input me-2 checkbox-lg" type="checkbox" :value="iconType" v-model="checkedIconTypes" @change="updateSymbolVisibility" :id="iconType" checked>
@@ -37,6 +37,7 @@
                 </div>
               </label>
             </div>
+            <button class="btn btn-primary w-100 rounded-0 toggle-legend animate__animated animate__fadeIn" @click="toggleLegend">Toggle Legend</button>
           </div>
           <Loading v-model:active="renderComponent"
                    :can-cancel="false"
@@ -92,6 +93,7 @@ export default class MapComponent extends Vue {
   ];
 
   step = 0;
+  showLegend = true
   checkedIconTypes: string[] = ['ico-sro', 'ico-ssro', 'struja-idle']
   selectedClusterIconType = 'ico-sro'
   iconTypes: string[] = ['ico-lamp', 'ico-sro', 'ico-ssro', 'struja-idle']
@@ -110,6 +112,11 @@ export default class MapComponent extends Vue {
     return require('@/assets/map_files/' + iconType + '.svg')
   }
 
+  toggleLegend () {
+    this.showLegend = !this.showLegend
+    localStorage.setItem('showLegend', JSON.stringify(this.showLegend))
+  }
+
   clusterIconChanged () {
     localStorage.setItem('selectedClusterIconType', JSON.stringify(this.selectedClusterIconType))
     const answer = { type: 'FeatureCollection', features: this.entities.features.filter((entity: { properties: { iconType: string } }) => entity.properties.iconType === this.selectedClusterIconType) }
@@ -120,10 +127,12 @@ export default class MapComponent extends Vue {
     // Retrieving the values from local storage
     const storedCheckedIconTypes = localStorage.getItem('checkedIconTypes')
     const storedSelectedClusterIconType = localStorage.getItem('selectedClusterIconType')
+    const showLegend = localStorage.getItem('showLegend')
 
     // Parsing the retrieved values
     this.checkedIconTypes = storedCheckedIconTypes ? JSON.parse(storedCheckedIconTypes) : ['ico-sro', 'ico-ssro', 'struja-idle']
     this.selectedClusterIconType = storedSelectedClusterIconType ? JSON.parse(storedSelectedClusterIconType) : 'ico-sro'
+    this.showLegend = showLegend ? JSON.parse(showLegend) : true
     mapboxgl.accessToken =
       'pk.eyJ1Ijoiam9zbyIsImEiOiJjbDBpN3NnbWMwMDJlM2ptcng2bGIxazJjIn0.xuMyew046jayaAFfWnsfJQ'
     this.map = new mapboxgl.Map({
