@@ -30,6 +30,11 @@
                   <img class="mt-1" :src="getIconPath(iconType)" :alt="iconType" style="height: 24px; width: 24px;">
                 </div>
                 <div class="d-none d-sm-block ms-1" style="text-transform: uppercase;">{{iconTypesLabels[iconType]}}</div>
+
+                <!-- Radio input -->
+                <div class="form-check form-check-inline ms-auto">
+                  <input class="form-check-input ms-1" type="radio" name="clusterIconType" :value="iconType" v-model="this.selectedClusterIconType" @change="clusterIconChanged()">
+                </div>
               </label>
             </div>
           </div>
@@ -89,6 +94,7 @@ export default class MapComponent extends Vue {
   step = 0;
   checkedIconTypes: string[] = ['ico-lamp', 'ico-sro', 'ico-ssro', 'struja-idle']
   iconTypes: string[] = ['ico-lamp', 'ico-sro', 'ico-ssro', 'struja-idle']
+  selectedClusterIconType = 'ico-sro'
   iconTypesLabels = {
     'ico-lamp': 'LAMP',
     'ico-sro': 'SRO',
@@ -102,6 +108,11 @@ export default class MapComponent extends Vue {
 
   getIconPath (iconType: string) {
     return require('@/assets/map_files/' + iconType + '.svg')
+  }
+
+  clusterIconChanged () {
+    const answer = { type: 'FeatureCollection', features: this.entities.features.filter((entity: { properties: { iconType: string } }) => entity.properties.iconType === this.selectedClusterIconType) }
+    this.map.getSource('entity-clusters').setData(answer)
   }
 
   mounted () {
@@ -363,6 +374,15 @@ export default class MapComponent extends Vue {
 
   generateMap (mapUpdated = false, cluster = true) {
     if (!mapUpdated) {
+      const filteredEntities = this.entities.features.filter((entity: { properties: { iconType: string } }) => entity.properties.iconType === this.selectedClusterIconType)
+      const answer = { type: 'FeatureCollection', features: filteredEntities }
+      this.map.addSource('entity-clusters', {
+        type: 'geojson',
+        data: answer,
+        cluster: cluster,
+        clusterMaxZoom: 12, // Max zoom to cluster points on
+        clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+      })
       this.map.addSource('entities', {
         type: 'geojson',
         data: this.entities,
@@ -372,7 +392,7 @@ export default class MapComponent extends Vue {
       })
       this.map.addLayer({
         id: 'clusters',
-        source: 'entities',
+        source: 'entity-clusters',
         type: 'circle',
         filter: ['has', 'point_count'],
         paint: {
@@ -399,7 +419,7 @@ export default class MapComponent extends Vue {
       this.map.addLayer({
         id: 'cluster-count',
         type: 'symbol',
-        source: 'entities',
+        source: 'entity-clusters',
         filter: ['has', 'point_count'],
         layout: {
           'text-field': '{point_count_abbreviated}',
