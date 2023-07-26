@@ -617,10 +617,10 @@ export default class MapComponent extends Vue {
       await this.changeIconTypeById()
       await this.connectUnclusteredPoints(this.relData)
     }
-    const strujaIdleFeatures = this.map.querySourceFeatures('entities', {
+    /* const strujaIdleFeatures = this.map.querySourceFeatures('entities', {
       filter: ['in', 'iconType', 'struja-idle', 'ico-sro']
     })
-    this.map.setLayoutProperty('icon-points', 'icon-size', this.calculateAdjustedSize(zoomLevel), strujaIdleFeatures)
+    this.map.setLayoutProperty('icon-points', 'icon-size', this.calculateAdjustedSize(zoomLevel), strujaIdleFeatures) */
   }
 
   calculateAdjustedSize (zoomLevel: number): number {
