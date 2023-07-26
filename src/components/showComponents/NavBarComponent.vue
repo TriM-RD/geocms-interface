@@ -33,12 +33,32 @@
               <router-link to="/account" class="dropdown-item opacity-75">Profile</router-link>
               <router-link to="/administration" class="dropdown-item opacity-75">Administration</router-link>
               <li class="opacity-50"><hr class="dropdown-divider"></li>
-              <li><button class="dropdown-item opacity-75" type="button" v-on:click="openReport">Open Report</button></li>
+              <li><button data-bs-toggle="modal" data-bs-target="#reportModal" class="dropdown-item opacity-75" type="button">Open Report</button></li>
               <li class="opacity-50"><hr class="dropdown-divider"></li>
               <li><button class="dropdown-item opacity-75" type="button" v-on:click="logout()">Log out</button></li>
             </ul>
           </li>
         </ul>
+        <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Report</h5>
+                <button type="button" class="btn-close" id="reportModalClose" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <Datepicker
+                  class="d-block w-100"
+                  @update:model-value="openReport"
+                  range
+                  :enable-time-picker="false"
+                  auto-apply
+                  inline
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </nav>
@@ -57,8 +77,10 @@ import {
 import http from '@/http-common'
 import Search from '@/components/Search.vue'
 import { Watch } from 'vue-property-decorator'
+import Datepicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
 @Options({
-  components: { Search },
+  components: { Search, Datepicker },
   props: {
     object: ObjectTemplate
   }
@@ -88,11 +110,10 @@ export default class NavBarComponent extends Vue {
     })
   }
 
-  openReport () : void {
-    const today = new Date()
-    const date1 = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().split('T')[0]
-    const date2 = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().split('T')[0]
-    window.open('https://tri-m.app/ormari/api/report.php?datefrom=' + date1 + '&dateto=' + date2)
+  openReport (dates: Date[]) : void {
+    window.open('https://tri-m.app/ormari/api/report.php?datefrom=' +
+      dates[0].toISOString().split('T')[0] +
+      '&dateto=' + dates[1].toISOString().split('T')[0])
   }
 }
 </script>

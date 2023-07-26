@@ -133,13 +133,31 @@ export default class MapComponent extends Vue {
     this.checkedIconTypes = storedCheckedIconTypes ? JSON.parse(storedCheckedIconTypes) : ['ico-sro', 'ico-ssro', 'struja-idle']
     this.selectedClusterIconType = storedSelectedClusterIconType ? JSON.parse(storedSelectedClusterIconType) : 'ico-sro'
     this.showLegend = showLegend ? JSON.parse(showLegend) : true
-    mapboxgl.accessToken =
-      'pk.eyJ1Ijoiam9zbyIsImEiOiJjbDBpN3NnbWMwMDJlM2ptcng2bGIxazJjIn0.xuMyew046jayaAFfWnsfJQ'
-    this.map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/joso/clfv7rrii007101rpc2dhq56h/draft'
+    this.initializeMapAndLoadStyle().then(() => {
+      // The map style has finished loading, now call the test function
+      this.test()
     })
-    this.test()
+  }
+
+  initializeMapAndLoadStyle () {
+    return new Promise<void>((resolve, reject) => {
+      mapboxgl.accessToken =
+        'pk.eyJ1Ijoiam9zbyIsImEiOiJjbDBpN3NnbWMwMDJlM2ptcng2bGIxazJjIn0.xuMyew046jayaAFfWnsfJQ'
+      this.map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/joso/clfv7rrii007101rpc2dhq56h/draft'
+      })
+
+      this.map.on('load', () => {
+        // The map has finished loading, resolve the promise
+        resolve()
+      })
+
+      this.map.on('error', (event: { error: any }) => {
+        // If an error occurs during the map loading process, reject the promise
+        reject(event.error)
+      })
+    })
   }
 
   async zoomToDevice () : Promise<void> {
@@ -220,7 +238,7 @@ export default class MapComponent extends Vue {
     this.map.setFilter('icon-points', ['in', 'iconType', ...this.checkedIconTypes])
   }
 
-  async test () {
+  async test () : Promise<void> {
     const response = await http.get(process.env.VUE_APP_BASE_URL + 'map')
     this.entities = response.data.data
     this.generateMap()
@@ -599,6 +617,25 @@ export default class MapComponent extends Vue {
       await this.changeIconTypeById()
       await this.connectUnclusteredPoints(this.relData)
     }
+    const strujaIdleFeatures = this.map.querySourceFeatures('entities', {
+      filter: ['in', 'iconType', 'struja-idle', 'ico-sro']
+    })
+    this.map.setLayoutProperty('icon-points', 'icon-size', this.calculateAdjustedSize(zoomLevel), strujaIdleFeatures)
+  }
+
+  calculateAdjustedSize (zoomLevel: number): number {
+    // Calculate the adjusted icon size based on the zoom level
+    // You can adjust the formula based on your requirements
+    const baseSize = 0.4 // Set to the original default size
+    const maxSize = 0.6 // Set to the original maximum size
+    const minZoom = 12
+    const maxZoom = 16
+
+    // Linear interpolation to adjust the size between baseSize and maxSize
+    const adjustedSize = baseSize + (maxSize - baseSize) * (zoomLevel - minZoom) / (maxZoom - minZoom)
+
+    // Return the adjusted size
+    return Math.min(maxSize, Math.max(baseSize, adjustedSize))
   }
 
   async changeIconTypeById (): Promise<void> {
