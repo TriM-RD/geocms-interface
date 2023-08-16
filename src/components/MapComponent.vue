@@ -785,7 +785,7 @@ export default class MapComponent extends Vue {
       additionalButtons += `<button class="list-group-item list-group-item-action additional-button btn-outline-secondary btn-sm btn-fixed text-truncate w-100 small-font" title="Open ${device.code}" data-deviceid="${device.id}" data-devicecode="${device.code}" style="width: 120px;">Open ${device.code}</button>`
     }
     additionalButtons += '</div>'
-
+    this.currentPopupIndex = devicesWithSameCoordinates.findIndex((device: { code: any }) => device.code === code)
     const popup = new mapboxgl.Popup({ closeOnClick: false })
       .setLngLat(coordinates)
       .setHTML(`<div class="d-flex flex-column h-100">
