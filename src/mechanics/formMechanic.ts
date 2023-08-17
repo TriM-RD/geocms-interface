@@ -350,16 +350,21 @@ export namespace Manager.Mechanic{
             await http.patch(process.env.VUE_APP_BASE_URL + route + '/' + this.id, this.ObjectTemplates)
               .then((response) => {
                 if (response.data.id !== false) {
-                  this.refreshPage()
+                  this.refreshPage()// TODO Most Likely not needed anymore
                   this.ObjectTemplates.length = 0
                   this.ObjectTemplates = this.Append(response.data.entities)
-                  this.refreshPage()
+                  this.refreshPage()// TODO End
                   useToast().dismiss(validatingToast)
                   useToast()({
                     component: ToastComponent,
                     props: { msg: { title: '', info: 'Form submitted.' } }
                   }, {
                     type: TYPE.SUCCESS
+                  })
+                  router.push({
+                    name: redirectTo,
+                    params: { id: response.data.id },
+                    query: { refresh: Date.now() }
                   })
                 } else {
                   this.refreshPage()
