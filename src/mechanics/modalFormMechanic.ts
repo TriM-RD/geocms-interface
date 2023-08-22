@@ -12,7 +12,6 @@ import {
   ActionTypeEnum, StatType
 } from '@cybertale/interface'
 import router from '@/router'
-import { Modal } from 'bootstrap'
 import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
 

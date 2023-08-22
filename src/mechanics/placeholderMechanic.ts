@@ -2,7 +2,7 @@ import { MechanicAbstract, ObjectTemplate, EventHandlerType } from '@cybertale/i
 
 export namespace Manager.Mechanic{
 
-  export class ColumnMechanic extends MechanicAbstract {
+  export class PlaceholderMechanic extends MechanicAbstract {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public async InitGet (_id: string): Promise<ObjectTemplate[]> {
       throw new Error('Function not implemented')

@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { Manager } from '@/mechanics/columnMechanic'
+import { Manager } from '@/mechanics/placeholderMechanic'
 import {
   ActionTypeEnum,
   MechanicAbstract,
@@ -41,7 +41,7 @@ import {
   }
 })
 export default class ColumnButtonComponent extends Vue {
-  mechanic: MechanicAbstract = new Manager.Mechanic.ColumnMechanic()
+  mechanic: MechanicAbstract = new Manager.Mechanic.PlaceholderMechanic()
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType

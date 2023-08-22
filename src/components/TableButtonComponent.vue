@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { Manager } from '@/mechanics/columnMechanic'
+import { Manager } from '@/mechanics/placeholderMechanic'
 import {
   ObjectTemplate,
   MechanicAbstract,
@@ -22,7 +22,7 @@ import {
   }
 })
 export default class TableButtonComponent extends Vue {
-  mechanic: MechanicAbstract = new Manager.Mechanic.ColumnMechanic()
+  mechanic: MechanicAbstract = new Manager.Mechanic.PlaceholderMechanic()
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType

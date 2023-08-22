@@ -16,6 +16,7 @@ import router from '@/router'
 import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
 import { Modal } from 'bootstrap'
+import { Definitions } from '@/definitions/appDefinitions'
 
 export namespace Manager.Mechanic{
 
@@ -97,9 +98,9 @@ export namespace Manager.Mechanic{
 
     protected async SelectList (eventHandler: EventHandlerType): Promise<void> {
       switch (router.currentRoute.value.name) {
-        case 'DeviceAdd':
-        case 'DeviceReplace':
-        case 'DeviceEdit':// TODO add regex to check if id is uuid
+        case Definitions.Device.Add:
+        case Definitions.Device.Replace:
+        case Definitions.Device.Edit:// TODO add regex to check if id is uuid
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Middle:
               this.removeElementFromArray(this.ObjectTemplates, 'group')
@@ -111,8 +112,8 @@ export namespace Manager.Mechanic{
               break
           }
           break
-        case 'AttributeAdd':
-        case 'AttributeEdit':
+        case Definitions.Attribute.Add:
+        case Definitions.Attribute.Edit:
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Middle:
               this.removeElementFromArray(this.ObjectTemplates, 'attributeType')
@@ -124,7 +125,7 @@ export namespace Manager.Mechanic{
               break
           }
           break
-        case 'GroupAdd':
+        case Definitions.Group.Add:
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Middle:
               this.removeElementFromArray(this.ObjectTemplates, 'groupType')
