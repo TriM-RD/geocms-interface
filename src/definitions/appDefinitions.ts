@@ -25,8 +25,8 @@ export namespace Definitions{
   }
 
   export enum Administration {
-    Administration = 'Administration',
-    AdministrationEdit = 'AdministrationEdit',
+    Def = 'Administration',
+    Edit = 'AdministrationEdit',
     AccountProfile = 'AccountProfile',
   }
 }

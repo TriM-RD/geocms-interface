@@ -36,7 +36,7 @@ export namespace Manager.Mechanic{
       const response = await http.get(process.env.VUE_APP_BASE_URL + _route + '/' + this.id)
       if (response.data.id !== undefined) {
         await router.push({
-          name: 'DeviceEdit',
+          name: Definitions.Device.Edit,
           params: { id: response.data.id }
         })
         return []
@@ -143,9 +143,9 @@ export namespace Manager.Mechanic{
       let rowCount = 0
       let rowsExist = false
       switch (router.currentRoute.value.name) {
-        case 'DeviceAdd':
-        case 'DeviceReplace':
-        case 'DeviceEdit':
+        case Definitions.Device.Add:
+        case Definitions.Device.Replace:
+        case Definitions.Device.Edit:
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Middle:
               await this.resolveButtonMiddle(eventHandler, eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
@@ -153,11 +153,11 @@ export namespace Manager.Mechanic{
             case SubObjectTypeEnum.Left:
               // Add it to Stats
               eventHandler.payload.Stats[StatTypeEnum.Disabled].Data = 'true'
-              await this.validateForm('entity', 'DeviceEdit', eventHandler.payload)
+              await this.validateForm('entity', Definitions.Device.Edit, eventHandler.payload)
               break
             case SubObjectTypeEnum.Right:
               await router.push({
-                name: 'Device'
+                name: Definitions.Device.Def
               })
               break
             case SubObjectTypeEnum.Up:
@@ -188,11 +188,11 @@ export namespace Manager.Mechanic{
               break
           }
           break
-        case 'GroupAdd':
-        case 'GroupEdit':
+        case Definitions.Group.Add:
+        case Definitions.Group.Edit:
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:
-              await this.validateForm('group', 'GroupEdit')
+              await this.validateForm('group', Definitions.Group.Edit)
               break
             case SubObjectTypeEnum.Middle:
               this.refreshPage()
@@ -211,11 +211,11 @@ export namespace Manager.Mechanic{
               this.refreshPage()
               break
             case SubObjectTypeEnum.Up:
-              await router.push({ name: 'AttributeAdd', params: { parentId: this.id } })
+              await router.push({ name: Definitions.Attribute.Add, params: { parentId: this.id } })
               break
             case SubObjectTypeEnum.Right:
               await router.push({
-                name: 'Group'
+                name: Definitions.Group.Def
               })
               break
             case SubObjectTypeEnum.Down:
@@ -227,11 +227,11 @@ export namespace Manager.Mechanic{
               break
           }
           break
-        case 'DivisionAdd':
-        case 'DivisionEdit':
+        case Definitions.Division.Add:
+        case Definitions.Division.Edit:
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:
-              await this.validateForm('division', 'DivisionEdit')
+              await this.validateForm('division', Definitions.Division.Edit)
               break
             case SubObjectTypeEnum.Middle:
               this.refreshPage()
@@ -249,7 +249,7 @@ export namespace Manager.Mechanic{
               break
             case SubObjectTypeEnum.Right:
               await router.push({
-                name: 'Division'
+                name: Definitions.Division.Def
               })
               break
             case SubObjectTypeEnum.Down:
@@ -261,11 +261,11 @@ export namespace Manager.Mechanic{
               break
           }
           break
-        case 'AttributeAdd':
-        case 'AttributeEdit':
+        case Definitions.Attribute.Add:
+        case Definitions.Attribute.Edit:
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:
-              await this.validateForm('attribute', 'AttributeEdit')
+              await this.validateForm('attribute', Definitions.Attribute.Edit)
               break
             case SubObjectTypeEnum.Middle:
               this.refreshPage()
@@ -281,7 +281,7 @@ export namespace Manager.Mechanic{
               break
             case SubObjectTypeEnum.Right:
               await router.push({
-                name: 'GroupEdit',
+                name: Definitions.Group.Edit,
                 params: { id: router.currentRoute.value.params.parentId }
               })
               break
@@ -294,15 +294,15 @@ export namespace Manager.Mechanic{
               break
           }
           break
-        case 'AdministrationEdit':
+        case Definitions.Administration.Edit:
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Right:
               await router.push({
-                name: 'Administration'
+                name: Definitions.Administration.Def
               })
               break
             case SubObjectTypeEnum.Left:
-              await this.validateForm('user', 'AdministrationEdit')
+              await this.validateForm('user', Definitions.Administration.Edit)
               break
             case SubObjectTypeEnum.Middle:
               this.refreshPage()

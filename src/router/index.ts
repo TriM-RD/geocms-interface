@@ -102,12 +102,12 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/administration',
-    name: Definitions.Administration.Administration,
+    name: Definitions.Administration.Def,
     component: Show
   },
   {
     path: '/administration/edit/:id',
-    name: Definitions.Administration.AdministrationEdit,
+    name: Definitions.Administration.Edit,
     component: Form
   }
 ]
