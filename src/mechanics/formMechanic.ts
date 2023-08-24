@@ -17,6 +17,9 @@ import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
 import { Modal } from 'bootstrap'
 import { Definitions } from '@/definitions/appDefinitions'
+import { ResolverType } from '@/resolvers/resolverType'
+import { HandlerAbstract } from '@/resolvers/device/handlerAbstract'
+import { FormAssignment } from '@/resolvers/assignments/formAssignment'
 
 export namespace Manager.Mechanic{
 
@@ -97,7 +100,11 @@ export namespace Manager.Mechanic{
     }
 
     protected async SelectList (eventHandler: EventHandlerType): Promise<void> {
-      switch (router.currentRoute.value.name) {
+      const name = router.currentRoute.value.name
+      if (typeof name === 'string') {
+        this.ObjectTemplates = await (ResolverType.ResolverTypes[name] as FormAssignment).SelectList(eventHandler, this.ObjectTemplates, this.refreshPage, this.Append)
+      }
+      /* switch (router.currentRoute.value.name) {
         case Definitions.Device.Add:
         case Definitions.Device.Replace:
         case Definitions.Device.Edit:// TODO add regex to check if id is uuid
@@ -105,7 +112,7 @@ export namespace Manager.Mechanic{
             case SubObjectTypeEnum.Middle:
               this.removeElementFromArray(this.ObjectTemplates, 'group')
               this.refreshPage()
-              this.ObjectTemplates = this.Append((await http.get(process.env.VUE_APP_BASE_URL + 'form/entity/' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
+                this.ObjectTemplates = this.Append((await http.get(process.env.VUE_APP_BASE_URL + 'form/entity/' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
               this.refreshPage()
               break
             default:
@@ -136,7 +143,7 @@ export namespace Manager.Mechanic{
             default:
               break
           }
-      }
+      } */
     }
 
     protected async Button (eventHandler: EventHandlerType): Promise<void> {
