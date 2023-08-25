@@ -6,6 +6,7 @@ import * as Group from '@/resolvers/group/'
 import * as Attribute from '@/resolvers/attribute/'
 export class ResolverType {
   public static ResolverTypes: { [index: string]: ResolverAbstract } = {
+    [Definitions.Other.Any]: new Device.Def.DefHandler(),
     // Device
     [Definitions.Device.Def]: new Device.Def.DefHandler(),
     [Definitions.Device.Add]: new Device.Add.AddHandler(),

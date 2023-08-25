@@ -79,14 +79,7 @@ export namespace Manager.Mechanic{
       if (eventHandler.payload.Stats[StatTypeEnum.Value].Data.id === null) {
         return
       }
-      this.refreshPage()
-      const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
-      if (eventHandler.payload.Stats[StatTypeEnum.Value].Data.id !== null) {
-        this.ObjectTemplates[temp].Stats[StatTypeEnum.Value].Data = eventHandler.payload.Stats[StatTypeEnum.Value].Data.id
-      } else {
-        this.ObjectTemplates[temp].Stats[StatTypeEnum.Value].Data = ''
-      }
-      this.refreshPage()
+      this.ObjectTemplates = await (ResolverType.ResolverTypes[Definitions.Other.Any] as FormAssignment).DataList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this))
     }
 
     protected async ECabinetRow (eventHandler: EventHandlerType): Promise<void> {
@@ -103,47 +96,7 @@ export namespace Manager.Mechanic{
       const name = router.currentRoute.value.name
       if (typeof name === 'string') {
         this.ObjectTemplates = await (ResolverType.ResolverTypes[name] as FormAssignment).SelectList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this))
-      }
-      /* switch (router.currentRoute.value.name) {
-        case Definitions.Device.Add:
-        case Definitions.Device.Replace:
-        case Definitions.Device.Edit:// TODO add regex to check if id is uuid
-          switch (eventHandler.subObjectType) {
-            case SubObjectTypeEnum.Middle:
-              this.removeElementFromArray(this.ObjectTemplates, 'group')
-              this.refreshPage()
-                this.ObjectTemplates = this.Append((await http.get(process.env.VUE_APP_BASE_URL + 'form/entity/' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
-              this.refreshPage()
-              break
-            default:
-              break
-          }
-          break
-        case Definitions.Attribute.Add:
-        case Definitions.Attribute.Edit:
-          switch (eventHandler.subObjectType) {
-            case SubObjectTypeEnum.Middle:
-              this.removeElementFromArray(this.ObjectTemplates, 'attributeType')
-              this.refreshPage()
-              this.ObjectTemplates = this.Append((await http.get(process.env.VUE_APP_BASE_URL + 'form/attribute/' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
-              this.refreshPage()
-              break
-            default:
-              break
-          }
-          break
-        case Definitions.Group.Add:
-          switch (eventHandler.subObjectType) {
-            case SubObjectTypeEnum.Middle:
-              this.removeElementFromArray(this.ObjectTemplates, 'groupType')
-              this.refreshPage()
-              this.ObjectTemplates = this.Append((await http.get(process.env.VUE_APP_BASE_URL + 'form/group/' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
-              this.refreshPage()
-              break
-            default:
-              break
-          }
-      } */
+      }// TODO add regex to check if id is uuid
     }
 
     protected async Button (eventHandler: EventHandlerType): Promise<void> {
