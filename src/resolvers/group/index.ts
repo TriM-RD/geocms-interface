@@ -1,7 +1,7 @@
-// @/resolvers/group/index.ts
+import * as Def from './defHandler'
+import * as Add from './addHandler'
+import * as Edit from './editHandler'
 
-declare module '@/resolvers/group/' {
-  export { DefHandler } from '@/resolvers/group/defHandler'
-  export { AddHandler } from '@/resolvers/group/addHandler'
-  export { EditHandler } from '@/resolvers/group/editHandler'
-}
+export { Def }
+export { Add }
+export { Edit }

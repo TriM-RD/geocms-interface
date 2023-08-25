@@ -1,7 +1,7 @@
-// @/resolvers/attribute/index.ts
+import * as Def from './defHandler'
+import * as Add from './addHandler'
+import * as Edit from './editHandler'
 
-declare module '.../resolvers/attribute/' {
-  export { DefHandler } from 'src/resolvers/attribute/defHandler'
-  export { AddHandler } from 'src/resolvers/attribute/addHandler'
-  export { EditHandler } from 'src/resolvers/attribute/editHandler'
-}
+export { Def }
+export { Add }
+export { Edit }

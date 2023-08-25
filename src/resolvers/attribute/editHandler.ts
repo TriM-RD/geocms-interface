@@ -1,9 +1,5 @@
-import { HandlerAbstract } from '@/resolvers/attribute/handlerAbstract'
-import { ResolverAbstract } from '@/resolvers/resolverAbstract'
+import { HandlerAbstract } from './handlerAbstract'
 
 export class EditHandler extends HandlerAbstract {
-  CreateResolver (): ResolverAbstract {
-    return new EditHandler()
-  }
 
 }
