@@ -102,7 +102,7 @@ export namespace Manager.Mechanic{
     protected async SelectList (eventHandler: EventHandlerType): Promise<void> {
       const name = router.currentRoute.value.name
       if (typeof name === 'string') {
-        this.ObjectTemplates = await (ResolverType.ResolverTypes[name] as FormAssignment).SelectList(eventHandler, this.ObjectTemplates, this.refreshPage, this.Append)
+        this.ObjectTemplates = await (ResolverType.ResolverTypes[name] as FormAssignment).SelectList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this))
       }
       /* switch (router.currentRoute.value.name) {
         case Definitions.Device.Add:

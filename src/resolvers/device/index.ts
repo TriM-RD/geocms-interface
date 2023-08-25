@@ -1,9 +1,9 @@
-import * as DefHandler from './defHandler'
-import * as AddHandler from './addHandler'
-import * as EditHandler from './editHandler'
-import * as ReplaceHandler from './replaceHandler'
+import * as Def from './defHandler'
+import * as Add from './addHandler'
+import * as Edit from './editHandler'
+import * as Replace from './replaceHandler'
 
-export { DefHandler }
-export { AddHandler }
-export { EditHandler }
-export { ReplaceHandler }
+export { Def }
+export { Add }
+export { Edit }
+export { Replace }
