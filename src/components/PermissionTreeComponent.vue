@@ -159,6 +159,8 @@ export default class PermissionTreeComponent extends Vue {
 
   newPermission (data: TreeData):TreeData {
     this.index = uuidv4()
+    const firm = localStorage.getItem('firm')
+    if (firm) { data.permission.firm = firm }
     return {
       label: data.newChildName,
       expand: false,
@@ -172,7 +174,8 @@ export default class PermissionTreeComponent extends Vue {
         parent_id: data.permission.id,
         // changed: true
         lft: 4,
-        rgt: 6
+        rgt: 6,
+        firm: data.permission.firm
       },
       parent: data,
       children: []
@@ -396,7 +399,8 @@ export default class PermissionTreeComponent extends Vue {
   }
 
   async start () : Promise<void> {
-    const response = await http.get(process.env.VUE_APP_BASE_URL + 'permission')
+    console.log(localStorage.getItem('firm'))
+    const response = await http.get(process.env.VUE_APP_BASE_URL + 'permission' + '?firm=' + localStorage.getItem('firm'))
     if (this.permissionsTreeData.children.length > 0) {
       this.permissionsTreeData.children.splice(0)
     }

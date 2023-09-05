@@ -11,6 +11,7 @@ interface Permission{
   parent_id?: string,
   lft: number,
   rgt: number,
+  firm?: string,
   _method?: string
 }
 

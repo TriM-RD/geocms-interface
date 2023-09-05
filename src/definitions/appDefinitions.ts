@@ -28,8 +28,13 @@ export namespace Definitions{
     Edit = 'AttributeEdit',
   }
 
+  export enum Permission {
+    Def = 'Permission',
+  }
+
   export enum Administration {
     Def = 'Administration',
+    Add = 'AdministrationAdd',
     Edit = 'AdministrationEdit',
     AccountProfile = 'AccountProfile',
   }

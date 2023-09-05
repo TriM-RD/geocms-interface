@@ -1,6 +1,8 @@
 <template>
-  <div v-if="($store.state.requiresAuth === 2)">
+  <div v-if="($store.state.requiresAuth === 2 || $store.state.requiresAuth === 3)">
     <NavBarComponent/>
+  </div>
+  <div v-if="($store.state.requiresAuth === 2)">
     <NavComponent />
     <!-- TODO MAKE MODAL INTO A COMPONENT -->
     <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -61,7 +63,12 @@ export default class App extends Vue {
       // success
       this.$store.state.name = response.data.name
       this.$store.state.email = response.data.email
-      this.$store.state.requiresAuth = 2
+      const tempFirms = response.data.firms ? response.data.firms : []
+      if (localStorage.getItem('firm') === '' || localStorage.getItem('firm') == null || !tempFirms.includes(localStorage.getItem('firm'))) {
+        this.$store.state.requiresAuth = 3
+      } else {
+        this.$store.state.requiresAuth = 2
+      }
     }, response => {
       // error
       this.$store.state.requiresAuth = 1

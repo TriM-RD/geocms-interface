@@ -18,7 +18,6 @@ import ToastComponent from '@/components/ToastComponent.vue'
 import { Modal } from 'bootstrap'
 import { Definitions } from '@/definitions/appDefinitions'
 import { ResolverType } from '@/resolvers/resolverType'
-import { HandlerAbstract } from '@/resolvers/device/handlerAbstract'
 import { FormAssignment } from '@/resolvers/assignments/formAssignment'
 
 export namespace Manager.Mechanic{
@@ -93,6 +92,7 @@ export namespace Manager.Mechanic{
     }
 
     protected async SelectList (eventHandler: EventHandlerType): Promise<void> {
+      console.log(eventHandler)
       const name = router.currentRoute.value.name
       if (typeof name === 'string') {
         this.ObjectTemplates = await (ResolverType.ResolverTypes[name] as FormAssignment).SelectList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this))
@@ -254,6 +254,7 @@ export namespace Manager.Mechanic{
               break
           }
           break
+        case Definitions.Administration.Add:
         case Definitions.Administration.Edit:
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Right:

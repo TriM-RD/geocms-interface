@@ -5,15 +5,20 @@
   <div v-if="($store.state.requiresAuth === 1)">
     <WelcomeComponent />
   </div>
+  <div v-if="($store.state.requiresAuth === 3)">
+    <FirmSelectionComponent />
+  </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import WelcomeComponent from '@/components/WelcomeComponent.vue' // @ is an alias to /src
 import MapComponent from '@/components/MapComponent.vue'
+import FirmSelectionComponent from '@/components/showComponents/FirmSelectionComponent.vue'
 
 @Options({
   components: {
+    FirmSelectionComponent,
     MapComponent,
     WelcomeComponent
   }

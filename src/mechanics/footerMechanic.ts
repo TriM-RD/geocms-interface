@@ -2,6 +2,7 @@ import { MechanicAbstract, RegionEnum, RegionType, EventHandlerType, SubObjectTy
 import router from '@/router'
 import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
+import { Definitions } from '@/definitions/appDefinitions'
 
 export namespace Manager.Mechanic{
 
@@ -27,7 +28,7 @@ export namespace Manager.Mechanic{
     protected Button (eventHandler: EventHandlerType): void {
       console.log('show')
       switch (router.currentRoute.value.name) {
-        case 'Device':
+        case Definitions.Device.Def:
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:
               if (window.innerWidth <= 760 && window.innerHeight <= 760) {
@@ -42,25 +43,34 @@ export namespace Manager.Mechanic{
               }
               break
             case SubObjectTypeEnum.Right:
-              router.push({ name: 'DeviceAdd' })
+              router.push({ name: Definitions.Device.Add })
               break
             default:
               break
           }
           break
-        case 'Group':
+        case Definitions.Group.Def:
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Right:
-              router.push({ name: 'GroupAdd' })
+              router.push({ name: Definitions.Group.Add })
               break
             default:
               break
           }
           break
-        case 'Division':
+        case Definitions.Division.Def:
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Right:
-              router.push({ name: 'DivisionAdd' })
+              router.push({ name: Definitions.Division.Add })
+              break
+            default:
+              break
+          }
+          break
+        case Definitions.Administration.Def:
+          switch (eventHandler.subObjectType) {
+            case SubObjectTypeEnum.Right:
+              router.push({ name: Definitions.Administration.Add })
               break
             default:
               break

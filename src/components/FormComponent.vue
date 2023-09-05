@@ -21,6 +21,7 @@ import {
 } from '@cybertale/interface'
 import Loading from 'vue-loading-overlay'
 import router from '@/router'
+import { Definitions } from '@/definitions/appDefinitions'
 @Options({
   components: {
     Loading
@@ -86,7 +87,8 @@ export default class FormComponent extends Vue {
       case 'AttributeEdit':
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'attribute'))
         break
-      case 'AdministrationEdit':
+      case Definitions.Administration.Add:
+      case Definitions.Administration.Edit:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'user'))
         break
     }

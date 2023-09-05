@@ -20,6 +20,7 @@ import {
   SubObjectTypeEnum, ActionTypeEnum, StatType
 } from '@cybertale/interface'
 import { Manager } from '@/mechanics/footerMechanic'
+import { Definitions } from '@/definitions/appDefinitions'
 @Options({
   props: {
     object: ObjectTemplate
@@ -62,33 +63,38 @@ export default class FooterComponent extends Vue {
     this.objectTemplates = []
     console.log(this.openTab)
     switch (this.openTab) {
-      case 'Device':
+      case Definitions.Device.Def:
         this.objectTemplates = this.mechanic.InitSet(
           this.scaffoldButtons(RegionEnum.Footer, RegionEnum.Footer, 'Scan', 'Add')
         )
         break
-      case 'Group':
+      case Definitions.Group.Def:
         this.objectTemplates = this.mechanic.InitSet(
           this.scaffoldButtons(RegionEnum.Table, RegionEnum.Footer, 'ReSort', 'Add')
         )
         break
-      case 'Division':
+      case Definitions.Division.Def:
         this.objectTemplates = this.mechanic.InitSet(
           this.scaffoldButtons(RegionEnum.Table, RegionEnum.Footer, 'ReSort', 'Add')
         )
         break
-      case 'Permission':
+      case Definitions.Permission.Def:
         this.objectTemplates = this.mechanic.InitSet(
           this.scaffoldButtons()
         )
         break
-      case 'DeviceAdd':
-      case 'DeviceReplace':
+      case Definitions.Administration.Def:
+        this.objectTemplates = this.mechanic.InitSet(
+          this.scaffoldButtons(RegionEnum.Footer, RegionEnum.Footer, 'ReSort', 'Add')
+        )
+        break
+      case Definitions.Device.Add:
+      case Definitions.Device.Replace:
         this.objectTemplates = this.mechanic.InitSet(
           this.scaffoldButtons()
         )
         break
-      case 'DeviceEdit':
+      case Definitions.Device.Edit:
         this.objectTemplates = this.mechanic.InitSet([
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Save'),
@@ -107,25 +113,26 @@ export default class FooterComponent extends Vue {
         ]
         )
         break
-      case 'GroupEdit':
-      case 'GroupAdd':
+      case Definitions.Group.Edit:
+      case Definitions.Group.Add:
         this.objectTemplates = this.mechanic.InitSet(
           this.scaffoldButtons()
         )
         break
-      case 'DivisionEdit':
-      case 'DivisionAdd':
+      case Definitions.Division.Edit:
+      case Definitions.Division.Add:
         this.objectTemplates = this.mechanic.InitSet(
           this.scaffoldButtons()
         )
         break
-      case 'AttributeEdit':
-      case 'AttributeAdd':
+      case Definitions.Attribute.Edit:
+      case Definitions.Attribute.Add:
         this.objectTemplates = this.mechanic.InitSet(
           this.scaffoldButtons()
         )
         break
-      case 'AdministrationEdit':
+      case Definitions.Administration.Add:
+      case Definitions.Administration.Edit:
         this.objectTemplates = this.mechanic.InitSet(
           this.scaffoldButtons()
         )
