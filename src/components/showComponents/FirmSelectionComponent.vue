@@ -1,8 +1,4 @@
 <template>
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#firmSelectionModal">
-    Open Modal
-  </button>
-
   <!-- Modal -->
   <div class="modal fade" id="firmSelectionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -30,6 +26,7 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import http from '@/http-common'
+import { Modal } from 'bootstrap'
 
 @Options({})
 export default class FirmSelectionComponent extends Vue {
@@ -40,12 +37,30 @@ export default class FirmSelectionComponent extends Vue {
       // success
       this.firms = response.data
     })
+    this.openModal()
+  }
+
+  openModal () {
+    const modal = document.getElementById('firmSelectionModal')
+    if (modal) {
+      const firmSelectionModal = new Modal(modal)
+      firmSelectionModal.show()
+    }
+  }
+
+  closeModal () {
+    const modal = document.getElementById('firmSelectionModal')
+    if (modal) {
+      const firmSelectionModal = new Modal(modal)
+      firmSelectionModal.hide()
+    }
   }
 
   async firmSelection (id: number) { // Not a number
     await http.get(process.env.VUE_APP_BASE_URL + 'firm/' + id).then(response => {
       // success
       localStorage.setItem('firm', response.data.id)
+      this.closeModal()
       this.$store.state.requiresAuth = 2
     }).catch(error => {
       // Error

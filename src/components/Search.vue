@@ -1,8 +1,8 @@
 <template>
   <form class="form-inline flex-nowrap bg-light mx-0 mx-lg-auto rounded p-1">
     <div class="input-group rounded">
-      <input v-model="title" class="form-control me-2 rounded" @keypress.enter.prevent="$refs.myChild.Init()" type="search" :placeholder="placeholder" aria-label="Search" >
-      <button type="button" class="btn" @click="$refs.myChild.Init();">
+      <input :disabled="($store.state.requiresAuth === 3)" v-model="title" class="form-control me-2 rounded" @keypress.enter.prevent="$refs.myChild.Init()" type="search" :placeholder="placeholder" aria-label="Search" >
+      <button :disabled="($store.state.requiresAuth === 3)" type="button" class="btn" @click.prevent="$refs.myChild.Init();">
       <span class="input-group-text border-0" id="search-addon">
     <i class="bi bi-search"></i>
   </span>
