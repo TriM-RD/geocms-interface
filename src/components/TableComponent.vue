@@ -176,7 +176,7 @@ export default class TableComponent extends Vue {
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'permissions/user'))
         break
       case 'Administration':
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'users'))
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', JSON.stringify({ api: 'users', filters: { firm: localStorage.getItem('firm') }, order: this.orderBy })))
         break
     }
     if (Object.keys(this.objectTemplates).length === 0) {

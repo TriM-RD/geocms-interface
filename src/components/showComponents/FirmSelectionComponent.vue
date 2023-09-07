@@ -4,8 +4,8 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Selectable List Modal</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h5 class="modal-title">Select Firm</h5>
+          <button id="closeSelectFirmModal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <ul class="list-group" id="firmList">
@@ -13,10 +13,6 @@
               {{ name }}
             </button>
           </ul>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="saveSelection">Save Selection</button>
         </div>
       </div>
     </div>
@@ -49,18 +45,17 @@ export default class FirmSelectionComponent extends Vue {
   }
 
   closeModal () {
-    const modal = document.getElementById('firmSelectionModal')
+    const modal = document.getElementById('closeSelectFirmModal')
     if (modal) {
-      const firmSelectionModal = new Modal(modal)
-      firmSelectionModal.hide()
+      modal.click()
     }
   }
 
   async firmSelection (id: number) { // Not a number
     await http.get(process.env.VUE_APP_BASE_URL + 'firm/' + id).then(response => {
       // success
-      localStorage.setItem('firm', response.data.id)
       this.closeModal()
+      localStorage.setItem('firm', response.data.id)
       this.$store.state.requiresAuth = 2
     }).catch(error => {
       // Error
