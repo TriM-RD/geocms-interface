@@ -23,6 +23,8 @@
 import { Options, Vue } from 'vue-class-component'
 import http from '@/http-common'
 import { Modal } from 'bootstrap'
+import router from '@/router'
+import { Definitions } from '@/definitions/appDefinitions'
 
 @Options({})
 export default class FirmSelectionComponent extends Vue {
@@ -56,7 +58,10 @@ export default class FirmSelectionComponent extends Vue {
       // success
       this.closeModal()
       localStorage.setItem('firm', response.data.id)
+      localStorage.setItem('firmName', response.data.name)
+      this.$store.commit('setFirmName', response.data.name)
       this.$store.state.requiresAuth = 2
+      this.$router.push({ name: Definitions.Other.Home })
     }).catch(error => {
       // Error
       if (error.response) {
@@ -78,5 +83,7 @@ export default class FirmSelectionComponent extends Vue {
 </script>
 
 <style scoped>
-
+.list-group-item {
+  text-transform: capitalize;
+}
 </style>

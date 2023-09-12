@@ -400,7 +400,7 @@ export default class PermissionTreeComponent extends Vue {
 
   async start () : Promise<void> {
     console.log(localStorage.getItem('firm'))
-    const response = await http.get(process.env.VUE_APP_BASE_URL + 'permission' + '?firm=' + localStorage.getItem('firm'))
+    const response = await http.get(process.env.VUE_APP_BASE_URL + 'permission')
     if (this.permissionsTreeData.children.length > 0) {
       this.permissionsTreeData.children.splice(0)
     }

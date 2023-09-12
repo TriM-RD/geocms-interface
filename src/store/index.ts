@@ -4,6 +4,7 @@ export default createStore({
   state: {
     name: '',
     email: '',
+    firm: '',
     requiresAuth: 0,
     clientId: '',
     codeVerifier: '',
@@ -22,6 +23,9 @@ export default createStore({
     },
     setNonce (state, nonce) {
       state.nonce = nonce
+    },
+    setFirmName (state, name) {
+      state.firm = name
     }
   },
   actions: {

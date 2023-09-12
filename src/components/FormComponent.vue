@@ -89,7 +89,7 @@ export default class FormComponent extends Vue {
         break
       case Definitions.Administration.Add:
       case Definitions.Administration.Edit:
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'user?firm=' + localStorage.getItem('firm')))
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'user'))
         break
     }
     this.renderComponent = false

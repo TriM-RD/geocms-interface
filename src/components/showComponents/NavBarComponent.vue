@@ -27,11 +27,12 @@
         <ul class="d-flex">
           <li class="nav-item dropdown nav-justified">
             <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              {{ $store.state.name }}
+              {{ $store.state.firm }}/{{ $store.state.name }}
             </button>
             <ul class="dropdown-menu dropdown-content">
               <router-link to="/account" class="dropdown-item opacity-75">Profile</router-link>
               <router-link to="/administration" class="dropdown-item opacity-75">Administration</router-link>
+              <router-link to="/firm-selection" class="dropdown-item opacity-75">Firm Selection</router-link>
               <li class="opacity-50"><hr class="dropdown-divider"></li>
               <li><button data-bs-toggle="modal" data-bs-target="#reportModal" class="dropdown-item opacity-75" type="button">Open Report</button></li>
               <li class="opacity-50"><hr class="dropdown-divider"></li>

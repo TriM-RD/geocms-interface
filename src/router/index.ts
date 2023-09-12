@@ -5,6 +5,7 @@ import PermissionTree from '@/views/PermissionTree.vue'
 import Form from '@/views/Form.vue'
 import AccountProfile from '@/views/AccountProfile.vue'
 import { Definitions } from '@/definitions/appDefinitions'
+import FirmSelectionComponent from '@/components/showComponents/FirmSelectionComponent.vue'
 
 /* type MyRouteRecord = RouteRecordRaw & {
   beforeRouteLeave: string;
@@ -12,7 +13,7 @@ import { Definitions } from '@/definitions/appDefinitions'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'Home',
+    name: Definitions.Other.Home,
     component: Home
   },
   {
@@ -114,6 +115,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/administration/add/:id',
     name: Definitions.Administration.Edit,
     component: Form
+  },
+  {
+    path: '/firm-selection',
+    name: 'FirmSelectionComponent',
+    component: FirmSelectionComponent
   }
 ]
 

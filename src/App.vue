@@ -67,6 +67,7 @@ export default class App extends Vue {
       if (localStorage.getItem('firm') === '' || localStorage.getItem('firm') == null || !tempFirms.includes(localStorage.getItem('firm'))) {
         this.$store.state.requiresAuth = 3
       } else {
+        this.$store.commit('setFirmName', localStorage.getItem('firmName'))
         this.$store.state.requiresAuth = 2
       }
     }, response => {
