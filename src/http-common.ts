@@ -9,4 +9,9 @@ const apiClient: AxiosInstance = axios.create({
   }
 })
 
+export function updateHeaders () : void {
+  apiClient.defaults.headers.Authorization = `Bearer ${localStorage.getItem('access_token')}`
+  apiClient.defaults.headers['X-Firm'] = localStorage.getItem('firm')
+}
+
 export default apiClient

@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import http from '@/http-common'
+import http, { updateHeaders } from '@/http-common'
 import { Modal } from 'bootstrap'
 import router from '@/router'
 import { Definitions } from '@/definitions/appDefinitions'
@@ -61,6 +61,7 @@ export default class FirmSelectionComponent extends Vue {
       localStorage.setItem('firmName', response.data.name)
       this.$store.commit('setFirmName', response.data.name)
       this.$store.state.requiresAuth = 2
+      updateHeaders()
       this.$router.push({ name: Definitions.Other.Home })
     }).catch(error => {
       // Error

@@ -14,6 +14,7 @@
              :placeholder="`${object.Stats[statTypeEnum.Placeholder].Data}`"
              @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, $event.target.value)">
       <slot></slot>
+      <slot></slot>
       <div class="invalid-feedback">{{ `${object.Stats[statTypeEnum.ErrorMessage] !== undefined?object.Stats[statTypeEnum.ErrorMessage].Data:''}` }}</div>
     </div>
     <div class="col-lg"></div>
