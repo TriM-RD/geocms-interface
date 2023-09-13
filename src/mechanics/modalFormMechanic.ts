@@ -213,7 +213,8 @@ export namespace Manager.Mechanic{
     }
 
     private async validateForm (route: string, temp: any) {
-      for (const form of document.getElementsByClassName('needs-validation')) {
+      const form = document.getElementById('modal-form')
+      if (form) {
         if (!(form as HTMLFormElement).checkValidity()) {
           form.classList.add('was-validated')
         } else {

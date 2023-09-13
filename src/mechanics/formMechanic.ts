@@ -299,7 +299,9 @@ export namespace Manager.Mechanic{
     }
 
     private async validateForm (route: string, redirectTo: string, button: ObjectTemplate | null = null) {
-      for (const form of document.getElementsByClassName('needs-validation')) {
+      console.log('YES')
+      const form = document.getElementById('classic-form')
+      if (form) {
         if (!(form as HTMLFormElement).checkValidity()) {
           form.classList.add('was-validated')
         } else {

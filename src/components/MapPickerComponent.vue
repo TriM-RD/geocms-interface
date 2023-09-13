@@ -79,7 +79,11 @@ export default class MapPickerComponent extends Vue {
   }
 
   init () {
-    const temp = JSON.parse(this.object.Stats[StatTypeEnum.Value].Data)
+    let temp = null
+    if (this.object.Stats[StatTypeEnum.Value].Data) {
+      temp = JSON.parse(this.object.Stats[StatTypeEnum.Value].Data)
+    }
+
     if (temp === null || router.currentRoute.value.name === 'DeviceAdd' || (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(String(router.currentRoute.value.params.id)))) {
       this.geoLocate()
     } else {

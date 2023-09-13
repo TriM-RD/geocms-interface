@@ -1,7 +1,7 @@
 <template>
   <div>
     <button @click="startMechanic()" type="button" style="display: none" data-bs-toggle="modal" :data-bs-target="`${'#formModal'+object.Stats[statTypeEnum.Tag].Data}`" :id="`${'formModalOpen'+object.Stats[statTypeEnum.Tag].Data}`"></button>
-    <form class="needs-validation" novalidate>
+    <form id="modal-form" class="needs-validation" novalidate>
       <div @click="test($event.target)" class="modal fade" :id="`${'formModal'+object.Stats[statTypeEnum.Tag].Data}`" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
@@ -62,6 +62,7 @@ export default class ModalFormComponent extends Vue {
   subObjectTypeEnum = SubObjectTypeEnum
   regionType = RegionType
   conditionsUnsubed = false
+
   submitButton = new ObjectTemplate(this.regionEnum.ModalForm, this.objectTypeEnum.Button, this.subObjectTypeEnum.Left, this.actionTypeEnum.Click, {
     [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Submit'),
     [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('submitFormButton'),
