@@ -20,7 +20,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
   public async Button (eventHandler: EventHandlerType, objectTemplates: ObjectTemplate[], refreshPage: () => void, append: (_objectTemplates: ObjectTemplate[]) => ObjectTemplate[], id: string, inEdit: boolean): Promise<ObjectTemplate[]> {
     switch (eventHandler.subObjectType) {
       case SubObjectTypeEnum.Left:
-        await this.validateForm('entity', Definitions.Device.Edit, objectTemplates, refreshPage, append, id, inEdit, eventHandler.payload)
+        await this.validateForm('division', Definitions.Division.Edit, objectTemplates, refreshPage, append, id, inEdit, eventHandler.payload)
         break
       case SubObjectTypeEnum.Middle:
         refreshPage()
