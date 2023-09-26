@@ -65,9 +65,10 @@ export default class ModalFormComponent extends Vue {
 
   submitButton = new ObjectTemplate(this.regionEnum.ModalForm, this.objectTypeEnum.Button, this.subObjectTypeEnum.Left, this.actionTypeEnum.Click, {
     [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Submit'),
-    [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('submitFormButton'),
+    [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(this.object.Stats[this.statTypeEnum.Tag].Data),
     [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('me-2 btn btn-success'),
-    [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(this.object.Stats[this.statTypeEnum.Tag].Data)
+    [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('submitFormButton'),
+    [StatTypeEnum.Disabled]: StatType.StatTypes[StatTypeEnum.Disabled]().CreateStat().InitData('')
   })
 
   beforeUnmount () {
@@ -130,7 +131,7 @@ export default class ModalFormComponent extends Vue {
           })
         ])
         break
-      case 'GroupAdd':
+      /* case 'GroupAdd':
       case 'GroupEdit':
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id === undefined ? '-1' : String(this.$route.params.id), 'group'))
         break
@@ -157,7 +158,7 @@ export default class ModalFormComponent extends Vue {
         break
       case 'AdministrationEdit':
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id === undefined ? '-1' : String(this.$route.params.id), 'user'))
-        break
+        break */
     }
     this.renderComponent = false
   }

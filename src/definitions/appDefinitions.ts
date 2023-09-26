@@ -9,6 +9,7 @@ export namespace Definitions{
     Add = 'DeviceAdd',
     Edit = 'DeviceEdit',
     Replace = 'DeviceReplace',
+    Modal = 'DeviceModal',
   }
 
   export enum Group {

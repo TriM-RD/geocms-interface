@@ -39,7 +39,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         break
       case SubObjectTypeEnum.Left:
         // Add it to Stats
-        eventHandler.payload.Stats[StatTypeEnum.Disabled].Data = 'true'
+        if (id !== 'formModalSubmit' + eventHandler.payload.Stats[StatTypeEnum.Value].Data) { eventHandler.payload.Stats[StatTypeEnum.Disabled].Data = 'true' }
         await this.validateForm('entity', Definitions.Device.Edit, objectTemplates, refreshPage, append, id, inEdit, eventHandler.payload)
         break
       case SubObjectTypeEnum.Right:
@@ -77,7 +77,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
     return objectTemplates
   }
 
-  private async resolveButtonMiddle (eventHandler: EventHandlerType, tag: string, objectTemplates: ObjectTemplate[], refreshPage: () => void, id: string) {
+  protected async resolveButtonMiddle (eventHandler: EventHandlerType, tag: string, objectTemplates: ObjectTemplate[], refreshPage: () => void, id: string) {
     switch (tag) {
       case 'replace':
         await router.push({

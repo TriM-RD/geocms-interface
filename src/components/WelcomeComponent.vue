@@ -270,7 +270,7 @@ export default class WelcomeComponent extends Vue {
     const verifier = this.$store.state.codeVerifier
     const nonce = this.$store.state.nonce // Add state parameter
     const query = `client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&code_challenge=${codeChallenge}&verifier=${verifier}&code_challenge_method=S256&state=${nonce}` // Add state parameter to the query string
-    console.log(process.env.VUE_APP_URL + 'oauth/authorize?' + query)
+    // console.log(process.env.VUE_APP_URL + 'oauth/authorize?' + query)
     window.location.href = process.env.VUE_APP_URL + 'oauth/redirect?' + query
   }
 

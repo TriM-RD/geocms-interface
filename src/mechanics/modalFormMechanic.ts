@@ -14,6 +14,9 @@ import {
 import router from '@/router'
 import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
+import { ResolverType } from '@/resolvers/resolverType'
+import { FormAssignment } from '@/resolvers/assignments/formAssignment'
+import { Definitions } from '@/definitions/appDefinitions'
 
 export namespace Manager.Mechanic{
 
@@ -74,7 +77,8 @@ export namespace Manager.Mechanic{
     }
 
     protected async SelectList (eventHandler: EventHandlerType): Promise<void> {
-      switch (router.currentRoute.value.name) {
+      this.ObjectTemplates = await (ResolverType.ResolverTypes[Definitions.Device.Modal] as FormAssignment).SelectList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this))
+      /* switch (router.currentRoute.value.name) {
         case 'DeviceAdd':
         case 'DeviceEdit':// TODO add regex to check if id is uuid
           switch (eventHandler.subObjectType) {
@@ -98,33 +102,17 @@ export namespace Manager.Mechanic{
               break
             default:
               break
-          } */
+          }
           break
-      }
+      } */
     }
 
     protected async Button (eventHandler: EventHandlerType): Promise<void> {
-      const temp = document.getElementById('formModalSubmit' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)
-      switch (eventHandler.subObjectType) {
-        case SubObjectTypeEnum.Middle:
-          await this.resolveButtonMiddle(eventHandler, eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
-          break
-        case SubObjectTypeEnum.Left:
-          await this.validateForm('entity', temp)
-          break
-        case SubObjectTypeEnum.Right:
-          await router.push({
-            name: 'Device'
-          })
-          break
-        case SubObjectTypeEnum.Down:
-          this.refreshPage()
-          this.resolveButtonDown(eventHandler, eventHandler.payload.Stats[StatTypeEnum.Tag].Data.split('-'))
-          this.refreshPage()
-          break
-        default:
-          break
+      const name = router.currentRoute.value.name
+      if (typeof name !== 'string') {
+        return
       }
+      await (ResolverType.ResolverTypes[Definitions.Device.Modal] as FormAssignment).Button(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this), 'formModalSubmit' + eventHandler.payload.Stats[StatTypeEnum.Value].Data, this.inEdit)
     }
 
     static getInstance (_mechanicCallback: MechanicDelegate | null = null): MechanicAbstract {
@@ -133,106 +121,6 @@ export namespace Manager.Mechanic{
       }
       MechanicAbstract.instance.SubscribeToVueComponent(_mechanicCallback)
       return MechanicAbstract.instance
-    }
-
-    private async resolveButtonMiddle (eventHandler: EventHandlerType, tag: string) {
-      switch (tag) {
-        default:
-          this.refreshPage()
-          this.ObjectTemplates = this.Splice(2, [// TODO while 2 is correct, it needs to be redone to make it programmatic
-            new ObjectTemplate(RegionEnum.ModalForm, ObjectTypeEnum.SelectButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
-              [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.ItemList].Data),
-              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Division'),
-              [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(Math.random().toString(36).slice(2, 7).toString()),
-              [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(''),
-              [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.Id].Data),
-              [StatTypeEnum.ErrorMessage]: StatType.StatTypes[StatTypeEnum.ErrorMessage]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.ErrorMessage].Data)
-            })
-          ])
-          this.refreshPage()
-          break
-      }
-    }
-
-    private resolveButtonDown (eventHandler: EventHandlerType, strings: string[]) {
-      switch (strings[0]) {
-        case 'destroy':
-          if (window.confirm('Are you sure you want to delete this entity?')) {
-            http.delete(process.env.VUE_APP_BASE_URL + 'entity' + '/' + this.id)
-              .then((response) => {
-                useToast()({
-                  component: ToastComponent,
-                  props: {
-                    msg: response.data.msg
-                  }
-                }, {
-                  type: response.data.status as TYPE
-                })
-                router.push({
-                  name: 'Device'
-                })
-              })
-          }
-          break
-        case 'codeButton':
-          this.generateCode(eventHandler, strings[0])
-          this.refreshPage()
-          this.refreshPage()
-          break
-        case 'delete':
-          this.removeElementByTag(eventHandler, strings[1])
-          break
-        default:
-          break
-      }
-    }
-
-    private removeElementByTag (eventHandler : EventHandlerType, tag : string) {
-      const elementIndex = this.ObjectTemplates.findIndex(
-        element => element.Stats[StatTypeEnum.Tag].Data === tag)
-      this.ObjectTemplates.splice(elementIndex, 1)
-    }
-
-    private generateCode (eventHandler: EventHandlerType, string: string) {
-      const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === 'code')
-      console.log(this.ObjectTemplates[temp].Stats[StatTypeEnum.Label].Data)
-      console.log(this.ObjectTemplates[temp].Stats[StatTypeEnum.Value].Data)
-      this.ObjectTemplates[temp].Stats[StatTypeEnum.Value].Data = this.generateRandomString(this.ObjectTemplates[temp].Stats[StatTypeEnum.Id].Data)
-      console.log(this.ObjectTemplates[temp].Stats[StatTypeEnum.Value].Data)
-    }
-
-    generateRandomString (inputString: string): string {
-      const characters = inputString.split('')
-      for (let i = characters.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * i)
-        const temp = characters[i]
-        characters[i] = characters[j]
-        characters[j] = temp
-      }
-      return characters.join('')
-    }
-
-    private async validateForm (route: string, temp: any) {
-      const form = document.getElementById('modal-form')
-      if (form) {
-        if (!(form as HTMLFormElement).checkValidity()) {
-          form.classList.add('was-validated')
-        } else {
-          await http.post(process.env.VUE_APP_BASE_URL + route, this.ObjectTemplates)
-            .then((response) => {
-              if (response.data.id !== false) {
-                if (temp !== null) { temp.click() }
-              } else {
-                this.refreshPage()
-                form.classList.remove('was-validated')
-                this.ObjectTemplates.length = 0
-                this.ObjectTemplates = this.Append(response.data.entities)
-                this.refreshPage()
-              }
-            })
-          // }
-        }
-      }
     }
   }
 

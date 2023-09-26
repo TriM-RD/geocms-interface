@@ -14,6 +14,7 @@ export class ResolverType {
     [Definitions.Device.Add]: new Device.Add.AddHandler(),
     [Definitions.Device.Edit]: new Device.Edit.EditHandler(),
     [Definitions.Device.Replace]: new Device.Replace.ReplaceHandler(),
+    [Definitions.Device.Modal]: new Device.Modal.ModalHandler(),
     // Group
     [Definitions.Group.Def]: new Group.Def.DefHandler(),
     [Definitions.Group.Add]: new Group.Add.AddHandler(),
