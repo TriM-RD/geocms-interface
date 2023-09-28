@@ -39,7 +39,9 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         break
       case SubObjectTypeEnum.Left:
         // Add it to Stats
-        if (id !== 'formModalSubmit' + eventHandler.payload.Stats[StatTypeEnum.Value].Data) { eventHandler.payload.Stats[StatTypeEnum.Disabled].Data = 'true' }
+        if (eventHandler.payload.Stats[StatTypeEnum.Value]) { // TODO needs to be fixed, not woring as expected
+          if (id !== 'formModalSubmit' + eventHandler.payload.Stats[StatTypeEnum.Value].Data) { eventHandler.payload.Stats[StatTypeEnum.Disabled].Data = 'true' }
+        }
         await this.validateForm('entity', Definitions.Device.Edit, objectTemplates, refreshPage, append, id, inEdit, eventHandler.payload)
         break
       case SubObjectTypeEnum.Right:
