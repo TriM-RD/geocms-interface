@@ -112,7 +112,9 @@ export namespace Manager.Mechanic{
       if (typeof name !== 'string') {
         return
       }
-      await (ResolverType.ResolverTypes[Definitions.Device.Modal] as FormAssignment).Button(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this), 'formModalSubmit' + eventHandler.payload.Stats[StatTypeEnum.Value].Data, this.inEdit)
+      let tempId = this.id
+      if (eventHandler.payload.Stats[StatTypeEnum.Value]) { tempId = 'formModalSubmit' + eventHandler.payload.Stats[StatTypeEnum.Value].Data }
+      await (ResolverType.ResolverTypes[Definitions.Device.Modal] as FormAssignment).Button(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this), tempId, this.inEdit)
     }
 
     static getInstance (_mechanicCallback: MechanicDelegate | null = null): MechanicAbstract {
