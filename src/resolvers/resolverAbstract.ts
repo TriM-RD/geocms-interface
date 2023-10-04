@@ -1,11 +1,12 @@
 import { EventHandlerType, ObjectTemplate, StatTypeEnum } from '@cybertale/interface'
-import { FormAssignment } from '@/resolvers/assignments/formAssignment'
 import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
 import http from '@/http-common'
 import router from '@/router'
+import { ResolverInterface } from '@/resolvers/assignments/resolverInterface'
+import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
 
-export abstract class ResolverAbstract implements FormAssignment {
+export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstract> {
   protected removeElementFromArray (arr: Array<any>, belongsTo: string) : void {
     (() => {
       // Perform the array update
@@ -19,20 +20,25 @@ export abstract class ResolverAbstract implements FormAssignment {
     })()
   }
 
-  abstract SelectList (eventHandler: EventHandlerType, objectTemplates: ObjectTemplate[], refreshPage: () => void, append: (_objectTemplates: ObjectTemplate[]) => ObjectTemplate[]): Promise<ObjectTemplate[]>
-  public async DataList (eventHandler: EventHandlerType, objectTemplates: ObjectTemplate[], refreshPage: () => void): Promise<ObjectTemplate[]> {
-    refreshPage()
-    const temp = objectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
-    if (eventHandler.payload.Stats[StatTypeEnum.Value].Data.id !== null) {
-      objectTemplates[temp].Stats[StatTypeEnum.Value].Data = eventHandler.payload.Stats[StatTypeEnum.Value].Data.id
-    } else {
-      objectTemplates[temp].Stats[StatTypeEnum.Value].Data = ''
-    }
-    refreshPage()
-    return objectTemplates
+  abstract FormSelectList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]>
+  public TableButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
+    return Promise.resolve([])
   }
 
-  abstract Button (eventHandler: EventHandlerType, objectTemplates: ObjectTemplate[], refreshPage: () => void, append: (_objectTemplates: ObjectTemplate[]) => ObjectTemplate[], id: string, inEdit: boolean): Promise<ObjectTemplate[]>
+  public async FormDataList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
+    wrapper.refreshPage()
+    const temp = wrapper.objectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+    if (wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data.id !== null) {
+      wrapper.objectTemplates[temp].Stats[StatTypeEnum.Value].Data = wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data.id
+    } else {
+      wrapper.objectTemplates[temp].Stats[StatTypeEnum.Value].Data = ''
+    }
+    wrapper.refreshPage()
+    return wrapper.objectTemplates
+  }
+
+  abstract FormButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]>
+  abstract RowButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]>
 
   protected resolveButtonDown (eventHandler: EventHandlerType, strings: string[], objectTemplates: ObjectTemplate[], refreshPage: () => void, id: string): ObjectTemplate[] {
     switch (strings[0]) {
@@ -145,6 +151,25 @@ export abstract class ResolverAbstract implements FormAssignment {
       }
     }
     if (button) { button.Stats[StatTypeEnum.Disabled].Data = '' }
+    return objectTemplates
+  }
+
+  protected async validateDelete (route: string, objectTemplates: ObjectTemplate[], refreshPage: () => void, id: string): Promise<ObjectTemplate[]> {
+    if (window.confirm('Are you sure you want to delete this entity?')) {
+      refreshPage()
+      http.delete(process.env.VUE_APP_BASE_URL + route + '/' + id)
+        .then((response) => {
+          useToast()({
+            component: ToastComponent,
+            props: {
+              msg: response.data.msg
+            }
+          }, {
+            type: response.data.status as TYPE
+          })
+          refreshPage()
+        })
+    }
     return objectTemplates
   }
 

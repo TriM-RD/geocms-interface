@@ -1,24 +1,18 @@
 import {
-  ActionTypeEnum,
   EventHandlerType,
   MechanicAbstract,
-  MechanicDelegate,
   ObjectTemplate,
   ObjectTypeEnum,
   RegionEnum,
   RegionType,
-  StatType,
-  StatTypeEnum,
-  SubObjectTypeEnum
+  StatTypeEnum
 } from '@cybertale/interface'
 import http from '@/http-common'
 import router from '@/router'
-import { TYPE, useToast } from 'vue-toastification'
-import ToastComponent from '@/components/ToastComponent.vue'
-import { Modal } from 'bootstrap'
 import { Definitions } from '@/definitions/appDefinitions'
 import { ResolverType } from '@/resolvers/resolverType'
-import { FormAssignment } from '@/resolvers/assignments/formAssignment'
+import { FormWrapper } from '@/resolvers/assignments/formWrapper'
+import { ResolverInterface } from '@/resolvers/assignments/resolverInterface'
 
 export namespace Manager.Mechanic{
 
@@ -78,7 +72,7 @@ export namespace Manager.Mechanic{
       if (eventHandler.payload.Stats[StatTypeEnum.Value].Data.id === null) {
         return
       }
-      this.ObjectTemplates = await (ResolverType.ResolverTypes[Definitions.Other.Any] as FormAssignment).DataList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this))
+      this.ObjectTemplates = await (ResolverType.ResolverTypes[Definitions.Other.Any] as ResolverInterface<FormWrapper>).FormDataList(new FormWrapper().DataList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this)))
     }
 
     protected async ECabinetRow (eventHandler: EventHandlerType): Promise<void> {
@@ -94,7 +88,7 @@ export namespace Manager.Mechanic{
     protected async SelectList (eventHandler: EventHandlerType): Promise<void> {
       const name = router.currentRoute.value.name
       if (typeof name === 'string') {
-        this.ObjectTemplates = await (ResolverType.ResolverTypes[name] as FormAssignment).SelectList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this))
+        this.ObjectTemplates = await (ResolverType.ResolverTypes[name] as ResolverInterface<FormWrapper>).FormSelectList(new FormWrapper().SelectList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this)))
       }// TODO add regex to check if id is uuid
     }
 
@@ -103,7 +97,7 @@ export namespace Manager.Mechanic{
       if (typeof name !== 'string') {
         return
       }
-      await (ResolverType.ResolverTypes[name] as FormAssignment).Button(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this), this.id, this.inEdit)
+      this.ObjectTemplates = await (ResolverType.ResolverTypes[name] as ResolverInterface<FormWrapper>).FormButton(new FormWrapper().Button(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this), this.id, this.inEdit))
     }
   }
 

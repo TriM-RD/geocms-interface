@@ -11,10 +11,23 @@ import {
 import http from '@/http-common'
 import { Definitions } from '@/definitions/appDefinitions'
 import router from '@/router'
+import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
 
 export abstract class HandlerAbstract extends ResolverAbstract {
   public async SelectList (eventHandler: EventHandlerType, objectTemplates: ObjectTemplate[], refreshPage: () => void, append: (_objectTemplates: ObjectTemplate[]) => ObjectTemplate[]): Promise<ObjectTemplate[]> {
     return objectTemplates
+  }
+
+  RowButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
+    return Promise.resolve([])
+  }
+
+  FormButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
+    return Promise.resolve([])
+  }
+
+  FormSelectList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
+    return Promise.resolve([])
   }
 
   public async Button (eventHandler: EventHandlerType, objectTemplates: ObjectTemplate[], refreshPage: () => void, append: (_objectTemplates: ObjectTemplate[]) => ObjectTemplate[], id: string, inEdit: boolean): Promise<ObjectTemplate[]> {

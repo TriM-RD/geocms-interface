@@ -3,20 +3,17 @@ import {
   EventHandlerType,
   ObjectTemplate,
   ObjectTypeEnum,
-  SubObjectTypeEnum,
   MechanicAbstract,
   MechanicDelegate,
   StatTypeEnum,
   RegionEnum,
-  RegionType,
-  ActionTypeEnum, StatType
+  RegionType
 } from '@cybertale/interface'
 import router from '@/router'
-import { TYPE, useToast } from 'vue-toastification'
-import ToastComponent from '@/components/ToastComponent.vue'
 import { ResolverType } from '@/resolvers/resolverType'
-import { FormAssignment } from '@/resolvers/assignments/formAssignment'
 import { Definitions } from '@/definitions/appDefinitions'
+import { ResolverInterface } from '@/resolvers/assignments/resolverInterface'
+import { FormWrapper } from '@/resolvers/assignments/formWrapper'
 
 export namespace Manager.Mechanic{
 
@@ -77,7 +74,7 @@ export namespace Manager.Mechanic{
     }
 
     protected async SelectList (eventHandler: EventHandlerType): Promise<void> {
-      this.ObjectTemplates = await (ResolverType.ResolverTypes[Definitions.Device.Modal] as FormAssignment).SelectList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this))
+      this.ObjectTemplates = await (ResolverType.ResolverTypes[Definitions.Device.Modal] as ResolverInterface<FormWrapper>).FormSelectList(new FormWrapper().SelectList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this)))
       /* switch (router.currentRoute.value.name) {
         case 'DeviceAdd':
         case 'DeviceEdit':// TODO add regex to check if id is uuid
@@ -114,7 +111,7 @@ export namespace Manager.Mechanic{
       }
       let tempId = this.id
       if (eventHandler.payload.Stats[StatTypeEnum.Value]) { tempId = 'formModalSubmit' + eventHandler.payload.Stats[StatTypeEnum.Value].Data }
-      await (ResolverType.ResolverTypes[Definitions.Device.Modal] as FormAssignment).Button(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this), tempId, this.inEdit)
+      await (ResolverType.ResolverTypes[name] as ResolverInterface<FormWrapper>).FormButton(new FormWrapper().Button(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this), tempId, this.inEdit))
     }
 
     static getInstance (_mechanicCallback: MechanicDelegate | null = null): MechanicAbstract {

@@ -1,8 +1,11 @@
 import http from '@/http-common'
 import router from '@/router'
 import { EventHandlerType, RegionEnum, ActionTypeEnum, RegionType, StatType, StatTypeEnum, MechanicAbstract, MechanicDelegate, SubObjectTypeEnum, ObjectTypeEnum, ObjectTemplate } from '@cybertale/interface'
-import { useToast, TYPE } from 'vue-toastification'
-import ToastComponent from '@/components/ToastComponent.vue'
+import { ResolverType } from '@/resolvers/resolverType'
+import { FormWrapper } from '@/resolvers/assignments/formWrapper'
+import { ResolverAbstract } from '@/resolvers/resolverAbstract'
+import { RowWrapper } from '@/resolvers/assignments/rowWrapper'
+import { ResolverInterface } from '@/resolvers/assignments/resolverInterface'
 
 export namespace Manager.Mechanic{
 
@@ -47,114 +50,11 @@ export namespace Manager.Mechanic{
     }
 
     protected async Button (eventHandler: EventHandlerType): Promise<void> {
-      const _id = eventHandler.payload.Stats[StatTypeEnum.Id].Data
-      switch (router.currentRoute.value.name) {
-        case 'Device':
-          switch (eventHandler.subObjectType) {
-            case SubObjectTypeEnum.Left:// Izbriši
-              await this.validateForm('entity', _id)
-              break
-            case SubObjectTypeEnum.Middle: // Uredi
-              await router.push({
-                name: 'DeviceEdit',
-                params: { id: _id }
-              })
-              break
-            case SubObjectTypeEnum.Right: // Pregledaj
-              await router.push({
-                name: 'DeviceEdit',
-                params: { id: _id }
-              })
-              break
-            default:
-              break
-          }
-          break
-        case 'Group':
-          switch (eventHandler.subObjectType) {
-            case SubObjectTypeEnum.Left:// Izbriši
-              await this.validateForm('group', _id)
-              break
-            case SubObjectTypeEnum.Middle: // Uredi
-              await router.push({
-                name: 'GroupEdit',
-                params: { id: _id }
-              })
-              break
-            case SubObjectTypeEnum.Right: // Pregledaj
-              await router.push({
-                name: 'GroupEdit',
-                params: { id: _id }
-              })
-              break
-            default:
-              break
-          }
-          break
-        case 'GroupEdit':
-          switch (eventHandler.subObjectType) {
-            case SubObjectTypeEnum.Left:// Izbriši
-              await this.validateForm('attribute', _id)
-              break
-            case SubObjectTypeEnum.Middle: // Pregledaj
-              await router.push({
-                name: 'AttributeEdit',
-                params: {
-                  parentId: router.currentRoute.value.params.id,
-                  id: _id
-                }
-              })
-              break
-            case SubObjectTypeEnum.Right: // Pregledaj
-              await router.push({
-                name: 'AttributeEdit',
-                params: { id: _id }
-              })
-              break
-            default:
-              break
-          }
-          break
-        case 'Division':
-          switch (eventHandler.subObjectType) {
-            case SubObjectTypeEnum.Left:// Izbriši
-              await this.validateForm('division', _id)
-              break
-            case SubObjectTypeEnum.Middle: // Uredi
-              await router.push({
-                name: 'DivisionEdit',
-                params: { id: _id }
-              })
-              break
-            case SubObjectTypeEnum.Right: // Pregledaj
-              await router.push({
-                name: 'DivisionEdit',
-                params: { id: _id }
-              })
-              break
-            default:
-              break
-          }
-          break
-        case 'Administration':
-          switch (eventHandler.subObjectType) {
-            case SubObjectTypeEnum.Middle: // Uredi
-              await router.push({
-                name: 'AdministrationEdit',
-                params: { id: _id }
-              })
-              break
-            case SubObjectTypeEnum.Right: // Pregledaj
-              await router.push({
-                name: 'AdministrationEdit',
-                params: { id: _id }
-              })
-              break
-            default:
-              break
-          }
-          break
+      const name = router.currentRoute.value.name
+      if (typeof name !== 'string') {
+        return
       }
+      this.ObjectTemplates = await (ResolverType.ResolverTypes[name] as ResolverInterface<RowWrapper>).RowButton(new RowWrapper().Button(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), eventHandler.payload.Stats[StatTypeEnum.Id].Data))
     }
 
     static getInstance (_mechanicCallback: MechanicDelegate | null = null): MechanicAbstract {
@@ -163,24 +63,6 @@ export namespace Manager.Mechanic{
         MechanicAbstract.instance.SubscribeToVueComponent(_mechanicCallback)
       }
       return MechanicAbstract.instance
-    }
-
-    private async validateForm (route: string, _id: string) {
-      if (window.confirm('Are you sure you want to delete this entity?')) {
-        this.refreshPage()
-        http.delete(process.env.VUE_APP_BASE_URL + route + '/' + _id)
-          .then((response) => {
-            useToast()({
-              component: ToastComponent,
-              props: {
-                msg: response.data.msg
-              }
-            }, {
-              type: response.data.status as TYPE
-            })
-            this.refreshPage()
-          })
-      }
     }
   }
 

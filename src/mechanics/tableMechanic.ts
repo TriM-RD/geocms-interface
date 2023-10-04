@@ -1,8 +1,20 @@
 import http from '@/http-common'
-import { EventHandlerType, RegionEnum, RegionType, MechanicAbstract, SubObjectTypeEnum, ObjectTypeEnum, ObjectTemplate } from '@cybertale/interface'
+import {
+  EventHandlerType,
+  RegionEnum,
+  RegionType,
+  MechanicAbstract,
+  SubObjectTypeEnum,
+  ObjectTypeEnum,
+  ObjectTemplate,
+  StatTypeEnum
+} from '@cybertale/interface'
 import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
 import router from '@/router'
+import { ResolverType } from '@/resolvers/resolverType'
+import { ResolverInterface } from '@/resolvers/assignments/resolverInterface'
+import { RowWrapper } from '@/resolvers/assignments/rowWrapper'
 
 export namespace Manager.Mechanic{
 
@@ -97,7 +109,12 @@ export namespace Manager.Mechanic{
       RegionType.RegionTypes[RegionEnum.Table].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
     }
 
-    protected Button (_eventHandler: EventHandlerType): void {
+    protected async Button (_eventHandler: EventHandlerType): Promise<void> {
+      /* const name = router.currentRoute.value.name
+      if (typeof name !== 'string') {
+        return
+      }
+      this.ObjectTemplates = await (ResolverType.ResolverTypes[name] as ResolverInterface<TableWraper>).TableButton(new TableWrapper().Button(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), _eventHandler.payload.Stats[StatTypeEnum.Id].Data)) */
       switch (router.currentRoute.value.name) {
         case 'Group':
           switch (_eventHandler.subObjectType) {
