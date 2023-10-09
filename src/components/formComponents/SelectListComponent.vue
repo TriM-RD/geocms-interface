@@ -1,5 +1,5 @@
 <template>
-  <div v-if="renderComponent" class="mb-3 row justify-content-md-center" :class="object.Stats[statTypeEnum.Design].Data">
+  <div v-if="renderComponent" class="mb-3 row justify-content-md-center">
         <div class="col-lg"></div>
         <div class="col">
       <div class="input-group">
