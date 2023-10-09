@@ -11,20 +11,21 @@ import {
 import http from '@/http-common'
 import router from '@/router'
 import { Modal } from 'bootstrap'
+import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
 
 export class ModalHandler extends HandlerAbstract {
-  public async SelectList (eventHandler: EventHandlerType, objectTemplates: ObjectTemplate[], refreshPage: () => void, append: (_objectTemplates: ObjectTemplate[]) => ObjectTemplate[]): Promise<ObjectTemplate[]> {
-    switch (eventHandler.subObjectType) {
+  public async FormSelectList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
+    switch (wrapper.eventHandler.subObjectType) {
       case SubObjectTypeEnum.Middle:
-        this.removeElementFromArray(objectTemplates, 'group')
-        refreshPage()
-        objectTemplates = append((await http.get(process.env.VUE_APP_BASE_URL + 'form/entity_modal/' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
-        refreshPage()
+        this.removeElementFromArray(wrapper.objectTemplates, 'group')
+        wrapper.refreshPage()
+        wrapper.objectTemplates = wrapper.append((await http.get(process.env.VUE_APP_BASE_URL + 'form/entity_modal/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
+        wrapper.refreshPage()
         break
       default:
         break
     }
-    return objectTemplates
+    return Promise.resolve(wrapper.objectTemplates)
   }
 
   protected async resolveButtonMiddle (eventHandler: EventHandlerType, tag: string, objectTemplates: ObjectTemplate[], refreshPage: () => void, id: string): Promise<void> {
