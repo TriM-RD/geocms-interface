@@ -87,7 +87,7 @@ export default class TableComponent extends Vue {
   }
 
   mounted () {
-    if (this.$route.name === 'Device') {
+    if (this.$route.name === Definitions.Device.Def) {
       this.onScroll = async () => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop
         const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
@@ -150,7 +150,7 @@ export default class TableComponent extends Vue {
   }
 
   checkRoute () {
-    return router.currentRoute.value.name === 'Device'
+    return router.currentRoute.value.name === Definitions.Device.Def
   }
 
   async Init () {

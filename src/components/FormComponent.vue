@@ -44,11 +44,11 @@ export default class FormComponent extends Vue {
 
   async Init () {
     switch (router.currentRoute.value.name) {
-      case 'DeviceEdit':
-      case 'DeviceAdd':
+      case Definitions.Device.Add:
+      case Definitions.Device.Edit:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'entity'))
         break
-      case 'DeviceReplace':
+      case Definitions.Device.Replace:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'replace/entity/' + this.$route.params.parentId.toString()))
         this.objectTemplates = this.mechanic.Append([
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
@@ -62,15 +62,15 @@ export default class FormComponent extends Vue {
           })
         ])
         break
-      case 'GroupAdd':
-      case 'GroupEdit':
+      case Definitions.Group.Edit:
+      case Definitions.Group.Add:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'group'))
         break
-      case 'DivisionAdd':
-      case 'DivisionEdit':
+      case Definitions.Division.Edit:
+      case Definitions.Division.Add:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'division'))
         break
-      case 'AttributeAdd':
+      case Definitions.Attribute.Add:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'attribute'))
         this.objectTemplates = this.mechanic.Append([
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
@@ -84,7 +84,7 @@ export default class FormComponent extends Vue {
           })
         ])
         break
-      case 'AttributeEdit':
+      case Definitions.Attribute.Edit:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'attribute'))
         break
       case Definitions.Administration.Add:

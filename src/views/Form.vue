@@ -13,6 +13,7 @@ import FormComponent from '@/components/FormComponent.vue'
 import TableComponent from '@/components/TableComponent.vue'
 import router from '@/router'
 import ListComponent from '@/components/ListComponent.vue'
+import { Definitions } from '@/definitions/appDefinitions'
 
 @Options({
   components: {
@@ -27,12 +28,11 @@ export default class Form extends Vue {
 
   mounted () {
     switch (router.currentRoute.value.name) {
-      case 'GroupEdit':
-      case 'GroupAdd':
+      case Definitions.Group.Edit:
+      case Definitions.Group.Add:
         this.renderTable = true
         break
-      case 'DeviceEdit':
-        console.log('test1')
+      case Definitions.Device.Edit:
         this.renderList = true
         break
     }

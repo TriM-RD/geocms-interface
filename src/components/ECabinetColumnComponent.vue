@@ -17,6 +17,7 @@ import {
   RegionType
 } from '@cybertale/interface'
 import router from '@/router'
+import { Definitions } from '@/definitions/appDefinitions'
 @Options({
   props: {
     object: ObjectTemplate,
@@ -36,7 +37,7 @@ export default class ECabinetColumnComponent extends Vue {
 
   edit () {
     router.push({
-      name: 'DeviceEdit',
+      name: Definitions.Device.Edit,
       params: { id: this.object.Stats[this.statTypeEnum.Id].Data }
     })
   }

@@ -8,7 +8,7 @@ export class DefHandler extends HandlerAbstract {
   public async RowButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
     switch (wrapper.eventHandler.subObjectType) {
       case SubObjectTypeEnum.Left:// Izbriši
-        await this.validateDelete('group', wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
+        await this.validateDelete(Definitions.Group.Def, wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
         break
       case SubObjectTypeEnum.Middle: // Uredi
         await router.push({
@@ -26,5 +26,15 @@ export class DefHandler extends HandlerAbstract {
         break
     }
     return Promise.resolve(wrapper.objectTemplates)
+  }
+
+  public async TableButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
+    switch (wrapper.eventHandler.subObjectType) {
+      case SubObjectTypeEnum.Left:
+        // TODO try to find a way to be able to have toast here instead of TableComponent
+        wrapper.refreshPage()
+        break
+    }
+    return wrapper.objectTemplates
   }
 }

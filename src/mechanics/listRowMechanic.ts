@@ -1,5 +1,6 @@
 import { MechanicAbstract, StatTypeEnum, RegionEnum, RegionType, EventHandlerType, SubObjectTypeEnum, ObjectTypeEnum, ObjectTemplate } from '@cybertale/interface'
 import router from '@/router'
+import { Definitions } from '@/definitions/appDefinitions'
 
 export namespace Manager.Mechanic{
 
@@ -28,15 +29,15 @@ export namespace Manager.Mechanic{
       switch (eventHandler.subObjectType) {
         case SubObjectTypeEnum.ParentObject:
           switch (_label) {
-            case 'Group':
-              router.push({ name: 'GroupEdit', params: { id: _id } })
+            case Definitions.Group.Def:
+              router.push({ name: Definitions.Group.Edit, params: { id: _id } })
               break
-            case 'Division':
-              router.push({ name: 'DivisionEdit', params: { id: _id } })
+            case Definitions.Division.Def:
+              router.push({ name: Definitions.Division.Edit, params: { id: _id } })
               break
-            case 'Device':
+            case Definitions.Device.Def:
             case 'Replacement History':
-              router.push({ name: 'DeviceEdit', params: { id: _id } })
+              router.push({ name: Definitions.Device.Edit, params: { id: _id } })
               break
             default:
               break

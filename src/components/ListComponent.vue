@@ -21,6 +21,7 @@ import {
   RegionType
 } from '@cybertale/interface'
 import router from '@/router'
+import { Definitions } from '@/definitions/appDefinitions'
 
 @Options({
   props: {
@@ -69,10 +70,10 @@ export default class ListComponent extends Vue {
     } else {
       this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'permissions/user'))
       switch (this.$route.name) {
-        case 'AccountProfile':
+        case Definitions.Administration.AccountProfile:
           this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'permissions/user'))
           break
-        case 'DeviceEdit':
+        case Definitions.Device.Edit:
           console.log('test')
           this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id.toString(), 'replacement/entity'))
           break

@@ -1,5 +1,6 @@
 import { MechanicAbstract, MechanicDelegate, RegionEnum, RegionType, StatTypeEnum, EventHandlerType, SubObjectTypeEnum, ObjectTypeEnum, ObjectTemplate } from '@cybertale/interface'
 import router from '@/router'
+import { Definitions } from '@/definitions/appDefinitions'
 
 export namespace Manager.Mechanic{
 
@@ -36,7 +37,7 @@ export namespace Manager.Mechanic{
     protected Button (eventHandler: EventHandlerType): void {
       const formModalOpenButton = document.getElementById('formModalOpen' + eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
       switch (router.currentRoute.value.name) {
-        case 'DeviceEdit':
+        case Definitions.Device.Edit:
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Middle:
               if (formModalOpenButton !== null) {

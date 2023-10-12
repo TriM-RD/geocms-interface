@@ -5,6 +5,7 @@ import http from '@/http-common'
 import router from '@/router'
 import { ResolverInterface } from '@/resolvers/assignments/resolverInterface'
 import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
+import { Definitions } from '@/definitions/appDefinitions'
 
 export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstract> {
   protected removeElementFromArray (arr: Array<any>, belongsTo: string) : void {
@@ -21,8 +22,8 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
   }
 
   abstract FormSelectList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]>
-  public TableButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
-    return Promise.resolve([])
+  public async TableButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
+    throw new Error('Feature not implemented')
   }
 
   public async FormDataList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
@@ -55,7 +56,7 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
                 type: response.data.status as TYPE
               })
               router.push({
-                name: 'Device'
+                name: Definitions.Device.Def
               })
             })
         }

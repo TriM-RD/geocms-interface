@@ -4,7 +4,6 @@ import {
   RegionEnum,
   RegionType,
   MechanicAbstract,
-  SubObjectTypeEnum,
   ObjectTypeEnum,
   ObjectTemplate,
   StatTypeEnum
@@ -14,7 +13,7 @@ import ToastComponent from '@/components/ToastComponent.vue'
 import router from '@/router'
 import { ResolverType } from '@/resolvers/resolverType'
 import { ResolverInterface } from '@/resolvers/assignments/resolverInterface'
-import { RowWrapper } from '@/resolvers/assignments/rowWrapper'
+import { TableWrapper } from '@/resolvers/assignments/tableWrapper'
 
 export namespace Manager.Mechanic{
 
@@ -110,36 +109,12 @@ export namespace Manager.Mechanic{
     }
 
     protected async Button (_eventHandler: EventHandlerType): Promise<void> {
-      /* const name = router.currentRoute.value.name
+      this.reverseOrder = true
+      const name = router.currentRoute.value.name
       if (typeof name !== 'string') {
         return
       }
-      this.ObjectTemplates = await (ResolverType.ResolverTypes[name] as ResolverInterface<TableWraper>).TableButton(new TableWrapper().Button(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), _eventHandler.payload.Stats[StatTypeEnum.Id].Data)) */
-      switch (router.currentRoute.value.name) {
-        case 'Group':
-          switch (_eventHandler.subObjectType) {
-            case SubObjectTypeEnum.Left:
-              this.reverseOrder = true
-              // TODO try to find a way to be able to have toast here instead of TableComponent
-              this.refreshPage()
-              break
-          }
-          break
-        case 'Division':
-          switch (_eventHandler.subObjectType) {
-            case SubObjectTypeEnum.Left:
-              this.reverseOrder = true
-              useToast()({
-                component: ToastComponent,
-                props: { msg: { title: 'Resorting...', info: 'Re-sorted names in table.' } }
-              }, {
-                type: TYPE.INFO
-              })
-              this.refreshPage()
-              break
-          }
-          break
-      }
+      await (ResolverType.ResolverTypes[name] as ResolverInterface<TableWrapper>).TableButton(new TableWrapper().Button(_eventHandler, this.ObjectTemplates, this.refreshPage.bind(this)))
     }
   }
 

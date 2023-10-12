@@ -41,6 +41,7 @@ import {
 } from '@cybertale/interface'
 import Loading from 'vue-loading-overlay'
 import router from '@/router'
+import { Definitions } from '@/definitions/appDefinitions'
 @Options({
   props: {
     object: ObjectTemplate
@@ -97,8 +98,8 @@ export default class ModalFormComponent extends Vue {
 
   async Init () {
     switch (router.currentRoute.value.name) {
-      case 'DeviceEdit':
-      case 'DeviceAdd':
+      case Definitions.Device.Edit:
+      case Definitions.Device.Add:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'entity_modal'))
         this.objectTemplates = this.mechanic.Append([
           new ObjectTemplate(RegionEnum.ModalForm, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {

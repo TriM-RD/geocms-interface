@@ -25,7 +25,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
   async FormButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
     switch (wrapper.eventHandler.subObjectType) {
       case SubObjectTypeEnum.Left:
-        await this.validateForm('division', Definitions.Division.Edit, wrapper.objectTemplates, wrapper.refreshPage, wrapper.append, wrapper.id, wrapper.inEdit, wrapper.eventHandler.payload)
+        await this.validateForm(Definitions.Division.Def, Definitions.Division.Edit, wrapper.objectTemplates, wrapper.refreshPage, wrapper.append, wrapper.id, wrapper.inEdit, wrapper.eventHandler.payload)
         break
       case SubObjectTypeEnum.Middle:
         wrapper.refreshPage()

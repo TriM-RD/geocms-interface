@@ -88,13 +88,13 @@ export abstract class HandlerAbstract extends ResolverAbstract {
     switch (tag) {
       case 'replace':
         await router.push({
-          name: 'DeviceReplace',
+          name: Definitions.Device.Replace,
           params: { parentId: id }
         })
         break
       case 'viewParent':
         await router.push({
-          name: 'DeviceEdit',
+          name: Definitions.Device.Edit,
           params: { id: eventHandler.payload.Stats[StatTypeEnum.Value].Data }
         })
         break
