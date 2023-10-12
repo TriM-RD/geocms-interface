@@ -28,6 +28,6 @@ export class EditHandler extends HandlerAbstract {
       default:
         break
     }
-    return wrapper.objectTemplates
+    return Promise.resolve(wrapper.objectTemplates)
   }
 }

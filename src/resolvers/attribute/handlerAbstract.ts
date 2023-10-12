@@ -14,7 +14,7 @@ import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
 
 export abstract class HandlerAbstract extends ResolverAbstract {
   public RowButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
-    return Promise.resolve([])
+    return Promise.resolve(wrapper.objectTemplates)
   }
 
   public async FormSelectList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
@@ -28,7 +28,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
       default:
         break
     }
-    return wrapper.objectTemplates
+    return Promise.resolve(wrapper.objectTemplates)
   }
 
   public async FormButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
@@ -62,6 +62,6 @@ export abstract class HandlerAbstract extends ResolverAbstract {
       default:
         break
     }
-    return wrapper.objectTemplates
+    return Promise.resolve(wrapper.objectTemplates)
   }
 }

@@ -50,6 +50,7 @@ import {
 import router from '@/router'
 import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
+import { Definitions } from '@/definitions/appDefinitions'
 @Options({
   components: {
     Loading
@@ -86,7 +87,7 @@ export default class TableComponent extends Vue {
   }
 
   mounted () {
-    if (this.$route.name !== 'GroupEdit' && this.$route.name !== 'Group') {
+    if (this.$route.name === 'Device') {
       this.onScroll = async () => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop
         const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
@@ -156,26 +157,26 @@ export default class TableComponent extends Vue {
     if (this.isInitRunning) { return }
     this.isInitRunning = true
     switch (router.currentRoute.value.name) {
-      case 'Device':
-        console.log(this.orderBy)
+      case Definitions.Device.Def:
+        // console.log(this.orderBy)
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', JSON.stringify({ api: 'entity', filters: this.filters, order: this.orderBy })))
         break
-      case 'Group':
+      case Definitions.Group.Def:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', JSON.stringify({ api: 'group', filters: this.filters, order: this.orderBy })))
         break
-      case 'Division':
+      case Definitions.Division.Def:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'division'))
         break
-      case 'GroupEdit':
+      case Definitions.Group.Edit:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'filter/attribute/' + this.$route.params.id))
         break
-      case 'GroupAdd':
+      case Definitions.Group.Add:
         this.renderComponent = false
         return
-      case 'AccountProfile':
+      case Definitions.Administration.AccountProfile:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'permissions/user'))
         break
-      case 'Administration':
+      case Definitions.Administration.Def:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'users'))
         break
     }
