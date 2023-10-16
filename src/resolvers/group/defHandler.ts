@@ -8,7 +8,7 @@ export class DefHandler extends HandlerAbstract {
   public async RowButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
     switch (wrapper.eventHandler.subObjectType) {
       case SubObjectTypeEnum.Left:// Izbriši
-        await this.validateDelete(Definitions.Group.Def, wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
+        await this.validateDelete('group', wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
         break
       case SubObjectTypeEnum.Middle: // Uredi
         await router.push({
