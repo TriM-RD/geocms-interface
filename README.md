@@ -1,24 +1,24 @@
-# interface
-
+# geocms-interface
+# Description
+##### UI collections for inserting and editing devices along with administration management and creation of custom device forms/groups.
+## Compatible version
+```
+node: v14.21
+npm: 6.14
+```
 ## Project setup
 ```
 npm install
 ```
+### Import folder to Vue CLI!
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+### Customize configuration (.env.development example)
 
-### Compiles and minifies for production
 ```
-npm run build
-```
+VUE_APP_BASE_URL=http://blog.test/api/
+VUE_APP_URL=http://blog.test/
+VUE_APP_CLIENT_ID=99062c75-d480-4659-82b7-7e0037d7fc52
 
-### Lints and fixes files
+PS:get VUE_APP_CLIENT_ID from oauth database, table oauth_clients. 
+Be sure that you choose the row with front_redirect to localhost:8080
 ```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

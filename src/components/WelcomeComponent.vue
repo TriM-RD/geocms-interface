@@ -278,7 +278,7 @@ export default class WelcomeComponent extends Vue {
     window.location.href = process.env.VUE_APP_URL + 'register'
   }
 
-  generateCodeChallengePair (): Promise<CodeChallengePair> {
+  async generateCodeChallengePair (): Promise<CodeChallengePair> {
     const codeVerifierBytes = new Uint8Array(64)
     crypto.getRandomValues(codeVerifierBytes)
     const codeVerifier = btoa(String.fromCharCode.apply(null, Array.from(codeVerifierBytes)))
@@ -287,15 +287,16 @@ export default class WelcomeComponent extends Vue {
       .replace(/=+$/, '')
 
     const codeChallengeBytes = new TextEncoder().encode(codeVerifier)
-    return crypto.subtle.digest('SHA-256', codeChallengeBytes)
-      .then((hashBuffer) => {
-        const hashArray = Array.from(new Uint8Array(hashBuffer))
-        const codeChallenge = btoa(String.fromCharCode.apply(null, hashArray))
-          .replace(/\+/g, '-')
-          .replace(/\//g, '_')
-          .replace(/=+$/, '')
-        return { codeVerifier, codeChallenge }
-      })
+    const hashBuffer = await crypto.subtle.digest('SHA-256', codeChallengeBytes)
+    const hashArray = Array.from(new Uint8Array(hashBuffer))
+    const codeChallenge = btoa(String.fromCharCode.apply(null, hashArray))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '')
+    return {
+      codeVerifier,
+      codeChallenge
+    }
   }
 }
 </script>
