@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-if="($store.state.requiresAuth === 2)">
+  <div class="h-100" v-if="($store.state.requiresAuth === 2)">
     <MapComponent/>
   </div>
   <div v-if="($store.state.requiresAuth === 1)">

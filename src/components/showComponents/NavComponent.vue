@@ -1,5 +1,5 @@
 <template>
-  <ul class="nav nav-pills nav-fill border mb-4">
+  <ul class="nav nav-pills nav-fill border mb-md-4">
     <li class="nav-item border-end border-secondary border-opacity-10">
       <router-link to="/" class="nav-link rounded-1" :class="{active: $route.path === '/'}">Map/Home</router-link>
     </li>

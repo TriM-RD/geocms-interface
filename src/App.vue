@@ -1,4 +1,5 @@
 <template>
+  <div class="d-flex flex-column vh-100">
   <div v-if="($store.state.requiresAuth === 2 || $store.state.requiresAuth === 3)">
     <NavBarComponent/>
   </div>
@@ -17,6 +18,7 @@
     <FooterComponent />
   </div>
   <router-view :key="$route.fullPath"/>
+  </div>
 </template>
 
 <style>

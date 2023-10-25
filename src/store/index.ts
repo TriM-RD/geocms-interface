@@ -9,7 +9,10 @@ export default createStore({
     clientId: '',
     codeVerifier: '',
     codeChallenge: '',
-    nonce: ''
+    nonce: '',
+    mapResizeDelegate: () => {
+      console.log()
+    }
   },
   mutations: {
     setClientId (state, clientId) {
@@ -26,9 +29,23 @@ export default createStore({
     },
     setFirmName (state, name) {
       state.firm = name
+    },
+    setMapResizeDelegate (state, delegate) {
+      state.mapResizeDelegate = delegate
     }
   },
   actions: {
+    invokeDelegate ({ state }) {
+      if (state.mapResizeDelegate && typeof state.mapResizeDelegate === 'function') {
+        setTimeout(() => {
+          /* const row = document.getElementById('row-content') TODO might be needed in the future or a similar option
+          if (row) {
+            row.style.maxHeight = (window.innerHeight - row.getBoundingClientRect().top) + 'px'
+          } */
+          state.mapResizeDelegate()
+        }, 500)
+      }
+    }
   },
   modules: {
   }

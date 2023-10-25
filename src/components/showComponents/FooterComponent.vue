@@ -138,7 +138,9 @@ export default class FooterComponent extends Vue {
         )
         break
     }
-    this.renderComponent = true
+    if (this.objectTemplates.length > 0) {
+      this.renderComponent = true
+    }
   }
 
   scaffoldButtons (leftRegion = RegionEnum.Form, rightRegion = RegionEnum.Form, leftButtonName = 'Save', rightButtonName = 'Cancel'): Array<any> {

@@ -1,10 +1,10 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid h-100 flex-fill flex-column d-flex">
     <div class="row">
       <div class="col-12 p-0 position-relative">
         <div class="device-code-input">
           <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-search"></i></span>
+            <span class="input-group-text rounded-0"><i class="bi bi-search"></i></span>
             <transition name="shake">
               <input list="device-codes" :disabled="renderComponent" :value="deviceCode" @input="deviceCode = $event.target.value" :class="{'is-invalid': error, 'form-control shake': error, 'form-control': !error}" placeholder="Enter device code..." @change="zoomToDevice"/>
             </transition>
@@ -19,9 +19,9 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-12 p-0 position-relative">
-        <div class="map-container" style="height: 75vh; position: relative;">
+    <div class="row h-100">
+      <div class="col-12 p-0 h-100 position-relative">
+        <div class="map-container h-100">
           <div class="map-legend position-absolute top-0 start-0 bg-white" style="z-index: 1; max-width: 200px;">
             <div class="list-group" v-show="showLegend">
               <label class="list-group-item rounded-0 d-flex align-items-center" v-for="iconType in iconTypes" :key="iconType">
@@ -43,7 +43,7 @@
                    :can-cancel="false"
                    :is-full-page="false"
                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"/>
-          <div id="map" style="height: 100%; width: 100%;"/>
+          <div id="map" class="h-100 w-100"/>
         </div>
       </div>
     </div>
@@ -137,6 +137,14 @@ export default class MapComponent extends Vue {
     this.initializeMapAndLoadStyle().then(() => {
       // The map style has finished loading, now call the test function
       this.test()
+      this.$store.commit('setMapResizeDelegate', this.storeTest.bind(this))
+    })
+  }
+
+  storeTest () : void {
+    this.$nextTick(() => {
+      console.log('testStore')
+      this.map.resize()
     })
   }
 
