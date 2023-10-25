@@ -4,7 +4,7 @@
       <a class="navbar-brand" href="/">
         <img src="../assets/LogoTriM.png" alt="Logo" width="85" class="d-inline-block align-text-top">
       </a>
-      <button v-on:click="login()" class="btn btn-outline-secondary">Login</button>
+      <button v-on:click="login()" class="btn btn-outline-secondary">{{ $t('hr').greeting }}</button>
     </div>
   </nav>
   <!-- Masthead-->
@@ -115,7 +115,14 @@
           <div class="mx-auto mb-5 mb-lg-0">
             <img class="img-fluid mb-3" src="../assets/gradUmag.png" alt="Grad Umag" />
             <h5>Grad Umag</h5>
-            <p class="font-weight-light mb-0">"Utilizing our platform for smart city solutions."</p>
+            <p class="font-weight-light mb-0">"Efficiently managing city public street lights using their innovative platform."</p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="mx-auto mb-5 mb-lg-0">
+            <img class="img-fluid mb-3 bg-dark" src="https://majresidence.com/img/logo-maj.svg" alt="Maj Residence" style="width: 28%;" />
+            <h5>Maj Residence</h5>
+            <p class="font-weight-light mb-0">"Enjoying flawless power control for our car charging stations."</p>
           </div>
         </div>
         <!--div class="col-lg-4">
@@ -194,19 +201,19 @@
       <div class="row">
         <div class="col-lg-6 h-100 text-center text-lg-start my-auto">
           <ul class="list-inline mb-2">
-            <li class="list-inline-item"><a href="#!">About</a></li>
+            <li class="list-inline-item"><a href="https://tri-m.hr/?p=o-nama" target="_blank">About</a></li>
             <li class="list-inline-item">⋅</li>
-            <li class="list-inline-item"><a href="#!">Contact</a></li>
-            <li class="list-inline-item">⋅</li>
+            <li class="list-inline-item"><a href="https://tri-m.hr/?p=kontakt" target="_blank">Contact</a></li>
+            <!--li class="list-inline-item">⋅</li>
             <li class="list-inline-item"><a href="#!">Terms of Use</a></li>
             <li class="list-inline-item">⋅</li>
-            <li class="list-inline-item"><a href="#!">Privacy Policy</a></li>
+            <li class="list-inline-item"><a href="#!">Privacy Policy</a></li-->
           </ul>
-          <p class="text-muted small mb-4 mb-lg-0">&copy; Your Website 2023. All Rights Reserved.</p>
+          <p class="text-muted small mb-4 mb-lg-0">&copy; ECabinet 2023. All Rights Reserved.</p>
         </div>
         <div class="col-lg-6 h-100 text-center text-lg-end my-auto">
           <ul class="list-inline mb-0">
-            <li class="list-inline-item me-4">
+            <!--li class="list-inline-item me-4">
               <a href="#!"><i class="bi-facebook fs-3"></i></a>
             </li>
             <li class="list-inline-item me-4">
@@ -214,7 +221,7 @@
             </li>
             <li class="list-inline-item">
               <a href="#!"><i class="bi-instagram fs-3"></i></a>
-            </li>
+            </li-->
           </ul>
         </div>
       </div>
@@ -275,7 +282,8 @@ export default class WelcomeComponent extends Vue {
   }
 
   redirectToRegistration () : void {
-    window.location.href = process.env.VUE_APP_URL + 'register'
+    const registrationUrl = process.env.VUE_APP_URL + 'register'
+    window.open(registrationUrl, '_blank')
   }
 
   async generateCodeChallengePair (): Promise<CodeChallengePair> {

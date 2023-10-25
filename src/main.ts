@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, Transition } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -29,6 +29,7 @@ import MapPickerComponent from '@/components/MapPickerComponent.vue'
 import DataSelectComponent from '@/components/DataSelectComponent.vue'
 import { ObjectType, ObjectTypeEnum } from '@cybertale/interface/src'
 import UppyComponent from '@/components/formComponents/UppyComponent.vue'
+import { TranslationKeyStrings, translations, Translations } from '@/locales'
 
 const defaultOptions = { treeName: 'blocks-tree' }
 
@@ -77,9 +78,12 @@ const options: PluginOptions = {
     return toast
   }
 }
-
-createApp(App)
-  .use(store)
+const app = createApp(App)
+app.config.globalProperties.$t = function $t (key: TranslationKeyStrings) {
+  // Load translations based on the current language
+  return translations[key]
+}
+app.use(store)
   .use(router)
   .use(VueBlocksTree, defaultOptions)
   .use(Toast, options)
