@@ -29,7 +29,6 @@ import MapPickerComponent from '@/components/MapPickerComponent.vue'
 import DataSelectComponent from '@/components/DataSelectComponent.vue'
 import { ObjectType, ObjectTypeEnum } from '@cybertale/interface/src'
 import UppyComponent from '@/components/formComponents/UppyComponent.vue'
-import { TranslationKeyStrings, translations, Translations } from '@/locales'
 
 const defaultOptions = { treeName: 'blocks-tree' }
 
@@ -78,12 +77,8 @@ const options: PluginOptions = {
     return toast
   }
 }
-const app = createApp(App)
-app.config.globalProperties.$t = function $t (key: TranslationKeyStrings) {
-  // Load translations based on the current language
-  return translations[key]
-}
-app.use(store)
+createApp(App)
+  .use(store)
   .use(router)
   .use(VueBlocksTree, defaultOptions)
   .use(Toast, options)

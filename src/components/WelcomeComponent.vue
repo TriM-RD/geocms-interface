@@ -4,17 +4,36 @@
       <a class="navbar-brand" href="/">
         <img src="../assets/LogoTriM.png" alt="Logo" width="85" class="d-inline-block align-text-top">
       </a>
-      <button v-on:click="login()" class="btn btn-outline-secondary">{{ $t('hr').greeting }}</button>
+      <div class="dropdown">
+        <button class="btn btn-sm dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{ $t.language }}
+          <img :src="selectedImage" width="30" class="img-fluid" />
+        </button>
+        <div class="dropdown-menu bg-light" aria-labelledby="languageDropdown">
+          <button class="dropdown-item" @click="changeLanguage('en')">
+            <img src="../assets/lang/en.svg" alt="English" width="30" class="img-fluid" />
+            {{ $t.english }}
+          </button>
+          <button class="dropdown-item" @click="changeLanguage('hr')">
+            <img src="../assets/lang/hr.svg" alt="Croatian" width="30" class="img-fluid" />
+            {{ $t.croatian }}
+          </button>
+        </div>
+      </div>
+      <button v-on:click="login()" class="btn btn-outline-secondary">{{ $t.login }}</button>
     </div>
   </nav>
+
   <!-- Masthead-->
   <header class="masthead">
     <div class="container position-relative">
       <div class="row justify-content-center">
         <div class="col-xl-6">
           <div class="text-center text-white">
-            <h1 class="mb-5">Discover the Future of Smart Device Management</h1>
-            <p class="lead mb-5">Harness the power of digitization with our GeoCMS solution for a smarter, more efficient environment.</p>
+            <h1 class="mb-5">{{ $t.discoverFuture }}</h1>
+            <p class="lead mb-5">{{
+                $t.harnessPower
+              }}</p>
             <!--h2 class="mb-4">Ready to get started? Sign up now!</h2>
             <form class="form-subscribe" id="contactFormFooter" data-sb-form-api-token="API_TOKEN">
               <div class="row">
@@ -47,22 +66,24 @@
         <div class="col-lg-4">
           <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
             <div class="features-icons-icon d-flex"><i class="bi-lightbulb m-auto text-secondary"></i></div>
-            <h3>Smart Control & Custom IoT Solutions</h3>
-            <p class="lead mb-0">Tailored IoT solutions that meet your specific requirements and goals.</p>
+            <h3>{{ $t.smartControl }}</h3>
+            <p class="lead mb-0">{{ $t.tailoredIoTSolutions }}</p>
           </div>
         </div>
         <div class="col-lg-4">
           <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
             <div class="features-icons-icon d-flex"><i class="bi-graph-up m-auto text-secondary"></i></div>
-            <h3>Data Analytics & Planning</h3>
-            <p class="lead mb-0">Use the app's analytics to make informed decisions and plan strategies effectively.</p>
+            <h3>{{ $t.dataAnalytics }}</h3>
+            <p class="lead mb-0">{{ $t.useAppAnalytics }}</p>
           </div>
         </div>
         <div class="col-lg-4">
           <div class="features-icons-item mx-auto mb-0 mb-lg-3">
             <div class="features-icons-icon d-flex"><i class="bi-wrench m-auto text-secondary"></i></div>
-            <h3>Infrastructure Management</h3>
-            <p class="lead mb-0">Manage your IoT infrastructure, including the addition and administration of various features such as locations and streetlights, directly within the app.</p>
+            <h3>{{ $t.infrastructureManagement }}</h3>
+            <p class="lead mb-0">{{
+                $t.manageIoTInfrastructure
+              }}</p>
           </div>
         </div>
       </div>
@@ -74,8 +95,10 @@
       <div class="row g-0">
         <div class="col-lg-2 order-md-1"></div>
         <div class="col-lg-3 my-auto order-md-2 order-2 showcase-text oval-shape teal-bg">
-          <h2 class="title-text mt-1">Smart Cities</h2>
-          <p class="lead mb-0 content-text mt-4">Our solution facilitates the construction and management of efficient, sustainable smart cities.</p>
+          <h2 class="title-text mt-1">{{ $t.smartCities }}</h2>
+          <p class="lead mb-0 content-text mt-4">{{
+              $t.ourSolutionFacilitates
+            }}</p>
         </div>
         <div class="col-lg-1 order-md-3"></div>
         <div class="col-lg-6 order-md-4 order-1 text-white showcase-img">
@@ -88,16 +111,16 @@
         </div>
         <div class="col-lg-1 order-md-2"></div>
         <div class="col-lg-3 order-md-3 order-2 my-auto showcase-text oval-shape deep-sea-blue-bg">
-          <h2 class="title-text mt-1">Smart Camps</h2>
-          <p class="lead mb-0 mt-4">Improve the organization and safety of camps with our advanced management system.</p>
+          <h2 class="title-text mt-1">{{ $t.smartCamps }}</h2>
+          <p class="lead mb-0 mt-4">{{ $t.improveOrganization }}</p>
         </div>
         <div class="col-lg-2 order-md-4"></div>
       </div>
       <div class="row g-0">
         <div class="col-lg-2 order-md-1"></div>
         <div class="col-lg-3 my-auto order-md-2 order-2 showcase-text oval-shape greenish-gray-bg">
-          <h2 class="title-text mt-2">Smart Infrastructure</h2>
-          <p class="lead mb-0 mt-4">Enhance infrastructure projects with efficient, data-driven planning and control.</p>
+          <h2 class="title-text mt-2">{{ $t.smartInfrastructure }}</h2>
+          <p class="lead mb-0 mt-4">{{ $t.enhanceInfrastructureProjects }}</p>
         </div>
         <div class="col-lg-1 order-md-3"></div>
         <div class="col-lg-6 order-md-last order-md-4 order-1 text-white showcase-img">
@@ -109,20 +132,22 @@
   <!-- Testimonials-->
   <section class="testimonials text-center bg-light">
     <div class="container">
-      <h2 class="mb-5">Meet Some of Our Clients...</h2>
+      <h2 class="mb-5">{{ $t.meetOurClients }}</h2>
       <div class="row">
         <div class="col-lg-4">
           <div class="mx-auto mb-5 mb-lg-0">
             <img class="img-fluid mb-3" src="../assets/gradUmag.png" alt="Grad Umag" />
             <h5>Grad Umag</h5>
-            <p class="font-weight-light mb-0">"Efficiently managing city public street lights using their innovative platform."</p>
+            <p class="font-weight-light mb-0">"{{
+                $t.efficientlyManagingCityLights
+              }}"</p>
           </div>
         </div>
         <div class="col-lg-4">
           <div class="mx-auto mb-5 mb-lg-0">
             <img class="img-fluid mb-3 bg-dark" src="https://majresidence.com/img/logo-maj.svg" alt="Maj Residence" style="width: 28%;" />
             <h5>Maj Residence</h5>
-            <p class="font-weight-light mb-0">"Enjoying flawless power control for our car charging stations."</p>
+            <p class="font-weight-light mb-0">"{{ $t.enjoyingFlawlessPowerControl }}"</p>
           </div>
         </div>
         <!--div class="col-lg-4">
@@ -147,7 +172,7 @@
     <div class="container position-relative">
       <div class="row justify-content-center">
         <div class="col-xl-6">
-          <h2 class="mb-4">Ready to get started? Sign up now!</h2>
+          <h2 class="mb-4">{{ $t.readyToGetStarted }}</h2>
           <!-- Signup form-->
           <!-- * * * * * * * * * * * * * * *-->
           <!-- * * SB Forms Contact Form * *-->
@@ -170,7 +195,7 @@
                   class="btn btn-outline-info btn-lg register-button"
                   id="submitButton"
                   type="submit">
-                  Sign up!
+                  {{ $t.register }}
                 </button>
               </div>
             </div>
@@ -180,8 +205,8 @@
             <!-- has successfully submitted-->
             <div class="d-none" id="submitSuccessMessage">
               <div class="text-center mb-3">
-                <div class="fw-bolder">Form submission successful!</div>
-                <p>To activate this form, sign up at</p>
+                <div class="fw-bolder">{{ $t.formSubmissionSuccessful }}</div>
+                <p>{{ $t.toActivateThisForm }}</p>
                 <a class="text-white" href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
               </div>
             </div>
@@ -189,7 +214,9 @@
             <!---->
             <!-- This is what your users will see when there is-->
             <!-- an error submitting the form-->
-            <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
+            <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">{{
+                $t.errorSendingMessage
+              }}</div></div>
           </form>
         </div>
       </div>
@@ -201,9 +228,9 @@
       <div class="row">
         <div class="col-lg-6 h-100 text-center text-lg-start my-auto">
           <ul class="list-inline mb-2">
-            <li class="list-inline-item"><a href="https://tri-m.hr/?p=o-nama" target="_blank">About</a></li>
+            <li class="list-inline-item"><a href="https://tri-m.hr/?p=o-nama" target="_blank">{{ $t.about }}</a></li>
             <li class="list-inline-item">⋅</li>
-            <li class="list-inline-item"><a href="https://tri-m.hr/?p=kontakt" target="_blank">Contact</a></li>
+            <li class="list-inline-item"><a href="https://tri-m.hr/?p=kontakt" target="_blank">{{ $t.contact }}</a></li>
             <!--li class="list-inline-item">⋅</li>
             <li class="list-inline-item"><a href="#!">Terms of Use</a></li>
             <li class="list-inline-item">⋅</li>
@@ -239,11 +266,19 @@ import {
   RegionType,
   RegionEnum
 } from '@cybertale/interface'
+import { $t, Translations } from '@/locales'
+import router from '@/router'
+import { Definitions } from '@/definitions/appDefinitions'
 interface CodeChallengePair {
   codeVerifier: string;
   codeChallenge: string;
 }
 @Options({
+  computed: {
+    $t () {
+      return $t
+    }
+  },
   props: {
     object: ObjectTemplate
   }
@@ -255,6 +290,7 @@ export default class WelcomeComponent extends Vue {
   regionType = RegionType
   regionEnum = RegionEnum
   object!: ObjectTemplate
+  selectedImage = require(`../assets/lang/${localStorage.getItem('lang') || 'en'}.svg`)
 
   async created (): Promise<void> {
     // Generate code verifier and code challenge
@@ -268,6 +304,12 @@ export default class WelcomeComponent extends Vue {
     })
     this.$store.commit('setClientId', process.env.VUE_APP_CLIENT_ID)
     this.$store.commit('setNonce', nonce)
+  }
+
+  changeLanguage (lang : keyof Translations): void {
+    localStorage.setItem('lang', lang)
+    window.location.href = window.location.origin
+    this.selectedImage = require(`../assets/lang/${lang}.svg`)
   }
 
   login (): void {

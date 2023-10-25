@@ -1,7 +1,9 @@
-import { Store } from '@/store'// path to store file
+// shims-vuex.d.ts
+import { Store as VuexStore } from 'vuex'
+import { State, Mutations } from '@/store/types'
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
-    $store: Store;
+    $store: VuexStore<State> & Mutations;
   }
 }

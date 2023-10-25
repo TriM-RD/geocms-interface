@@ -1,6 +1,7 @@
 import { createStore } from 'vuex'
+import { State } from '@/store/types'
 
-export default createStore({
+export default createStore<State>({
   state: {
     name: '',
     email: '',

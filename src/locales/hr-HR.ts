@@ -1,6 +1,32 @@
 import { TranslationKeys } from '@/locales/index'
 
 export const hrDictionary:TranslationKeys = {
-  greeting: 'Pozdrav',
-  welcome: 'Welcome to our website'
+  language: 'Jezik',
+  croatian: 'Hrvatski',
+  english: 'Engleski',
+  about: 'O nama',
+  contact: 'Kontakt',
+  dataAnalytics: 'Analiza podataka i planiranje',
+  discoverFuture: 'Otkrijte budućnost upravljanja pametnim uređajima',
+  efficientlyManagingCityLights: 'Učinkovito upravljanje javnom rasvjetom grada koristeći njihovu inovativnu platformu.',
+  enhanceInfrastructureProjects: 'Unaprijedite projekte infrastrukture učinkovitim, vođenim planiranjem i kontrolom podataka.',
+  enjoyingFlawlessPowerControl: 'Uživanje u besprijekornoj kontroli napajanja za naše stanice za punjenje automobila.',
+  errorSendingMessage: 'Greška pri slanju poruke!',
+  formSubmissionSuccessful: 'Uspješno slanje obrasca!',
+  harnessPower: 'Iskoristite moć digitalizacije s našim GeoCMS rješenjem za pametnije i učinkovitije okruženje.',
+  improveOrganization: 'Poboljšajte organizaciju i sigurnost kampova s našim naprednim sustavom upravljanja.',
+  infrastructureManagement: 'Upravljanje infrastrukturom',
+  login: 'Login',
+  manageIoTInfrastructure: 'Upravljajte svojom IoT infrastrukturom, uključujući dodavanje i administraciju različitih funkcija poput lokacija i uličnih svjetiljki, izravno unutar aplikacije.',
+  meetOurClients: 'Upoznajte neke od naših klijenata…',
+  ourSolutionFacilitates: 'Naše rješenje olakšava izgradnju i upravljanje učinkovitim, održivim pametnim gradovima.',
+  readyToGetStarted: 'Spremni za početak? Prijavite se sada!',
+  register: 'Register',
+  smartCamps: 'Pametni kampovi',
+  smartCities: 'Pametni gradovi',
+  smartControl: 'Pametna kontrola i prilagođena IoT rješenja',
+  smartInfrastructure: 'Pametna infrastruktura',
+  tailoredIoTSolutions: 'Prilagođena IoT rješenja koja zadovoljavaju vaše specifične zahtjeve i ciljeve.',
+  toActivateThisForm: 'Da biste aktivirali ovaj obrazac, prijavite se na',
+  useAppAnalytics: 'Koristite analitiku aplikacije za donošenje informiranih odluka i učinkovito planiranje strategija.'
 }

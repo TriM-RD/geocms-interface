@@ -38,6 +38,7 @@ import NavComponent from '@/components/showComponents/NavComponent.vue'
 import FooterComponent from '@/components/showComponents/FooterComponent.vue'
 import WelcomeComponent from '@/components/WelcomeComponent.vue'
 import http from '@/http-common'
+import { Translations } from '@/locales'
 
 @Options({
   components: {
