@@ -37,7 +37,7 @@ export namespace Manager.Mechanic{
     protected Button (eventHandler: EventHandlerType): void {
       const formModalOpenButton = document.getElementById('formModalOpen' + eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
       switch (router.currentRoute.value.name) {
-        case Definitions.Device.Edit:
+        case Definitions.Entity.Edit:
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Middle:
               if (formModalOpenButton !== null) {

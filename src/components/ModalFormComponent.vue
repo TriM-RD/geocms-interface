@@ -98,8 +98,8 @@ export default class ModalFormComponent extends Vue {
 
   async Init () {
     switch (router.currentRoute.value.name) {
-      case Definitions.Device.Edit:
-      case Definitions.Device.Add:
+      case Definitions.Entity.Edit:
+      case Definitions.Entity.Add:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'entity_modal'))
         this.objectTemplates = this.mechanic.Append([
           new ObjectTemplate(RegionEnum.ModalForm, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {

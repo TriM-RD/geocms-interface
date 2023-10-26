@@ -37,7 +37,7 @@ export default class ECabinetColumnComponent extends Vue {
 
   edit () {
     router.push({
-      name: Definitions.Device.Edit,
+      name: Definitions.Entity.Edit,
       params: { id: this.object.Stats[this.statTypeEnum.Id].Data }
     })
   }

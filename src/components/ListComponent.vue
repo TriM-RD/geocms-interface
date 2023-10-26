@@ -73,7 +73,7 @@ export default class ListComponent extends Vue {
         case Definitions.Administration.AccountProfile:
           this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'permissions/user'))
           break
-        case Definitions.Device.Edit:
+        case Definitions.Entity.Edit:
           console.log('test')
           this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id.toString(), 'replacement/entity'))
           break

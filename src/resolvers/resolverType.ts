@@ -10,11 +10,11 @@ export class ResolverType {
   public static ResolverTypes: { [index: string]: ResolverAbstract } = {
     [Definitions.Other.Any]: new Device.Def.DefHandler(),
     // Device
-    [Definitions.Device.Def]: new Device.Def.DefHandler(),
-    [Definitions.Device.Add]: new Device.Add.AddHandler(),
-    [Definitions.Device.Edit]: new Device.Edit.EditHandler(),
-    [Definitions.Device.Replace]: new Device.Replace.ReplaceHandler(),
-    [Definitions.Device.Modal]: new Device.Modal.ModalHandler(),
+    [Definitions.Entity.Def]: new Device.Def.DefHandler(),
+    [Definitions.Entity.Add]: new Device.Add.AddHandler(),
+    [Definitions.Entity.Edit]: new Device.Edit.EditHandler(),
+    [Definitions.Entity.Replace]: new Device.Replace.ReplaceHandler(),
+    [Definitions.Entity.Modal]: new Device.Modal.ModalHandler(),
     // Group
     [Definitions.Group.Def]: new Group.Def.DefHandler(),
     [Definitions.Group.Add]: new Group.Add.AddHandler(),

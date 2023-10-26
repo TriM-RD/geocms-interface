@@ -74,7 +74,7 @@ export namespace Manager.Mechanic{
     }
 
     protected async SelectList (eventHandler: EventHandlerType): Promise<void> {
-      this.ObjectTemplates = await (ResolverType.ResolverTypes[Definitions.Device.Modal] as ResolverInterface<FormWrapper>).FormSelectList(new FormWrapper().SelectList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this)))
+      this.ObjectTemplates = await (ResolverType.ResolverTypes[Definitions.Entity.Modal] as ResolverInterface<FormWrapper>).FormSelectList(new FormWrapper().SelectList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this)))
       /* switch (router.currentRoute.value.name) {
         case 'DeviceAdd':
         case 'DeviceEdit':// TODO add regex to check if id is uuid

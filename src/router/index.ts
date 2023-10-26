@@ -17,8 +17,8 @@ const routes: Array<RouteRecordRaw> = [
     component: Home
   },
   {
-    path: '/device',
-    name: Definitions.Device.Def,
+    path: '/entity',
+    name: Definitions.Entity.Def,
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -26,18 +26,18 @@ const routes: Array<RouteRecordRaw> = [
     component: Show
   },
   {
-    path: '/device/add',
-    name: Definitions.Device.Add,
+    path: '/entity/add',
+    name: Definitions.Entity.Add,
     component: Form
   },
   {
-    path: '/device/add/:id',
-    name: Definitions.Device.Edit,
+    path: '/entity/add/:id',
+    name: Definitions.Entity.Edit,
     component: Form
   },
   {
-    path: '/device/replace/:parentId',
-    name: Definitions.Device.Replace,
+    path: '/entity/replace/:parentId',
+    name: Definitions.Entity.Replace,
     component: Form
   },
   {

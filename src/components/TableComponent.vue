@@ -87,7 +87,7 @@ export default class TableComponent extends Vue {
   }
 
   mounted () {
-    if (this.$route.name === Definitions.Device.Def) {
+    if (this.$route.name === Definitions.Entity.Def) {
       this.onScroll = async () => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop
         const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
@@ -150,14 +150,14 @@ export default class TableComponent extends Vue {
   }
 
   checkRoute () {
-    return router.currentRoute.value.name === Definitions.Device.Def
+    return router.currentRoute.value.name === Definitions.Entity.Def
   }
 
   async Init () {
     if (this.isInitRunning) { return }
     this.isInitRunning = true
     switch (router.currentRoute.value.name) {
-      case Definitions.Device.Def:
+      case Definitions.Entity.Def:
         // console.log(this.orderBy)
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', JSON.stringify({ api: 'entity', filters: this.filters, order: this.orderBy })))
         break

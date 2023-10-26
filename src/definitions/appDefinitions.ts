@@ -4,12 +4,12 @@ export namespace Definitions{
     Any = 'Device',
     Home = 'Home'
   }
-  export enum Device {
-    Def = 'Device',
-    Add = 'DeviceAdd',
-    Edit = 'DeviceEdit',
-    Replace = 'DeviceReplace',
-    Modal = 'DeviceModal',
+  export enum Entity {
+    Def = 'Entity',
+    Add = 'EntityAdd',
+    Edit = 'EntityEdit',
+    Replace = 'EntityReplace',
+    Modal = 'EntityModal',
   }
 
   export enum Group {

@@ -1,6 +1,13 @@
 import { TranslationKeys } from '@/locales/index'
 
 export const hrDictionary:TranslationKeys = {
+  administration: 'Administracija',
+  firmSelection: 'Odabir Firme',
+  logOut: 'Odjava',
+  openReport: 'Otvaranje Izvješća',
+  profile: 'Profil',
+  report: 'Izvješće',
+  search: 'Pretraživanje',
   language: 'Jezik',
   croatian: 'Hrvatski',
   english: 'Engleski',

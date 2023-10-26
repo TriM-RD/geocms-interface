@@ -32,7 +32,7 @@ export default class Form extends Vue {
       case Definitions.Group.Add:
         this.renderTable = true
         break
-      case Definitions.Device.Edit:
+      case Definitions.Entity.Edit:
         this.renderList = true
         break
     }

@@ -575,7 +575,7 @@ export default class MapComponent extends Vue {
         this.currentPopup = popup
         const btn = document.getElementsByClassName('open-popup')[0]
         btn.addEventListener('click', () => {
-          this.$router.push({ name: Definitions.Device.Edit, params: { id: id } })
+          this.$router.push({ name: Definitions.Entity.Edit, params: { id: id } })
         })
       })
       /* this.map.on('move', () => {
@@ -862,7 +862,7 @@ export default class MapComponent extends Vue {
       btn.addEventListener('click', () => {
         const deviceId = btn.getAttribute('data-deviceid')
         // console.log(deviceId)
-        if (deviceId) { this.$router.push({ name: Definitions.Device.Edit, params: { id: deviceId } }) }
+        if (deviceId) { this.$router.push({ name: Definitions.Entity.Edit, params: { id: deviceId } }) }
       })
     })
   }

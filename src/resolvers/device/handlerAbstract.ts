@@ -47,11 +47,11 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         if (wrapper.eventHandler.payload.Stats[StatTypeEnum.Value]) { // TODO needs to be fixed, not working as expected
           if (wrapper.id !== 'formModalSubmit' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data) { wrapper.eventHandler.payload.Stats[StatTypeEnum.Disabled].Data = 'true' }
         }
-        await this.validateForm('entity', Definitions.Device.Edit, wrapper.objectTemplates, wrapper.refreshPage, wrapper.append, wrapper.id, wrapper.inEdit, wrapper.eventHandler.payload)
+        await this.validateForm('entity', Definitions.Entity.Edit, wrapper.objectTemplates, wrapper.refreshPage, wrapper.append, wrapper.id, wrapper.inEdit, wrapper.eventHandler.payload)
         break
       case SubObjectTypeEnum.Right:
         await router.push({
-          name: Definitions.Device.Def
+          name: Definitions.Entity.Def
         })
         break
       case SubObjectTypeEnum.Up:
@@ -88,13 +88,13 @@ export abstract class HandlerAbstract extends ResolverAbstract {
     switch (tag) {
       case 'replace':
         await router.push({
-          name: Definitions.Device.Replace,
+          name: Definitions.Entity.Replace,
           params: { parentId: id }
         })
         break
       case 'viewParent':
         await router.push({
-          name: Definitions.Device.Edit,
+          name: Definitions.Entity.Edit,
           params: { id: eventHandler.payload.Stats[StatTypeEnum.Value].Data }
         })
         break

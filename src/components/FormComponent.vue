@@ -44,11 +44,11 @@ export default class FormComponent extends Vue {
 
   async Init () {
     switch (router.currentRoute.value.name) {
-      case Definitions.Device.Add:
-      case Definitions.Device.Edit:
+      case Definitions.Entity.Add:
+      case Definitions.Entity.Edit:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'entity'))
         break
-      case Definitions.Device.Replace:
+      case Definitions.Entity.Replace:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'replace/entity/' + this.$route.params.parentId.toString()))
         this.objectTemplates = this.mechanic.Append([
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {

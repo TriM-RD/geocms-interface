@@ -35,9 +35,9 @@ export namespace Manager.Mechanic{
             case Definitions.Division.Def:
               router.push({ name: Definitions.Division.Edit, params: { id: _id } })
               break
-            case Definitions.Device.Def:
+            case Definitions.Entity.Def:
             case 'Replacement History':
-              router.push({ name: Definitions.Device.Edit, params: { id: _id } })
+              router.push({ name: Definitions.Entity.Edit, params: { id: _id } })
               break
             default:
               break

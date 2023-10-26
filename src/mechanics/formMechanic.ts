@@ -32,7 +32,7 @@ export namespace Manager.Mechanic{
       const response = await http.get(process.env.VUE_APP_BASE_URL + _route + '/' + this.id)
       if (response.data.id !== undefined) {
         await router.push({
-          name: Definitions.Device.Edit,
+          name: Definitions.Entity.Edit,
           params: { id: response.data.id }
         })
         return []

@@ -63,7 +63,7 @@ export default class FooterComponent extends Vue {
     this.objectTemplates = []
     console.log(this.openTab)
     switch (this.openTab) {
-      case Definitions.Device.Def:
+      case Definitions.Entity.Def:
         this.objectTemplates = this.mechanic.InitSet(
           this.scaffoldButtons(RegionEnum.Footer, RegionEnum.Footer, 'Scan', 'Add')
         )
@@ -88,13 +88,13 @@ export default class FooterComponent extends Vue {
           this.scaffoldButtons(RegionEnum.Footer, RegionEnum.Footer, 'ReSort', 'Add')
         )
         break
-      case Definitions.Device.Add:
-      case Definitions.Device.Replace:
+      case Definitions.Entity.Add:
+      case Definitions.Entity.Replace:
         this.objectTemplates = this.mechanic.InitSet(
           this.scaffoldButtons()
         )
         break
-      case Definitions.Device.Edit:
+      case Definitions.Entity.Edit:
         this.objectTemplates = this.mechanic.InitSet([
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Save'),

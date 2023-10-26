@@ -15,13 +15,13 @@ export class DefHandler extends HandlerAbstract {
         break
       case SubObjectTypeEnum.Middle: // Uredi
         await router.push({
-          name: Definitions.Device.Edit,
+          name: Definitions.Entity.Edit,
           params: { id: wrapper.id }
         })
         break
       case SubObjectTypeEnum.Right: // Pregledaj
         await router.push({
-          name: Definitions.Device.Edit,
+          name: Definitions.Entity.Edit,
           params: { id: wrapper.id }
         })
         break

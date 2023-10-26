@@ -28,7 +28,7 @@ export namespace Manager.Mechanic{
     protected Button (eventHandler: EventHandlerType): void {
       console.log('show')
       switch (router.currentRoute.value.name) {
-        case Definitions.Device.Def:
+        case Definitions.Entity.Def:
           switch (eventHandler.subObjectType) {
             case SubObjectTypeEnum.Left:
               if (window.innerWidth <= 760 && window.innerHeight <= 760) {
@@ -43,7 +43,7 @@ export namespace Manager.Mechanic{
               }
               break
             case SubObjectTypeEnum.Right:
-              router.push({ name: Definitions.Device.Add })
+              router.push({ name: Definitions.Entity.Add })
               break
             default:
               break

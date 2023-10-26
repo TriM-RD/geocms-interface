@@ -29,7 +29,14 @@ export type TranslationKeys = {
   contact: string,
   english: string,
   croatian: string
-  language: string
+  language: string,
+  search: string,
+  profile: string,
+  administration: string,
+  firmSelection: string,
+  openReport: string,
+  logOut: string,
+  report: string,
 }
 
 export type Translations = {

@@ -4,7 +4,7 @@
       <router-link to="/" class="nav-link rounded-1" :class="{active: $route.path === '/'}">Map/Home</router-link>
     </li>
     <li class="nav-item border-end border-secondary border-opacity-10">
-      <router-link to="/device" class="nav-link rounded-1" :class="{active: $route.path === '/device'}">Devices</router-link>
+      <router-link to="/entity" class="nav-link rounded-1" :class="{active: $route.path === '/entity'}">Devices</router-link>
     </li>
     <li class="nav-item border-end border-secondary border-opacity-10">
       <router-link to="/permission" class="nav-link rounded-1" :class="{active: $route.path === '/permission'}">Permissions</router-link>

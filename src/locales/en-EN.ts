@@ -1,6 +1,13 @@
 import { TranslationKeys } from '@/locales/index'
 
 export const enDictionary:TranslationKeys = {
+  report: 'Administration',
+  administration: 'Administration',
+  firmSelection: 'Firm Selection',
+  logOut: 'Log Out',
+  openReport: 'Open Report',
+  profile: 'Profile',
+  search: 'Search',
   language: 'Language',
   croatian: 'Croatian',
   english: 'English',

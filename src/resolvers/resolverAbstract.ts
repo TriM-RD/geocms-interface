@@ -56,7 +56,7 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
                 type: response.data.status as TYPE
               })
               router.push({
-                name: Definitions.Device.Def
+                name: Definitions.Entity.Def
               })
             })
         }

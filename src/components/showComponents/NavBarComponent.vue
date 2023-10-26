@@ -9,13 +9,13 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
         <div class="flex-grow-1 d-flex">
-          <Search data-bs-toggle="modal" data-bs-target="#searchModal" :placeholder="'Search'"/>
+          <Search data-bs-toggle="modal" data-bs-target="#searchModal" :placeholder="$t.search"/>
         </div>
         <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Search</h5>
+                <h5 class="modal-title">{{ $t.search }}</h5>
                 <button type="button" class="btn-close" id="searchModalClose" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
@@ -30,13 +30,14 @@
               {{ $store.state.firm }}/{{ $store.state.name }}
             </button>
             <ul class="dropdown-menu dropdown-content">
-              <router-link to="/account" class="dropdown-item opacity-75">Profile</router-link>
-              <router-link to="/administration" class="dropdown-item opacity-75">Administration</router-link>
-              <router-link to="/firm-selection" class="dropdown-item opacity-75">Firm Selection</router-link>
+              <router-link to="/account" class="dropdown-item opacity-75">{{$t.profile}}</router-link>
+              <router-link to="/administration" class="dropdown-item opacity-75">{{ $t.administration }}</router-link>
+              <router-link to="/firm-selection" class="dropdown-item opacity-75">{{ $t.firmSelection }}</router-link>
               <li class="opacity-50"><hr class="dropdown-divider"></li>
-              <li><button data-bs-toggle="modal" data-bs-target="#reportModal" class="dropdown-item opacity-75" type="button">Open Report</button></li>
+              <li><button data-bs-toggle="modal" data-bs-target="#reportModal" class="dropdown-item opacity-75" type="button">
+                {{ $t.openReport }}</button></li>
               <li class="opacity-50"><hr class="dropdown-divider"></li>
-              <li><button class="dropdown-item opacity-75" type="button" v-on:click="logout()">Log out</button></li>
+              <li><button class="dropdown-item opacity-75" type="button" v-on:click="logout()">{{ $t.logOut }}</button></li>
             </ul>
           </li>
         </ul>
@@ -44,7 +45,7 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Report</h5>
+                <h5 class="modal-title">{{ $t.report }}</h5>
                 <button type="button" class="btn-close" id="reportModalClose" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
@@ -80,7 +81,13 @@ import Search from '@/components/Search.vue'
 import { Watch } from 'vue-property-decorator'
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
+import { $t } from '../../locales'
 @Options({
+  computed: {
+    $t () {
+      return $t
+    }
+  },
   components: { Search, Datepicker },
   props: {
     object: ObjectTemplate

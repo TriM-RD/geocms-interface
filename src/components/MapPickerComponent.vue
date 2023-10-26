@@ -85,7 +85,7 @@ export default class MapPickerComponent extends Vue {
       temp = JSON.parse(this.object.Stats[StatTypeEnum.Value].Data)
     }
 
-    if (temp === null || router.currentRoute.value.name === Definitions.Device.Add || (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(String(router.currentRoute.value.params.id)))) {
+    if (temp === null || router.currentRoute.value.name === Definitions.Entity.Add || (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(String(router.currentRoute.value.params.id)))) {
       this.geoLocate()
     } else {
       this.updateMarker([temp[0], temp[1]])
