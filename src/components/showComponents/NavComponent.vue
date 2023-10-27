@@ -1,19 +1,19 @@
 <template>
   <ul class="nav nav-pills nav-fill border mb-md-4">
     <li class="nav-item border-end border-secondary border-opacity-10">
-      <router-link to="/" class="nav-link rounded-1" :class="{active: $route.path === '/'}">Map/Home</router-link>
+      <router-link to="/" class="nav-link rounded-1" :class="{active: $route.path === '/'}">{{$t.map}}</router-link>
     </li>
     <li class="nav-item border-end border-secondary border-opacity-10">
-      <router-link to="/entity" class="nav-link rounded-1" :class="{active: $route.path === '/entity'}">Devices</router-link>
+      <router-link to="/entity" class="nav-link rounded-1" :class="{active: $route.path === '/entity'}">{{ $t.entities }}</router-link>
     </li>
     <li class="nav-item border-end border-secondary border-opacity-10">
-      <router-link to="/permission" class="nav-link rounded-1" :class="{active: $route.path === '/permission'}">Permissions</router-link>
+      <router-link to="/permission" class="nav-link rounded-1" :class="{active: $route.path === '/permission'}">{{$t.permissions}}</router-link>
     </li>
     <li class="nav-item border-end border-secondary border-opacity-10">
-      <router-link to="/group" class="nav-link rounded-1" :class="{active: $route.path === '/group'}">Groups</router-link>
+      <router-link to="/group" class="nav-link rounded-1" :class="{active: $route.path === '/group'}">{{$t.groups}}</router-link>
     </li>
     <li class="nav-item border-end border-secondary border-opacity-10">
-      <router-link to="/division" class="nav-link rounded-1" :class="{active: $route.path === '/division'}">Divisions</router-link>
+      <router-link to="/division" class="nav-link rounded-1" :class="{active: $route.path === '/division'}">{{$t.divisions}}</router-link>
     </li>
   </ul>
 </template>
@@ -27,7 +27,13 @@ import {
   RegionType,
   RegionEnum
 } from '@cybertale/interface'
+import { $t } from '../../locales'
 @Options({
+  computed: {
+    $t () {
+      return $t
+    }
+  },
   props: {
     object: ObjectTemplate
   }

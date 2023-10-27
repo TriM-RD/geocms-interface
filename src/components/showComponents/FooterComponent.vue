@@ -21,6 +21,7 @@ import {
 } from '@cybertale/interface'
 import { Manager } from '@/mechanics/footerMechanic'
 import { Definitions } from '@/definitions/appDefinitions'
+import { $t } from '@/locales'
 @Options({
   props: {
     object: ObjectTemplate
@@ -61,21 +62,20 @@ export default class FooterComponent extends Vue {
 
   choose () {
     this.objectTemplates = []
-    console.log(this.openTab)
     switch (this.openTab) {
       case Definitions.Entity.Def:
         this.objectTemplates = this.mechanic.InitSet(
-          this.scaffoldButtons(RegionEnum.Footer, RegionEnum.Footer, 'Scan', 'Add')
+          this.scaffoldButtons(RegionEnum.Footer, RegionEnum.Footer, $t.scan, $t.add)
         )
         break
       case Definitions.Group.Def:
         this.objectTemplates = this.mechanic.InitSet(
-          this.scaffoldButtons(RegionEnum.Table, RegionEnum.Footer, 'ReSort', 'Add')
+          this.scaffoldButtons(RegionEnum.Table, RegionEnum.Footer, $t.reSort, $t.add)
         )
         break
       case Definitions.Division.Def:
         this.objectTemplates = this.mechanic.InitSet(
-          this.scaffoldButtons(RegionEnum.Table, RegionEnum.Footer, 'ReSort', 'Add')
+          this.scaffoldButtons(RegionEnum.Table, RegionEnum.Footer, $t.reSort, $t.add)
         )
         break
       case Definitions.Permission.Def:
@@ -85,7 +85,7 @@ export default class FooterComponent extends Vue {
         break
       case Definitions.Administration.Def:
         this.objectTemplates = this.mechanic.InitSet(
-          this.scaffoldButtons(RegionEnum.Footer, RegionEnum.Footer, 'ReSort', 'Add')
+          this.scaffoldButtons(RegionEnum.Footer, RegionEnum.Footer, $t.reSort, $t.add)
         )
         break
       case Definitions.Entity.Add:
@@ -97,17 +97,17 @@ export default class FooterComponent extends Vue {
       case Definitions.Entity.Edit:
         this.objectTemplates = this.mechanic.InitSet([
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
-            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Save'),
+            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData($t.save),
             [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-success me-2 flex-fill'),
             [StatTypeEnum.Disabled]: StatType.StatTypes[StatTypeEnum.Disabled]().CreateStat().InitData('')
           }),
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Down, ActionTypeEnum.Click, {
-            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Delete'),
+            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData($t.delete),
             [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-danger flex-fill'),
             [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('destroy')
           }),
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Button, SubObjectTypeEnum.Right, ActionTypeEnum.Click, {
-            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Cancel'),
+            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData($t.cancel),
             [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-secondary flex-fill')
           })
         ]
@@ -143,7 +143,7 @@ export default class FooterComponent extends Vue {
     }
   }
 
-  scaffoldButtons (leftRegion = RegionEnum.Form, rightRegion = RegionEnum.Form, leftButtonName = 'Save', rightButtonName = 'Cancel'): Array<any> {
+  scaffoldButtons (leftRegion = RegionEnum.Form, rightRegion = RegionEnum.Form, leftButtonName = $t.save, rightButtonName = $t.cancel): Array<any> {
     return [
       new ObjectTemplate(leftRegion, ObjectTypeEnum.Button, SubObjectTypeEnum.Left, ActionTypeEnum.Click, {
         [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData(leftButtonName),

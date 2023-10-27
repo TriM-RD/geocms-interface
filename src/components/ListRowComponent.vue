@@ -17,6 +17,7 @@ import {
   RegionEnum,
   SubObjectTypeEnum, ActionTypeEnum, StatType
 } from '@cybertale/interface'
+import { $t } from '@/locales'
 @Options({
   props: {
     object: ObjectTemplate,
@@ -31,10 +32,10 @@ export default class ListRowComponent extends Vue {
   objectType = ObjectType
   object!: ObjectTemplate
   index!: number
-  objectTemplates = this.mechanic.InitSet(
+  objectTemplates = this.mechanic.InitSet( // TODO most likely not used
     [
       new ObjectTemplate(RegionEnum.TableColumn, ObjectTypeEnum.Button, SubObjectTypeEnum.Middle, ActionTypeEnum.Click, {
-        [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Edit'),
+        [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData($t.edit),
         [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-info'),
         [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Id].Data)
       })

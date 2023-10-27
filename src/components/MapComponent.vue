@@ -6,14 +6,15 @@
           <div class="input-group">
             <span class="input-group-text rounded-0"><i class="bi bi-search"></i></span>
             <transition name="shake">
-              <input list="device-codes" :disabled="renderComponent" :value="deviceCode" @input="deviceCode = $event.target.value" :class="{'is-invalid': error, 'form-control shake': error, 'form-control': !error}" placeholder="Enter device code..." @change="zoomToDevice"/>
+              <input list="device-codes" :disabled="renderComponent" :value="entityCode" @input="deviceCode = $event.target.value" :class="{'is-invalid': error, 'form-control shake': error, 'form-control': !error}"
+                     :placeholder="$t.enterEntityCode" @change="zoomToEntity"/>
             </transition>
-            <button class="btn btn-primary" type="button" @click="zoomToDevice">Search</button>
-            <datalist id="device-codes" v-if="deviceCode.length >= 2 && !renderComponent">
+            <button class="btn btn-primary" type="button" @click="zoomToEntity">{{ $t.search }}</button>
+            <datalist id="device-codes" v-if="entityCode.length >= 2 && !renderComponent">
               <option v-for="feature in entities.features" :value="feature.properties.code" :key="feature.properties.code"></option>
             </datalist>
             <div class="invalid-feedback">
-              Device not found
+              {{ $t.entityNotFound }}
             </div>
           </div>
         </div>
@@ -37,7 +38,8 @@
                 </div>
               </label>
             </div>
-            <button class="btn btn-primary w-100 rounded-0 toggle-legend animate__animated animate__fadeIn" @click="toggleLegend">Toggle Legend</button>
+            <button class="btn btn-primary w-100 rounded-0 toggle-legend animate__animated animate__fadeIn" @click="toggleLegend">
+              {{ $t.toggleLegend }}</button>
           </div>
           <Loading v-model:active="renderComponent"
                    :can-cancel="false"
@@ -58,8 +60,14 @@ import http from '@/http-common'
 import Loading from 'vue-loading-overlay'
 import { Modal } from 'bootstrap'
 import { Definitions } from '@/definitions/appDefinitions'
+import { $t } from '@/locales'
 
 @Options({
+  computed: {
+    $t () {
+      return $t
+    }
+  },
   components: {
     Loading
   }
@@ -105,7 +113,7 @@ export default class MapComponent extends Vue {
     'struja-idle': 'NCV'
   };
 
-  deviceCode = ''
+  entityCode = ''
   error = false
   strujaFeatureIds: string[] = [];
 
@@ -169,12 +177,12 @@ export default class MapComponent extends Vue {
     })
   }
 
-  async zoomToDevice () : Promise<void> {
+  async zoomToEntity () : Promise<void> {
     // Your method to fetch the device data should go here, this is just a placeholder
     const featureWithCode = this.entities.features.find((feature: any) => {
       // Replace 'codeProperty' with the actual property name that contains the code in your feature object
       const code = feature.properties.code
-      return code === this.deviceCode
+      return code === this.entityCode
     })
     if (featureWithCode) {
       // Then you could zoom to the device location like this
@@ -564,13 +572,13 @@ export default class MapComponent extends Vue {
         await this.updateMapData(id)
 
         // Rest of the code
-        const devicesWithSameCoordinates = this.entities.features.filter((device: { geometry: { coordinates: any[] } }) => {
-          return device.geometry.coordinates[0] === coordinates[0] && device.geometry
+        const entitiesWithSameCoordinates = this.entities.features.filter((entity: { geometry: { coordinates: any[] } }) => {
+          return entity.geometry.coordinates[0] === coordinates[0] && entity.geometry
             .coordinates[1] === coordinates[1]
         })
         const popup = new mapboxgl.Popup({ closeOnClick: false })
           .setLngLat(coordinates)
-          .setHTML(`<p>Code: ${code}</p><br><button class="btn btn-secondary btn-sm open-popup" >Open</button><br><p>Devices with same coordinates: ${devicesWithSameCoordinates.length}</p>`)
+          .setHTML(`<p>${$t.code}: ${code}</p><br><button class="btn btn-secondary btn-sm open-popup" >${$t.open}</button><br><p>${$t.entitiesWithSameCoordinates}":" ${entitiesWithSameCoordinates.length}</p>`)
         popup.addTo(this.map)
         this.currentPopup = popup
         const btn = document.getElementsByClassName('open-popup')[0]
@@ -773,28 +781,28 @@ export default class MapComponent extends Vue {
     await this.updateMapData(id)
     const precision = 100000
     // Rest of the code
-    const devicesWithSameCoordinates = this.entities.features.filter((device: { id: string, geometry: { coordinates: any[] }, properties : { iconType: string, code: string } }) => {
-      return device.id === id ||
+    const entitiesWithSameCoordinates = this.entities.features.filter((entity: { id: string, geometry: { coordinates: any[] }, properties : { iconType: string, code: string } }) => {
+      return entity.id === id ||
         (
-          Math.round(parseFloat(device.geometry.coordinates[0]) * precision) === Math.round(parseFloat(coordinates[0]) * precision) &&
-          Math.round(parseFloat(device.geometry.coordinates[1]) * precision) === Math.round(parseFloat(coordinates[1]) * precision)
+          Math.round(parseFloat(entity.geometry.coordinates[0]) * precision) === Math.round(parseFloat(coordinates[0]) * precision) &&
+          Math.round(parseFloat(entity.geometry.coordinates[1]) * precision) === Math.round(parseFloat(coordinates[1]) * precision)
         )
-    }).map((device: { properties: { iconType: string, code: string, id: string } }) => {
+    }).map((entity: { properties: { iconType: string, code: string, id: string } }) => {
       return {
-        code: device.properties.code,
-        iconType: device.properties.iconType,
-        id: device.properties.id
+        code: entity.properties.code,
+        iconType: entity.properties.iconType,
+        id: entity.properties.id
       }
     })
     let additionalButtons = '<div class="list-group">'
-    for (const device of devicesWithSameCoordinates) {
-      if (device.iconType.includes('struja')) {
-        additionalButtons += `<button class="list-group-item list-group-item-action controller-ncv-button btn-outline-secondary btn-sm btn-fixed text-truncate w-100 small-font" title="View ormar ${device.code}" data-devicecode="${device.code}" style="width: 120px;">View ormar ${device.code}</button>`
+    for (const entity of entitiesWithSameCoordinates) {
+      if (entity.iconType.includes('struja')) {
+        additionalButtons += `<button class="list-group-item list-group-item-action controller-ncv-button btn-outline-secondary btn-sm btn-fixed text-truncate w-100 small-font" title="View ormar ${entity.code}" data-devicecode="${entity.code}" style="width: 120px;">View ormar ${entity.code}</button>`
       }
-      additionalButtons += `<button class="list-group-item list-group-item-action additional-button btn-outline-secondary btn-sm btn-fixed text-truncate w-100 small-font" title="Open ${device.code}" data-deviceid="${device.id}" data-devicecode="${device.code}" style="width: 120px;">Open ${device.code}</button>`
+      additionalButtons += `<button class="list-group-item list-group-item-action additional-button btn-outline-secondary btn-sm btn-fixed text-truncate w-100 small-font" title="Open ${entity.code}" data-deviceid="${entity.id}" data-devicecode="${entity.code}" style="width: 120px;">Open ${entity.code}</button>`
     }
     additionalButtons += '</div>'
-    this.currentPopupIndex = devicesWithSameCoordinates.findIndex((device: { code: any }) => device.code === code)
+    this.currentPopupIndex = entitiesWithSameCoordinates.findIndex((entity: { code: any }) => entity.code === code)
     const popup = new mapboxgl.Popup({ closeOnClick: false })
       .setLngLat(coordinates)
       .setHTML(`<div class="d-flex flex-column h-100">
@@ -802,23 +810,23 @@ export default class MapComponent extends Vue {
       <button id="navigationButton" class="btn btn-outline-secondary">
         <span class="bi bi-geo-fill"></span>
       </button>
-      <input type="text" class="form-control" readonly value="Code: ${code}">
+      <input type="text" class="form-control" readonly value="${$t.code}: ${code}">
     </div>
     ${additionalButtons}
-    <p class="small-font mt-3 mb-0">Devices with same coordinates: ${devicesWithSameCoordinates.length}</p>
-    ${devicesWithSameCoordinates.length > 1 ? '<button id="nextButton" class="btn btn-primary mt-3">Next</button>' : ''}
+    <p class="small-font mt-3 mb-0">${$t.entitiesWithSameCoordinates}: ${entitiesWithSameCoordinates.length}</p>
+    ${entitiesWithSameCoordinates.length > 1 ? '<button id="nextButton" class="btn btn-primary mt-3">Next</button>' : ''}
   </div>`)
     popup.addTo(this.map)
     this.currentPopup = popup
     this.currentPopupIndex++
-    if (devicesWithSameCoordinates.length > 1) {
+    if (entitiesWithSameCoordinates.length > 1) {
       const nextButton = document.getElementById('nextButton')
       if (nextButton) {
         nextButton.addEventListener('click', () => {
-          if (this.currentPopupIndex >= devicesWithSameCoordinates.length) {
+          if (this.currentPopupIndex >= entitiesWithSameCoordinates.length) {
             this.currentPopupIndex = 0
           }
-          const nextFeature = devicesWithSameCoordinates[this.currentPopupIndex]
+          const nextFeature = entitiesWithSameCoordinates[this.currentPopupIndex]
           const feature = {
             geometry: {
               coordinates: coordinates
@@ -842,11 +850,11 @@ export default class MapComponent extends Vue {
     const ncvBtns = document.getElementsByClassName('controller-ncv-button')
     Array.from(ncvBtns).forEach(btn => {
       btn.addEventListener('click', () => {
-        const deviceCode = btn.getAttribute('data-devicecode')
+        const entityCode = btn.getAttribute('data-devicecode')
         const iframe = document.getElementById('yourIframeId') as HTMLIFrameElement
         if (iframe !== null) {
           if (iframe.contentWindow !== null) {
-            iframe.contentWindow.postMessage({ command: 'openModalOrmar', code: deviceCode }, '*')
+            iframe.contentWindow.postMessage({ command: 'openModalOrmar', code: entityCode }, '*')
           }
         }
         const myModalElement = document.getElementById('myModal')
@@ -860,9 +868,9 @@ export default class MapComponent extends Vue {
     const additionalBtns = document.getElementsByClassName('additional-button')
     Array.from(additionalBtns).forEach(btn => {
       btn.addEventListener('click', () => {
-        const deviceId = btn.getAttribute('data-deviceid')
-        // console.log(deviceId)
-        if (deviceId) { this.$router.push({ name: Definitions.Entity.Edit, params: { id: deviceId } }) }
+        const entityId = btn.getAttribute('data-deviceid')
+        // console.log(entityId)
+        if (entityId) { this.$router.push({ name: Definitions.Entity.Edit, params: { id: entityId } }) }
       })
     })
   }

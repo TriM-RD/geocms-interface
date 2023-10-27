@@ -42,6 +42,7 @@ import {
 import Loading from 'vue-loading-overlay'
 import router from '@/router'
 import { Definitions } from '@/definitions/appDefinitions'
+import { $t } from '@/locales'
 @Options({
   props: {
     object: ObjectTemplate
@@ -65,7 +66,7 @@ export default class ModalFormComponent extends Vue {
   conditionsUnsubed = false
 
   submitButton = new ObjectTemplate(this.regionEnum.ModalForm, this.objectTypeEnum.Button, this.subObjectTypeEnum.Left, this.actionTypeEnum.Click, {
-    [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Submit'),
+    [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData($t.save),
     [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(this.object.Stats[this.statTypeEnum.Tag].Data),
     [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('me-2 btn btn-success'),
     [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('submitFormButton'),

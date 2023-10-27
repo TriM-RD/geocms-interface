@@ -3,14 +3,14 @@
     <div class="row">
       <div class="col-12 col-sm-9 d-flex justify-content-between align-items-center">
         <div></div> <!-- Empty div for alignment with first column -->
-        <input @change="handleFilterChange" v-model="filters.code" type="search" class="form-control flex-fill me-3" id="codeFilter" placeholder="Filter by code">
-        <input @change="handleFilterChange" v-model="filters.division" type="search" class="form-control flex-fill me-3" id="divisionFilter" placeholder="Filter by division">
-        <input @change="handleFilterChange" v-model="filters.group" type="search" class="form-control flex-fill me-3" id="groupFilter" placeholder="Filter by group">
+        <input @change="handleFilterChange" v-model="filters.code" type="search" class="form-control flex-fill me-3" id="codeFilter" :placeholder="$t.filterByCode">
+        <input @change="handleFilterChange" v-model="filters.division" type="search" class="form-control flex-fill me-3" id="divisionFilter" :placeholder="$t.filterByDivision">
+        <input @change="handleFilterChange" v-model="filters.group" type="search" class="form-control flex-fill me-3" id="groupFilter" :placeholder="$t.filterByGroup">
       </div>
       <div class="col-12 col-sm-3 mt-3 mt-sm-0">
         <select class="form-select" id="sortOrder" @change="handleFilterChange" v-model="orderBy">
-          <option selected value="asc">Ascending</option>
-          <option value="desc">Descending</option>
+          <option selected value="asc">{{$t.ascending}}</option>
+          <option value="desc">{{ $t.descending }}</option>
         </select>
       </div>
       <div></div> <!-- Empty div for alignment with last column -->

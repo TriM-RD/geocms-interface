@@ -37,10 +37,10 @@
   <div class="mb-3 row justify-content-md-center">
     <div class="col"></div>
     <div class="col input-group mb-3">
-      <label class="input-group-text" for="inputGroupSelect01">Change orientation</label>
+      <label class="input-group-text" for="inputGroupSelect01">{{ $t.changeOrientation }}</label>
       <select class="form-select" id="inputGroupSelect01" v-model="treeOrientation">
-        <option value="0">Vertical</option>
-        <option value="1">Horizontal</option>
+        <option value="0">{{ $t.vertical }}</option>
+        <option value="1">{{ $t.horizontal }}</option>
       </select>
     </div>
     <div class="col"></div>
@@ -53,17 +53,17 @@
     <div class="modal-dialog" v-show="exists ===false">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" if="modal-title">Delete {{ deleteCheckData.permission.name }}</h5>
+          <h5 class="modal-title" id="modal-title">{{ $t.delete }} {{ deleteCheckData.permission.name }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
         <div class="modal-body">
-          <p>By clicking the yes button you will delete "{{ deleteCheckData.permission.name }}" from the database.</p>
+          <p>{{$t.deleteCheckDataPrev}} "{{ deleteCheckData.permission.name }}" {{ $t.deleteCheckDataAfter }}</p>
         </div>
         <div class="modal-footer">
           <!--span class="form-control-static pull-left">Delete {{ deleteCheckData.permission.name }}</span-->
-          <button class="btn btn-danger mr-auto" data-bs-dismiss="modal" @click="deleteData()">Yes</button>
-          <button class="btn btn-primary" data-bs-dismiss="modal">No</button>
+          <button class="btn btn-danger mr-auto" data-bs-dismiss="modal" @click="deleteData()">{{ $t.yes }}</button>
+          <button class="btn btn-primary" data-bs-dismiss="modal">{{ $t.no }}</button>
         </div>
       </div>
     </div>
@@ -71,15 +71,15 @@
     <div class="modal-dialog" v-show="exists ===true">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" if="modal-title">Cannot delete {{ deleteCheckData.permission.name }}</h5>
+          <h5 class="modal-title" if="modal-title">{{ $t.cannotDelete }} {{ deleteCheckData.permission.name }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
         <div class="modal-body">
-          <p>Deleting the "{{ deleteCheckData.permission.name }}" record from the database is not possible as it is associated with either a user or a division.</p>
+          <p>{{$t.deleteCheckDataPrev2}} "{{ deleteCheckData.permission.name }}" {{$t.deleteCheckDataAfter2}}</p>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+          <button class="btn btn-primary" data-bs-dismiss="modal">{{ $t.ok }}</button>
         </div>
       </div>
     </div>
@@ -90,7 +90,7 @@
     <div class="modal-dialog" v-show="exists ===true">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" if="modal-title">Cannot delete {{ deleteCheckData.permission.name }}</h5>
+          <h5 class="modal-title" if="modal-title">{{ $t.cannotDelete }} {{ deleteCheckData.permission.name }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
@@ -111,7 +111,13 @@ import { MechanicAbstract } from '@cybertale/interface'
 import { Manager } from '@/mechanics/permissionMechanic'
 import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
+import { $t } from '@/locales'
 @Options({
+  computed: {
+    $t () {
+      return $t
+    }
+  },
   components: {
     Loading
   }

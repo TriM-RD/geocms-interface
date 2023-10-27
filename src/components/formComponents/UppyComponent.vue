@@ -12,7 +12,7 @@
         ></a>
         <div class="row" v-if="images.length > 0">
           <div class="col px-0">
-            <button @click.prevent="openGallery('image')" class="btn btn-outline-dark w-100 rounded-bottom">View Images</button>
+            <button @click.prevent="openGallery('image')" class="btn btn-outline-dark w-100 rounded-bottom">{{$t.viewImages}}</button>
           </div>
         </div>
       </fancybox-component>
@@ -29,7 +29,7 @@
         </a>
         <div class="row" v-if="pdfs.length > 0">
           <div class="col px-0">
-            <button @click.prevent="openGallery('pdf')" class="btn btn-outline-dark w-100 rounded-bottom">View PDFs</button>
+            <button @click.prevent="openGallery('pdf')" class="btn btn-outline-dark w-100 rounded-bottom">{{$t.viewPDFs}}</button>
           </div>
         </div>
       </fancybox-component>

@@ -4,7 +4,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Select Firm</h5>
+          <h5 class="modal-title">{{ $t.selectFirm }}</h5>
           <button id="closeSelectFirmModal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -25,8 +25,15 @@ import http, { updateHeaders } from '@/http-common'
 import { Modal } from 'bootstrap'
 import router from '@/router'
 import { Definitions } from '@/definitions/appDefinitions'
+import { $t } from '../../locales'
 
-@Options({})
+@Options({
+  computed: {
+    $t () {
+      return $t
+    }
+  }
+})
 export default class FirmSelectionComponent extends Vue {
   firms = []
 

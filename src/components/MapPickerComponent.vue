@@ -4,11 +4,11 @@
       <div class="col-lg-4"></div>
       <div class="col-lg-4">
         <div class="input-group mt-3 mb-1">
-          <label class="input-group-text text-truncate">Longitude</label>
+          <label class="input-group-text text-truncate">$t.longitude</label>
           <input type="text" class="form-control" placeholder="Longitude" @input="updateMarker(lngLat)" v-model="lngLat[0]" aria-label="Longitude">
-          <label class="input-group-text">Latitude</label>
+          <label class="input-group-text">$t.latitude</label>
           <input type="text" class="form-control" placeholder="Latitude" @input="updateMarker(lngLat)" v-model="lngLat[1]" aria-label="Latitude">
-          <button class="btn btn-outline-info" type="button" @click="geoLocate()">Get</button>
+          <button class="btn btn-outline-info" type="button" @click="geoLocate()">$t.get</button>
         </div>
       </div>
     </div>
