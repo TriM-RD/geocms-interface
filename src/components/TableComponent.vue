@@ -51,7 +51,13 @@ import router from '@/router'
 import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
 import { Definitions } from '@/definitions/appDefinitions'
+import { $t } from '@/locales'
 @Options({
+  computed: {
+    $t () {
+      return $t
+    }
+  },
   components: {
     Loading
   }

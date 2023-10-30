@@ -1,11 +1,16 @@
 import { TranslationKeys } from '@/locales/index'
 
 export const hrDictionary:TranslationKeys = {
+  ascending: 'Uzlazno',
+  descending: 'Silazno',
+  filterByCode: 'Filtrirati po šifri',
+  filterByDivision: 'Filtrirati po odjelu',
+  filterByGroup: 'Filtriraj po grupi',
   addAttribute: 'Dodati Atribut',
   cannotDelete: 'Ne može se izbrisati',
   changeOrientation: 'Promijenite orijentaciju',
   deleteCheckDataAfter: 'iz baze podataka.',
-  deleteCheckDataAfter2: 'record from the database is not possible as it is associated with either a user or a division.',
+  deleteCheckDataAfter2: 'zapis iz baze podataka nije moguć jer je povezan ili s korisnikom ili s odjelom.',
   deleteCheckDataPrev: 'Klikom na gumb Da izbrisat će te',
   deleteCheckDataPrev2: 'Brisanje zapis iz baze podataka nije moguć jer je povezan ili s korisnikom ili s odjelom',
   horizontal: 'Horizontal',
@@ -16,8 +21,8 @@ export const hrDictionary:TranslationKeys = {
   get: 'Pronađi',
   latitude: 'Latituda',
   longitude: 'Longituda',
-  enterEntityCode: 'Unesite kod entiteta...',
-  code: 'Kod',
+  enterEntityCode: 'Unesite šifru entiteta...',
+  code: 'Šifra',
   entityNotFound: 'Entitet nije pronađen',
   entitiesWithSameCoordinates: 'Entiteti sa istim kordinatama',
   open: 'Otvoriti',
