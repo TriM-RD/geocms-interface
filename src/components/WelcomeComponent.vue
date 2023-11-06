@@ -269,6 +269,7 @@ import {
 import { $t, Translations } from '@/locales'
 import router from '@/router'
 import { Definitions } from '@/definitions/appDefinitions'
+import http from '@/http-common'
 interface CodeChallengePair {
   codeVerifier: string;
   codeChallenge: string;
@@ -306,7 +307,7 @@ export default class WelcomeComponent extends Vue {
     this.$store.commit('setNonce', nonce)
   }
 
-  changeLanguage (lang : keyof Translations): void {
+  async changeLanguage (lang: keyof Translations): Promise<void> {
     localStorage.setItem('lang', lang)
     window.location.href = window.location.origin
     this.selectedImage = require(`../assets/lang/${lang}.svg`)
