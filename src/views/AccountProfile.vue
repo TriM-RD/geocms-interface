@@ -2,7 +2,7 @@
     <div class="container" style="text-align: center;">
           <h4>{{$t.aboutUser}}</h4>
           <div class="input-group mb-3 col-lg-4">
-          <span class="input-group-text" id="basic-addon1">{{ $t.name }}</span>
+          <span class="input-group-text" id="basic-addon1">{{ $t.userName }}</span>
           <span class="form-control">{{ $store.state.name }}</span>
           </div>
           <div class="input-group mb-3 col-lg-4">

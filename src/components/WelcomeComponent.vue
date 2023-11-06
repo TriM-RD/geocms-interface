@@ -269,7 +269,7 @@ import {
 import { $t, Translations } from '@/locales'
 import router from '@/router'
 import { Definitions } from '@/definitions/appDefinitions'
-import http from '@/http-common'
+import http, { updateHeaders } from '@/http-common'
 interface CodeChallengePair {
   codeVerifier: string;
   codeChallenge: string;
@@ -309,6 +309,7 @@ export default class WelcomeComponent extends Vue {
 
   async changeLanguage (lang: keyof Translations): Promise<void> {
     localStorage.setItem('lang', lang)
+    updateHeaders()
     window.location.href = window.location.origin
     this.selectedImage = require(`../assets/lang/${lang}.svg`)
   }

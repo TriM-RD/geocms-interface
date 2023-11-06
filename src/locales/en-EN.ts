@@ -46,6 +46,7 @@ export const enDictionary:TranslationKeys = {
   permissions: 'Permissions',
   aboutUser: 'About user',
   email: 'Email',
+  userName: 'User Name',
   name: 'Name',
   report: 'Administration',
   administration: 'Administration',

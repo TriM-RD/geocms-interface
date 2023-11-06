@@ -1,4 +1,5 @@
 export type TranslationKeys = {
+  userName: string,
   email: string,
   name: string,
   aboutUser: string,
