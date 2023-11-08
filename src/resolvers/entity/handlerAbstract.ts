@@ -12,10 +12,9 @@ import http from '@/http-common'
 import { Definitions } from '@/definitions/appDefinitions'
 import router from '@/router'
 import { Modal } from 'bootstrap'
-import { TYPE, useToast } from 'vue-toastification'
-import ToastComponent from '@/components/ToastComponent.vue'
 import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
 import { $t } from '@/locales'
+import { TagHelpers } from '@/definitions/tagHelpers'
 
 export abstract class HandlerAbstract extends ResolverAbstract {
   RowButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
@@ -25,7 +24,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
   public async FormSelectList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
     switch (wrapper.eventHandler.subObjectType) {
       case SubObjectTypeEnum.Middle:
-        this.removeElementFromArray(wrapper.objectTemplates, 'group')
+        this.removeElementFromArray(wrapper.objectTemplates, TagHelpers.CyberTags.group)
         wrapper.refreshPage()
         wrapper.objectTemplates = wrapper.append((await http.get(process.env.VUE_APP_BASE_URL + 'form/entity/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
         wrapper.refreshPage()
@@ -58,7 +57,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
       case SubObjectTypeEnum.Up:
         wrapper.refreshPage()
         for (const row of wrapper.objectTemplates) {
-          if (row.Stats[StatTypeEnum.Tag].Data === 'ecabinetRow') {
+          if (row.Stats[StatTypeEnum.Tag].Data === TagHelpers.EcabinetTags.ecabinetRow) {
             rowCount = Number(row.Stats[StatTypeEnum.Value].Data)
             rowsExist = true
           }
@@ -67,7 +66,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         wrapper.objectTemplates = wrapper.append([
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.ECabinetRow, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Row'),
-            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('ecabinetRow'),
+            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(TagHelpers.EcabinetTags.ecabinetRow),
             [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(rowCount.toString()),
             [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData('')
           })
@@ -87,19 +86,19 @@ export abstract class HandlerAbstract extends ResolverAbstract {
 
   protected async resolveButtonMiddle (eventHandler: EventHandlerType, tag: string, objectTemplates: ObjectTemplate[], refreshPage: () => void, id: string): Promise<void> {
     switch (tag) {
-      case 'replace':
+      case TagHelpers.EcabinetTags.replace:
         await router.push({
           name: Definitions.Entity.Replace,
           params: { parentId: id }
         })
         break
-      case 'viewParent':
+      case TagHelpers.EcabinetTags.viewParent:
         await router.push({
           name: Definitions.Entity.Edit,
           params: { id: eventHandler.payload.Stats[StatTypeEnum.Value].Data }
         })
         break
-      case 'showControllerButton':
+      case TagHelpers.ControllerTags.showControllerButton:
         // eslint-disable-next-line no-case-declarations
         const iframe = document.getElementById('yourIframeId') as HTMLIFrameElement
         if (iframe !== null) {
@@ -115,13 +114,13 @@ export abstract class HandlerAbstract extends ResolverAbstract {
           myModal.show()
         }
         break
-      case 'add':
+      case TagHelpers.CyberTags.add:
         refreshPage()
         objectTemplates = this.Splice(2, objectTemplates, [// TODO while 2 is correct, it needs to be redone to make it programmatic
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.SelectButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
             [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.ItemList].Data),
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData($t.division), // TODO while 'Division' is correct, it needs to be redone to make it programmatic
-            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('division' + Math.random().toString(36).slice(2, 7).toString()), // TODO while Math.random() is correct, it needs to be redone to make it programmatic
+            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(TagHelpers.CyberTags.division + Math.random().toString(36).slice(2, 7).toString()), // TODO while Math.random() is correct, it needs to be redone to make it programmatic
             [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(''),
             [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.Id].Data),
             [StatTypeEnum.ErrorMessage]: StatType.StatTypes[StatTypeEnum.ErrorMessage]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.ErrorMessage].Data)
