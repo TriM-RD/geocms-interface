@@ -60,7 +60,7 @@ export default class ListComponent extends Vue {
         this.renderComponent = false
         return
       }
-      this.countDevice = (this.title.match(/device:/g) || []).length
+      this.countDevice = (this.title.match(/entity:/g) || []).length
       if (this.countDevice >= 2) {
         window.alert('Groups can only be listed once in a search!')
         this.renderComponent = false

@@ -1,7 +1,7 @@
 export namespace Definitions{
 
   export enum Other {
-    Any = 'Device',
+    Any = 'Entity',
     Home = 'Home'
   }
   export enum Entity {

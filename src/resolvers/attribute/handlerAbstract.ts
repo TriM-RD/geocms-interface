@@ -11,6 +11,7 @@ import http from '@/http-common'
 import { Definitions } from '@/definitions/appDefinitions'
 import router from '@/router'
 import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
+import { $t } from '@/locales'
 
 export abstract class HandlerAbstract extends ResolverAbstract {
   public RowButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
@@ -40,8 +41,8 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         wrapper.refreshPage()
         wrapper.objectTemplates = wrapper.append([
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.FieldButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
-            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Value'),
-            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(Math.random().toString(36).slice(2, 7).toString()),
+            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData($t.value),
+            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('value' + Math.random().toString(36).slice(2, 7).toString()),
             [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(''),
             [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(wrapper.eventHandler.payload.Stats[StatTypeEnum.Id].Data)
           })

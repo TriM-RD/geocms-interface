@@ -2,15 +2,15 @@
   <div class="container-fluid h-100 flex-fill flex-column d-flex">
     <div class="row">
       <div class="col-12 p-0 position-relative">
-        <div class="device-code-input">
+        <div class="entity-code-input">
           <div class="input-group">
             <span class="input-group-text rounded-0"><i class="bi bi-search"></i></span>
             <transition name="shake">
-              <input list="device-codes" :disabled="renderComponent" :value="entityCode" @input="deviceCode = $event.target.value" :class="{'is-invalid': error, 'form-control shake': error, 'form-control': !error}"
+              <input list="entity-codes" :disabled="renderComponent" :value="entityCode" @input="entityCode = $event.target.value" :class="{'is-invalid': error, 'form-control shake': error, 'form-control': !error}"
                      :placeholder="$t.enterEntityCode" @change="zoomToEntity"/>
             </transition>
             <button class="btn btn-primary" type="button" @click="zoomToEntity">{{ $t.search }}</button>
-            <datalist id="device-codes" v-if="entityCode.length >= 2 && !renderComponent">
+            <datalist id="entity-codes" v-if="entityCode.length >= 2 && !renderComponent">
               <option v-for="feature in entities.features" :value="feature.properties.code" :key="feature.properties.code"></option>
             </datalist>
             <div class="invalid-feedback">
@@ -178,14 +178,14 @@ export default class MapComponent extends Vue {
   }
 
   async zoomToEntity () : Promise<void> {
-    // Your method to fetch the device data should go here, this is just a placeholder
+    // Your method to fetch the entity data should go here, this is just a placeholder
     const featureWithCode = this.entities.features.find((feature: any) => {
       // Replace 'codeProperty' with the actual property name that contains the code in your feature object
       const code = feature.properties.code
       return code === this.entityCode
     })
     if (featureWithCode) {
-      // Then you could zoom to the device location like this
+      // Then you could zoom to the entity location like this
       this.map.flyTo({
         center: [featureWithCode.geometry.coordinates[0], featureWithCode.geometry.coordinates[1]],
         zoom: 18 // Set the zoom level to your preference
@@ -797,9 +797,9 @@ export default class MapComponent extends Vue {
     let additionalButtons = '<div class="list-group">'
     for (const entity of entitiesWithSameCoordinates) {
       if (entity.iconType.includes('struja')) {
-        additionalButtons += `<button class="list-group-item list-group-item-action controller-ncv-button btn-outline-secondary btn-sm btn-fixed text-truncate w-100 small-font" title="View ormar ${entity.code}" data-devicecode="${entity.code}" style="width: 120px;">View ormar ${entity.code}</button>`
+        additionalButtons += `<button class="list-group-item list-group-item-action controller-ncv-button btn-outline-secondary btn-sm btn-fixed text-truncate w-100 small-font" title="View ormar ${entity.code}" data-entitycode="${entity.code}" style="width: 120px;">View ormar ${entity.code}</button>`
       }
-      additionalButtons += `<button class="list-group-item list-group-item-action additional-button btn-outline-secondary btn-sm btn-fixed text-truncate w-100 small-font" title="Open ${entity.code}" data-deviceid="${entity.id}" data-devicecode="${entity.code}" style="width: 120px;">Open ${entity.code}</button>`
+      additionalButtons += `<button class="list-group-item list-group-item-action additional-button btn-outline-secondary btn-sm btn-fixed text-truncate w-100 small-font" title="Open ${entity.code}" data-entityid="${entity.id}" data-entitycode="${entity.code}" style="width: 120px;">Open ${entity.code}</button>`
     }
     additionalButtons += '</div>'
     this.currentPopupIndex = entitiesWithSameCoordinates.findIndex((entity: { code: any }) => entity.code === code)
@@ -850,7 +850,7 @@ export default class MapComponent extends Vue {
     const ncvBtns = document.getElementsByClassName('controller-ncv-button')
     Array.from(ncvBtns).forEach(btn => {
       btn.addEventListener('click', () => {
-        const entityCode = btn.getAttribute('data-devicecode')
+        const entityCode = btn.getAttribute('data-entitycode')
         const iframe = document.getElementById('yourIframeId') as HTMLIFrameElement
         if (iframe !== null) {
           if (iframe.contentWindow !== null) {
@@ -868,7 +868,7 @@ export default class MapComponent extends Vue {
     const additionalBtns = document.getElementsByClassName('additional-button')
     Array.from(additionalBtns).forEach(btn => {
       btn.addEventListener('click', () => {
-        const entityId = btn.getAttribute('data-deviceid')
+        const entityId = btn.getAttribute('data-entityid')
         // console.log(entityId)
         if (entityId) { this.$router.push({ name: Definitions.Entity.Edit, params: { id: entityId } }) }
       })

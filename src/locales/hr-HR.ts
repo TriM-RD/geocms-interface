@@ -1,6 +1,10 @@
 import { TranslationKeys } from '@/locales/keys'
 
 export const hrDictionary:TranslationKeys = {
+  template: 'Predložak',
+  division: 'Odjel',
+  value: 'Vrijednost',
+  permission: 'Dopuštenje',
   ascending: 'Uzlazno',
   descending: 'Silazno',
   filterByCode: 'Filtrirati po šifri',

@@ -1,4 +1,8 @@
 export type TranslationKeys = {
+  template: string,
+  division: string,
+  value: string,
+  permission: string,
   userName: string,
   email: string,
   name: string,

@@ -1,7 +1,7 @@
 import { Definitions } from '@/definitions/appDefinitions'
 
 import { ResolverAbstract } from '@/resolvers/resolverAbstract'
-import * as Device from '@/resolvers/device/'
+import * as Device from '@/resolvers/entity/'
 import * as Group from '@/resolvers/group/'
 import * as Attribute from '@/resolvers/attribute/'
 import * as Division from '@/resolvers/division/'

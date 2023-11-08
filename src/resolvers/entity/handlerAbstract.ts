@@ -15,6 +15,7 @@ import { Modal } from 'bootstrap'
 import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
 import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
+import { $t } from '@/locales'
 
 export abstract class HandlerAbstract extends ResolverAbstract {
   RowButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
@@ -114,12 +115,12 @@ export abstract class HandlerAbstract extends ResolverAbstract {
           myModal.show()
         }
         break
-      default:
+      case 'add':
         refreshPage()
         objectTemplates = this.Splice(2, objectTemplates, [// TODO while 2 is correct, it needs to be redone to make it programmatic
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.SelectButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
             [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.ItemList].Data),
-            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Division'), // TODO while 'Division' is correct, it needs to be redone to make it programmatic
+            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData($t.division), // TODO while 'Division' is correct, it needs to be redone to make it programmatic
             [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('division' + Math.random().toString(36).slice(2, 7).toString()), // TODO while Math.random() is correct, it needs to be redone to make it programmatic
             [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(''),
             [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.Id].Data),

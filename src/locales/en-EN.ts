@@ -1,6 +1,10 @@
 import { TranslationKeys } from '@/locales/keys'
 
 export const enDictionary:TranslationKeys = {
+  template: 'Template',
+  division: 'Division',
+  value: 'Value',
+  permission: 'Permission',
   ascending: 'Ascending',
   descending: 'Descending',
   filterByCode: 'Filter by code',

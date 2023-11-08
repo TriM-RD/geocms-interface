@@ -21,13 +21,13 @@ import ListComponent from '@/components/ListComponent.vue'
   props: {
     placeholder: {
       type: String,
-      default: 'group:"def" division:"default" device:"example"'
+      default: 'group:"def" division:"default" entity:"example"'
     }
   }
 })
 export default class Search extends Vue {
   title = ''
-  placeholder = 'group:"def" division:"default" device:"example"'
+  placeholder = 'group:"def" division:"default" entity:"example"'
   renderComponent = false
   objectTemplates!: ObjectTemplate[]
 }
