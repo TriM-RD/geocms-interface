@@ -40,7 +40,8 @@ export abstract class HandlerAbstract extends ResolverAbstract {
     let rowsExist = false
     switch (wrapper.eventHandler.subObjectType) {
       case SubObjectTypeEnum.Middle:
-        await this.resolveButtonMiddle(wrapper.eventHandler, wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data, wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
+        console.log(wrapper)
+        await this.resolveButtonMiddle(wrapper.eventHandler, wrapper.eventHandler.payload[0].Stats[StatTypeEnum.Tag].Data, wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
         break
       case SubObjectTypeEnum.Left:
         // Add it to Stats
@@ -116,16 +117,8 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         break
       case TagHelpers.CyberTags.add:
         refreshPage()
-        objectTemplates = this.Splice(2, objectTemplates, [// TODO while 2 is correct, it needs to be redone to make it programmatic
-          new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.SelectButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
-            [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.ItemList].Data),
-            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData($t.division), // TODO while 'Division' is correct, it needs to be redone to make it programmatic
-            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(TagHelpers.CyberTags.division + Math.random().toString(36).slice(2, 7).toString()), // TODO while Math.random() is correct, it needs to be redone to make it programmatic
-            [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(''),
-            [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.Id].Data),
-            [StatTypeEnum.ErrorMessage]: StatType.StatTypes[StatTypeEnum.ErrorMessage]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.ErrorMessage].Data)
-          })
-        ])
+        eventHandler.payload[0].Stats[StatTypeEnum.ElementType].Data = ''
+        objectTemplates = this.Splice(2, objectTemplates, [eventHandler.payload[0]])
         refreshPage()
         break
     }

@@ -1,9 +1,9 @@
 <template>
   <td>
-    <div class="btn-group d-none d-md-flex justify-content-center">
+    <div class="btn-group d-none d-md-flex justify-content-center" v-if="!isSmallScreen">
       <component v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ Math.random().toString(36).slice(2, 7) }`"  :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'></component>
     </div>
-    <div class="dropdown d-md-none">
+    <div class="dropdown d-md-none" v-if="isSmallScreen">
       <button type="button" class="btn btn-outline-secondary" data-bs-toggle="dropdown" aria-expanded="false">
         <span class="bi-chevron-down"></span>
       </button>
@@ -50,15 +50,20 @@ export default class ColumnButtonComponent extends Vue {
   index!: number
   objectTemplates: ObjectTemplate[] = this.mechanic.InitSet(this.entity)
   renderComponent = false
+  isSmallScreen = false
 
-  /* mounted () {
-    if (this.entity !== undefined) {
-      this.objectTemplates = this.mechanic.InitSet(this.entity)
-    }
-  } */
+  mounted () {
+    this.checkScreenSize()
+    window.addEventListener('resize', this.checkScreenSize)
+  }
 
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
+    window.removeEventListener('resize', this.checkScreenSize)
+  }
+
+  checkScreenSize () {
+    this.isSmallScreen = window.innerWidth < 768
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {

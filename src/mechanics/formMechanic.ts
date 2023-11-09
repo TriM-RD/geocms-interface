@@ -51,6 +51,7 @@ export namespace Manager.Mechanic{
 
     protected SubscribeConditions (): void {
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
+      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectButton].SubscribeLogic(this.Button.bind(this))
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectList].SubscribeLogic(this.SelectList.bind(this))
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Field].SubscribeLogic(this.FieldButton.bind(this))
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectList].SubscribeLogic(this.FieldButton.bind(this))
@@ -93,6 +94,7 @@ export namespace Manager.Mechanic{
     }
 
     protected async Button (eventHandler: EventHandlerType): Promise<void> {
+      console.log(eventHandler)
       const name = router.currentRoute.value.name
       if (typeof name !== 'string') {
         return

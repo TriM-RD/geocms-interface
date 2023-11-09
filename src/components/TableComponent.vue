@@ -193,6 +193,7 @@ export default class TableComponent extends Vue {
     let tempId = null
     let tempObjectTemplates = []
     for (const element of this.objectTemplates) {
+      // console.log(element.Stats[StatTypeEnum.Tag].Data)
       if (element.Stats[StatTypeEnum.Id].Data === tempId) {
         tempObjectTemplates.push(JSON.parse(JSON.stringify(element)))
       } else {

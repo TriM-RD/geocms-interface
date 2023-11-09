@@ -29,6 +29,7 @@ import MapPickerComponent from '@/components/MapPickerComponent.vue'
 import DataSelectComponent from '@/components/DataSelectComponent.vue'
 import { ObjectType, ObjectTypeEnum } from '@cybertale/interface/src'
 import UppyComponent from '@/components/formComponents/UppyComponent.vue'
+import FormButtonComponent from '@/components/FormButtonComponent.vue'
 
 const defaultOptions = { treeName: 'blocks-tree' }
 
@@ -46,7 +47,7 @@ ObjectType.ObjectTypes[ObjectTypeEnum.ECabinetColumn](() => ECabinetColumnCompon
 ObjectType.ObjectTypes[ObjectTypeEnum.ECabinetRow](() => ECabinetRowComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.ColumnButton](() => ColumnButtonComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.FieldButton](() => FieldButtonComponent)
-ObjectType.ObjectTypes[ObjectTypeEnum.SelectButton](() => SelectButtonComponent)
+ObjectType.ObjectTypes[ObjectTypeEnum.SelectButton](() => FormButtonComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.ListRow](() => ListRowComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.ModalForm](() => ModalFormComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.MapPicker](() => MapPickerComponent)

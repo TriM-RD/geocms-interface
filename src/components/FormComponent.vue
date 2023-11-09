@@ -3,7 +3,7 @@
            :can-cancel="false"
            :is-full-page="false"/>
   <form v-if="!renderComponent" class="needs-validation" id="classic-form" novalidate>
-    <component :page-refresh="renderComponent" :rerender="changeRender"  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ _objectTemplate.Stats[statTypeEnum.Tag].Data }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'> </component>
+    <component :page-refresh="renderComponent" :rerender="changeRender"  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ _objectTemplate.Stats[statTypeEnum.Tag].Data }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :entity='resolveEntities(_objectTemplate)' :object='_objectTemplate'> </component>
   </form>
 </template>
 
@@ -33,6 +33,8 @@ export default class FormComponent extends Vue {
   renderComponent= true
   objectTemplates!: ObjectTemplate[]
   statTypeEnum = StatTypeEnum
+  belongsTo!: { [key: string]: ObjectTemplate[] }
+  entity!: ObjectTemplate[]
 
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
@@ -42,11 +44,47 @@ export default class FormComponent extends Vue {
     this.Init()
   }
 
+  resolveEntities (_object: ObjectTemplate) {
+    for (const tag of Object.keys(this.belongsTo)) {
+      if (_object.Stats[StatTypeEnum.Tag].Data === tag) {
+        return this.belongsTo[tag]
+      }
+    }
+  }
+
   async Init () {
+    const itemsToDelete = []
     switch (router.currentRoute.value.name) {
       case Definitions.Entity.Add:
       case Definitions.Entity.Edit:
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'entity'))
+        this.entity = await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'entity')
+
+        this.belongsTo = {}
+
+        // Use a separate array to store indices of items to be deleted
+        // eslint-disable-next-line no-case-declarations
+        const itemsToDelete = []
+
+        for (let i = 0; i < this.entity.length; i++) {
+          const item = this.entity[i]
+
+          if (item.Stats[StatTypeEnum.BelongsTo] !== undefined) {
+            const data = item.Stats[StatTypeEnum.BelongsTo].Data
+            this.belongsTo[data] = this.belongsTo[data] || []
+            this.belongsTo[data].push(item)
+
+            // Add index to itemsToDelete array
+            itemsToDelete.push(i)
+          }
+        }
+
+        // Iterate in reverse to avoid issues with array modifications
+        for (let i = itemsToDelete.length - 1; i >= 0; i--) {
+          this.entity.splice(itemsToDelete[i], 1)
+        }
+
+        this.objectTemplates = this.mechanic.InitSet(this.entity)
+        console.log(this.objectTemplates)
         break
       case Definitions.Entity.Replace:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'replace/entity/' + this.$route.params.parentId.toString()))

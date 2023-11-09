@@ -54,6 +54,7 @@ export default class RowComponent extends Vue {
       tempEntity.splice(itemsToDelete[i], 1)
     }
     this.objectTemplates = this.mechanic.InitSet(tempEntity)
+    console.log(this.objectTemplates)
     this.renderComponent = true
   }
 
