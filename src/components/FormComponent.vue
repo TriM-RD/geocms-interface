@@ -45,9 +45,12 @@ export default class FormComponent extends Vue {
   }
 
   resolveEntities (_object: ObjectTemplate) {
-    for (const tag of Object.keys(this.belongsTo)) {
-      if (_object.Stats[StatTypeEnum.Tag].Data === tag) {
-        return this.belongsTo[tag]
+    if (_object.Stats[StatTypeEnum.BelongsTo] === undefined) {
+      this.objectTemplates = this.mechanic.InitSet(this.entity)
+      for (const tag of Object.keys(this.belongsTo)) {
+        if (_object.Stats[StatTypeEnum.Tag].Data.includes(tag)) {
+          return this.belongsTo[tag]
+        }
       }
     }
   }

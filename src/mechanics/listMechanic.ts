@@ -28,7 +28,7 @@ export namespace Manager.Mechanic{
       let _temp: ObjectTemplate[] = []
       data.forEach((_list: any) => {
         _temp = _temp.concat(_list.filter((_object : ObjectTemplate) => { return _object.Stats[StatTypeEnum.Tag].Data === 'name' }).map((_object: any) => {
-          return new ObjectTemplate(RegionEnum.List, ObjectTypeEnum.ListRow, SubObjectTypeEnum.ParentObject, _object.ActionEnum, this.reStructure(_object.Stats))
+          return new ObjectTemplate(RegionEnum.List, ObjectTypeEnum.Button, SubObjectTypeEnum.ParentObject, _object.ActionEnum, this.reStructure(_object.Stats))
         }))
       })
       return _temp

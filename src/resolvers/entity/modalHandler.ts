@@ -32,7 +32,7 @@ export class ModalHandler extends HandlerAbstract {
     switch (tag) {
       default:
         refreshPage()
-        objectTemplates = this.Splice(2, objectTemplates, [// TODO while 2 is correct, it needs to be redone to make it programmatic
+        /* objectTemplates = this.Splice(2, objectTemplates, [// TODO while 2 is correct, it needs to be redone to make it programmatic
           new ObjectTemplate(RegionEnum.ModalForm, ObjectTypeEnum.SelectButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
             [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.ItemList].Data),
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Division'),
@@ -41,7 +41,7 @@ export class ModalHandler extends HandlerAbstract {
             [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.Id].Data),
             [StatTypeEnum.ErrorMessage]: StatType.StatTypes[StatTypeEnum.ErrorMessage]().CreateStat().InitData(eventHandler.payload.Stats[StatTypeEnum.ErrorMessage].Data)
           })
-        ])
+        ]) */
         refreshPage()
         break
     }

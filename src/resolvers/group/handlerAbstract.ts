@@ -1,4 +1,3 @@
-import { ResolverAbstract } from '@/resolvers/resolverAbstract'
 import {
   ActionTypeEnum,
   EventHandlerType,
@@ -13,6 +12,7 @@ import { Definitions } from '@/definitions/appDefinitions'
 import router from '@/router'
 import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
 import { $t } from '@/locales'
+import { ResolverAbstract } from '@/resolvers/resolverAbstract'
 
 export abstract class HandlerAbstract extends ResolverAbstract {
   RowButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
@@ -40,7 +40,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         break
       case SubObjectTypeEnum.Middle:
         wrapper.refreshPage()
-        wrapper.objectTemplates = this.Splice(3, wrapper.objectTemplates, [// TODO while 2 is correct, it needs to be redone to make it programmatic
+        /* wrapper.objectTemplates = this.Splice(3, wrapper.objectTemplates, [// TODO while 2 is correct, it needs to be redone to make it programmatic
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.SelectButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
             [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData(wrapper.eventHandler.payload.Stats[StatTypeEnum.ItemList].Data),
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData($t.template),
@@ -51,7 +51,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
             [StatTypeEnum.BelongsTo]: StatType.StatTypes[StatTypeEnum.BelongsTo]().CreateStat().InitData(wrapper.inEdit ? '' : wrapper.eventHandler.payload.Stats[StatTypeEnum.BelongsTo].Data), // TODO inEdit here might no longer be needed
             [StatTypeEnum.ErrorMessage]: StatType.StatTypes[StatTypeEnum.ErrorMessage]().CreateStat().InitData(wrapper.eventHandler.payload.Stats[StatTypeEnum.ErrorMessage].Data)
           })
-        ])
+        ]) */
         wrapper.refreshPage()
         break
       case SubObjectTypeEnum.Up:

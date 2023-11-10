@@ -4,7 +4,8 @@ import {
   EventHandlerType,
   ObjectTemplate,
   ObjectTypeEnum,
-  RegionEnum, StatType,
+  RegionEnum,
+  StatType,
   StatTypeEnum,
   SubObjectTypeEnum
 } from '@cybertale/interface'
@@ -13,8 +14,8 @@ import { Definitions } from '@/definitions/appDefinitions'
 import router from '@/router'
 import { Modal } from 'bootstrap'
 import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
-import { $t } from '@/locales'
 import { TagHelpers } from '@/definitions/tagHelpers'
+import { v4 as uuidv4 } from 'uuid'
 
 export abstract class HandlerAbstract extends ResolverAbstract {
   RowButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
@@ -23,6 +24,10 @@ export abstract class HandlerAbstract extends ResolverAbstract {
 
   public async FormSelectList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
     switch (wrapper.eventHandler.subObjectType) {
+      case SubObjectTypeEnum.ParentObject:
+        wrapper.objectTemplates[wrapper.objectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data.includes(wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data))].Stats[StatTypeEnum.Value].Data = wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data
+        console.log(wrapper.objectTemplates)
+        break
       case SubObjectTypeEnum.Middle:
         this.removeElementFromArray(wrapper.objectTemplates, TagHelpers.CyberTags.group)
         wrapper.refreshPage()
@@ -32,7 +37,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
       default:
         break
     }
-    return Promise.resolve(wrapper.objectTemplates)
+    return wrapper.objectTemplates
   }
 
   public async FormButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
@@ -115,12 +120,34 @@ export abstract class HandlerAbstract extends ResolverAbstract {
           myModal.show()
         }
         break
-      case TagHelpers.CyberTags.add:
+      case TagHelpers.CyberTags.add + TagHelpers.CyberTags.division: // TODO: need to solve with contain/includes
         refreshPage()
         eventHandler.payload[0].Stats[StatTypeEnum.ElementType].Data = ''
-        objectTemplates = this.Splice(2, objectTemplates, [eventHandler.payload[0]])
+        // eslint-disable-next-line no-case-declarations
+        let i = -1
+        console.log(eventHandler.payload[0].Stats[StatTypeEnum.Tag].Data)
+        for (const objectTemplate of objectTemplates) {
+          if (objectTemplate.Stats[StatTypeEnum.Tag].Data.includes(eventHandler.payload[0].Stats[StatTypeEnum.Tag].Data)) {
+            i++
+          }
+        }
+        this.appendIdentifier(eventHandler.payload)
+        objectTemplates = this.Splice(2 + i, objectTemplates, [eventHandler.payload[0]])
         refreshPage()
         break
+    }
+  }
+
+  appendIdentifier (_objects: ObjectTemplate[]): void {
+    const identifier = uuidv4()
+    let firstDone = false
+    for (const item of _objects) {
+      item.Stats[StatTypeEnum.Tag].Data = item.Stats[StatTypeEnum.Tag].Data + identifier
+      if (firstDone) {
+        item.Stats[StatTypeEnum.BelongsTo].Data = item.Stats[StatTypeEnum.BelongsTo].Data + identifier
+      } else {
+        firstDone = true
+      }
     }
   }
 

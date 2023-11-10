@@ -2,7 +2,7 @@
         <div class="mb-3 row justify-content-md-center" v-if="object ?.Stats[statTypeEnum.ElementType].Data === 'button'">
             <button data-bs-toggle="tooltip" data-bs-placement="top"
                     :class="`${object.Stats[statTypeEnum.Design].Data}`"
-                    @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, [JSON.parse(JSON.stringify(object)), ...entity])'>
+                    @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[objectTypeEnum.Button].ChooseSubType(object, [JSON.parse(JSON.stringify(object)), ...JSON.parse(JSON.stringify(entity))])'>
                 {{object.Stats[statTypeEnum.Label].Data}}
             </button>
         </div>
@@ -33,6 +33,7 @@ import {
   StatTypeEnum,
   SubObjectTypeEnum
 } from '@cybertale/interface'
+import { v4 as uuidv4 } from 'uuid'
 
 @Options({
   props: {
@@ -45,7 +46,7 @@ import {
     }
   }
 })
-export default class FormButtonComponent extends Vue {
+export default class InputGroupComponent extends Vue {
   mechanic: MechanicAbstract = new Manager.Mechanic.PlaceholderMechanic()
   objectTemplate = ObjectTemplate
   regionEnum = RegionEnum
@@ -56,8 +57,13 @@ export default class FormButtonComponent extends Vue {
   object!: ObjectTemplate
   entity!: ObjectTemplate[]
   index!: number
-  objectTemplates: ObjectTemplate[] = this.mechanic.InitSet(this.entity)
+  objectTemplates: ObjectTemplate[] = []
   renderComponent = false
+
+  mounted () {
+    console.log(this.entity)
+    this.objectTemplates = this.mechanic.InitSet(JSON.parse(JSON.stringify(this.entity)))
+  }
 
   specialCase () {
     if (this.object !== undefined) {
@@ -72,6 +78,7 @@ export default class FormButtonComponent extends Vue {
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {
+    // _object.Stats[StatTypeEnum.Tag].Data = uuidv4()
     return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }
 }

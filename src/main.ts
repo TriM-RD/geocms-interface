@@ -1,4 +1,4 @@
-import { createApp, Transition } from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -21,17 +21,13 @@ import ColumnComponent from '@/components/ColumnComponent.vue'
 import ECabinetColumnComponent from '@/components/ECabinetColumnComponent.vue'
 import ECabinetRowComponent from '@/components/ECabinetRowComponent.vue'
 import ColumnButtonComponent from '@/components/ColumnButtonComponent.vue'
-import FieldButtonComponent from '@/components/FieldButtonComponent.vue'
-import SelectButtonComponent from '@/components/SelectButtonComponent.vue'
-import ListRowComponent from '@/components/ListRowComponent.vue'
 import ModalFormComponent from '@/components/ModalFormComponent.vue'
 import MapPickerComponent from '@/components/MapPickerComponent.vue'
-import DataSelectComponent from '@/components/DataSelectComponent.vue'
 import { ObjectType, ObjectTypeEnum } from '@cybertale/interface/src'
 import UppyComponent from '@/components/formComponents/UppyComponent.vue'
-import FormButtonComponent from '@/components/FormButtonComponent.vue'
+import InputGroupComponent from '@/components/InputGroupComponent.vue'
 
-const defaultOptions = { treeName: 'blocks-tree' }
+const defaultOptions = { nodeName: 'node-tree', treeName: 'blocks-tree' }
 
 ObjectType.ObjectTypes[ObjectTypeEnum.Field](() => InputComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.Button](() => SubmitButtonComponent)
@@ -46,12 +42,9 @@ ObjectType.ObjectTypes[ObjectTypeEnum.Column](() => ColumnComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.ECabinetColumn](() => ECabinetColumnComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.ECabinetRow](() => ECabinetRowComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.ColumnButton](() => ColumnButtonComponent)
-ObjectType.ObjectTypes[ObjectTypeEnum.FieldButton](() => FieldButtonComponent)
-ObjectType.ObjectTypes[ObjectTypeEnum.SelectButton](() => FormButtonComponent)
-ObjectType.ObjectTypes[ObjectTypeEnum.ListRow](() => ListRowComponent)
+ObjectType.ObjectTypes[ObjectTypeEnum.InputGroup](() => InputGroupComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.ModalForm](() => ModalFormComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.MapPicker](() => MapPickerComponent)
-ObjectType.ObjectTypes[ObjectTypeEnum.DataSelect](() => DataSelectComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.UploadFile](() => UppyComponent)
 
 const options: PluginOptions = {

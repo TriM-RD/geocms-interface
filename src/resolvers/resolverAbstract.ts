@@ -191,4 +191,14 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
   protected checkIfContains (str: string, word: string): boolean {
     return str.includes(word)
   }
+
+  protected updateValueData (wrapper: WrapperAbstract): void {
+    const matchingIndex = wrapper.objectTemplates.findIndex(element =>
+      element.Stats[StatTypeEnum.Tag].Data.includes(wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+    )
+
+    if (matchingIndex !== -1) {
+      wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data = wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data
+    }
+  }
 }

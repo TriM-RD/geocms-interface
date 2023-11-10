@@ -31,7 +31,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         break
       case SubObjectTypeEnum.Middle:
         wrapper.refreshPage()
-        wrapper.objectTemplates = wrapper.append([
+        /* wrapper.objectTemplates = wrapper.append([
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.SelectButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
             [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData(wrapper.eventHandler.payload.Stats[StatTypeEnum.ItemList].Data),
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData($t.permission),
@@ -40,7 +40,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
             [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(wrapper.eventHandler.payload.Stats[StatTypeEnum.Id].Data),
             [StatTypeEnum.ErrorMessage]: StatType.StatTypes[StatTypeEnum.ErrorMessage]().CreateStat().InitData(wrapper.eventHandler.payload.Stats[StatTypeEnum.ErrorMessage].Data)
           })
-        ])
+        ]) */
         wrapper.refreshPage()
         break
       case SubObjectTypeEnum.Right:

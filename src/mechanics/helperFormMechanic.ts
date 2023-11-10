@@ -23,11 +23,11 @@ export namespace Manager.Mechanic{
     }
 
     protected SubscribeConditions (): void {
-      RegionType.RegionTypes[RegionEnum.MapPicker].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
+      RegionType.RegionTypes[RegionEnum.Placeholder].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
     }
 
     public UnsubscribeConditions (): void {
-      RegionType.RegionTypes[RegionEnum.MapPicker].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
+      RegionType.RegionTypes[RegionEnum.Placeholder].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -52,8 +52,8 @@ export namespace Manager.Mechanic{
       return characters.join('')
     }
 
-    private generateCode (eventHandler: EventHandlerType, string: string) {
-      const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === string)
+    private generateCode (eventHandler: EventHandlerType, tag: string) {
+      const temp = this.ObjectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === tag)
       RegionType.RegionTypes[this.ObjectTemplates[temp].Region].ObjectTypes[this.ObjectTemplates[temp].ObjectEnum].ChooseSubType(this.ObjectTemplates[temp], this.generateRandomString(this.ObjectTemplates[temp].Stats[StatTypeEnum.Id].Data))
     }
   }

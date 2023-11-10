@@ -16,11 +16,11 @@ export namespace Manager.Mechanic{
     }
 
     protected SubscribeConditions (): void {
-      RegionType.RegionTypes[RegionEnum.List].ObjectTypes[ObjectTypeEnum.ListRow].SubscribeLogic(this.Button.bind(this))
+      RegionType.RegionTypes[RegionEnum.List].ObjectTypes[ObjectTypeEnum.Button].SubscribeLogic(this.Button.bind(this))
     }
 
     public UnsubscribeConditions (): void {
-      RegionType.RegionTypes[RegionEnum.List].ObjectTypes[ObjectTypeEnum.ListRow].NullifyLogic()
+      RegionType.RegionTypes[RegionEnum.List].ObjectTypes[ObjectTypeEnum.Button].NullifyLogic()
     }
 
     protected Button (eventHandler: EventHandlerType): void {
