@@ -2,7 +2,7 @@
         <div class="mb-3 row justify-content-md-center" v-if="object ?.Stats[statTypeEnum.ElementType].Data === 'button'">
             <button data-bs-toggle="tooltip" data-bs-placement="top"
                     :class="`${object.Stats[statTypeEnum.Design].Data}`"
-                    @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[objectTypeEnum.Button].ChooseSubType(object, [JSON.parse(JSON.stringify(object)), ...JSON.parse(JSON.stringify(entity))])'>
+                    @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[objectTypeEnum.Button].ChooseSubType(JSON.parse(JSON.stringify(objectCopy(object))))'>
                 {{object.Stats[statTypeEnum.Label].Data}}
             </button>
         </div>
@@ -10,7 +10,6 @@
         <div class="col-lg"></div>
           <div class="col">
             <div class="input-group">
-              <label :title="specialCase()" for="exampleDataList" class="input-group-text">{{object.Stats[statTypeEnum.Label].Data }}</label>
               <component v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ Math.random().toString(36).slice(2, 7) }`"  :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'></component>
             </div>
         </div>
@@ -33,7 +32,6 @@ import {
   StatTypeEnum,
   SubObjectTypeEnum
 } from '@cybertale/interface'
-import { v4 as uuidv4 } from 'uuid'
 
 @Options({
   props: {
@@ -53,6 +51,8 @@ export default class InputGroupComponent extends Vue {
   regionType = RegionType
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
+  subObjectTypeEnum = SubObjectTypeEnum
+  actionTypeEnum = ActionTypeEnum
   objectType = ObjectType
   object!: ObjectTemplate
   entity!: ObjectTemplate[]
@@ -61,8 +61,7 @@ export default class InputGroupComponent extends Vue {
   renderComponent = false
 
   mounted () {
-    console.log(this.entity)
-    this.objectTemplates = this.mechanic.InitSet(JSON.parse(JSON.stringify(this.entity)))
+    this.objectTemplates = this.mechanic.InitSet(this.entityCopy(this.entity))
   }
 
   specialCase () {
@@ -71,6 +70,21 @@ export default class InputGroupComponent extends Vue {
         return this.object.Stats[this.statTypeEnum.Tooltip].Data
       }
     }
+  }
+
+  objectCopy (_object : ObjectTemplate) : ObjectTemplate {
+    if (_object.Stats[StatTypeEnum.Value]) { _object.Stats[StatTypeEnum.Value].Data = this.object.Stats[StatTypeEnum.Value].Data }
+    return new ObjectTemplate(_object.Region, _object.ObjectEnum, _object.SubObjectEnum, _object.ActionEnum, _object.Stats)
+  }
+
+  entityCopy (entities: ObjectTemplate[]) : ObjectTemplate[] {
+    const arr = []
+    entities = JSON.parse(JSON.stringify(entities))
+    for (const entity of entities) {
+      entity.Stats[StatTypeEnum.Tag].Data = entity.Stats[StatTypeEnum.Tag].Data + this.object.Stats[StatTypeEnum.Tag].Data
+      arr.push(this.objectCopy(entity))
+    }
+    return arr
   }
 
   beforeUnmount () {

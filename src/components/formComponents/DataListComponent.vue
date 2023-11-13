@@ -64,7 +64,7 @@ export default class DataListComponent extends Vue {
     if (this.object.Stats[this.statTypeEnum.IsValid].Data === '') { return '' }
     if (this.object.Stats[this.statTypeEnum.IsValid].Data) { return 'is-valid' }
     if (this.object.Stats[this.statTypeEnum.ErrorMessage].Data === null) { return '' }
-    if (this.object.Stats[this.statTypeEnum.ErrorMessage].Data !== '') { console.log('test'); return 'is-invalid' }
+    if (this.object.Stats[this.statTypeEnum.ErrorMessage].Data !== '') { return 'is-invalid' }
     return ''
   }
 

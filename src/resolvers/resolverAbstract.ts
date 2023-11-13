@@ -62,7 +62,7 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
         }
         break
       case 'delete':
-        this.removeElementByTag(eventHandler, strings[1], objectTemplates)
+        this.removeElementByTag(strings[1], objectTemplates)
         break
       default:
         break
@@ -181,24 +181,24 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
     return objectTemplates
   }
 
-  protected removeElementByTag (eventHandler : EventHandlerType, tag : string, objectTemplates: ObjectTemplate[]): ObjectTemplate[] {
-    const elementIndex = objectTemplates.findIndex(
-      element => element.Stats[StatTypeEnum.Tag].Data === tag)
+  protected removeElementByTag (tag : string, objectTemplates: ObjectTemplate[]): ObjectTemplate[] {
+    const elementIndex = this.getObjectTemplateIndex(tag, objectTemplates)
     objectTemplates.splice(elementIndex, 1)
     return objectTemplates
   }
 
-  protected checkIfContains (str: string, word: string): boolean {
-    return str.includes(word)
+  protected getObjectTemplateIndex (tag: string, objectTemplates : ObjectTemplate[]) : number {
+    return objectTemplates.findIndex(element =>
+      element.Stats[StatTypeEnum.Tag].Data === tag
+    )
   }
 
-  protected updateValueData (wrapper: WrapperAbstract): void {
-    const matchingIndex = wrapper.objectTemplates.findIndex(element =>
-      element.Stats[StatTypeEnum.Tag].Data.includes(wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
-    )
+  protected updateValueData (wrapper: WrapperAbstract): WrapperAbstract {
+    const matchingIndex = this.getObjectTemplateIndex(wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data, wrapper.objectTemplates)
 
     if (matchingIndex !== -1) {
       wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data = wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data
     }
+    return wrapper
   }
 }

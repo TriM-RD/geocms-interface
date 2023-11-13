@@ -25,11 +25,11 @@ export abstract class HandlerAbstract extends ResolverAbstract {
   public async FormSelectList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
     switch (wrapper.eventHandler.subObjectType) {
       case SubObjectTypeEnum.ParentObject:
-        wrapper.objectTemplates[wrapper.objectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data.includes(wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data))].Stats[StatTypeEnum.Value].Data = wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data
-        console.log(wrapper.objectTemplates)
+        wrapper = this.updateValueData(wrapper)
         break
       case SubObjectTypeEnum.Middle:
         this.removeElementFromArray(wrapper.objectTemplates, TagHelpers.CyberTags.group)
+        wrapper = this.updateValueData(wrapper)
         wrapper.refreshPage()
         wrapper.objectTemplates = wrapper.append((await http.get(process.env.VUE_APP_BASE_URL + 'form/entity/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
         wrapper.refreshPage()
@@ -45,8 +45,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
     let rowsExist = false
     switch (wrapper.eventHandler.subObjectType) {
       case SubObjectTypeEnum.Middle:
-        console.log(wrapper)
-        await this.resolveButtonMiddle(wrapper.eventHandler, wrapper.eventHandler.payload[0].Stats[StatTypeEnum.Tag].Data, wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
+        await this.resolveButtonMiddle(wrapper.eventHandler, wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data, wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
         break
       case SubObjectTypeEnum.Left:
         // Add it to Stats
@@ -81,7 +80,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         break
       case SubObjectTypeEnum.Down:
         wrapper.refreshPage()
-        this.resolveButtonDown(wrapper.eventHandler, wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data.split('-'), wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
+        this.resolveButtonDown(wrapper.eventHandler, wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data.split('|'), wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
         wrapper.refreshPage()
         break
       default:
@@ -122,32 +121,18 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         break
       case TagHelpers.CyberTags.add + TagHelpers.CyberTags.division: // TODO: need to solve with contain/includes
         refreshPage()
-        eventHandler.payload[0].Stats[StatTypeEnum.ElementType].Data = ''
+        eventHandler.payload.Stats[StatTypeEnum.ElementType].Data = ''
         // eslint-disable-next-line no-case-declarations
         let i = -1
-        console.log(eventHandler.payload[0].Stats[StatTypeEnum.Tag].Data)
         for (const objectTemplate of objectTemplates) {
-          if (objectTemplate.Stats[StatTypeEnum.Tag].Data.includes(eventHandler.payload[0].Stats[StatTypeEnum.Tag].Data)) {
+          if (objectTemplate.Stats[StatTypeEnum.Tag].Data.includes(eventHandler.payload.Stats[StatTypeEnum.Tag].Data)) {
             i++
           }
         }
-        this.appendIdentifier(eventHandler.payload)
-        objectTemplates = this.Splice(2 + i, objectTemplates, [eventHandler.payload[0]])
+        eventHandler.payload.Stats[StatTypeEnum.Tag].Data = eventHandler.payload.Stats[StatTypeEnum.Tag].Data + uuidv4()
+        objectTemplates = this.Splice(2 + i, objectTemplates, [eventHandler.payload])
         refreshPage()
         break
-    }
-  }
-
-  appendIdentifier (_objects: ObjectTemplate[]): void {
-    const identifier = uuidv4()
-    let firstDone = false
-    for (const item of _objects) {
-      item.Stats[StatTypeEnum.Tag].Data = item.Stats[StatTypeEnum.Tag].Data + identifier
-      if (firstDone) {
-        item.Stats[StatTypeEnum.BelongsTo].Data = item.Stats[StatTypeEnum.BelongsTo].Data + identifier
-      } else {
-        firstDone = true
-      }
     }
   }
 

@@ -3,7 +3,7 @@
            :can-cancel="false"
            :is-full-page="false"/>
   <form v-if="!renderComponent" class="needs-validation" id="classic-form" novalidate>
-    <component :page-refresh="renderComponent" :rerender="changeRender"  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ _objectTemplate.Stats[statTypeEnum.Tag].Data }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :entity='resolveEntities(_objectTemplate)' :object='_objectTemplate'> </component>
+    <component :page-refresh="renderComponent"  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ _objectTemplate.Stats[statTypeEnum.Tag].Data }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :entity='resolveEntities(_objectTemplate)' :object='_objectTemplate'> </component>
   </form>
 </template>
 
@@ -44,50 +44,51 @@ export default class FormComponent extends Vue {
     this.Init()
   }
 
-  resolveEntities (_object: ObjectTemplate) {
-    if (_object.Stats[StatTypeEnum.BelongsTo] === undefined) {
-      this.objectTemplates = this.mechanic.InitSet(this.entity)
+  resolveEntities (_object: ObjectTemplate) : ObjectTemplate[] {
+    if (this.belongsTo) {
       for (const tag of Object.keys(this.belongsTo)) {
         if (_object.Stats[StatTypeEnum.Tag].Data.includes(tag)) {
           return this.belongsTo[tag]
         }
       }
     }
+
+    return []
+  }
+
+  extractChildren () : ObjectTemplate[] {
+    this.belongsTo = {}
+
+    // Use a separate array to store indices of items to be deleted
+    // eslint-disable-next-line no-case-declarations
+    const itemsToDelete = []
+
+    for (let i = 0; i < this.entity.length; i++) {
+      const item = this.entity[i]
+
+      if (item.Stats[StatTypeEnum.BelongsTo] !== undefined) {
+        const data = item.Stats[StatTypeEnum.BelongsTo].Data
+        this.belongsTo[data] = this.belongsTo[data] || []
+        this.belongsTo[data].push(item)
+
+        // Add index to itemsToDelete array
+        itemsToDelete.push(i)
+      }
+    }
+
+    // Iterate in reverse to avoid issues with array modifications
+    for (let i = itemsToDelete.length - 1; i >= 0; i--) {
+      this.entity.splice(itemsToDelete[i], 1)
+    }
+    return this.entity
   }
 
   async Init () {
-    const itemsToDelete = []
     switch (router.currentRoute.value.name) {
       case Definitions.Entity.Add:
       case Definitions.Entity.Edit:
         this.entity = await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'entity')
-
-        this.belongsTo = {}
-
-        // Use a separate array to store indices of items to be deleted
-        // eslint-disable-next-line no-case-declarations
-        const itemsToDelete = []
-
-        for (let i = 0; i < this.entity.length; i++) {
-          const item = this.entity[i]
-
-          if (item.Stats[StatTypeEnum.BelongsTo] !== undefined) {
-            const data = item.Stats[StatTypeEnum.BelongsTo].Data
-            this.belongsTo[data] = this.belongsTo[data] || []
-            this.belongsTo[data].push(item)
-
-            // Add index to itemsToDelete array
-            itemsToDelete.push(i)
-          }
-        }
-
-        // Iterate in reverse to avoid issues with array modifications
-        for (let i = itemsToDelete.length - 1; i >= 0; i--) {
-          this.entity.splice(itemsToDelete[i], 1)
-        }
-
-        this.objectTemplates = this.mechanic.InitSet(this.entity)
-        console.log(this.objectTemplates)
+        this.objectTemplates = this.mechanic.InitSet(this.extractChildren())
         break
       case Definitions.Entity.Replace:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'replace/entity/' + this.$route.params.parentId.toString()))
@@ -105,11 +106,13 @@ export default class FormComponent extends Vue {
         break
       case Definitions.Group.Edit:
       case Definitions.Group.Add:
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'group'))
+        this.entity = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'group'))
+        this.objectTemplates = this.mechanic.InitSet(this.extractChildren())
         break
       case Definitions.Division.Edit:
       case Definitions.Division.Add:
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'division'))
+        this.entity = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'division'))
+        this.objectTemplates = this.mechanic.InitSet(this.extractChildren())
         break
       case Definitions.Attribute.Add:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'attribute'))
@@ -130,11 +133,11 @@ export default class FormComponent extends Vue {
         break
       case Definitions.Administration.Add:
       case Definitions.Administration.Edit:
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'user'))
+        this.entity = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'user'))
+        this.objectTemplates = this.mechanic.InitSet(this.extractChildren())
         break
     }
     this.renderComponent = false
-    console.log(this.objectTemplates)
   }
 
   reRender () {

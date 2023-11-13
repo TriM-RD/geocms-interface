@@ -26,6 +26,7 @@ import MapPickerComponent from '@/components/MapPickerComponent.vue'
 import { ObjectType, ObjectTypeEnum } from '@cybertale/interface/src'
 import UppyComponent from '@/components/formComponents/UppyComponent.vue'
 import InputGroupComponent from '@/components/InputGroupComponent.vue'
+import LabelComponent from '@/components/formComponents/LabelComponent.vue'
 
 const defaultOptions = { nodeName: 'node-tree', treeName: 'blocks-tree' }
 
@@ -46,6 +47,7 @@ ObjectType.ObjectTypes[ObjectTypeEnum.InputGroup](() => InputGroupComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.ModalForm](() => ModalFormComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.MapPicker](() => MapPickerComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.UploadFile](() => UppyComponent)
+ObjectType.ObjectTypes[ObjectTypeEnum.Label](() => LabelComponent)
 
 const options: PluginOptions = {
   position: POSITION.TOP_RIGHT,
