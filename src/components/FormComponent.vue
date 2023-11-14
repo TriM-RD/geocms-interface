@@ -83,7 +83,7 @@ export default class FormComponent extends Vue {
     return this.entity
   }
 
-  async Init () {
+  async Init () : Promise<void> {
     switch (router.currentRoute.value.name) {
       case Definitions.Entity.Add:
       case Definitions.Entity.Edit:
@@ -140,11 +140,11 @@ export default class FormComponent extends Vue {
     this.renderComponent = false
   }
 
-  reRender () {
+  reRender (): void {
     this.renderComponent = !this.renderComponent
   }
 
-  changeRender () {
+  changeRender (): void {
     this.renderComponent = !this.renderComponent
     this.mechanic.UnsubscribeConditions()
     this.objectTemplates = []

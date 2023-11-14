@@ -24,9 +24,6 @@ export abstract class HandlerAbstract extends ResolverAbstract {
 
   public async FormSelectList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
     switch (wrapper.eventHandler.subObjectType) {
-      case SubObjectTypeEnum.ParentObject:
-        wrapper = this.updateValueData(wrapper)
-        break
       case SubObjectTypeEnum.Middle:
         this.removeElementFromArray(wrapper.objectTemplates, TagHelpers.CyberTags.group)
         wrapper = this.updateValueData(wrapper)
@@ -35,6 +32,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         wrapper.refreshPage()
         break
       default:
+        wrapper.objectTemplates = await super.FormSelectList(wrapper)
         break
     }
     return wrapper.objectTemplates
@@ -45,7 +43,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
     let rowsExist = false
     switch (wrapper.eventHandler.subObjectType) {
       case SubObjectTypeEnum.Middle:
-        await this.resolveButtonMiddle(wrapper.eventHandler, wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data, wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
+        wrapper = await this.resolveButtonMiddle(wrapper)
         break
       case SubObjectTypeEnum.Left:
         // Add it to Stats
@@ -89,18 +87,18 @@ export abstract class HandlerAbstract extends ResolverAbstract {
     return Promise.resolve(wrapper.objectTemplates)
   }
 
-  protected async resolveButtonMiddle (eventHandler: EventHandlerType, tag: string, objectTemplates: ObjectTemplate[], refreshPage: () => void, id: string): Promise<void> {
-    switch (tag) {
+  protected async resolveButtonMiddle (wrapper: WrapperAbstract): Promise<WrapperAbstract> {
+    switch (wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data) {
       case TagHelpers.EcabinetTags.replace:
         await router.push({
           name: Definitions.Entity.Replace,
-          params: { parentId: id }
+          params: { parentId: wrapper.id }
         })
         break
       case TagHelpers.EcabinetTags.viewParent:
         await router.push({
           name: Definitions.Entity.Edit,
-          params: { id: eventHandler.payload.Stats[StatTypeEnum.Value].Data }
+          params: { id: wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data }
         })
         break
       case TagHelpers.ControllerTags.showControllerButton:
@@ -108,7 +106,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         const iframe = document.getElementById('yourIframeId') as HTMLIFrameElement
         if (iframe !== null) {
           if (iframe.contentWindow !== null) {
-            iframe.contentWindow.postMessage({ command: 'openModalOrmar', code: this.specialTruncate(eventHandler.payload.Stats[StatTypeEnum.Value].Data) }, '*')
+            iframe.contentWindow.postMessage({ command: 'openModalOrmar', code: this.specialTruncate(wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data) }, '*')
           }
         }
         // Open the modal
@@ -119,21 +117,11 @@ export abstract class HandlerAbstract extends ResolverAbstract {
           myModal.show()
         }
         break
-      case TagHelpers.CyberTags.add + TagHelpers.CyberTags.division: // TODO: need to solve with contain/includes
-        refreshPage()
-        eventHandler.payload.Stats[StatTypeEnum.ElementType].Data = ''
-        // eslint-disable-next-line no-case-declarations
-        let i = -1
-        for (const objectTemplate of objectTemplates) {
-          if (objectTemplate.Stats[StatTypeEnum.Tag].Data.includes(eventHandler.payload.Stats[StatTypeEnum.Tag].Data)) {
-            i++
-          }
-        }
-        eventHandler.payload.Stats[StatTypeEnum.Tag].Data = eventHandler.payload.Stats[StatTypeEnum.Tag].Data + uuidv4()
-        objectTemplates = this.Splice(2 + i, objectTemplates, [eventHandler.payload])
-        refreshPage()
+      case TagHelpers.CyberTags.add + TagHelpers.CyberTags.division:
+        this.addObjectTemplateInputGroup(wrapper)
         break
     }
+    return wrapper
   }
 
   protected resolveButtonDown (eventHandler: EventHandlerType, strings: string[], objectTemplates: ObjectTemplate[], refreshPage: () => void, id: string): ObjectTemplate[] {

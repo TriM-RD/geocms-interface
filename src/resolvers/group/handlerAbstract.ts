@@ -28,6 +28,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         wrapper.refreshPage()
         break
       default:
+        wrapper.objectTemplates = await super.FormSelectList(wrapper)
         break
     }
     return Promise.resolve(wrapper.objectTemplates)
@@ -64,7 +65,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         break
       case SubObjectTypeEnum.Down:
         wrapper.refreshPage()
-        this.resolveButtonDown(wrapper.eventHandler, wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data.split('-'), wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
+        this.resolveButtonDown(wrapper.eventHandler, wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data.split('|'), wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
         wrapper.refreshPage()
         break
       default:

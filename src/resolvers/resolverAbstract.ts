@@ -1,4 +1,4 @@
-import { EventHandlerType, ObjectTemplate, StatTypeEnum } from '@cybertale/interface'
+import { EventHandlerType, ObjectTemplate, StatTypeEnum, SubObjectTypeEnum } from '@cybertale/interface'
 import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
 import http from '@/http-common'
@@ -6,6 +6,7 @@ import router from '@/router'
 import { ResolverInterface } from '@/resolvers/assignments/resolverInterface'
 import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
 import { Definitions } from '@/definitions/appDefinitions'
+import { v4 as uuidv4 } from 'uuid'
 
 export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstract> {
   protected removeElementFromArray (arr: Array<any>, belongsTo: string) : void {
@@ -21,7 +22,15 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
     })()
   }
 
-  abstract FormSelectList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]>
+  public async FormSelectList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
+    switch (wrapper.eventHandler.subObjectType) {
+      case SubObjectTypeEnum.ParentObject:
+        wrapper = this.updateValueData(wrapper)
+        break
+    }
+    return wrapper.objectTemplates
+  }
+
   public async TableButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
     throw new Error('Feature not implemented')
   }
@@ -185,6 +194,22 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
     const elementIndex = this.getObjectTemplateIndex(tag, objectTemplates)
     objectTemplates.splice(elementIndex, 1)
     return objectTemplates
+  }
+
+  protected addObjectTemplateInputGroup (wrapper: WrapperAbstract) : WrapperAbstract {
+    wrapper.refreshPage()
+    wrapper.eventHandler.payload.Stats[StatTypeEnum.ElementType].Data = ''
+    // eslint-disable-next-line no-case-declarations
+    let i = -1
+    for (const objectTemplate of wrapper.objectTemplates) {
+      if (objectTemplate.Stats[StatTypeEnum.Tag].Data.includes(wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data)) {
+        i++
+      }
+    }
+    wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data = wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data + uuidv4()
+    wrapper.objectTemplates = this.Splice(2 + i, wrapper.objectTemplates, [wrapper.eventHandler.payload])
+    wrapper.refreshPage()
+    return wrapper
   }
 
   protected getObjectTemplateIndex (tag: string, objectTemplates : ObjectTemplate[]) : number {

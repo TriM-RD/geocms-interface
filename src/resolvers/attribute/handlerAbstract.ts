@@ -27,6 +27,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         wrapper.refreshPage()
         break
       default:
+        wrapper.objectTemplates = await super.FormSelectList(wrapper)
         break
     }
     return Promise.resolve(wrapper.objectTemplates)
@@ -38,16 +39,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         await this.validateForm('attribute', Definitions.Attribute.Edit, wrapper.objectTemplates, wrapper.refreshPage, wrapper.append, wrapper.id, wrapper.inEdit, wrapper.eventHandler.payload)
         break
       case SubObjectTypeEnum.Middle:
-        wrapper.refreshPage()
-        /* wrapper.objectTemplates = wrapper.append([
-          new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.FieldButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
-            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData($t.value),
-            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('value' + Math.random().toString(36).slice(2, 7).toString()),
-            [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(''),
-            [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(wrapper.eventHandler.payload.Stats[StatTypeEnum.Id].Data)
-          })
-        ]) */
-        wrapper.refreshPage()
+        this.addObjectTemplateInputGroup(wrapper)
         break
       case SubObjectTypeEnum.Right:
         await router.push({
@@ -57,7 +49,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         break
       case SubObjectTypeEnum.Down:
         wrapper.refreshPage()
-        this.resolveButtonDown(wrapper.eventHandler, wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data.split('-'), wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
+        this.resolveButtonDown(wrapper.eventHandler, wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data.split('|'), wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
         wrapper.refreshPage()
         break
       default:
