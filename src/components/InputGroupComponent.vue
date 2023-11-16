@@ -1,8 +1,9 @@
 <template>
+  <div v-if="!reRender">
         <div class="mb-3 row justify-content-md-center" v-if="object ?.Stats[statTypeEnum.ElementType].Data === 'button'">
             <button data-bs-toggle="tooltip" data-bs-placement="top"
                     :class="`${object.Stats[statTypeEnum.Design].Data}`"
-                    @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[objectTypeEnum.Button].ChooseSubType(JSON.parse(JSON.stringify(objectCopy(object))))'>
+                    @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[objectTypeEnum.Button].ChooseSubType(JSON.parse(JSON.stringify(objectCopy(object))) as ObjectTemplate)'>
                 {{object.Stats[statTypeEnum.Label].Data}}
             </button>
         </div>
@@ -15,6 +16,7 @@
         </div>
         <div class="col-lg"></div>
       </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -34,6 +36,11 @@ import {
 } from '@cybertale/interface'
 
 @Options({
+  computed: {
+    ObjectTemplate () {
+      return ObjectTemplate
+    }
+  },
   props: {
     entity: Array,
     object: ObjectTemplate,
@@ -58,18 +65,15 @@ export default class InputGroupComponent extends Vue {
   entity!: ObjectTemplate[]
   index!: number
   objectTemplates: ObjectTemplate[] = []
-  renderComponent = false
+  pageRefresh!: boolean
 
-  mounted () {
+  mounted () : void {
     this.objectTemplates = this.mechanic.InitSet(this.entityCopy(this.entity))
   }
 
-  specialCase () {
-    if (this.object !== undefined) {
-      if (this.object.Stats[this.statTypeEnum.Tooltip] !== undefined) {
-        return this.object.Stats[this.statTypeEnum.Tooltip].Data
-      }
-    }
+  get reRender () : boolean {
+    this.objectTemplates = this.mechanic.InitSet(this.entityCopy(this.entity))
+    return this.pageRefresh
   }
 
   objectCopy (_object : ObjectTemplate) : ObjectTemplate {
@@ -92,11 +96,11 @@ export default class InputGroupComponent extends Vue {
     return arr
   }
 
-  beforeUnmount () {
+  beforeUnmount () : void {
     this.mechanic.UnsubscribeConditions()
   }
 
-  getComponent (_regionEnum : number, _objectEnum: number) {
+  getComponent (_regionEnum : number, _objectEnum: number): StatTypeEnum {
     // _object.Stats[StatTypeEnum.Tag].Data = uuidv4()
     return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }

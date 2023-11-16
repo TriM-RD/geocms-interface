@@ -113,6 +113,7 @@ export default class FormComponent extends Vue {
       case Definitions.Division.Add:
         this.entity = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'division'))
         this.objectTemplates = this.mechanic.InitSet(this.extractChildren())
+        console.log(this.objectTemplates)
         break
       case Definitions.Attribute.Add:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'attribute'))

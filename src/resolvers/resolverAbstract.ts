@@ -198,6 +198,7 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
 
   protected addObjectTemplateInputGroup (wrapper: WrapperAbstract) : WrapperAbstract {
     wrapper.refreshPage()
+    wrapper.eventHandler.payload = this.getObjectTemplateFromObject(wrapper.eventHandler.payload)
     wrapper.eventHandler.payload.Stats[StatTypeEnum.ElementType].Data = ''
     // eslint-disable-next-line no-case-declarations
     let i = -1
@@ -207,9 +208,13 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
       }
     }
     wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data = wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data + uuidv4()
-    wrapper.objectTemplates = this.Splice(2 + i, wrapper.objectTemplates, [wrapper.eventHandler.payload])
+    wrapper.objectTemplates = this.Splice(2 + i, wrapper.objectTemplates, [wrapper.eventHandler.payload as ObjectTemplate])
     wrapper.refreshPage()
     return wrapper
+  }
+
+  getObjectTemplateFromObject (object : ObjectTemplate): ObjectTemplate {
+    return new ObjectTemplate(object.Region, object.ObjectEnum, object.SubObjectEnum, object.ActionEnum, object.Stats)
   }
 
   protected getObjectTemplateIndex (tag: string, objectTemplates : ObjectTemplate[]) : number {
