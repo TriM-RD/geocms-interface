@@ -14,7 +14,7 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
       // Perform the array update
       for (let i = arr.length - 1; i >= 0; i--) {
         if (arr[i].Stats[StatTypeEnum.BelongsTo] !== undefined) {
-          if (arr[i].Stats[StatTypeEnum.BelongsTo].Data === belongsTo) {
+          if (arr[i].Stats[StatTypeEnum.BelongsTo].Data.includes(belongsTo)) {
             arr.splice(i, 1)
           }
         }
@@ -201,14 +201,15 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
     wrapper.eventHandler.payload = this.getObjectTemplateFromObject(wrapper.eventHandler.payload)
     wrapper.eventHandler.payload.Stats[StatTypeEnum.ElementType].Data = ''
     // eslint-disable-next-line no-case-declarations
-    let i = -1
+    let i = 0
+    const index = wrapper.objectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
     for (const objectTemplate of wrapper.objectTemplates) {
       if (objectTemplate.Stats[StatTypeEnum.Tag].Data.includes(wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data)) {
         i++
       }
     }
     wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data = wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data + uuidv4()
-    wrapper.objectTemplates = this.Splice(2 + i, wrapper.objectTemplates, [wrapper.eventHandler.payload as ObjectTemplate])
+    wrapper.objectTemplates = this.Splice(index + i, wrapper.objectTemplates, [wrapper.eventHandler.payload as ObjectTemplate])
     wrapper.refreshPage()
     return wrapper
   }
