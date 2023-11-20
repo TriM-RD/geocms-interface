@@ -13,6 +13,7 @@ import router from '@/router'
 import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
 import { $t } from '@/locales'
 import { ResolverAbstract } from '@/resolvers/resolverAbstract'
+import { TagHelpers } from '@/definitions/tagHelpers'
 
 export abstract class HandlerAbstract extends ResolverAbstract {
   RowButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
@@ -22,12 +23,14 @@ export abstract class HandlerAbstract extends ResolverAbstract {
   public async FormSelectList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
     switch (wrapper.eventHandler.subObjectType) {
       case SubObjectTypeEnum.Middle:
-        this.removeElementFromArray(wrapper.objectTemplates, 'groupType')
+        this.removeElementFromArray(wrapper.objectTemplates, TagHelpers.CyberTags.groupType)
+        wrapper = this.updateValueData(wrapper)
         wrapper.refreshPage()
         wrapper.objectTemplates = wrapper.append((await http.get(process.env.VUE_APP_BASE_URL + 'form/group/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
         wrapper.refreshPage()
         break
       default:
+        wrapper.objectTemplates = await super.FormSelectList(wrapper)
         break
     }
     return Promise.resolve(wrapper.objectTemplates)
@@ -64,7 +67,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         break
       case SubObjectTypeEnum.Down:
         wrapper.refreshPage()
-        this.resolveButtonDown(wrapper.eventHandler, wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data.split('-'), wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
+        this.resolveButtonDown(wrapper.eventHandler, wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data.split('|'), wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
         wrapper.refreshPage()
         break
       default:

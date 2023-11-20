@@ -15,10 +15,6 @@ import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
 import { $t } from '@/locales'
 
 export abstract class HandlerAbstract extends ResolverAbstract {
-  public async FormSelectList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
-    return Promise.resolve(wrapper.objectTemplates)
-  }
-
   RowButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
     return Promise.resolve(wrapper.objectTemplates)
   }
@@ -30,16 +26,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         break
       case SubObjectTypeEnum.Middle:
         wrapper.refreshPage()
-        /* wrapper.objectTemplates = wrapper.append([
-          new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.SelectButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
-            [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData(wrapper.eventHandler.payload.Stats[StatTypeEnum.ItemList].Data),
-            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData($t.permission),
-            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('permission' + Math.random().toString(36).slice(2, 7).toString()),
-            [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(''),
-            [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(wrapper.eventHandler.payload.Stats[StatTypeEnum.Id].Data),
-            [StatTypeEnum.ErrorMessage]: StatType.StatTypes[StatTypeEnum.ErrorMessage]().CreateStat().InitData(wrapper.eventHandler.payload.Stats[StatTypeEnum.ErrorMessage].Data)
-          })
-        ]) */
+        this.addObjectTemplateInputGroup(wrapper)
         wrapper.refreshPage()
         break
       case SubObjectTypeEnum.Right:
@@ -49,7 +36,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         break
       case SubObjectTypeEnum.Down:
         wrapper.refreshPage()
-        this.resolveButtonDown(wrapper.eventHandler, wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data.split('-'), wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
+        this.resolveButtonDown(wrapper.eventHandler, wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data.split('|'), wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
         wrapper.refreshPage()
         break
       default:
