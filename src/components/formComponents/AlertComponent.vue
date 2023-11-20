@@ -1,6 +1,6 @@
 <template>
-  <div class="alert alert-secondary">
-    {{object.Stats[statTypeEnum.Value].Data}}
+  <div class="alert" :class="object?.Stats[statTypeEnum.Design].Data">
+    {{object.Stats[statTypeEnum.Label].Data}}
   </div>
 </template>
 
