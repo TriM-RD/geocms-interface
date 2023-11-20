@@ -2,7 +2,7 @@
   <div v-if="!reRender">
         <div class="mb-3 row justify-content-md-center" v-if="object ?.Stats[statTypeEnum.ElementType].Data === 'button'">
             <button data-bs-toggle="tooltip" data-bs-placement="top"
-                    :class="`${object.Stats[statTypeEnum.Design].Data}`"
+                    :class="object.Stats[statTypeEnum.Design].Data"
                     @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[objectTypeEnum.Button].ChooseSubType(JSON.parse(JSON.stringify(objectCopy(object))) as ObjectTemplate)'>
                 {{object.Stats[statTypeEnum.Label].Data}}
             </button>

@@ -1,29 +1,26 @@
 <template>
-  <div class="mb-3 row justify-content-md-center">
-    <div class="col-lg"></div>
-    <div class="col input-group">
-      <label :title="tooltipCase()" class="input-group-text" :hidden="specialCase()">{{object.Stats[statTypeEnum.Label].Data }}</label>
-      <input class="form-control"
-             :id="object.Stats[statTypeEnum.Tag].Data"
-             :required="attributeCheck(statTypeEnum.Required)"
-             :disabled="attributeCheck(statTypeEnum.Disabled)"
-             :autocomplete="`${object.Stats[statTypeEnum.AutoComplete] !== undefined?object.Stats[statTypeEnum.AutoComplete].Data:''}`"
-             :class="object.Stats[statTypeEnum.Design].Data+' '+validate()"
-             :type="`${object.Stats[statTypeEnum.ElementType] !== undefined?object.Stats[statTypeEnum.ElementType].Data:''}`"
-             :value="object.Stats[statTypeEnum.Value].Data"
-             :placeholder="`${object.Stats[statTypeEnum.Placeholder].Data}`"
-             @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, $event.target.value)">
-      <slot></slot>
-      <div class="invalid-feedback">{{ `${object.Stats[statTypeEnum.ErrorMessage] !== undefined?object.Stats[statTypeEnum.ErrorMessage].Data:''}` }}</div>
-    </div>
-    <div class="col-lg"></div>
-  </div>
+  <input class="form-control"
+         :id="object?.Stats[statTypeEnum.Tag].Data"
+         :required="attributeCheck(statTypeEnum.Required)"
+         :disabled="attributeCheck(statTypeEnum.Disabled)"
+         :autocomplete="returnIfExists(statTypeEnum.AutoComplete)"
+         :class="object?.Stats[statTypeEnum.Design].Data+' '+validate()"
+         :type="returnIfExists(statTypeEnum.ElementType)"
+         :value="object?.Stats[statTypeEnum.Value].Data"
+         :placeholder="returnIfExists(statTypeEnum.Placeholder)"
+         @input="regionType.RegionTypes[object?.Region].ObjectTypes[object?.ObjectEnum].ChooseSubType(object as ObjectTemplate, $event.target.value)">
+  <div class="invalid-feedback">{{ returnIfExists(statTypeEnum.ErrorMessage) }}</div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import { ObjectTemplate, ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, RegionEnum } from '@cybertale/interface'
 @Options({
+  computed: {
+    ObjectTemplate () {
+      return ObjectTemplate
+    }
+  },
   props: {
     object: ObjectTemplate
   }
@@ -35,6 +32,13 @@ export default class InputComponent extends Vue {
   regionType = RegionType
   regionEnum = RegionEnum
   object!: ObjectTemplate
+
+  returnIfExists (tag: number): string {
+    if (this.object.Stats[tag]) {
+      return this.object.Stats[tag].Data
+    }
+    return ''
+  }
 
   validate () : string {
     if (this.object.Stats[this.statTypeEnum.IsValid] === undefined) { return '' }
@@ -68,5 +72,14 @@ export default class InputComponent extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.form-check .form-check-input{
+  float: none;
+}
+.form-check-input{
+  margin-right: 1%;
+}
+.form-check-input:checked {
+  background-color: #606467;
+  border-color: #606467;
+}
 </style>
