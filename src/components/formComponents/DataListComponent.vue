@@ -1,26 +1,16 @@
 <template>
-  <div class="mb-3 row justify-content-md-center">
-    <div class="col-lg"></div>
-    <div class="col">
-  <div class="input-group">
-    <label :title="`${object.Stats[statTypeEnum.Tooltip].Data}`" for="exampleDataList" class="input-group-text">{{object.Stats[statTypeEnum.Label].Data }}</label>
-    <input class="form-control" list="datalistOptions"
-           :class="validate()"
-           :required="attributeCheck(statTypeEnum.Required)"
-           :disabled="attributeCheck(statTypeEnum.Disabled)"
-           :type="`${object.Stats[statTypeEnum.ElementType] !== undefined?object.Stats[statTypeEnum.ElementType].Data:''}`"
-           :value="`${object.Stats[statTypeEnum.Value].Data !== null?object.Stats[statTypeEnum.Value].Data.name === undefined?valueName:object.Stats[statTypeEnum.Value].Data.name:''}`"
-           :placeholder="`${object.Stats[statTypeEnum.Placeholder].Data}`"
-           @input="inputEvent(object, $event.target.value)">
-    <datalist id="datalistOptions" v-if="dspStyle">
-      <option v-for="(item, key, index) in JSON.parse(object.Stats[statTypeEnum.ItemList].Data)" :selected="check(item.name)" :key="`${ key }-${ index }`" :value="item.name">{{item.name}}</option>
-    </datalist>
-    <slot></slot>
-    <div class="invalid-feedback">{{ `${object.Stats[statTypeEnum.ErrorMessage] !== undefined?object.Stats[statTypeEnum.ErrorMessage].Data:''}` }}</div>
-  </div>
-  </div>
-  <div class="col-lg"></div>
-  </div>
+  <input class="form-control" list="datalistOptions"
+         :class="returnIfExists(statTypeEnum.Design) + ' ' + validate()"
+         :required="attributeCheck(statTypeEnum.Required)"
+         :disabled="attributeCheck(statTypeEnum.Disabled)"
+         :type="returnIfExists(statTypeEnum.ElementType)"
+         :value="`${object?.Stats[statTypeEnum.Value].Data !== null?object.Stats[statTypeEnum.Value].Data.name === undefined?valueName:object.Stats[statTypeEnum.Value].Data.name:''}`"
+         :placeholder="returnIfExists(statTypeEnum.Placeholder)"
+         @input="inputEvent(object as ObjectTemplate, $event.target.value)">
+  <datalist id="datalistOptions" v-if="dspStyle">
+    <option v-for="(item, key, index) in JSON.parse(object.Stats[statTypeEnum.ItemList].Data)" :selected="check(item.name)" :key="`${ key }-${ index }`" :value="item.name">{{item.name}}</option>
+  </datalist>
+  <div class="invalid-feedback">{{ returnIfExists(statTypeEnum.ErrorMessage) }}</div>
 </template>
 
 <script lang="ts">
@@ -33,6 +23,11 @@ interface Option {
 }
 
 @Options({
+  computed: {
+    ObjectTemplate () {
+      return ObjectTemplate
+    }
+  },
   props: {
     object: ObjectTemplate
   }
@@ -47,10 +42,17 @@ export default class DataListComponent extends Vue {
   dspStyle = false
   options: Option[] = JSON.parse(this.object.Stats[this.statTypeEnum.ItemList].Data)
 
+  returnIfExists (tag: number): string {
+    if (this.object.Stats[tag]) {
+      return this.object.Stats[tag].Data
+    }
+    return ''
+  }
+
   get valueName (): string {
     const temp = this.options.find((option: any) => option.id === this.object.Stats[this.statTypeEnum.Value].Data)
-    if (temp === undefined) { return this.object.Stats[this.statTypeEnum.Value].Data }
-    return temp!.name
+    if (!temp) { return this.object.Stats[this.statTypeEnum.Value].Data }
+    return temp?.name
   }
 
   attributeCheck (statType : number) : boolean | string {
@@ -68,16 +70,12 @@ export default class DataListComponent extends Vue {
     return ''
   }
 
-  inputEvent (object: ObjectTemplate, value: string) {
-    if (value.length >= 3) {
-      this.dspStyle = true
-    } else {
-      this.dspStyle = false
-    }
+  inputEvent (object: ObjectTemplate, value: string) : void {
+    this.dspStyle = value.length >= 3
     this.regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, value)
   }
 
-  check (id : string) {
+  check (id : string) : boolean {
     if (this.object.Stats[this.statTypeEnum.Value] === undefined || id === undefined) { return false }
     return this.object.Stats[this.statTypeEnum.Value].Data === id.toString()
   }
