@@ -1,13 +1,13 @@
 <template>
   <div v-if="!reRender">
-        <div class="mb-3 row justify-content-md-center" v-if="object ?.Stats[statTypeEnum.ElementType].Data === 'button'">
+        <div v-if="returnIfExists(statTypeEnum.ElementType) === 'button'" class="mb-3 row justify-content-md-center">
             <button data-bs-toggle="tooltip" data-bs-placement="top"
                     :class="object.Stats[statTypeEnum.Design].Data"
                     @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[objectTypeEnum.Button].ChooseSubType(JSON.parse(JSON.stringify(objectCopy(object))) as ObjectTemplate)'>
                 {{object.Stats[statTypeEnum.Label].Data}}
             </button>
         </div>
-      <div class="mb-3 row justify-content-md-center" v-if="object ?.Stats[statTypeEnum.ElementType].Data !== 'button'">
+      <div v-else class="mb-3 row justify-content-md-center">
         <div class="col-lg"></div>
           <div class="col">
             <div class="input-group">
@@ -66,6 +66,13 @@ export default class InputGroupComponent extends Vue {
   index!: number
   objectTemplates: ObjectTemplate[] = []
   pageRefresh!: boolean
+
+  returnIfExists (tag: number): string {
+    if (this.object.Stats[tag]) {
+      return this.object.Stats[tag].Data
+    }
+    return ''
+  }
 
   mounted () : void {
     this.objectTemplates = this.mechanic.InitSet(this.entityCopy(this.entity))

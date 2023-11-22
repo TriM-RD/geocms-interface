@@ -22,6 +22,15 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
     })()
   }
 
+  public async FormField (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
+    switch (wrapper.eventHandler.subObjectType) {
+      case SubObjectTypeEnum.ParentObject:
+        wrapper = this.updateValueData(wrapper)
+        break
+    }
+    return wrapper.objectTemplates
+  }
+
   public async FormSelectList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
     switch (wrapper.eventHandler.subObjectType) {
       case SubObjectTypeEnum.ParentObject:
