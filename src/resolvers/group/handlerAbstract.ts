@@ -26,7 +26,9 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         this.removeElementFromArray(wrapper.objectTemplates, TagHelpers.CyberTags.groupType)
         wrapper = this.updateValueData(wrapper)
         wrapper.refreshPage()
-        wrapper.objectTemplates = wrapper.append((await http.get(process.env.VUE_APP_BASE_URL + 'form/group/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
+        console.log((await http.get(process.env.VUE_APP_BASE_URL + 'form/group/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
+        wrapper.objectTemplates = this.append(wrapper, (await http.get(process.env.VUE_APP_BASE_URL + 'form/group/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
+        console.log(wrapper.objectTemplates)
         wrapper.refreshPage()
         break
       default:

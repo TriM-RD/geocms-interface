@@ -241,4 +241,11 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
     }
     return wrapper
   }
+
+  protected append (wrapper: WrapperAbstract, _objectTemplates: ObjectTemplate[]) : ObjectTemplate[] {
+    for (const element of _objectTemplates) {
+      wrapper.objectTemplates.push(new ObjectTemplate(element.Region, element.ObjectEnum, element.SubObjectEnum, element.ActionEnum, element.Stats))
+    }
+    return wrapper.objectTemplates
+  }
 }

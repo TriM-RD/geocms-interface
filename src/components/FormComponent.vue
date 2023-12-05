@@ -33,8 +33,9 @@ export default class FormComponent extends Vue {
   renderComponent= true
   objectTemplates!: ObjectTemplate[]
   statTypeEnum = StatTypeEnum
-  belongsTo!: { [key: string]: ObjectTemplate[] }
+  belongsTo: { [key: string]: ObjectTemplate[] } = {}
   entity!: ObjectTemplate[]
+  static test = false
 
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
@@ -45,7 +46,12 @@ export default class FormComponent extends Vue {
   }
 
   resolveEntities (_object: ObjectTemplate) : ObjectTemplate[] {
+    if (FormComponent.test) {
+      this.objectTemplates = this.extractChildren(JSON.parse(JSON.stringify(this.objectTemplates)))
+      FormComponent.test = false
+    }
     if (this.belongsTo) {
+      console.log(this.belongsTo)
       for (const tag of Object.keys(this.belongsTo)) {
         if (_object.Stats[StatTypeEnum.Tag].Data.includes(tag)) {
           return this.belongsTo[tag]
@@ -56,20 +62,18 @@ export default class FormComponent extends Vue {
     return []
   }
 
-  extractChildren () : ObjectTemplate[] {
-    this.belongsTo = {}
-
-    // Use a separate array to store indices of items to be deleted
-    // eslint-disable-next-line no-case-declarations
+  extractChildren (entities : ObjectTemplate[]) : ObjectTemplate[] {
     const itemsToDelete = []
 
-    for (let i = 0; i < this.entity.length; i++) {
-      const item = this.entity[i]
+    for (let i = 0; i < entities.length; i++) {
+      const item = entities[i]
 
       if (item.Stats[StatTypeEnum.BelongsTo] !== undefined) {
         const data = item.Stats[StatTypeEnum.BelongsTo].Data
         this.belongsTo[data] = this.belongsTo[data] || []
-        this.belongsTo[data].push(item)
+        if (!this.belongsTo[data].includes(item)) {
+          this.belongsTo[data].push(item as ObjectTemplate)
+        }
 
         // Add index to itemsToDelete array
         itemsToDelete.push(i)
@@ -78,9 +82,9 @@ export default class FormComponent extends Vue {
 
     // Iterate in reverse to avoid issues with array modifications
     for (let i = itemsToDelete.length - 1; i >= 0; i--) {
-      this.entity.splice(itemsToDelete[i], 1)
+      entities.splice(itemsToDelete[i], 1)
     }
-    return this.entity
+    return entities
   }
 
   async Init () : Promise<void> {
@@ -88,10 +92,10 @@ export default class FormComponent extends Vue {
       case Definitions.Entity.Add:
       case Definitions.Entity.Edit:
         this.entity = await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'entity')
-        this.objectTemplates = this.mechanic.InitSet(this.extractChildren())
+        this.objectTemplates = this.mechanic.InitSet(this.extractChildren(this.entity))
         break
       case Definitions.Entity.Replace:
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'replace/entity/' + this.$route.params.parentId.toString()))
+        this.objectTemplates = await this.mechanic.InitGet('-1', 'replace/entity/' + this.$route.params.parentId.toString())
         this.objectTemplates = this.mechanic.Append([
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('ReplacedEntity'),
@@ -106,17 +110,17 @@ export default class FormComponent extends Vue {
         break
       case Definitions.Group.Edit:
       case Definitions.Group.Add:
-        this.entity = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'group'))
-        this.objectTemplates = this.mechanic.InitSet(this.extractChildren())
+        this.objectTemplates = this.mechanic.InitSet(this.extractChildren(
+          await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'group')))
         break
       case Definitions.Division.Edit:
       case Definitions.Division.Add:
-        this.entity = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'division'))
-        this.objectTemplates = this.mechanic.InitSet(this.extractChildren())
+        this.entity = await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'division')
+        this.objectTemplates = this.mechanic.InitSet(this.extractChildren(this.entity))
         console.log(this.objectTemplates)
         break
       case Definitions.Attribute.Add:
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'attribute'))
+        this.objectTemplates = await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'attribute')
         this.objectTemplates = this.mechanic.Append([
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Group'),
@@ -130,12 +134,12 @@ export default class FormComponent extends Vue {
         ])
         break
       case Definitions.Attribute.Edit:
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'attribute'))
+        this.objectTemplates = await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'attribute')
         break
       case Definitions.Administration.Add:
       case Definitions.Administration.Edit:
-        this.entity = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'user'))
-        this.objectTemplates = this.mechanic.InitSet(this.extractChildren())
+        this.entity = await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'user')
+        this.objectTemplates = this.mechanic.InitSet(this.extractChildren(this.entity))
         break
     }
     this.renderComponent = false
@@ -143,6 +147,7 @@ export default class FormComponent extends Vue {
 
   reRender (): void {
     this.renderComponent = !this.renderComponent
+    FormComponent.test = true
   }
 
   changeRender (): void {
