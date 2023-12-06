@@ -2,7 +2,7 @@
   <Loading v-model:active="renderComponent"
            :can-cancel="false"
            :is-full-page="false"/>
-  <form v-if="!renderComponent" class="needs-validation" id="classic-form" novalidate>
+  <form v-if="!reRenderToo" class="needs-validation" id="classic-form" novalidate>
     <component :page-refresh="renderComponent"  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ _objectTemplate.Stats[statTypeEnum.Tag].Data }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :entity='resolveEntities(_objectTemplate)' :object='_objectTemplate'> </component>
   </form>
 </template>
@@ -46,12 +46,7 @@ export default class FormComponent extends Vue {
   }
 
   resolveEntities (_object: ObjectTemplate) : ObjectTemplate[] {
-    if (FormComponent.test) {
-      this.objectTemplates = this.extractChildren(JSON.parse(JSON.stringify(this.objectTemplates)))
-      FormComponent.test = false
-    }
     if (this.belongsTo) {
-      console.log(this.belongsTo)
       for (const tag of Object.keys(this.belongsTo)) {
         if (_object.Stats[StatTypeEnum.Tag].Data.includes(tag)) {
           return this.belongsTo[tag]
@@ -143,6 +138,11 @@ export default class FormComponent extends Vue {
         break
     }
     this.renderComponent = false
+  }
+
+  get reRenderToo () : boolean {
+    if (this.objectTemplates !== undefined) { this.objectTemplates = this.extractChildren(this.objectTemplates) }
+    return this.renderComponent
   }
 
   reRender (): void {

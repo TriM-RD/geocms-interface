@@ -26,9 +26,9 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         this.removeElementFromArray(wrapper.objectTemplates, TagHelpers.CyberTags.groupType)
         wrapper = this.updateValueData(wrapper)
         wrapper.refreshPage()
-        console.log((await http.get(process.env.VUE_APP_BASE_URL + 'form/group/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
+        // console.log((await http.get(process.env.VUE_APP_BASE_URL + 'form/group/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
         wrapper.objectTemplates = this.append(wrapper, (await http.get(process.env.VUE_APP_BASE_URL + 'form/group/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
-        console.log(wrapper.objectTemplates)
+        // console.log(wrapper.objectTemplates)
         wrapper.refreshPage()
         break
       default:
@@ -44,7 +44,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         await this.validateForm('group', Definitions.Group.Edit, wrapper.objectTemplates, wrapper.refreshPage, wrapper.append, wrapper.id, wrapper.inEdit, wrapper.eventHandler.payload)
         break
       case SubObjectTypeEnum.Middle:
-        wrapper.refreshPage()
+        this.addObjectTemplateInputGroup(wrapper)
         /* wrapper.objectTemplates = this.Splice(3, wrapper.objectTemplates, [// TODO while 2 is correct, it needs to be redone to make it programmatic
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.SelectButton, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
             [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData(wrapper.eventHandler.payload.Stats[StatTypeEnum.ItemList].Data),
@@ -57,7 +57,6 @@ export abstract class HandlerAbstract extends ResolverAbstract {
             [StatTypeEnum.ErrorMessage]: StatType.StatTypes[StatTypeEnum.ErrorMessage]().CreateStat().InitData(wrapper.eventHandler.payload.Stats[StatTypeEnum.ErrorMessage].Data)
           })
         ]) */
-        wrapper.refreshPage()
         break
       case SubObjectTypeEnum.Up:
         await router.push({ name: Definitions.Attribute.Add, params: { parentId: wrapper.id } })
