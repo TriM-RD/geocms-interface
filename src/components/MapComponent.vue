@@ -61,7 +61,9 @@ import Loading from 'vue-loading-overlay'
 import { Modal } from 'bootstrap'
 import { Definitions } from '@/definitions/appDefinitions'
 import { $t } from '@/locales'
-
+interface IconTypesLabels {
+  [key: string]: string;
+}
 @Options({
   computed: {
     $t () {
@@ -72,7 +74,6 @@ import { $t } from '@/locales'
     Loading
   }
 })
-
 export default class MapComponent extends Vue {
   longitude = 0
   latitude = 0
@@ -106,7 +107,7 @@ export default class MapComponent extends Vue {
   checkedIconTypes: string[] = ['ico-sro', 'ico-ssro', 'struja-idle']
   selectedClusterIconType = 'ico-sro'
   iconTypes: string[] = ['ico-lamp', 'ico-sro', 'ico-ssro', 'struja-idle']
-  iconTypesLabels = {
+  iconTypesLabels: IconTypesLabels = {
     'ico-lamp': 'LAMP',
     'ico-sro': 'SRO',
     'ico-ssro': 'SSRO',
@@ -119,6 +120,18 @@ export default class MapComponent extends Vue {
 
   getIconPath (iconType: string) {
     return require('@/assets/map_files/' + iconType + '.svg')
+  }
+
+  created () {
+    if (localStorage.getItem('firmName') === 'zaton') {
+      this.checkedIconTypes = ['ico-switch', 'ico-active']
+      this.selectedClusterIconType = 'ico-active'
+      this.iconTypes = ['ico-switch', 'ico-active']
+      this.iconTypesLabels = {
+        'ico-switch': 'SWITCH',
+        'ico-active': 'ACC'
+      }
+    }
   }
 
   toggleLegend () {
@@ -139,8 +152,8 @@ export default class MapComponent extends Vue {
     const showLegend = localStorage.getItem('showLegend')
 
     // Parsing the retrieved values
-    this.checkedIconTypes = storedCheckedIconTypes ? JSON.parse(storedCheckedIconTypes) : ['ico-sro', 'ico-ssro', 'struja-idle']
-    this.selectedClusterIconType = storedSelectedClusterIconType ? JSON.parse(storedSelectedClusterIconType) : 'ico-sro'
+    this.checkedIconTypes = storedCheckedIconTypes ? JSON.parse(storedCheckedIconTypes) : this.checkedIconTypes
+    this.selectedClusterIconType = storedSelectedClusterIconType ? JSON.parse(storedSelectedClusterIconType) : this.selectedClusterIconType
     this.showLegend = showLegend ? JSON.parse(showLegend) : true
     this.initializeMapAndLoadStyle().then(() => {
       // The map style has finished loading, now call the test function
@@ -489,6 +502,10 @@ export default class MapComponent extends Vue {
             0.6,
             ['==', ['get', 'iconType'], 'struja-idle'],
             0.6,
+            ['==', ['get', 'iconType'], 'ico-switch'],
+            0.6,
+            ['==', ['get', 'iconType'], 'ico-active'],
+            0.6,
             0.3
           ],
           'symbol-sort-key': [
@@ -496,6 +513,10 @@ export default class MapComponent extends Vue {
             ['==', ['get', 'iconType'], 'ico-sro'],
             8,
             ['==', ['get', 'iconType'], 'struja-idle'],
+            9,
+            ['==', ['get', 'iconType'], 'ico-switch'],
+            9,
+            ['==', ['get', 'iconType'], 'ico-active'],
             9,
             0
           ]
@@ -505,7 +526,7 @@ export default class MapComponent extends Vue {
             'case',
             ['boolean', ['feature-state', 'change_opacity'], false],
             1,
-            ['all', ['!=', ['get', 'iconType'], 'ico-sro'], ['!=', ['get', 'iconType'], 'struja-idle']],
+            ['all', ['!=', ['get', 'iconType'], 'ico-sro'], ['!=', ['get', 'iconType'], 'ico-switch'], ['!=', ['get', 'iconType'], 'ico-active'], ['!=', ['get', 'iconType'], 'struja-idle']],
             0.1,
             1
           ]
@@ -674,7 +695,10 @@ export default class MapComponent extends Vue {
       ['in', ['get', 'id'], ['literal', allIds]],
       1,
       [
-        'all', ['!=', ['get', 'iconType'], 'ico-sro'],
+        'all',
+        ['!=', ['get', 'iconType'], 'ico-sro'],
+        ['!=', ['get', 'iconType'], 'ico-active'],
+        ['!=', ['get', 'iconType'], 'ico-switch'],
         ['!=', ['get', 'iconType'], 'struja-idle'],
         ['!=', ['get', 'iconType'], 'struja-on'],
         ['!=', ['get', 'iconType'], 'struja-off'],
@@ -698,6 +722,8 @@ export default class MapComponent extends Vue {
         ['==', ['get', 'iconType'], 'struja-warning'], 0.6,
         ['in', ['get', 'id'], ['literal', allIds]], 0.2,
         ['==', ['get', 'iconType'], 'ico-sro'], 0.6,
+        ['==', ['get', 'iconType'], 'ico-active'], 0.6,
+        ['==', ['get', 'iconType'], 'ico-switch'], 0.6,
         0.3
       ],
       17, [
@@ -708,6 +734,8 @@ export default class MapComponent extends Vue {
         ['==', ['get', 'iconType'], 'struja-warning'], 0.6,
         ['in', ['get', 'id'], ['literal', allIds]], 0.4,
         ['==', ['get', 'iconType'], 'ico-sro'], 0.6,
+        ['==', ['get', 'iconType'], 'ico-active'], 0.6,
+        ['==', ['get', 'iconType'], 'ico-switch'], 0.6,
         0.3
       ],
       18, [
@@ -718,6 +746,8 @@ export default class MapComponent extends Vue {
         ['==', ['get', 'iconType'], 'struja-warning'], 0.6,
         ['in', ['get', 'id'], ['literal', allIds]], 0.6,
         ['==', ['get', 'iconType'], 'ico-sro'], 0.6,
+        ['==', ['get', 'iconType'], 'ico-active'], 0.6,
+        ['==', ['get', 'iconType'], 'ico-switch'], 0.6,
         0.3
       ]
     ]
