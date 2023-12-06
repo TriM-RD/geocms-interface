@@ -13,8 +13,8 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
     (() => {
       // Perform the array update
       for (let i = arr.length - 1; i >= 0; i--) {
-        if (arr[i].Stats[StatTypeEnum.BelongsTo] !== undefined) {
-          if (arr[i].Stats[StatTypeEnum.BelongsTo].Data.includes(belongsTo)) {
+        if (arr[i].Stats[StatTypeEnum.DependsOn] !== undefined) {
+          if (arr[i].Stats[StatTypeEnum.DependsOn].Data.includes(belongsTo)) {
             arr.splice(i, 1)
           }
         }
