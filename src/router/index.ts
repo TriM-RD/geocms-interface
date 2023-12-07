@@ -36,6 +36,16 @@ const routes: Array<RouteRecordRaw> = [
     component: Form
   },
   {
+    path: '/device/add',
+    name: Definitions.Entity.Add,
+    component: Form
+  },
+  {
+    path: '/device/add/:id',
+    name: Definitions.Entity.Edit,
+    component: Form
+  },
+  {
     path: '/entity/replace/:parentId',
     name: Definitions.Entity.Replace,
     component: Form
