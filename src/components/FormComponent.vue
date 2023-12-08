@@ -66,7 +66,7 @@ export default class FormComponent extends Vue {
       if (item.Stats[StatTypeEnum.BelongsTo] !== undefined) {
         const data = item.Stats[StatTypeEnum.BelongsTo].Data
         this.belongsTo[data] = this.belongsTo[data] || []
-        if (!this.belongsTo[data].includes(item)) {
+        if (!this.belongsTo[data].some(function (obj) { return obj.Stats[StatTypeEnum.Tag].Data === item.Stats[StatTypeEnum.Tag].Data })) {
           this.belongsTo[data].push(item as ObjectTemplate)
         }
 
@@ -141,7 +141,9 @@ export default class FormComponent extends Vue {
   }
 
   get reRenderToo () : boolean {
-    if (this.objectTemplates !== undefined) { this.objectTemplates = this.extractChildren(this.objectTemplates) }
+    if (this.objectTemplates !== undefined) {
+      this.objectTemplates = this.extractChildren(this.objectTemplates)
+    }
     return this.renderComponent
   }
 

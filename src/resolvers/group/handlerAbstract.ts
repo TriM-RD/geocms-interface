@@ -23,10 +23,10 @@ export abstract class HandlerAbstract extends ResolverAbstract {
   public async FormSelectList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
     switch (wrapper.eventHandler.subObjectType) {
       case SubObjectTypeEnum.Middle:
-        this.removeElementFromArray(wrapper.objectTemplates, TagHelpers.CyberTags.groupType)
         wrapper = this.updateValueData(wrapper)
         wrapper.refreshPage()
         // console.log((await http.get(process.env.VUE_APP_BASE_URL + 'form/group/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
+        this.removeElementFromArray(wrapper.objectTemplates, TagHelpers.CyberTags.groupType)
         wrapper.objectTemplates = this.append(wrapper, (await http.get(process.env.VUE_APP_BASE_URL + 'form/group/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
         // console.log(wrapper.objectTemplates)
         wrapper.refreshPage()
