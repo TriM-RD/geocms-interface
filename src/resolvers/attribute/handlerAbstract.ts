@@ -12,6 +12,7 @@ import { Definitions } from '@/definitions/appDefinitions'
 import router from '@/router'
 import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
 import { $t } from '@/locales'
+import { TagHelpers } from '@/definitions/tagHelpers'
 
 export abstract class HandlerAbstract extends ResolverAbstract {
   public RowButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
@@ -21,8 +22,9 @@ export abstract class HandlerAbstract extends ResolverAbstract {
   public async FormSelectList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
     switch (wrapper.eventHandler.subObjectType) {
       case SubObjectTypeEnum.Middle:
-        this.removeElementFromArray(wrapper.objectTemplates, 'attributeType')
+        wrapper = this.updateValueData(wrapper)
         wrapper.refreshPage()
+        this.removeElementFromArray(wrapper.objectTemplates, 'attributeType')
         wrapper.objectTemplates = wrapper.append((await http.get(process.env.VUE_APP_BASE_URL + 'form/attribute/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
         wrapper.refreshPage()
         break
