@@ -39,7 +39,7 @@ export const enDictionary:TranslationKeys = {
   viewPDFs: 'View PDFs',
   delete: 'Delete',
   add: 'Add',
-  cancel: 'Cancel',
+  cancel: 'Cancel/Back',
   reSort: 'ReSort',
   save: 'Save',
   scan: 'Scan',
