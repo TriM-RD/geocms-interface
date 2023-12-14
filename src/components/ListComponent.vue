@@ -4,7 +4,7 @@
       <h5 class="mt-4">{{ header }}</h5>
       <div class="list-group">
         <component  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }`"
-                    :is="checkIfGetComponent(header===_objectTemplate.Stats[statTypeEnum.Label].Data, _objectTemplate.Region, _objectTemplate.ObjectEnum)"
+                    :is="checkIfGetComponent(header===_objectTemplate.Stats[statTypeEnum.Value].Data, _objectTemplate.Region, _objectTemplate.ObjectEnum)"
                     :object='_objectTemplate' :index='key'></component>
       </div>
     </div>
@@ -95,8 +95,8 @@ export default class ListComponent extends Vue {
   getHeaders () : void { // TODO Needs to be reworked. @JosoMarich
     this.headers = []
     for (const header of this.objectTemplates) {
-      if (this.headers.indexOf(header.Stats[StatTypeEnum.Label].Data) === -1) {
-        this.headers[this.headers.length] = header.Stats[StatTypeEnum.Label].Data
+      if (this.headers.indexOf(header.Stats[StatTypeEnum.Value].Data) === -1) {
+        this.headers[this.headers.length] = header.Stats[StatTypeEnum.Value].Data
       }
     }
   }
