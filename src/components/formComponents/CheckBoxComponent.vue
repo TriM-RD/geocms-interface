@@ -1,7 +1,7 @@
 <template>
   <div :class="object?.Stats[statTypeEnum.Design].Data">
     <input class="form-check-input mt-0" type="checkbox"
-           :checked="object?.Stats[statTypeEnum.Value].Data"
+           :checked="!!object?.Stats[statTypeEnum.Value].Data"
            :id="object?.Stats[statTypeEnum.Tag].Data"
            :required="attributeCheck(statTypeEnum.Required)"
            :disabled="attributeCheck(statTypeEnum.Disabled)"

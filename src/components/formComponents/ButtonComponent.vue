@@ -18,7 +18,7 @@ import { ObjectTemplate, ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, R
     object: ObjectTemplate
   }
 })
-export default class SubmitButtonComponent extends Vue {
+export default class ButtonComponent extends Vue {
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType

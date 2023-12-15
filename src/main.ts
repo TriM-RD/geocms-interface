@@ -8,8 +8,8 @@ import VueBlocksTree from 'vue3-blocks-tree'
 import 'vue3-blocks-tree/dist/vue3-blocks-tree.css'
 import Toast, { PluginOptions, POSITION, TYPE } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
-import InputComponent from '@/components/formComponents/InputComponent.vue'
-import SubmitButtonComponent from '@/components/formComponents/ButtonComponent.vue'
+import FieldComponent from '@/components/formComponents/FieldComponent.vue'
+import ButtonComponent from '@/components/formComponents/ButtonComponent.vue'
 import RowComponent from '@/components/RowComponent.vue'
 import TextAreaComponent from '@/components/formComponents/TextAreaComponent.vue'
 import AlertComponent from '@/components/formComponents/AlertComponent.vue'
@@ -30,8 +30,8 @@ import LabelComponent from '@/components/formComponents/LabelComponent.vue'
 
 const defaultOptions = { nodeName: 'node-tree', treeName: 'blocks-tree' }
 
-ObjectType.ObjectTypes[ObjectTypeEnum.Field](() => InputComponent)
-ObjectType.ObjectTypes[ObjectTypeEnum.Button](() => SubmitButtonComponent)
+ObjectType.ObjectTypes[ObjectTypeEnum.Field](() => FieldComponent)
+ObjectType.ObjectTypes[ObjectTypeEnum.Button](() => ButtonComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.Row](() => RowComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.Text](() => TextAreaComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.Alert](() => AlertComponent)

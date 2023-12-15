@@ -86,7 +86,9 @@ export default class InputGroupComponent extends Vue {
   objectCopy (_object : ObjectTemplate) : ObjectTemplate {
     if (_object.Stats[StatTypeEnum.Value]) { _object.Stats[StatTypeEnum.Value].Data = this.object.Stats[StatTypeEnum.Value].Data }
     if (_object.Stats[StatTypeEnum.ErrorMessage]) { _object.Stats[StatTypeEnum.ErrorMessage].Data = this.object.Stats[StatTypeEnum.ErrorMessage].Data }
-    if (_object.Stats[StatTypeEnum.IsValid]) { _object.Stats[StatTypeEnum.IsValid].Data = this.object.Stats[StatTypeEnum.IsValid].Data } else if (this.object.Stats[StatTypeEnum.IsValid]) {
+    if (_object.Stats[StatTypeEnum.IsValid]) {
+      _object.Stats[StatTypeEnum.IsValid].Data = this.object.Stats[StatTypeEnum.IsValid].Data
+    } else if (this.object.Stats[StatTypeEnum.IsValid]) {
       _object.Stats[StatTypeEnum.IsValid] = StatType.StatTypes[StatTypeEnum.IsValid]()
       _object.Stats[StatTypeEnum.IsValid].Data = this.object.Stats[StatTypeEnum.IsValid].Data
     }

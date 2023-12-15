@@ -6,7 +6,7 @@
          :autocomplete="returnIfExists(statTypeEnum.AutoComplete)"
          :class="object?.Stats[statTypeEnum.Design].Data+' '+validate()"
          :type="returnIfExists(statTypeEnum.ElementType)"
-         :value="object?.Stats[statTypeEnum.Value].Data"
+         :value="labelToValue()"
          :placeholder="returnIfExists(statTypeEnum.Placeholder)"
          @input="regionType.RegionTypes[object?.Region].ObjectTypes[object?.ObjectEnum].ChooseSubType(object as ObjectTemplate, $event.target.value)">
   <div class="invalid-feedback">{{ returnIfExists(statTypeEnum.ErrorMessage) }}</div>
@@ -15,6 +15,8 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import { ObjectTemplate, ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, RegionEnum } from '@cybertale/interface'
+import { TagHelpers } from '@/definitions/tagHelpers'
+import CyberTags = TagHelpers.CyberTags
 @Options({
   computed: {
     ObjectTemplate () {
@@ -25,13 +27,20 @@ import { ObjectTemplate, ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, R
     object: ObjectTemplate
   }
 })
-export default class InputComponent extends Vue {
+export default class FieldComponent extends Vue {
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType
   regionType = RegionType
   regionEnum = RegionEnum
   object!: ObjectTemplate
+
+  labelToValue (): string {
+    if (this.returnIfExists(this.statTypeEnum.Tag).includes(CyberTags.label) && this.attributeCheck(this.statTypeEnum.Disabled)) {
+      return this.returnIfExists(this.statTypeEnum.Label)
+    }
+    return this.object?.Stats[this.statTypeEnum.Value].Data
+  }
 
   returnIfExists (tag: number): string {
     if (this.object.Stats[tag]) {
@@ -41,11 +50,17 @@ export default class InputComponent extends Vue {
   }
 
   validate () : string {
+    console.log(1)
     if (this.object.Stats[this.statTypeEnum.IsValid] === undefined) { return '' }
+    console.log(2)
     if (this.object.Stats[this.statTypeEnum.IsValid].Data === '') { return '' }
+    console.log(3)
     if (this.object.Stats[this.statTypeEnum.IsValid].Data) { return 'is-valid' }
+    console.log(4)
     if (this.object.Stats[this.statTypeEnum.ErrorMessage].Data === null) { return '' }
+    console.log(5)
     if (this.object.Stats[this.statTypeEnum.ErrorMessage].Data !== '') { return 'is-invalid' }
+    console.log(6)
     return ''
   }
 

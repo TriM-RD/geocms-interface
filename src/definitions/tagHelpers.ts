@@ -19,6 +19,7 @@ export namespace TagHelpers{
     order = 'order',
     children = 'children',
     value = 'value',
+    label = 'label',
   }
 
   export enum EcabinetTags {
