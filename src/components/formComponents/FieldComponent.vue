@@ -50,17 +50,11 @@ export default class FieldComponent extends Vue {
   }
 
   validate () : string {
-    console.log(1)
     if (this.object.Stats[this.statTypeEnum.IsValid] === undefined) { return '' }
-    console.log(2)
     if (this.object.Stats[this.statTypeEnum.IsValid].Data === '') { return '' }
-    console.log(3)
     if (this.object.Stats[this.statTypeEnum.IsValid].Data) { return 'is-valid' }
-    console.log(4)
     if (this.object.Stats[this.statTypeEnum.ErrorMessage].Data === null) { return '' }
-    console.log(5)
     if (this.object.Stats[this.statTypeEnum.ErrorMessage].Data !== '') { return 'is-invalid' }
-    console.log(6)
     return ''
   }
 

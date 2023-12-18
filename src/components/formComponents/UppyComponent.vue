@@ -48,11 +48,17 @@ import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'
 import FancyboxComponent from '@/components/showComponents/FancyboxComponent.vue'
 import { v4 as uuidv4 } from 'uuid'
+import { $t } from '../../locales'
 
 interface FileNameWithData {
   [key: string]: any;
 }
 @Options({
+  computed: {
+    $t () {
+      return $t
+    }
+  },
   components: {
     FancyboxComponent
   },
