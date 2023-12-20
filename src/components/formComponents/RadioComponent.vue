@@ -1,16 +1,25 @@
 <template>
-  <div class="mb-3 row justify-content-md-center" >
-    <div class="col-lg"></div>
-    <div class="col-lg"></div>
-    <div class="col input-group" v-for="(item, key, index) in JSON.parse(object.Stats[statTypeEnum.ItemList].Data)" :key="`${ key }-${ index }`">
-      <div class="input-group-text">
-        <input class="form-check-input mt-0" :name="object.Stats[statTypeEnum.Label].Data" :value="item.id" type="radio" :checked="object.Stats[statTypeEnum.Value].Data===item.id"
+  <div :class="object?.Stats[statTypeEnum.Design].Data">
+    <div v-if="returnIfExists(statTypeEnum.ItemList)">
+      <div v-for="(item, key, index) in JSON.parse(object.Stats[statTypeEnum.ItemList].Data)" :key="`${ key }-${ index }`">
+        <input class="form-check-input mt-0"
+               :name="object.Stats[statTypeEnum.Tag].Data"
+               :value="item.id" type="radio"
+               :checked="object.Stats[statTypeEnum.Value].Data===item.id"
                @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, $event.target.value)">
+        <label class="form-check-label" for="flexCheckDefault">
+          {{ item.name }}
+        </label>
       </div>
-      <input disabled type="text" :value="item.name" class="form-control" aria-label="Text input with radio button">
     </div>
-    <div class="col-lg"></div>
-    <div class="col-lg"></div>
+    <div v-else>
+      <input class="form-check-input"
+             :name="object.Stats[statTypeEnum.Name].Data"
+             :value="object.Stats[statTypeEnum.Value].Data"
+             type="radio"
+             :checked="object.Stats[statTypeEnum.Value].Data===object.Stats[statTypeEnum.Value].Data"
+             @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, $event.target.value)">
+    </div>
   </div>
 </template>
 
@@ -29,6 +38,13 @@ export default class RadioComponent extends Vue {
   regionType = RegionType
   regionEnum = RegionEnum
   object!: ObjectTemplate
+
+  returnIfExists (tag: number): string {
+    if (this.object.Stats[tag]) {
+      return this.object.Stats[tag].Data
+    }
+    return ''
+  }
 }
 </script>
 

@@ -57,6 +57,7 @@ export namespace Manager.Mechanic{
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.ECabinetRow].SubscribeLogic(this.ECabinetRow.bind(this))
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.DataList].SubscribeLogic(this.DataList.bind(this))
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.CheckBox].SubscribeLogic(this.Field.bind(this))
+      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Radio].SubscribeLogic(this.Field.bind(this))
     }
 
     public UnsubscribeConditions (): void {
@@ -106,6 +107,13 @@ export namespace Manager.Mechanic{
         return
       }
       this.ObjectTemplates = await (ResolverType.ResolverTypes[name] as ResolverInterface<FormWrapper>).FormButton(new FormWrapper().Button(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this), this.id, this.inEdit))
+    }
+
+    protected async Radio (eventHandler: EventHandlerType): Promise<void> {
+      const name = router.currentRoute.value.name
+      if (typeof name === 'string') {
+        this.ObjectTemplates = await (ResolverType.ResolverTypes[name] as ResolverInterface<FormWrapper>).FormRadio(new FormWrapper().Radio(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this)))
+      }// TODO add regex to check if id is uuid
     }
   }
 

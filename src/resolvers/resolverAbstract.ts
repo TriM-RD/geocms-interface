@@ -31,6 +31,18 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
     return wrapper.objectTemplates
   }
 
+  public async FormRadio (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
+    /* let selectedRadio = document.querySelector('input[name=' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Name].Data + ']:checked')
+    let selectedValue = selectedRadio ? selectedRadio.value : null */
+    switch (wrapper.eventHandler.subObjectType) {
+      case SubObjectTypeEnum.ParentObject:
+
+        wrapper = this.updateValueData(wrapper)
+        break
+    }
+    return wrapper.objectTemplates
+  }
+
   public async FormSelectList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
     switch (wrapper.eventHandler.subObjectType) {
       case SubObjectTypeEnum.ParentObject:

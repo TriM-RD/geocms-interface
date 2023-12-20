@@ -34,4 +34,12 @@ export class FormWrapper extends WrapperAbstract {
     this.append = append
     return this
   }
+
+  Radio (eventHandler: EventHandlerType, objectTemplates: ObjectTemplate[], refreshPage: () => void, append: (_objectTemplates: ObjectTemplate[]) => ObjectTemplate[]): FormWrapper {
+    this.eventHandler = eventHandler
+    this.objectTemplates = objectTemplates
+    this.refreshPage = refreshPage
+    this.append = append
+    return this
+  }
 }

@@ -1,21 +1,21 @@
 <template>
   <div v-if="!reRender">
-        <div v-if="returnIfExists(statTypeEnum.ElementType) === 'button'" class="mb-3 row justify-content-md-center">
-            <button data-bs-toggle="tooltip" data-bs-placement="top"
-                    :class="object.Stats[statTypeEnum.Design].Data"
-                    @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[objectTypeEnum.Button].ChooseSubType(JSON.parse(JSON.stringify(objectCopy(object))) as ObjectTemplate)'>
-                {{object.Stats[statTypeEnum.Label].Data}}
-            </button>
+    <div v-if="returnIfExists(statTypeEnum.ElementType) === 'button'" class="mb-3 row justify-content-md-center">
+      <button data-bs-toggle="tooltip" data-bs-placement="top"
+              :class="object.Stats[statTypeEnum.Design].Data"
+              @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[objectTypeEnum.Button].ChooseSubType(JSON.parse(JSON.stringify(objectCopy(object))) as ObjectTemplate)'>
+        {{object.Stats[statTypeEnum.Label].Data}}
+      </button>
+    </div>
+    <div v-else class="mb-3 row justify-content-md-center">
+      <div class="col-lg"></div>
+      <div class="col">
+        <div class="input-group" v-for="(group, index) in groupedObjectTemplates" :key="`${ index }-${ Math.random().toString(36).slice(2, 7) }`">
+          <component v-for="(_objectTemplate, key) in group" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate' :key="`${ key }-${ Math.random().toString(36).slice(2, 7) }`"></component>
         </div>
-      <div v-else class="mb-3 row justify-content-md-center">
-        <div class="col-lg"></div>
-          <div class="col">
-            <div class="input-group">
-              <component v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ Math.random().toString(36).slice(2, 7) }`"  :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'></component>
-            </div>
-        </div>
-        <div class="col-lg"></div>
       </div>
+      <div class="col-lg"></div>
+    </div>
   </div>
 </template>
 
@@ -66,6 +66,27 @@ export default class InputGroupComponent extends Vue {
   index!: number
   objectTemplates: ObjectTemplate[] = []
   pageRefresh!: boolean
+
+  get groupedObjectTemplates () : ObjectTemplate[][] {
+    const groups = []
+    let currentGroup: ObjectTemplate[] = []
+
+    this.objectTemplates.forEach(_objectTemplate => {
+      currentGroup.push(_objectTemplate)
+
+      if (_objectTemplate.Stats[StatTypeEnum.DependsOn]) {
+        groups.push(currentGroup)
+        currentGroup = []
+      }
+    })
+
+    // Push the last group if it's not empty
+    if (currentGroup.length > 0) {
+      groups.push(currentGroup)
+    }
+
+    return groups
+  }
 
   returnIfExists (tag: number): string {
     if (this.object.Stats[tag]) {
