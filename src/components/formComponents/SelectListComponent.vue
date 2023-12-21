@@ -3,12 +3,12 @@
           :class="validate()"
           :required="attributeCheck(statTypeEnum.Required)"
           :disabled="attributeCheck(statTypeEnum.Disabled)"
-          :autocomplete="`${object.Stats[statTypeEnum.AutoComplete] !== undefined?object.Stats[statTypeEnum.AutoComplete].Data:''}`"
+          :autocomplete="returnIfExists(statTypeEnum.AutoComplete)"
           @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, $event.target.value)">
     <option value="" :selected="object.Stats[statTypeEnum.Value] === undefined" hidden>Select a type.</option>
     <option v-for="(item, key, index) in JSON.parse(object.Stats[statTypeEnum.ItemList].Data)" :selected="check(item.id)" :key="`${ key }-${ index }`" :value="item.id">{{item.name}}</option>
   </select>
-  <div class="invalid-feedback order-1">{{ `${object.Stats[statTypeEnum.ErrorMessage] !== undefined?object.Stats[statTypeEnum.ErrorMessage].Data:''}` }}</div>
+  <div class="invalid-feedback order-1">{{ returnIfExists(statTypeEnum.ErrorMessage) }}</div>
 </template>
 
 <script lang="ts">
@@ -36,6 +36,13 @@ export default class SelectListComponent extends Vue {
     console.log(this.object.Stats)
     if (this.object.Stats[this.statTypeEnum.ErrorMessage].Data === null) { return '' }
     if (this.object.Stats[this.statTypeEnum.ErrorMessage].Data !== '') { return 'is-invalid' }
+    return ''
+  }
+
+  returnIfExists (tag: number): string {
+    if (this.object.Stats[tag]) {
+      return this.object.Stats[tag].Data
+    }
     return ''
   }
 

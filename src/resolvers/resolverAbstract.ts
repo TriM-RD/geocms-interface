@@ -32,12 +32,9 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
   }
 
   public async FormRadio (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
-    /* let selectedRadio = document.querySelector('input[name=' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Name].Data + ']:checked')
-    let selectedValue = selectedRadio ? selectedRadio.value : null */
     switch (wrapper.eventHandler.subObjectType) {
       case SubObjectTypeEnum.ParentObject:
-
-        wrapper = this.updateValueData(wrapper)
+        wrapper = this.updateValueData(wrapper, StatTypeEnum.ItemList, StatTypeEnum.Name)
         break
     }
     return wrapper.objectTemplates
@@ -239,17 +236,16 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
     return new ObjectTemplate(object.Region, object.ObjectEnum, object.SubObjectEnum, object.ActionEnum, object.Stats)
   }
 
-  protected getObjectTemplateIndex (tag: string, objectTemplates : ObjectTemplate[]) : number {
+  protected getObjectTemplateIndex (tag: string, objectTemplates : ObjectTemplate[], searchByValueType: StatTypeEnum = StatTypeEnum.Tag) : number {
     return objectTemplates.findIndex(element =>
-      element.Stats[StatTypeEnum.Tag].Data === tag
+      element.Stats[searchByValueType] && element.Stats[searchByValueType].Data === tag
     )
   }
 
-  protected updateValueData (wrapper: WrapperAbstract): WrapperAbstract {
-    const matchingIndex = this.getObjectTemplateIndex(wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data, wrapper.objectTemplates)
-
+  protected updateValueData (wrapper: WrapperAbstract, tagContainingValue: StatTypeEnum = StatTypeEnum.Value, searchByValueType: StatTypeEnum = StatTypeEnum.Tag): WrapperAbstract {
+    const matchingIndex = this.getObjectTemplateIndex(wrapper.eventHandler.payload.Stats[searchByValueType].Data, wrapper.objectTemplates, searchByValueType)
     if (matchingIndex !== -1) {
-      wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data = wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data
+      wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data = wrapper.eventHandler.payload.Stats[tagContainingValue].Data
     }
     return wrapper
   }

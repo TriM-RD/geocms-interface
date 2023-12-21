@@ -1,12 +1,12 @@
 <template>
   <div :class="object?.Stats[statTypeEnum.Design].Data">
-    <div v-if="returnIfExists(statTypeEnum.ItemList)">
+    <div v-if="returnIfExists(statTypeEnum.ItemList) && !returnIfExists(statTypeEnum.Name)">
       <div v-for="(item, key, index) in JSON.parse(object.Stats[statTypeEnum.ItemList].Data)" :key="`${ key }-${ index }`">
         <input class="form-check-input mt-0"
                :name="object.Stats[statTypeEnum.Tag].Data"
                :value="item.id" type="radio"
                :checked="object.Stats[statTypeEnum.Value].Data===item.id"
-               @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, $event.target.value)">
+               @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object as ObjectTemplate, $event.target.value)">
         <label class="form-check-label" for="flexCheckDefault">
           {{ item.name }}
         </label>
@@ -15,10 +15,10 @@
     <div v-else>
       <input class="form-check-input"
              :name="object.Stats[statTypeEnum.Name].Data"
-             :value="object.Stats[statTypeEnum.Value].Data"
+             :value="object.Stats[statTypeEnum.ItemList].Data"
              type="radio"
-             :checked="object.Stats[statTypeEnum.Value].Data===object.Stats[statTypeEnum.Value].Data"
-             @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, $event.target.value)">
+             :checked="object.Stats[statTypeEnum.ItemList].Data===object.Stats[statTypeEnum.Value].Data"
+             @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object as ObjectTemplate, $event.target.value)">
     </div>
   </div>
 </template>
@@ -27,6 +27,11 @@
 import { Options, Vue } from 'vue-class-component'
 import { ObjectTemplate, ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, RegionEnum } from '@cybertale/interface'
 @Options({
+  computed: {
+    ObjectTemplate () {
+      return ObjectTemplate
+    }
+  },
   props: {
     object: ObjectTemplate
   }

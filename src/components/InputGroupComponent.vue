@@ -3,7 +3,7 @@
     <div v-if="returnIfExists(statTypeEnum.ElementType) === 'button'" class="mb-3 row justify-content-md-center">
       <button data-bs-toggle="tooltip" data-bs-placement="top"
               :class="object.Stats[statTypeEnum.Design].Data"
-              @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[objectTypeEnum.Button].ChooseSubType(JSON.parse(JSON.stringify(objectCopy(object))) as ObjectTemplate)'>
+              @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[objectTypeEnum.Button].ChooseSubType(JSON.parse(JSON.stringify(objectCopy(object as ObjectTemplate))) as ObjectTemplate)'>
         {{object.Stats[statTypeEnum.Label].Data}}
       </button>
     </div>
@@ -74,7 +74,7 @@ export default class InputGroupComponent extends Vue {
     this.objectTemplates.forEach(_objectTemplate => {
       currentGroup.push(_objectTemplate)
 
-      if (_objectTemplate.Stats[StatTypeEnum.DependsOn]) {
+      if (_objectTemplate.Stats[StatTypeEnum.BreakLine]) {
         groups.push(currentGroup)
         currentGroup = []
       }
@@ -105,19 +105,15 @@ export default class InputGroupComponent extends Vue {
   }
 
   objectCopy (_object : ObjectTemplate) : ObjectTemplate {
-    if (_object.Stats[StatTypeEnum.Value]) { _object.Stats[StatTypeEnum.Value].Data = this.object.Stats[StatTypeEnum.Value].Data }
-    // if (_object.Stats[StatTypeEnum.ErrorMessage]) { _object.Stats[StatTypeEnum.ErrorMessage].Data = this.object.Stats[StatTypeEnum.ErrorMessage].Data }
-    if (_object.Stats[StatTypeEnum.ErrorMessage]) {
-      _object.Stats[StatTypeEnum.ErrorMessage].Data = this.object.Stats[StatTypeEnum.ErrorMessage].Data
-    } else if (this.object.Stats[StatTypeEnum.ErrorMessage]) {
-      _object.Stats[StatTypeEnum.ErrorMessage] = StatType.StatTypes[StatTypeEnum.ErrorMessage]()
-      _object.Stats[StatTypeEnum.ErrorMessage].Data = this.object.Stats[StatTypeEnum.ErrorMessage].Data
-    }
-    if (_object.Stats[StatTypeEnum.IsValid]) {
-      _object.Stats[StatTypeEnum.IsValid].Data = this.object.Stats[StatTypeEnum.IsValid].Data
-    } else if (this.object.Stats[StatTypeEnum.IsValid]) {
-      _object.Stats[StatTypeEnum.IsValid] = StatType.StatTypes[StatTypeEnum.IsValid]()
-      _object.Stats[StatTypeEnum.IsValid].Data = this.object.Stats[StatTypeEnum.IsValid].Data
+    if (_object.Stats[StatTypeEnum.Inherit]) {
+      for (const stat of JSON.parse(_object.Stats[StatTypeEnum.Inherit].Data)) {
+        if (_object.Stats[stat]) {
+          _object.Stats[stat].Data = this.object.Stats[stat].Data
+        } else if (this.object.Stats[stat]) {
+          _object.Stats[stat] = StatType.StatTypes[stat]()
+          _object.Stats[stat].Data = this.object.Stats[stat].Data
+        }
+      }
     }
     return new ObjectTemplate(_object.Region, _object.ObjectEnum, _object.SubObjectEnum, _object.ActionEnum, _object.Stats)
   }
