@@ -15,7 +15,6 @@ import router from '@/router'
 import { Modal } from 'bootstrap'
 import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
 import { TagHelpers } from '@/definitions/tagHelpers'
-import { v4 as uuidv4 } from 'uuid'
 
 export abstract class HandlerAbstract extends ResolverAbstract {
   RowButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
