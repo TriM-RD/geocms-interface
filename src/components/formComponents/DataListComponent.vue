@@ -1,5 +1,5 @@
 <template>
-  <input class="form-control" list="datalistOptions"
+  <input class="form-control" :list="object.Stats[statTypeEnum.BelongsTo].Data"
          :class="returnIfExists(statTypeEnum.Design) + ' ' + validate()"
          :required="attributeCheck(statTypeEnum.Required)"
          :disabled="attributeCheck(statTypeEnum.Disabled)"
@@ -7,10 +7,10 @@
          :value="`${object?.Stats[statTypeEnum.Value].Data !== null?object.Stats[statTypeEnum.Value].Data.name === undefined?valueName:object.Stats[statTypeEnum.Value].Data.name:''}`"
          :placeholder="returnIfExists(statTypeEnum.Placeholder)"
          @input="inputEvent(object as ObjectTemplate, $event.target.value)">
-  <datalist id="datalistOptions" v-if="dspStyle">
+  <datalist :id="object.Stats[statTypeEnum.BelongsTo].Data" v-if="dspStyle">
     <option v-for="(item, key, index) in JSON.parse(object.Stats[statTypeEnum.ItemList].Data)" :selected="check(item.name)" :key="`${ key }-${ index }`" :value="item.name">{{item.name}}</option>
   </datalist>
-  <div class="invalid-feedback">{{ returnIfExists(statTypeEnum.ErrorMessage) }}</div>
+  <div class="invalid-feedback order-1">{{ returnIfExists(statTypeEnum.ErrorMessage) }}</div>
 </template>
 
 <script lang="ts">
@@ -72,6 +72,7 @@ export default class DataListComponent extends Vue {
 
   inputEvent (object: ObjectTemplate, value: string) : void {
     this.dspStyle = value.length >= 3
+    console.log(value)
     this.regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, value)
   }
 

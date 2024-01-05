@@ -7,6 +7,8 @@ import { ResolverInterface } from '@/resolvers/assignments/resolverInterface'
 import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
 import { Definitions } from '@/definitions/appDefinitions'
 import { v4 as uuidv4 } from 'uuid'
+import { TagHelpers } from '@/definitions/tagHelpers'
+import CyberTags = TagHelpers.CyberTags
 
 export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstract> {
   protected removeElementFromArray (arr: Array<any>, belongsTo: string) : void {
@@ -54,14 +56,19 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
   }
 
   public async FormDataList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
-    wrapper.refreshPage()
+    const matchingIndex = this.getObjectTemplateIndex(wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data, wrapper.objectTemplates, StatTypeEnum.Tag)
+    if (matchingIndex !== -1) {
+      const itemList = JSON.parse(wrapper.eventHandler.payload.Stats[StatTypeEnum.ItemList].Data)
+      wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data = itemList[wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data]
+    }
+    /* wrapper.refreshPage()
     const temp = wrapper.objectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
     if (wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data.id !== null) {
       wrapper.objectTemplates[temp].Stats[StatTypeEnum.Value].Data = wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data.id
     } else {
       wrapper.objectTemplates[temp].Stats[StatTypeEnum.Value].Data = ''
     }
-    wrapper.refreshPage()
+    wrapper.refreshPage() */
     return wrapper.objectTemplates
   }
 

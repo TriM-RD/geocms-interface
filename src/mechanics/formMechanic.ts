@@ -75,7 +75,12 @@ export namespace Manager.Mechanic{
       if (eventHandler.payload.Stats[StatTypeEnum.Value].Data.id === null) {
         return
       }
-      this.ObjectTemplates = await (ResolverType.ResolverTypes[Definitions.Other.Any] as ResolverInterface<FormWrapper>).FormDataList(new FormWrapper().DataList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this)))
+      console.log('not null')
+      const name = router.currentRoute.value.name
+      if (typeof name === 'string') {
+        // this.ObjectTemplates = await (ResolverType.ResolverTypes[Definitions.Other.Any] as ResolverInterface<FormWrapper>).FormDataList(new FormWrapper().DataList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this)))
+        this.ObjectTemplates = await (ResolverType.ResolverTypes[name] as ResolverInterface<FormWrapper>).FormDataList(new FormWrapper().DataList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this)))
+      }
     }
 
     protected async ECabinetRow (eventHandler: EventHandlerType): Promise<void> {
