@@ -1,6 +1,8 @@
 import { TranslationKeys } from '@/locales/keys'
 
 export const hrDictionary:TranslationKeys = {
+  unLink: 'Odspojiti',
+  link: 'Spojiti',
   template: 'Predložak',
   division: 'Odjel',
   value: 'Vrijednost',

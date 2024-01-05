@@ -72,7 +72,6 @@ export default class DataListComponent extends Vue {
 
   inputEvent (object: ObjectTemplate, value: string) : void {
     this.dspStyle = value.length >= 3
-    console.log(value)
     this.regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object, value)
   }
 

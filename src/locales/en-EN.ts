@@ -1,6 +1,8 @@
 import { TranslationKeys } from '@/locales/keys'
 
 export const enDictionary:TranslationKeys = {
+  unLink: 'Un-link',
+  link: 'Link',
   template: 'Template',
   division: 'Division',
   value: 'Value',

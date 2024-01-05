@@ -72,13 +72,11 @@ export namespace Manager.Mechanic{
     }
 
     protected async DataList (eventHandler: EventHandlerType): Promise<void> {
-      if (eventHandler.payload.Stats[StatTypeEnum.Value].Data.id === null) {
+      if (!eventHandler.payload.Stats[StatTypeEnum.Value].Data.id) {
         return
       }
-      console.log('not null')
       const name = router.currentRoute.value.name
       if (typeof name === 'string') {
-        // this.ObjectTemplates = await (ResolverType.ResolverTypes[Definitions.Other.Any] as ResolverInterface<FormWrapper>).FormDataList(new FormWrapper().DataList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this)))
         this.ObjectTemplates = await (ResolverType.ResolverTypes[name] as ResolverInterface<FormWrapper>).FormDataList(new FormWrapper().DataList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this)))
       }
     }

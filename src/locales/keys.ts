@@ -1,4 +1,6 @@
 export type TranslationKeys = {
+  unLink: string,
+  link: string,
   template: string,
   division: string,
   value: string,

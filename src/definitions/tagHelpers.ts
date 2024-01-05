@@ -32,6 +32,7 @@ export namespace TagHelpers{
     replacedEntity = 'replacedEntity',
     addEcabinetRow = 'addEcabinetRow',
     viewParent = 'viewParent',
+    link = 'link',
   }
 
   export enum ControllerTags {

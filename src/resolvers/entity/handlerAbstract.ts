@@ -15,6 +15,7 @@ import router from '@/router'
 import { Modal } from 'bootstrap'
 import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
 import { TagHelpers } from '@/definitions/tagHelpers'
+import { $t } from '@/locales'
 
 export abstract class HandlerAbstract extends ResolverAbstract {
   RowButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
@@ -125,8 +126,8 @@ export abstract class HandlerAbstract extends ResolverAbstract {
 
   protected resolveButtonDown (eventHandler: EventHandlerType, strings: string[], objectTemplates: ObjectTemplate[], refreshPage: () => void, id: string): ObjectTemplate[] {
     switch (strings[0]) {
-      case 'link':
-        alert('test')
+      case TagHelpers.EcabinetTags.link:
+        console.log('test')
         objectTemplates = this.unlinkBelongs(eventHandler, strings[1], objectTemplates)
         break
       default:
@@ -149,17 +150,16 @@ export abstract class HandlerAbstract extends ResolverAbstract {
 
   private unlinkBelongs (eventHandler : EventHandlerType, tag : string, objectTemplates: ObjectTemplate[]): ObjectTemplate[] {
     const belongsIndex = objectTemplates.findIndex(
-      element => element.Stats[StatTypeEnum.Tag].Data.split('|')[0] === tag)
-    /* const tags = objectTemplates[belongsIndex].Stats[StatTypeEnum.Tag].Data.split('|')
-    if (tags[1] === 'true') {
-      objectTemplates[belongsIndex].Stats[StatTypeEnum.Tag].Data = tags[0] + ''
-      eventHandler.payload.Stats[StatTypeEnum.Label].Data = 'Un-Link'
-      eventHandler.payload.Stats[StatTypeEnum.Design].Data = 'btn btn-outline-danger me-2'
-    } else {
-      objectTemplates[belongsIndex].Stats[StatTypeEnum.Tag].Data = tags[0] + '-true'
-      eventHandler.payload.Stats[StatTypeEnum.Label].Data = 'Link'
+      element => element.Stats[StatTypeEnum.Tag].Data === tag)
+    if (objectTemplates[belongsIndex].Stats[StatTypeEnum.Name].Data) {
+      objectTemplates[belongsIndex].Stats[StatTypeEnum.Name].Data = ''
+      eventHandler.payload.Stats[StatTypeEnum.Label].Data = $t.link
       eventHandler.payload.Stats[StatTypeEnum.Design].Data = 'btn btn-outline-info me-2'
-    } */
+    } else {
+      objectTemplates[belongsIndex].Stats[StatTypeEnum.Name].Data = 'true'
+      eventHandler.payload.Stats[StatTypeEnum.Label].Data = $t.unLink
+      eventHandler.payload.Stats[StatTypeEnum.Design].Data = 'btn btn-outline-danger me-2'
+    }
     return objectTemplates
   }
 }
