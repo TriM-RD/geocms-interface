@@ -3,9 +3,9 @@
           :data-bs-title="tooltipCase()"
           :hidden="specialCase()"
           :disabled="attributeCheck(statTypeEnum.Disabled)"
-          :class="`${object.Stats[statTypeEnum.Design].Data}`"
+          :class="getValue(statTypeEnum.Design)"
           @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object)'>
-    {{object.Stats[statTypeEnum.Label].Data}}
+    {{ getValue(statTypeEnum.Label) }}
   </button>
   <slot></slot>
 </template>
@@ -26,6 +26,24 @@ export default class ButtonComponent extends Vue {
   regionEnum = RegionEnum
   object!: ObjectTemplate
   renderComponent= false
+
+  getValue (temp: number) {
+    console.log(this.object)
+    if (this.object !== undefined) {
+      if (this.object.Stats[this.statTypeEnum.Name] !== undefined) {
+        const data = JSON.parse(this.object.Stats[temp].Data)
+        console.log(this.object.Stats[this.statTypeEnum.Name].Data)
+        const value = this.object.Stats[this.statTypeEnum.Name].Data
+        if (['true', '1'].includes(String(value))) { // TODO instead of true/false make it indexed
+          return data[0]
+        } else {
+          return data[1]
+        }
+      } else {
+        return this.object.Stats[temp].Data
+      }
+    }
+  }
 
   tooltipCase () {
     if (this.object !== undefined) {

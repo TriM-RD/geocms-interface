@@ -149,16 +149,13 @@ export abstract class HandlerAbstract extends ResolverAbstract {
   }
 
   private unlinkBelongs (eventHandler : EventHandlerType, tag : string, objectTemplates: ObjectTemplate[]): ObjectTemplate[] {
-    const belongsIndex = objectTemplates.findIndex(
-      element => element.Stats[StatTypeEnum.Tag].Data === tag)
+    const belongsIndex = objectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === tag)
     if (objectTemplates[belongsIndex].Stats[StatTypeEnum.Name].Data) {
-      objectTemplates[belongsIndex].Stats[StatTypeEnum.Name].Data = ''
-      eventHandler.payload.Stats[StatTypeEnum.Label].Data = $t.link
-      eventHandler.payload.Stats[StatTypeEnum.Design].Data = 'btn btn-outline-info me-2'
+      objectTemplates[belongsIndex].Stats[StatTypeEnum.Name].Data = '' // TODO instead of true/false make it indexed
+      eventHandler.payload.Stats[StatTypeEnum.Name].Data = ''
     } else {
       objectTemplates[belongsIndex].Stats[StatTypeEnum.Name].Data = 'true'
-      eventHandler.payload.Stats[StatTypeEnum.Label].Data = $t.unLink
-      eventHandler.payload.Stats[StatTypeEnum.Design].Data = 'btn btn-outline-danger me-2'
+      eventHandler.payload.Stats[StatTypeEnum.Name].Data = 'true'
     }
     return objectTemplates
   }
