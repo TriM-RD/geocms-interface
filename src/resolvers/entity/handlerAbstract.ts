@@ -78,7 +78,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         break
       case SubObjectTypeEnum.Down:
         wrapper.refreshPage()
-        this.resolveButtonDown(wrapper.eventHandler, wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data.split('|'), wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
+        wrapper.objectTemplates = this.resolveButtonDown(wrapper.eventHandler, wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data.split('|'), wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
         wrapper.refreshPage()
         break
       default:
@@ -127,7 +127,6 @@ export abstract class HandlerAbstract extends ResolverAbstract {
   protected resolveButtonDown (eventHandler: EventHandlerType, strings: string[], objectTemplates: ObjectTemplate[], refreshPage: () => void, id: string): ObjectTemplate[] {
     switch (strings[0]) {
       case TagHelpers.EcabinetTags.link:
-        console.log('test')
         objectTemplates = this.unlinkBelongs(eventHandler, strings[1], objectTemplates)
         break
       default:
@@ -150,12 +149,12 @@ export abstract class HandlerAbstract extends ResolverAbstract {
 
   private unlinkBelongs (eventHandler : EventHandlerType, tag : string, objectTemplates: ObjectTemplate[]): ObjectTemplate[] {
     const belongsIndex = objectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === tag)
-    if (objectTemplates[belongsIndex].Stats[StatTypeEnum.Name].Data) {
-      objectTemplates[belongsIndex].Stats[StatTypeEnum.Name].Data = '' // TODO instead of true/false make it indexed
-      eventHandler.payload.Stats[StatTypeEnum.Name].Data = ''
+    if (objectTemplates[belongsIndex].Stats[StatTypeEnum.Option].Data === '0') {
+      objectTemplates[belongsIndex].Stats[StatTypeEnum.Option].Data = '1'
+      eventHandler.payload.Stats[StatTypeEnum.Option].Data = '1'
     } else {
-      objectTemplates[belongsIndex].Stats[StatTypeEnum.Name].Data = 'true'
-      eventHandler.payload.Stats[StatTypeEnum.Name].Data = 'true'
+      objectTemplates[belongsIndex].Stats[StatTypeEnum.Option].Data = '0'
+      eventHandler.payload.Stats[StatTypeEnum.Option].Data = '0'
     }
     return objectTemplates
   }

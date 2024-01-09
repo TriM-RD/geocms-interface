@@ -27,27 +27,30 @@ export default class ButtonComponent extends Vue {
   object!: ObjectTemplate
   renderComponent= false
 
-  getValue (temp: number) {
-    console.log(this.object)
-    if (this.object !== undefined) {
-      if (this.object.Stats[this.statTypeEnum.Name] !== undefined) {
-        const data = JSON.parse(this.object.Stats[temp].Data)
-        console.log(this.object.Stats[this.statTypeEnum.Name].Data)
-        const value = this.object.Stats[this.statTypeEnum.Name].Data
-        if (['true', '1'].includes(String(value))) { // TODO instead of true/false make it indexed
-          return data[0]
-        } else {
-          return data[1]
-        }
+  getValue (statEnum: number) : string {
+    if (this.object) {
+      if (this.object.Stats[this.statTypeEnum.Option] && this.isJSON(this.object.Stats[statEnum].Data)) {
+        const data = JSON.parse(this.object.Stats[statEnum].Data)
+        return data[Number(this.object.Stats[this.statTypeEnum.Option].Data)]
       } else {
-        return this.object.Stats[temp].Data
+        return this.object.Stats[statEnum].Data
       }
     }
+    return ''
+  }
+
+  isJSON (str: string): boolean {
+    try {
+      JSON.parse(str)
+    } catch (e) {
+      return false
+    }
+    return true
   }
 
   tooltipCase () {
-    if (this.object !== undefined) {
-      if (this.object.Stats[this.statTypeEnum.Tooltip] !== undefined) {
+    if (this.object) {
+      if (this.object.Stats[this.statTypeEnum.Tooltip]) {
         return this.object.Stats[this.statTypeEnum.Tooltip].Data
       }
     }

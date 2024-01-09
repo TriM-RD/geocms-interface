@@ -27,9 +27,29 @@ export default class LabelComponent extends Vue {
     return ''
   }
 
+  getValue (statEnum: number) : string {
+    if (this.object.Stats[statEnum]) {
+      if (this.object.Stats[this.statTypeEnum.Option] && this.object.Stats[statEnum] && this.isJSON(this.object.Stats[statEnum].Data)) {
+        const data = JSON.parse(this.object.Stats[statEnum].Data)
+        return data[Number(this.object.Stats[this.statTypeEnum.Option].Data)]
+      } else {
+        return this.object.Stats[statEnum].Data
+      }
+    }
+    return ''
+  }
+
   specialCase () : boolean {
-    if (this.object.Stats[this.statTypeEnum.ElementType] === undefined) { return false }
-    return this.object.Stats[this.statTypeEnum.ElementType].Data === 'hidden'
+    return this.getValue(this.statTypeEnum.ElementType) === 'hidden'
+  }
+
+  isJSON (str: string): boolean {
+    try {
+      JSON.parse(str)
+    } catch (e) {
+      return false
+    }
+    return true
   }
 
   attributeCheck (statType : number) : boolean | string {

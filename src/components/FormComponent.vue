@@ -2,7 +2,7 @@
   <Loading v-model:active="renderComponent"
            :can-cancel="false"
            :is-full-page="false"/>
-  <form v-if="!reRenderToo" class="needs-validation" id="classic-form" novalidate>
+  <form v-if="!reRenderToo" :key="componentKey" class="needs-validation" id="classic-form" novalidate>
     <component :page-refresh="renderComponent"  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ _objectTemplate.Stats[statTypeEnum.Tag].Data }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :entity='resolveEntities(_objectTemplate)' :object='_objectTemplate'> </component>
   </form>
 </template>
@@ -35,7 +35,7 @@ export default class FormComponent extends Vue {
   statTypeEnum = StatTypeEnum
   belongsTo: { [key: string]: ObjectTemplate[] } = {}
   entity!: ObjectTemplate[]
-  static test = false
+  componentKey = false
 
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
@@ -133,12 +133,12 @@ export default class FormComponent extends Vue {
     if (this.objectTemplates !== undefined) {
       this.objectTemplates = this.extractChildren(this.objectTemplates)
     }
+    this.componentKey = !this.componentKey
     return this.renderComponent
   }
 
   reRender (): void {
     this.renderComponent = !this.renderComponent
-    FormComponent.test = true
   }
 
   changeRender (): void {

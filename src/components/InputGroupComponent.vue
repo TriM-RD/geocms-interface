@@ -123,6 +123,9 @@ export default class InputGroupComponent extends Vue {
     entities = JSON.parse(JSON.stringify(entities))
     for (const entity of entities) {
       entity.Stats[StatTypeEnum.Tag].Data = entity.Stats[StatTypeEnum.Tag].Data + this.object.Stats[StatTypeEnum.Tag].Data
+      if (entity.Stats[StatTypeEnum.Option]) {
+        entity.Stats[StatTypeEnum.Option].Data = this.object.Stats[StatTypeEnum.Option].Data
+      }
       arr.push(this.objectCopy(entity))
     }
     return arr

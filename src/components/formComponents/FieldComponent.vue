@@ -5,7 +5,7 @@
          :disabled="attributeCheck(statTypeEnum.Disabled)"
          :autocomplete="returnIfExists(statTypeEnum.AutoComplete)"
          :class="object?.Stats[statTypeEnum.Design].Data+' '+validate()"
-         :type="returnIfExists(statTypeEnum.ElementType)"
+         :type="getValue(statTypeEnum.ElementType)"
          :value="labelToValue()"
          :placeholder="returnIfExists(statTypeEnum.Placeholder)"
          @input="regionType.RegionTypes[object?.Region].ObjectTypes[object?.ObjectEnum].ChooseSubType(object as ObjectTemplate, $event.target.value)">
@@ -42,6 +42,27 @@ export default class FieldComponent extends Vue {
     return this.object?.Stats[this.statTypeEnum.Value].Data
   }
 
+  getValue (statEnum: number) : string {
+    if (this.object.Stats[statEnum]) {
+      if (this.object.Stats[this.statTypeEnum.Option] && this.object.Stats[statEnum] && this.isJSON(this.object.Stats[statEnum].Data)) {
+        const data = JSON.parse(this.object.Stats[statEnum].Data)
+        return data[Number(this.object.Stats[this.statTypeEnum.Option].Data)]
+      } else {
+        return this.object.Stats[statEnum].Data
+      }
+    }
+    return ''
+  }
+
+  isJSON (str: string): boolean {
+    try {
+      JSON.parse(str)
+    } catch (e) {
+      return false
+    }
+    return true
+  }
+
   returnIfExists (tag: number): string {
     if (this.object.Stats[tag]) {
       return this.object.Stats[tag].Data
@@ -56,11 +77,6 @@ export default class FieldComponent extends Vue {
     if (this.object.Stats[this.statTypeEnum.ErrorMessage].Data === null) { return '' }
     if (this.object.Stats[this.statTypeEnum.ErrorMessage].Data !== '') { return 'is-invalid' }
     return ''
-  }
-
-  specialCase () : boolean {
-    if (this.object.Stats[this.statTypeEnum.ElementType] === undefined) { return false }
-    return this.object.Stats[this.statTypeEnum.ElementType].Data === 'hidden'
   }
 
   attributeCheck (statType : number) : boolean | string {
