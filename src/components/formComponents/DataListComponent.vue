@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { ObjectTemplate, ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, RegionEnum } from '@cybertale/interface'
+import { ObjectTemplate, ObjectType, ObjectTypeEnum, RegionEnum, RegionType, StatTypeEnum } from '@cybertale/interface'
 
 interface Option {
   id: number;
@@ -49,9 +49,31 @@ export default class DataListComponent extends Vue {
     return ''
   }
 
+  getValue (statEnum: number, indexStatTypeEnum = StatTypeEnum.Option) : string {
+    if (this.object.Stats[statEnum]) {
+      if (this.object.Stats[indexStatTypeEnum] && this.object.Stats[statEnum] && this.isJSON(this.object.Stats[statEnum].Data)) {
+        const data = JSON.parse(this.object.Stats[statEnum].Data)
+        return data[Number(this.object.Stats[indexStatTypeEnum].Data)]
+      } else {
+        return this.object.Stats[statEnum].Data
+      }
+    }
+    return ''
+  }
+
+  isJSON (str: string): boolean {
+    let temp = null
+    try {
+      temp = JSON.parse(str)
+    } catch (e) {
+      return false
+    }
+    return Array.isArray(temp)
+  }
+
   get valueName (): string {
-    const temp = this.options.find((option: any) => option.id === this.object.Stats[this.statTypeEnum.Value].Data)
-    if (!temp) { return this.object.Stats[this.statTypeEnum.Value].Data }
+    const temp = this.options.find((option: any) => option.id === this.getValue(StatTypeEnum.Value, StatTypeEnum.ValueIndices))
+    if (!temp) { return this.getValue(StatTypeEnum.Value, StatTypeEnum.ValueIndices) }
     return temp?.name
   }
 

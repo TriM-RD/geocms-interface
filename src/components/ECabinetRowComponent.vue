@@ -30,7 +30,7 @@ import { $t } from '@/locales'
     rerender: Function
   }
 })
-export default class ECabinetRowComponent extends Vue {
+export default class ECabinetRowComponent extends Vue { // TODO turn into InputGroup
   rerender!: () => void
   mechanic: MechanicAbstract = Manager.Mechanic.ECabinetRowMechanic.getInstance(this.rerender.bind(this))
   regionEnum = RegionEnum
@@ -50,6 +50,7 @@ export default class ECabinetRowComponent extends Vue {
   }
 
   mounted () {
+    console.log(this.object.Stats[StatTypeEnum.Value].Data)
     if (this.object.Stats[StatTypeEnum.ItemList].Data !== '') {
       this.values = this.object.Stats[StatTypeEnum.ItemList].Data
     }

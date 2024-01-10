@@ -66,6 +66,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
           }
         }
         if (rowsExist) { rowCount += 1 }
+        console.log('tst')
         wrapper.objectTemplates = wrapper.append([
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.ECabinetRow, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Row'),
@@ -74,6 +75,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
             [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData('')
           })
         ])
+        console.log(wrapper.objectTemplates)
         wrapper.refreshPage()
         break
       case SubObjectTypeEnum.Down:
@@ -151,10 +153,8 @@ export abstract class HandlerAbstract extends ResolverAbstract {
     const belongsIndex = objectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === tag)
     if (objectTemplates[belongsIndex].Stats[StatTypeEnum.Option].Data === '0') {
       objectTemplates[belongsIndex].Stats[StatTypeEnum.Option].Data = '1'
-      eventHandler.payload.Stats[StatTypeEnum.Option].Data = '1'
     } else {
       objectTemplates[belongsIndex].Stats[StatTypeEnum.Option].Data = '0'
-      eventHandler.payload.Stats[StatTypeEnum.Option].Data = '0'
     }
     return objectTemplates
   }

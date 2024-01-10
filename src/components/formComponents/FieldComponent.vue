@@ -14,9 +14,10 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { ObjectTemplate, ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, RegionEnum } from '@cybertale/interface'
+import { ObjectTemplate, ObjectType, ObjectTypeEnum, RegionEnum, RegionType, StatTypeEnum } from '@cybertale/interface'
 import { TagHelpers } from '@/definitions/tagHelpers'
 import CyberTags = TagHelpers.CyberTags
+
 @Options({
   computed: {
     ObjectTemplate () {
@@ -39,14 +40,14 @@ export default class FieldComponent extends Vue {
     if (this.returnIfExists(this.statTypeEnum.Tag).includes(CyberTags.label) && this.attributeCheck(this.statTypeEnum.Disabled)) {
       return this.returnIfExists(this.statTypeEnum.Label)
     }
-    return this.object?.Stats[this.statTypeEnum.Value].Data
+    return this.getValue(StatTypeEnum.Value, StatTypeEnum.ValueIndices)
   }
 
-  getValue (statEnum: number) : string {
+  getValue (statEnum: number, indexStatTypeEnum = StatTypeEnum.Option) : string {
     if (this.object.Stats[statEnum]) {
-      if (this.object.Stats[this.statTypeEnum.Option] && this.object.Stats[statEnum] && this.isJSON(this.object.Stats[statEnum].Data)) {
+      if (this.object.Stats[indexStatTypeEnum] && this.object.Stats[statEnum] && this.isJSON(this.object.Stats[statEnum].Data)) {
         const data = JSON.parse(this.object.Stats[statEnum].Data)
-        return data[Number(this.object.Stats[this.statTypeEnum.Option].Data)]
+        return data[Number(this.object.Stats[indexStatTypeEnum].Data)]
       } else {
         return this.object.Stats[statEnum].Data
       }
@@ -55,12 +56,13 @@ export default class FieldComponent extends Vue {
   }
 
   isJSON (str: string): boolean {
+    let temp = null
     try {
-      JSON.parse(str)
+      temp = JSON.parse(str)
     } catch (e) {
       return false
     }
-    return true
+    return Array.isArray(temp)
   }
 
   returnIfExists (tag: number): string {

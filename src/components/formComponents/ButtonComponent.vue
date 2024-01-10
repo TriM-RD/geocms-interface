@@ -40,12 +40,13 @@ export default class ButtonComponent extends Vue {
   }
 
   isJSON (str: string): boolean {
+    let temp = null
     try {
-      JSON.parse(str)
+      temp = JSON.parse(str)
     } catch (e) {
       return false
     }
-    return true
+    return Array.isArray(temp)
   }
 
   tooltipCase () {

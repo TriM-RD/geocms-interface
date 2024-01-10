@@ -56,12 +56,19 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
   }
 
   public async FormDataList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
-    const temp = wrapper.objectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
-    if (wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data.id) {
-      wrapper.objectTemplates[temp].Stats[StatTypeEnum.Value].Data = wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data.id
+    const matchingIndex = wrapper.objectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+    if (this.isJSON(wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data)) {
+      const stat = JSON.parse(wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data)
+      stat[wrapper.eventHandler.payload.Stats[StatTypeEnum.ValueIndices].Data] = wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data.id
+      wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data = JSON.stringify(stat)
     } else {
-      wrapper.objectTemplates[temp].Stats[StatTypeEnum.Value].Data = ''
+      if (wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data.id) {
+        wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data = wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data.id
+      } else {
+        wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data = ''
+      }
     }
+
     return wrapper.objectTemplates
   }
 
@@ -238,14 +245,20 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
 
   protected getObjectTemplateIndex (tag: string, objectTemplates : ObjectTemplate[], searchByValueType: StatTypeEnum = StatTypeEnum.Tag) : number {
     return objectTemplates.findIndex(element =>
-      element.Stats[searchByValueType] && element.Stats[searchByValueType].Data === tag
+      element.Stats[searchByValueType] && (element.Stats[searchByValueType].Data === tag || element.Stats[searchByValueType].Data === tag.split('|')[1])
     )
   }
 
   protected updateValueData (wrapper: WrapperAbstract, tagContainingValue: StatTypeEnum = StatTypeEnum.Value, searchByValueType: StatTypeEnum = StatTypeEnum.Tag): WrapperAbstract {
     const matchingIndex = this.getObjectTemplateIndex(wrapper.eventHandler.payload.Stats[searchByValueType].Data, wrapper.objectTemplates, searchByValueType)
     if (matchingIndex !== -1) {
-      wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data = wrapper.eventHandler.payload.Stats[tagContainingValue].Data
+      if (this.isJSON(wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data)) {
+        const stat = JSON.parse(wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data)
+        stat[wrapper.eventHandler.payload.Stats[StatTypeEnum.ValueIndices].Data] = wrapper.eventHandler.payload.Stats[tagContainingValue].Data
+        wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data = JSON.stringify(stat)
+      } else {
+        wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data = wrapper.eventHandler.payload.Stats[tagContainingValue].Data
+      }
     }
     return wrapper
   }
@@ -255,5 +268,15 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
       wrapper.objectTemplates.push(new ObjectTemplate(element.Region, element.ObjectEnum, element.SubObjectEnum, element.ActionEnum, element.Stats))
     }
     return wrapper.objectTemplates
+  }
+
+  private isJSON (str: string): boolean {
+    let temp = null
+    try {
+      temp = JSON.parse(str)
+    } catch (e) {
+      return false
+    }
+    return Array.isArray(temp)
   }
 }
