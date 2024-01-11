@@ -35,7 +35,8 @@ export namespace Manager.Mechanic{
     }
 
     protected Button (eventHandler: EventHandlerType): void {
-      const formModalOpenButton = document.getElementById('formModalOpen' + eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+      console.log(eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+      const formModalOpenButton = document.getElementById('formModalOpen' + eventHandler.payload.Stats[StatTypeEnum.Tag].Data.replace('button', '')) // TODO refactor, make it more programmatic and safer
       switch (router.currentRoute.value.name) {
         case Definitions.Entity.Edit:
           switch (eventHandler.subObjectType) {

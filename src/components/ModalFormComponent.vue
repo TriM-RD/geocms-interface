@@ -13,8 +13,8 @@
               <Loading v-model:active="renderComponent"
                        :can-cancel="false"
                        :is-full-page="false"/>
-              <div v-if="!renderComponent">
-                  <component :page-refresh="renderComponent" :rerender="changeRender"  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ _objectTemplate.Stats[statTypeEnum.Tag].Data }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate'> </component>
+              <div v-if="!reRenderToo" :key="componentKey">
+                  <component :page-refresh="renderComponent" :rerender="changeRender"  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ _objectTemplate.Stats[statTypeEnum.Tag].Data }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :entity='resolveEntities(_objectTemplate)' :object='_objectTemplate'> </component>
               </div>
             </div>
             <div class="modal-footer">
@@ -64,6 +64,9 @@ export default class ModalFormComponent extends Vue {
   subObjectTypeEnum = SubObjectTypeEnum
   regionType = RegionType
   conditionsUnsubed = false
+  entity!: ObjectTemplate[]
+  componentKey = false
+  belongsTo: { [key: string]: ObjectTemplate[] } = {}
 
   submitButton = new ObjectTemplate(this.regionEnum.ModalForm, this.objectTypeEnum.Button, this.subObjectTypeEnum.Left, this.actionTypeEnum.Click, {
     [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData($t.save),
@@ -84,6 +87,43 @@ export default class ModalFormComponent extends Vue {
     this.Init()
   }
 
+  resolveEntities (_object: ObjectTemplate) : ObjectTemplate[] {
+    if (this.belongsTo) {
+      for (const tag of Object.keys(this.belongsTo)) {
+        if (_object.Stats[StatTypeEnum.Tag].Data.includes(tag)) {
+          return this.belongsTo[tag]
+        }
+      }
+    }
+
+    return []
+  }
+
+  extractChildren (entities : ObjectTemplate[]) : ObjectTemplate[] {
+    const itemsToDelete = []
+
+    for (let i = 0; i < entities.length; i++) {
+      const item = entities[i]
+
+      if (item.Stats[StatTypeEnum.BelongsTo] !== undefined) {
+        const data = item.Stats[StatTypeEnum.BelongsTo].Data
+        this.belongsTo[data] = this.belongsTo[data] || []
+        if (!this.belongsTo[data].some(function (obj) { return obj.Stats[StatTypeEnum.Tag].Data === item.Stats[StatTypeEnum.Tag].Data })) {
+          this.belongsTo[data].push(item as ObjectTemplate)
+        }
+
+        // Add index to itemsToDelete array
+        itemsToDelete.push(i)
+      }
+    }
+
+    // Iterate in reverse to avoid issues with array modifications
+    for (let i = itemsToDelete.length - 1; i >= 0; i--) {
+      entities.splice(itemsToDelete[i], 1)
+    }
+    return entities
+  }
+
   test (target : any) {
     if (target.id === 'formModal' + this.object.Stats[StatTypeEnum.Tag].Data || target.id === 'formModalClose' + this.object.Stats[StatTypeEnum.Tag].Data) {
       console.log('unsubed')
@@ -101,9 +141,10 @@ export default class ModalFormComponent extends Vue {
     switch (router.currentRoute.value.name) {
       case Definitions.Entity.Edit:
       case Definitions.Entity.Add:
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'entity_modal'))
+        this.entity = await this.mechanic.InitGet('-1', 'entity_modal')
+        this.objectTemplates = this.mechanic.InitSet(this.extractChildren(this.entity))
         this.objectTemplates = this.mechanic.Append([
-          new ObjectTemplate(RegionEnum.ModalForm, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
+          /* new ObjectTemplate(RegionEnum.ModalForm, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Row'),
             [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('ecabinetRowChild'),
             [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Tag].Data),
@@ -120,7 +161,7 @@ export default class ModalFormComponent extends Vue {
             [StatTypeEnum.ElementType]: StatType.StatTypes[StatTypeEnum.ElementType]().CreateStat().InitData('hidden'),
             [StatTypeEnum.Placeholder]: StatType.StatTypes[StatTypeEnum.Placeholder]().CreateStat().InitData(''),
             [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.objectTemplates[0].Stats[StatTypeEnum.Id].Data)
-          }),
+          }), */
           new ObjectTemplate(RegionEnum.ModalForm, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Belongs'),
             [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(this.$route.params.id.toString()),
@@ -163,6 +204,14 @@ export default class ModalFormComponent extends Vue {
         break */
     }
     this.renderComponent = false
+  }
+
+  get reRenderToo () : boolean {
+    if (this.objectTemplates !== undefined) {
+      this.objectTemplates = this.extractChildren(this.objectTemplates)
+    }
+    this.componentKey = !this.componentKey
+    return this.renderComponent
   }
 
   reRender (test = false) {
