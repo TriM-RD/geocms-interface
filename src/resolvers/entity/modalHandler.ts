@@ -73,6 +73,7 @@ export class ModalHandler extends HandlerAbstract {
         // }
       }
     }
+    console.log('herrogello')
     return objectTemplates
   }
 }

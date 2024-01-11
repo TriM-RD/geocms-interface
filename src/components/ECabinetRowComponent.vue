@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!pageRefresh">
+  <div v-if="!reRender">
     <div v-if="returnIfExists(statTypeEnum.ElementType) === 'button'" class="mb-3 row justify-content-md-center">
       <button data-bs-toggle="tooltip" data-bs-placement="top"
               :class="object.Stats[statTypeEnum.Design].Data"
@@ -47,11 +47,13 @@ import {
     pageRefresh: {
       type: Boolean,
       default: true
-    }
+    },
+    rerender: Function
   }
 })
 export default class ECabinetRowComponent extends Vue {
-  mechanic: MechanicAbstract = Manager.Mechanic.ECabinetRowMechanic.getInstance()
+  rerender!: () => void
+  mechanic: MechanicAbstract = Manager.Mechanic.ECabinetRowMechanic.getInstance(this.rerender.bind(this))
   objectTemplate = ObjectTemplate
   regionEnum = RegionEnum
   regionType = RegionType
@@ -118,7 +120,7 @@ export default class ECabinetRowComponent extends Vue {
 
   get reRender () : boolean {
     console.log('test')
-    this.objectTemplates = this.mechanic.InitSet(this.entityCopy(this.entity))
+    // this.objectTemplates = this.mechanic.InitSet(this.entityCopy(this.entity))
     return this.pageRefresh
   }
 

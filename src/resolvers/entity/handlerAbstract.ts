@@ -48,9 +48,9 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         break
       case SubObjectTypeEnum.Left:
         // Add it to Stats
-        if (wrapper.eventHandler.payload.Stats[StatTypeEnum.Value]) { // TODO needs to be fixed, not working as expected
+        /* if (wrapper.eventHandler.payload.Stats[StatTypeEnum.Value]) { // TODO needs to be fixed, not working as expected
           if (wrapper.id !== 'formModalSubmit' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data) { wrapper.eventHandler.payload.Stats[StatTypeEnum.Disabled].Data = 'true' }
-        }
+        } */
         await this.validateForm('entity', Definitions.Entity.Edit, wrapper.objectTemplates, wrapper.refreshPage, wrapper.append, wrapper.id, wrapper.inEdit, wrapper.eventHandler.payload)
         break
       case SubObjectTypeEnum.Right:
@@ -119,7 +119,6 @@ export abstract class HandlerAbstract extends ResolverAbstract {
   }
 
   protected async resolveButtonMiddle (wrapper: WrapperAbstract): Promise<WrapperAbstract> {
-    console.log(wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
     switch (wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data) {
       case TagHelpers.EcabinetTags.replace:
         await router.push({

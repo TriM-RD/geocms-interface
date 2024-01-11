@@ -43,6 +43,7 @@ import Loading from 'vue-loading-overlay'
 import router from '@/router'
 import { Definitions } from '@/definitions/appDefinitions'
 import { $t } from '@/locales'
+import { TagHelpers } from '@/definitions/tagHelpers'
 @Options({
   props: {
     object: ObjectTemplate
@@ -143,6 +144,7 @@ export default class ModalFormComponent extends Vue {
       case Definitions.Entity.Add:
         this.entity = await this.mechanic.InitGet('-1', 'entity_modal')
         this.objectTemplates = this.mechanic.InitSet(this.extractChildren(this.entity))
+        console.log(this.object.Stats[StatTypeEnum.Value].Data)
         this.objectTemplates = this.mechanic.Append([
           /* new ObjectTemplate(RegionEnum.ModalForm, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Row'),
@@ -164,9 +166,12 @@ export default class ModalFormComponent extends Vue {
           }), */
           new ObjectTemplate(RegionEnum.ModalForm, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Belongs'),
-            [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(this.$route.params.id.toString()),
+            [StatTypeEnum.Option]: StatType.StatTypes[StatTypeEnum.Option]().CreateStat().InitData('1'),
+            [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(
+              JSON.stringify([this.$route.params.id.toString(), this.object.Stats[StatTypeEnum.Value].Data.toString(), this.object.Stats[StatTypeEnum.Value].Data.toString()])
+            ),
             [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('me-2 readonly'),
-            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('belongs'),
+            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(TagHelpers.CyberTags.belongs),
             [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(this.objectTemplates[0].Stats[StatTypeEnum.Id].Data),
             [StatTypeEnum.ElementType]: StatType.StatTypes[StatTypeEnum.ElementType]().CreateStat().InitData('hidden'),
             [StatTypeEnum.Placeholder]: StatType.StatTypes[StatTypeEnum.Placeholder]().CreateStat().InitData(''),

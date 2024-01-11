@@ -14,6 +14,7 @@ import { ResolverType } from '@/resolvers/resolverType'
 import { Definitions } from '@/definitions/appDefinitions'
 import { ResolverInterface } from '@/resolvers/assignments/resolverInterface'
 import { FormWrapper } from '@/resolvers/assignments/formWrapper'
+import * as Device from '@/resolvers/entity'
 
 export namespace Manager.Mechanic{
 
@@ -111,7 +112,7 @@ export namespace Manager.Mechanic{
       }
       let tempId = this.id
       if (eventHandler.payload.Stats[StatTypeEnum.Value]) { tempId = 'formModalSubmit' + eventHandler.payload.Stats[StatTypeEnum.Value].Data }
-      await (ResolverType.ResolverTypes[name] as ResolverInterface<FormWrapper>).FormButton(new FormWrapper().Button(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this), tempId, this.inEdit))
+      await (new Device.Modal.ModalHandler() as ResolverInterface<FormWrapper>).FormButton(new FormWrapper().Button(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this), tempId, this.inEdit))
     }
 
     static getInstance (_mechanicCallback: MechanicDelegate | null = null): MechanicAbstract {

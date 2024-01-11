@@ -7,7 +7,7 @@ import * as Attribute from '@/resolvers/attribute/'
 import * as Division from '@/resolvers/division/'
 import * as Administration from '@/resolvers/administration/'
 export class ResolverType {
-  public static ResolverTypes: { [index: string]: ResolverAbstract } = {
+  public static ResolverTypes: { [index: string]: ResolverAbstract } = { // TODO change it to delegate
     [Definitions.Other.Any]: new Device.Def.DefHandler(),
     // Device
     [Definitions.Entity.Def]: new Device.Def.DefHandler(),
