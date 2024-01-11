@@ -90,6 +90,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
   }
 
   protected async resolveButtonMiddle (wrapper: WrapperAbstract): Promise<WrapperAbstract> {
+    console.log(wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
     switch (wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data) {
       case TagHelpers.EcabinetTags.replace:
         await router.push({
@@ -97,7 +98,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
           params: { parentId: wrapper.id }
         })
         break
-      case TagHelpers.EcabinetTags.viewParent:
+      case TagHelpers.Methods.multiTags(TagHelpers.EcabinetTags.viewParent, TagHelpers.EcabinetTags.belongs):
         await router.push({
           name: Definitions.Entity.Edit,
           params: { id: wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data }

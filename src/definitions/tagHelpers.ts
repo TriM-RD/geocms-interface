@@ -1,5 +1,10 @@
 export namespace TagHelpers{
 
+  export class Methods {
+    public static multiTags (firstTag: string, secondTag = ''): string {
+      return firstTag + '|' + secondTag
+    }
+  }
   export enum CyberTags {
     code = 'code',
     group = 'group',
