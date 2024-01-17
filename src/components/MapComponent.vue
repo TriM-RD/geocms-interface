@@ -131,6 +131,18 @@ export default class MapComponent extends Vue {
         'ico-switch': 'SWITCH',
         'ico-active': 'ACC'
       }
+    } else if (localStorage.getItem('firmName') === 'aminess') {
+      this.checkedIconTypes = ['ico-sro', 'ico-ssro', 'struja-idle', 'ico-switch', 'ico-active']
+      this.selectedClusterIconType = 'ico-active'
+      this.iconTypes = ['ico-lamp', 'ico-sro', 'ico-ssro', 'struja-idle', 'ico-switch', 'ico-active']
+      this.iconTypesLabels = {
+        'ico-switch': 'SWITCH',
+        'ico-active': 'ACC',
+        'ico-lamp': 'LAMP',
+        'ico-sro': 'SRO',
+        'ico-ssro': 'SSRO',
+        'struja-idle': 'NCV'
+      }
     }
   }
 

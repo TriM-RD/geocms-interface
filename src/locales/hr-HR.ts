@@ -41,7 +41,7 @@ export const hrDictionary:TranslationKeys = {
   viewPDFs: 'Pogledati PDF-ove',
   delete: 'Izbrisati',
   add: 'Dodati',
-  cancel: 'Otkazati',
+  cancel: 'Odustati/Povratak',
   reSort: 'Resortiraj',
   save: 'Spremiti',
   scan: 'Skenirati',

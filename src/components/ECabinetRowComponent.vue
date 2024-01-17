@@ -99,22 +99,25 @@ export default class ECabinetRowComponent extends Vue {
 
   mounted () : void {
     this.objectTemplates = this.mechanic.InitSet(this.entityCopy(this.entity))
-    if (this.object.Stats[StatTypeEnum.ItemList].Data !== '') {
-      this.values = this.object.Stats[StatTypeEnum.ItemList].Data
-    }
-    if (this.object.Stats[StatTypeEnum.ItemList].Data !== '') {
-      for (const value of JSON.parse(this.values)) {
-        this.objectTemplates = this.mechanic.Append([
-          new ObjectTemplate(RegionEnum.ECabinetRow, ObjectTypeEnum.ECabinetColumn, SubObjectTypeEnum.Middle, ActionTypeEnum.Click, {
-            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData(value.code),
-            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Value].Data),
-            [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-info me-2'),
-            [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData('formModal'),
-            [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(value.id)
-          })
-        ])
+    if (this.object.Stats[StatTypeEnum.ItemList].Data) {
+      if (this.object.Stats[StatTypeEnum.ItemList].Data !== '') {
+        this.values = this.object.Stats[StatTypeEnum.ItemList].Data
+      }
+      if (this.object.Stats[StatTypeEnum.ItemList].Data !== '') {
+        for (const value of JSON.parse(this.values)) {
+          this.objectTemplates = this.mechanic.Append([
+            new ObjectTemplate(RegionEnum.ECabinetRow, ObjectTypeEnum.ECabinetColumn, SubObjectTypeEnum.Middle, ActionTypeEnum.Click, {
+              [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData(value.code),
+              [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(this.object.Stats[StatTypeEnum.Value].Data),
+              [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('btn btn-outline-info me-2'),
+              [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData('formModal'),
+              [StatTypeEnum.Id]: StatType.StatTypes[StatTypeEnum.Id]().CreateStat().InitData(value.id)
+            })
+          ])
+        }
       }
     }
+
     // this.objectTemplates = this.mechanic.InitSet(this.entityCopy(this.entity))
   }
 
