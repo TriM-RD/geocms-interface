@@ -26,7 +26,6 @@ export namespace Manager.Mechanic{
     }
 
     protected Button (eventHandler: EventHandlerType): void {
-      console.log('show')
       switch (router.currentRoute.value.name) {
         case Definitions.Entity.Def:
           switch (eventHandler.subObjectType) {

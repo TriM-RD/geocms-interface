@@ -190,10 +190,8 @@ export default class PermissionTreeComponent extends Vue {
 
   show (e : any, data : any) : void {
     if (e.target.tagName.toLowerCase() === 'div' || (e.target.tagName.toLowerCase() === 'label' && !data.expand)) {
-      console.log('first if')
       data.expand = !data.expand
     } else if (e.target.tagName.toLowerCase() === 'label' && data.expand) {
-      console.log('second if')
       data.expand = !data.expand
     }
   }

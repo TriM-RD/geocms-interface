@@ -223,7 +223,6 @@ export default class TableComponent extends Vue {
       const groupValues = Object.values(this.groupTypeFilter)
       this.renderComponent = true
       const currentGroupIndex = groupValues.indexOf(this.filters.group) + 1
-      console.log(currentGroupIndex)
       if (currentGroupIndex >= groupValues.length && this.filters.group !== '') { // TODO something is not working (ORDER), most likely fixed
         this.filters.group = groupValues[0]
       } else {

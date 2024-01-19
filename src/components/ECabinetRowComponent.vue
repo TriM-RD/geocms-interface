@@ -122,7 +122,6 @@ export default class ECabinetRowComponent extends Vue {
   }
 
   get reRender () : boolean {
-    console.log('test')
     // this.objectTemplates = this.mechanic.InitSet(this.entityCopy(this.entity))
     return this.pageRefresh
   }

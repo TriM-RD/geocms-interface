@@ -33,7 +33,7 @@
           </div>
         </div>
       </fancybox-component>
-      <div id="uppyDashboard" style="width:100%;"></div>
+      <div :id="'uppyDashboard' + this.object.Region" style="width:100%;"></div>
     </div>
     <div class="col-lg"></div>
   </div>
@@ -43,12 +43,21 @@
 import { Options, Vue } from 'vue-class-component'
 import Uppy from '@uppy/core'
 import Dashboard from '@uppy/dashboard'
-import { ObjectTemplate, ObjectType, ObjectTypeEnum, RegionEnum, RegionType, StatTypeEnum } from '@cybertale/interface'
+import {
+  MechanicAbstract,
+  ObjectTemplate,
+  ObjectType,
+  ObjectTypeEnum,
+  RegionEnum,
+  RegionType,
+  StatTypeEnum
+} from '@cybertale/interface'
 import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'
 import FancyboxComponent from '@/components/showComponents/FancyboxComponent.vue'
 import { v4 as uuidv4 } from 'uuid'
-import { $t } from '../../locales'
+import { $t } from '@/locales'
+import { Manager } from '@/mechanics/placeholderMechanic'
 
 interface FileNameWithData {
   [key: string]: any;
@@ -68,6 +77,7 @@ interface FileNameWithData {
 })
 export default class UppyComponent extends Vue {
   object!: ObjectTemplate
+  mechanic: MechanicAbstract = new Manager.Mechanic.PlaceholderMechanic()
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType
@@ -113,7 +123,8 @@ export default class UppyComponent extends Vue {
 
     this.uppy.use(Dashboard, {
       inline: true,
-      target: '#uppyDashboard',
+      target: '#uppyDashboard' + this.object.Region, // TODO find a more robust solution for id
+      // target: '#uppyDashboard',
       showProgressDetails: true,
       hideUploadButton: true,
       note: 'Images and PDFs only, 1–5 files, up to 1 MB. File-name must not contain "+"'

@@ -59,29 +59,11 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         })
         break
       case SubObjectTypeEnum.Up:
-        console.log('test')
-        /* wrapper.refreshPage()
-        for (const row of wrapper.objectTemplates) {
-          if (row.Stats[StatTypeEnum.Tag].Data === TagHelpers.EcabinetTags.ecabinetRow) {
-            rowCount = Number(row.Stats[StatTypeEnum.Value].Data)
-            rowsExist = true
-          }
-        }
-        if (rowsExist) { rowCount += 1 }
-        console.log('tst')
-        wrapper.objectTemplates = wrapper.append([
-          new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.ECabinetRow, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
-            [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('Row'),
-            [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData(TagHelpers.EcabinetTags.ecabinetRow),
-            [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(rowCount.toString()),
-            [StatTypeEnum.ItemList]: StatType.StatTypes[StatTypeEnum.ItemList]().CreateStat().InitData('')
-          })
-        ])
-        console.log(wrapper.objectTemplates)
-        wrapper.refreshPage() */
         wrapper.refreshPage()
+        // eslint-disable-next-line no-case-declarations
+        const oldTag = wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data
         for (const row of wrapper.objectTemplates) {
-          if (row.Stats[StatTypeEnum.Tag].Data.includes(TagHelpers.EcabinetTags.addEcabinetRow)) {
+          if (row.Stats[StatTypeEnum.Tag].Data.includes(TagHelpers.EcabinetTags.addEcabinetRow) && row.Stats[StatTypeEnum.Tag].Data !== TagHelpers.EcabinetTags.addEcabinetRow) {
             rowCount = Number(row.Stats[StatTypeEnum.Value].Data)
             rowsExist = true
           }
@@ -89,22 +71,10 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         if (rowsExist) { rowCount += 1 }
         wrapper.eventHandler.payload = this.getObjectTemplateFromObject(wrapper.eventHandler.payload)
         wrapper.eventHandler.payload.Stats[StatTypeEnum.ElementType].Data = ''
-        // eslint-disable-next-line no-case-declarations
-        let i = 1
-        // eslint-disable-next-line no-case-declarations
-        const index = wrapper.objectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
-        for (const objectTemplate of wrapper.objectTemplates) {
-          if (objectTemplate.Stats[StatTypeEnum.Tag].Data.includes(wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data)) {
-            i++
-          }
-        }
         wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data = wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data + uuidv4()
         wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data = rowCount.toString()
         wrapper.eventHandler.payload.Stats[StatTypeEnum.ItemList].Data = ''
-        wrapper.objectTemplates = this.Splice(index + i, wrapper.objectTemplates, [wrapper.eventHandler.payload as ObjectTemplate])
-        wrapper.objectTemplates[index + i].Stats[StatTypeEnum.Value].Data = rowCount.toString()
-        wrapper.objectTemplates[index + i].Stats[StatTypeEnum.ItemList].Data = ''
-        // console.log(wrapper.objectTemplates)
+        wrapper.objectTemplates = this.Splice(this.getObjectTemplateIndex(oldTag, wrapper.objectTemplates) + rowCount + 1, wrapper.objectTemplates, [wrapper.eventHandler.payload as ObjectTemplate])
         wrapper.refreshPage()
         break
       case SubObjectTypeEnum.Down:

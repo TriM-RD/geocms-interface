@@ -176,7 +176,6 @@ export default class MapComponent extends Vue {
 
   storeTest () : void {
     this.$nextTick(() => {
-      console.log('testStore')
       this.map.resize()
     })
   }

@@ -75,34 +75,10 @@ export namespace Manager.Mechanic{
     }
 
     protected async SelectList (eventHandler: EventHandlerType): Promise<void> {
-      this.ObjectTemplates = await (ResolverType.ResolverTypes[Definitions.Entity.Modal] as ResolverInterface<FormWrapper>).FormSelectList(new FormWrapper().SelectList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this)))
-      /* switch (router.currentRoute.value.name) {
-        case 'DeviceAdd':
-        case 'DeviceEdit':// TODO add regex to check if id is uuid
-          switch (eventHandler.subObjectType) {
-            case SubObjectTypeEnum.Middle:
-              this.removeElementFromArray(this.ObjectTemplates, 'group')
-              this.refreshPage()
-              this.ObjectTemplates = this.Append((await http.get(process.env.VUE_APP_BASE_URL + 'form/entity_modal/' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
-              this.refreshPage()
-              break
-            default:
-              break
-          }
-          /* switch (eventHandler.subObjectType) {
-            case SubObjectTypeEnum.Middle:
-              this.removeElementFromArray(this.ObjectTemplates, 'group')
-              this.refreshPage()
-              console.log(this.ObjectTemplates)
-              this.ObjectTemplates = this.AppendAndFilterDuplicate((await http.get(process.env.VUE_APP_BASE_URL + 'form/entity/' + eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
-              console.log(this.ObjectTemplates)
-              this.refreshPage()
-              break
-            default:
-              break
-          }
-          break
-      } */
+      const name = router.currentRoute.value.name
+      if (typeof name === 'string') {
+        this.ObjectTemplates = await (ResolverType.ResolverTypes[Definitions.Entity.Modal] as ResolverInterface<FormWrapper>).FormSelectList(new FormWrapper().SelectList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this), this.Append.bind(this)))
+      }// TODO add regex to check if id is uuid
     }
 
     protected async Button (eventHandler: EventHandlerType): Promise<void> {

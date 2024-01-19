@@ -112,7 +112,6 @@ export default class FormComponent extends Vue {
       case Definitions.Division.Add:
         this.entity = await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'division')
         this.objectTemplates = this.mechanic.InitSet(this.extractChildren(this.entity))
-        console.log(this.objectTemplates)
         break
       case Definitions.Attribute.Add:
         this.objectTemplates = await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'attribute?group=' + this.$route.params.parentId.toString())
@@ -138,7 +137,6 @@ export default class FormComponent extends Vue {
   }
 
   reRender (): void {
-    console.log(this.renderComponent)
     this.renderComponent = !this.renderComponent
   }
 

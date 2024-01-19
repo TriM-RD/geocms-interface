@@ -11,12 +11,12 @@ import { TagHelpers } from '@/definitions/tagHelpers'
 import CyberTags = TagHelpers.CyberTags
 
 export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstract> {
-  protected removeElementFromArray (arr: Array<any>, belongsTo: string) : void {
+  protected removeElementFromArray (arr: Array<any>, dependsOn: string) : void {
     (() => {
       // Perform the array update
       for (let i = arr.length - 1; i >= 0; i--) {
         if (arr[i].Stats[StatTypeEnum.DependsOn] !== undefined) {
-          if (arr[i].Stats[StatTypeEnum.DependsOn].Data.includes(belongsTo)) {
+          if (arr[i].Stats[StatTypeEnum.DependsOn].Data.includes(dependsOn)) {
             arr.splice(i, 1)
           }
         }
