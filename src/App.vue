@@ -36,16 +36,13 @@ import { Options, Vue } from 'vue-class-component'
 import NavBarComponent from '@/components/showComponents/NavBarComponent.vue'
 import NavComponent from '@/components/showComponents/NavComponent.vue'
 import FooterComponent from '@/components/showComponents/FooterComponent.vue'
-import WelcomeComponent from '@/components/WelcomeComponent.vue'
 import http from '@/http-common'
-import { Translations } from '@/locales'
 
 @Options({
   components: {
     NavBarComponent,
     NavComponent,
-    FooterComponent,
-    WelcomeComponent
+    FooterComponent
   }
 })
 export default class App extends Vue {

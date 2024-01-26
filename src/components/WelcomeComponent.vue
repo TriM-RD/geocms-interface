@@ -266,10 +266,9 @@ import {
   RegionType,
   RegionEnum
 } from '@cybertale/interface'
+import { Inject } from 'vue-property-decorator'
 import { $t, Translations } from '@/locales'
-import router from '@/router'
-import { Definitions } from '@/definitions/appDefinitions'
-import http, { updateHeaders } from '@/http-common'
+import { updateHeaders } from '@/http-common'
 interface CodeChallengePair {
   codeVerifier: string;
   codeChallenge: string;
@@ -285,13 +284,16 @@ interface CodeChallengePair {
   }
 })
 export default class WelcomeComponent extends Vue {
+  @Inject() http: any;
+  @Inject() Definitions: any;
+  @Inject() router: any;
+  selectedImage = require(`../assets/lang/${localStorage.getItem('lang') || 'en'}.svg`)
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType
   regionType = RegionType
   regionEnum = RegionEnum
   object!: ObjectTemplate
-  selectedImage = require(`../assets/lang/${localStorage.getItem('lang') || 'en'}.svg`)
 
   async created (): Promise<void> {
     // Generate code verifier and code challenge

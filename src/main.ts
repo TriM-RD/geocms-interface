@@ -8,15 +8,8 @@ import VueBlocksTree from 'vue3-blocks-tree'
 import 'vue3-blocks-tree/dist/vue3-blocks-tree.css'
 import Toast, { PluginOptions, POSITION, TYPE } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
-import FieldComponent from '@/components/formComponents/FieldComponent.vue'
-import ButtonComponent from '@/components/formComponents/ButtonComponent.vue'
+import { LabelComponent, FieldComponent, ButtonComponent, AlertComponent, CheckBoxComponent, DataListComponent, SelectListComponent, RadioComponent } from '@cybertale/form/src'
 import RowComponent from '@/components/RowComponent.vue'
-import TextAreaComponent from '@/components/formComponents/TextAreaComponent.vue'
-import AlertComponent from '@/components/formComponents/AlertComponent.vue'
-import CheckBoxComponent from '@/components/formComponents/CheckBoxComponent.vue'
-import DataListComponent from '@/components/formComponents/DataListComponent.vue'
-import SelectListComponent from '@/components/formComponents/SelectListComponent.vue'
-import RadioComponent from '@/components/formComponents/RadioComponent.vue'
 import ColumnComponent from '@/components/ColumnComponent.vue'
 import ECabinetColumnComponent from '@/components/ECabinetColumnComponent.vue'
 import ECabinetRowComponent from '@/components/ECabinetRowComponent.vue'
@@ -24,16 +17,15 @@ import ColumnButtonComponent from '@/components/ColumnButtonComponent.vue'
 import ModalFormComponent from '@/components/ModalFormComponent.vue'
 import MapPickerComponent from '@/components/MapPickerComponent.vue'
 import { ObjectType, ObjectTypeEnum } from '@cybertale/interface/src'
-import UppyComponent from '@/components/formComponents/UppyComponent.vue'
+import UppyComponent from '@/components/UppyComponent.vue'
 import InputGroupComponent from '@/components/InputGroupComponent.vue'
-import LabelComponent from '@/components/formComponents/LabelComponent.vue'
 
 const defaultOptions = { nodeName: 'node-tree', treeName: 'blocks-tree' }
 
 ObjectType.ObjectTypes[ObjectTypeEnum.Field](() => FieldComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.Button](() => ButtonComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.Row](() => RowComponent)
-ObjectType.ObjectTypes[ObjectTypeEnum.Text](() => TextAreaComponent)
+// ObjectType.ObjectTypes[ObjectTypeEnum.Text](() => TextAreaComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.Alert](() => AlertComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.CheckBox](() => CheckBoxComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.DataList](() => DataListComponent)

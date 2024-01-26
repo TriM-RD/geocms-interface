@@ -53,28 +53,30 @@
 </template>
 
 <script lang="ts">
+import { Inject } from 'vue-property-decorator'
 import { Options, Vue } from 'vue-class-component'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import mapboxgl from 'mapbox-gl'
-import http from '@/http-common'
 import Loading from 'vue-loading-overlay'
 import { Modal } from 'bootstrap'
-import { Definitions } from '@/definitions/appDefinitions'
-import { $t } from '@/locales'
 interface IconTypesLabels {
   [key: string]: string;
 }
 @Options({
-  computed: {
-    $t () {
-      return $t
-    }
-  },
   components: {
     Loading
   }
 })
 export default class MapComponent extends Vue {
+  @Inject() http: any;
+  @Inject() Definitions: any;
+  @Inject() translation: any;
+  @Inject() router: any;
+
+  get $t () : any {
+    return this.translation
+  }
+
   longitude = 0
   latitude = 0
   trigger!: boolean
@@ -280,14 +282,14 @@ export default class MapComponent extends Vue {
   }
 
   async test () : Promise<void> {
-    const response = await http.get(process.env.VUE_APP_BASE_URL + 'map')
+    const response = await this.http.get(process.env.VUE_APP_BASE_URL + 'map')
     this.entities = response.data.data
     this.generateMap()
   }
 
   async updateMapData (id: string) {
     if (this.checkedIconTypes.includes('ico-lamp')) {
-      const response = await http.get(process.env.VUE_APP_BASE_URL + 'maprelation/' + id)
+      const response = await this.http.get(process.env.VUE_APP_BASE_URL + 'maprelation/' + id)
       this.relData = response.data
       // Update the arrows with the relationship data
       await this.connectUnclusteredPoints(this.relData)
@@ -610,12 +612,12 @@ export default class MapComponent extends Vue {
         })
         const popup = new mapboxgl.Popup({ closeOnClick: false })
           .setLngLat(coordinates)
-          .setHTML(`<p>${$t.code}: ${code}</p><br><button class="btn btn-secondary btn-sm open-popup" >${$t.open}</button><br><p>${$t.entitiesWithSameCoordinates}":" ${entitiesWithSameCoordinates.length}</p>`)
+          .setHTML(`<p>${this.translation.code}: ${code}</p><br><button class="btn btn-secondary btn-sm open-popup" >${this.translation.open}</button><br><p>${this.translation.entitiesWithSameCoordinates}":" ${entitiesWithSameCoordinates.length}</p>`)
         popup.addTo(this.map)
         this.currentPopup = popup
         const btn = document.getElementsByClassName('open-popup')[0]
         btn.addEventListener('click', () => {
-          this.$router.push({ name: Definitions.Entity.Edit, params: { id: id } })
+          this.router.push({ name: this.Definitions.Entity.Edit, params: { id: id } })
         })
       })
       /* this.map.on('move', () => {
@@ -688,7 +690,7 @@ export default class MapComponent extends Vue {
   }
 
   async changeIconTypeById (): Promise<void> {
-    const response = await http.get('https://tri-m.app/ormari/api/ormarOkCode.php')
+    const response = await this.http.get('https://tri-m.app/ormari/api/ormarOkCode.php')
     // Define new icon images according to the newIconType
     const newIconImage = [
       'match',
@@ -851,10 +853,10 @@ export default class MapComponent extends Vue {
       <button id="navigationButton" class="btn btn-outline-secondary">
         <span class="bi bi-geo-fill"></span>
       </button>
-      <input type="text" class="form-control" readonly value="${$t.code}: ${code}">
+      <input type="text" class="form-control" readonly value="${this.translation.code}: ${code}">
     </div>
     ${additionalButtons}
-    <p class="small-font mt-3 mb-0">${$t.entitiesWithSameCoordinates}: ${entitiesWithSameCoordinates.length}</p>
+    <p class="small-font mt-3 mb-0">${this.translation.entitiesWithSameCoordinates}: ${entitiesWithSameCoordinates.length}</p>
     ${entitiesWithSameCoordinates.length > 1 ? '<button id="nextButton" class="btn btn-primary mt-3">Next</button>' : ''}
   </div>`)
     popup.addTo(this.map)
@@ -911,7 +913,7 @@ export default class MapComponent extends Vue {
       btn.addEventListener('click', () => {
         const entityId = btn.getAttribute('data-entityid')
         // console.log(entityId)
-        if (entityId) { this.$router.push({ name: Definitions.Entity.Edit, params: { id: entityId } }) }
+        if (entityId) { this.router.push({ name: this.Definitions.Entity.Edit, params: { id: entityId } }) }
       })
     })
   }

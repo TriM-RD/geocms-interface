@@ -8,6 +8,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@geocms/components": "git+https://github.com/TriM-RD/geocms-components.git",
+    "@cybertale/form": "^0.1.1",
     "@cybertale/interface": "^2.0.6",
     "@fancyapps/ui": "^5.0.16",
     "@uppy/core": "^3.1.2",

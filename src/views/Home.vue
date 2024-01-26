@@ -11,10 +11,15 @@
 </template>
 
 <script lang="ts">
+import { Provide } from 'vue-property-decorator'
 import { Options, Vue } from 'vue-class-component'
 import WelcomeComponent from '@/components/WelcomeComponent.vue' // @ is an alias to /src
-import MapComponent from '@/components/MapComponent.vue'
+import { MapComponent } from '@geocms/components/src'
 import FirmSelectionComponent from '@/components/showComponents/FirmSelectionComponent.vue'
+import http from '@/http-common'
+import { Definitions } from '@/definitions/appDefinitions'
+import { $t } from '@/locales'
+import router from '@/router'
 
 @Options({
   components: {
@@ -23,5 +28,11 @@ import FirmSelectionComponent from '@/components/showComponents/FirmSelectionCom
     WelcomeComponent
   }
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  @Provide() http = http;
+  @Provide() Definitions = Definitions;
+  @Provide() translation = $t;
+  @Provide() router = router;
+  @Provide() selectedImage = require(`../assets/lang/${localStorage.getItem('lang') || 'en'}.svg`);
+}
 </script>
