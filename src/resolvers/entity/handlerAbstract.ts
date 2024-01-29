@@ -14,8 +14,7 @@ import { Definitions } from '@/definitions/appDefinitions'
 import router from '@/router'
 import { Modal } from 'bootstrap'
 import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
-import { TagHelpers } from '@/definitions/tagHelpers'
-import { $t } from '@/locales'
+import { TagHelpers } from '@geocms/components'
 import { v4 as uuidv4 } from 'uuid'
 
 export abstract class HandlerAbstract extends ResolverAbstract {

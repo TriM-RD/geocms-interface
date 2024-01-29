@@ -5,7 +5,7 @@ import PermissionTree from '@/views/PermissionTree.vue'
 import Form from '@/views/Form.vue'
 import AccountProfile from '@/views/AccountProfile.vue'
 import { Definitions } from '@/definitions/appDefinitions'
-import FirmSelectionComponent from '@/components/showComponents/FirmSelectionComponent.vue'
+import { FirmSelectionComponent } from '@geocms/components'
 
 /* type MyRouteRecord = RouteRecordRaw & {
   beforeRouteLeave: string;

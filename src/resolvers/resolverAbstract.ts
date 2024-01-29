@@ -7,7 +7,7 @@ import { ResolverInterface } from '@/resolvers/assignments/resolverInterface'
 import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
 import { Definitions } from '@/definitions/appDefinitions'
 import { v4 as uuidv4 } from 'uuid'
-import { TagHelpers } from '@/definitions/tagHelpers'
+import { TagHelpers } from '@geocms/components'
 import CyberTags = TagHelpers.CyberTags
 
 export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstract> {

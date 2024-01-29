@@ -111,7 +111,7 @@ import { MechanicAbstract } from '@cybertale/interface'
 import { Manager } from '@/mechanics/permissionMechanic'
 import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
-import { $t } from '@/locales'
+import { $t } from '@geocms/localization'
 @Options({
   computed: {
     $t () {

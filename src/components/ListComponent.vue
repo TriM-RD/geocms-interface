@@ -21,7 +21,7 @@ import {
   RegionType
 } from '@cybertale/interface'
 import router from '@/router'
-import { Definitions } from '@/definitions/appDefinitions'
+import { Definitions } from '@geocms/components'
 
 @Options({
   props: {

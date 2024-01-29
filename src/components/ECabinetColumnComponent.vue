@@ -17,8 +17,8 @@ import {
   RegionType
 } from '@cybertale/interface'
 import router from '@/router'
-import { Definitions } from '@/definitions/appDefinitions'
-import { $t } from '../locales'
+import { Definitions } from '@geocms/components'
+import { $t } from '@geocms/localization'
 @Options({
   computed: {
     $t () {

@@ -13,12 +13,10 @@
 <script lang="ts">
 import { Provide } from 'vue-property-decorator'
 import { Options, Vue } from 'vue-class-component'
-import WelcomeComponent from '@/components/WelcomeComponent.vue' // @ is an alias to /src
-import { MapComponent } from '@geocms/components/src'
-import FirmSelectionComponent from '@/components/showComponents/FirmSelectionComponent.vue'
-import http from '@/http-common'
-import { Definitions } from '@/definitions/appDefinitions'
-import { $t } from '@/locales'
+import { MapComponent, WelcomeComponent, FirmSelectionComponent, Definitions } from '@geocms/components/src'
+import http, { updateHeaders } from '@/http-common'
+
+import { $t } from '@geocms/localization'
 import router from '@/router'
 
 @Options({
@@ -33,6 +31,6 @@ export default class Home extends Vue {
   @Provide() Definitions = Definitions;
   @Provide() translation = $t;
   @Provide() router = router;
-  @Provide() selectedImage = require(`../assets/lang/${localStorage.getItem('lang') || 'en'}.svg`);
+  @Provide() updateHeaders = updateHeaders;
 }
 </script>

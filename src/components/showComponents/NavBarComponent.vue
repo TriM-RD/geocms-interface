@@ -81,7 +81,7 @@ import Search from '@/components/Search.vue'
 import { Watch } from 'vue-property-decorator'
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { $t } from '../../locales'
+import { $t } from '@geocms/localization'
 @Options({
   computed: {
     $t () {

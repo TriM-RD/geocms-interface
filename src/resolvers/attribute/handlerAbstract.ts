@@ -11,8 +11,6 @@ import http from '@/http-common'
 import { Definitions } from '@/definitions/appDefinitions'
 import router from '@/router'
 import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
-import { $t } from '@/locales'
-import { TagHelpers } from '@/definitions/tagHelpers'
 
 export abstract class HandlerAbstract extends ResolverAbstract {
   public RowButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {

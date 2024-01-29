@@ -18,7 +18,7 @@ import {
   RegionEnum,
   SubObjectTypeEnum, ActionTypeEnum, StatType
 } from '@cybertale/interface'
-import { $t } from '@/locales'
+import { $t } from '@geocms/localization'
 @Options({
   props: {
     object: ObjectTemplate,

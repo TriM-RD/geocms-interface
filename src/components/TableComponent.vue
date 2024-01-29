@@ -50,8 +50,8 @@ import {
 import router from '@/router'
 import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
-import { Definitions } from '@/definitions/appDefinitions'
-import { $t } from '@/locales'
+import { Definitions } from '@geocms/components'
+import { $t } from '@geocms/localization'
 @Options({
   computed: {
     $t () {

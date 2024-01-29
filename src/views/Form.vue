@@ -13,7 +13,7 @@ import FormComponent from '@/components/FormComponent.vue'
 import TableComponent from '@/components/TableComponent.vue'
 import router from '@/router'
 import ListComponent from '@/components/ListComponent.vue'
-import { Definitions } from '@/definitions/appDefinitions'
+import { Definitions } from '@geocms/components'
 
 @Options({
   components: {

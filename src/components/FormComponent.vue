@@ -21,7 +21,7 @@ import {
 } from '@cybertale/interface'
 import Loading from 'vue-loading-overlay'
 import router from '@/router'
-import { Definitions } from '@/definitions/appDefinitions'
+import { Definitions } from '@geocms/components'
 @Options({
   components: {
     Loading

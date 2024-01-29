@@ -27,7 +27,7 @@ import {
   RegionType,
   RegionEnum
 } from '@cybertale/interface'
-import { $t } from '../../locales'
+import { $t } from '@geocms/localization'
 @Options({
   computed: {
     $t () {

@@ -20,8 +20,8 @@ import {
   SubObjectTypeEnum, ActionTypeEnum, StatType
 } from '@cybertale/interface'
 import { Manager } from '@/mechanics/footerMechanic'
-import { Definitions } from '@/definitions/appDefinitions'
-import { $t } from '@/locales'
+import { Definitions } from '@geocms/components'
+import { $t } from '@geocms/localization'
 @Options({
   props: {
     object: ObjectTemplate

@@ -11,9 +11,8 @@ import http from '@/http-common'
 import { Definitions } from '@/definitions/appDefinitions'
 import router from '@/router'
 import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
-import { $t } from '@/locales'
 import { ResolverAbstract } from '@/resolvers/resolverAbstract'
-import { TagHelpers } from '@/definitions/tagHelpers'
+import { TagHelpers } from '@geocms/components'
 
 export abstract class HandlerAbstract extends ResolverAbstract {
   RowButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {

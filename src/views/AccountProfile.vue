@@ -16,7 +16,7 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import ListComponent from '@/components/ListComponent.vue'
-import { $t } from '../locales'
+import { $t } from '@geocms/localization'
 // import createStore from '@/store/index'
 
 @Options({

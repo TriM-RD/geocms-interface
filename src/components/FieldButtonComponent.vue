@@ -11,7 +11,7 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import { Manager } from '@/mechanics/helperFormMechanic'
-import { $t } from '@/locales'
+import { $t } from '@geocms/localization'
 import {
   ObjectTemplate,
   MechanicAbstract,

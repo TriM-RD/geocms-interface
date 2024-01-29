@@ -36,7 +36,11 @@ import { Options, Vue } from 'vue-class-component'
 import NavBarComponent from '@/components/showComponents/NavBarComponent.vue'
 import NavComponent from '@/components/showComponents/NavComponent.vue'
 import FooterComponent from '@/components/showComponents/FooterComponent.vue'
-import http from '@/http-common'
+import { Provide } from 'vue-property-decorator'
+import { $t } from '@geocms/localization'
+import http, { updateHeaders } from '@/http-common'
+import { Definitions } from '@geocms/components'
+import router from '@/router'
 
 @Options({
   components: {
@@ -46,6 +50,11 @@ import http from '@/http-common'
   }
 })
 export default class App extends Vue {
+  @Provide() http = http;
+  @Provide() Definitions = Definitions;
+  @Provide() translation = $t;
+  @Provide() router = router;
+  @Provide() updateHeaders = updateHeaders;
   created (): void {
     const temp = location.hash.substr(1)
     if (temp !== '' && localStorage.getItem('access_token') === '') {

@@ -41,9 +41,9 @@ import {
 } from '@cybertale/interface'
 import Loading from 'vue-loading-overlay'
 import router from '@/router'
-import { Definitions } from '@/definitions/appDefinitions'
-import { $t } from '@/locales'
-import { TagHelpers } from '@/definitions/tagHelpers'
+import { Definitions, TagHelpers } from '@geocms/components'
+import { $t } from '@geocms/localization'
+
 @Options({
   props: {
     object: ObjectTemplate

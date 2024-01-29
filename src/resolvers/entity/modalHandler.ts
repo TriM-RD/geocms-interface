@@ -6,7 +6,7 @@ import {
 } from '@cybertale/interface'
 import http from '@/http-common'
 import { WrapperAbstract } from '@/resolvers/assignments/wrapperAbstract'
-import { TagHelpers } from '@/definitions/tagHelpers'
+import { TagHelpers } from '@geocms/components'
 
 export class ModalHandler extends HandlerAbstract {
   public async FormSelectList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {

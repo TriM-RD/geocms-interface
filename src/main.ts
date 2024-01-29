@@ -17,7 +17,7 @@ import ColumnButtonComponent from '@/components/ColumnButtonComponent.vue'
 import ModalFormComponent from '@/components/ModalFormComponent.vue'
 import MapPickerComponent from '@/components/MapPickerComponent.vue'
 import { ObjectType, ObjectTypeEnum } from '@cybertale/interface/src'
-import UppyComponent from '@/components/UppyComponent.vue'
+import { UppyComponent } from '@geocms/components/src/index'
 import InputGroupComponent from '@/components/InputGroupComponent.vue'
 
 const defaultOptions = { nodeName: 'node-tree', treeName: 'blocks-tree' }
