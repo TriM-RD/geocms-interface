@@ -172,6 +172,7 @@ export default class MapPickerComponent extends Vue {
 
   addImageLayer () {
     if (this.map) {
+      // Add your existing image layer
       this.map.addSource('my-source', {
         type: 'image',
         url: require('../assets/koversada.png'),
@@ -192,6 +193,25 @@ export default class MapPickerComponent extends Vue {
           'raster-opacity': 0.5
         }
       })
+
+      // Add the hosted Mapbox tileset as a source
+      this.map.addSource('mapbox-tileset', {
+        type: 'raster', // GeoTIFFs are raster data
+        url: 'mapbox://joso.9g1mhqyu', // The tileset ID you uploaded to Mapbox
+        tileSize: 256 // Common tile size for raster tiles
+      })
+
+      this.map.addLayer({
+        id: 'tileset-layer',
+        type: 'raster', // Display raster data
+        source: 'mapbox-tileset',
+        paint: {
+          'raster-opacity': 0.8, // Adjust opacity as needed
+          'raster-fade-duration': 100 // Optional: makes transitions smoother
+        }
+      })
+
+      // Show image layer button conditionally based on firmName
       if (localStorage.getItem('firmName') === 'trim') {
         this.showImageButton = true
       }
