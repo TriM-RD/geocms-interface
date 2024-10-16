@@ -196,17 +196,26 @@ export default class MapPickerComponent extends Vue {
 
       // Add the hosted Mapbox tileset as a source
       this.map.addSource('mapbox-tileset', {
+        type: 'image',
+        url: require('../assets/koversadaBig.png'),
+        coordinates: [
+          [13.59431264, 45.14664839], // Top-left
+          [13.62086774, 45.14728560], // Top-right
+          [13.62173370, 45.12959157], // Bottom-right
+          [13.5951652, 45.1289459] // Bottom-left
+        ]
+      })/* this.map.addSource('mapbox-tileset', {
         type: 'raster', // GeoTIFFs are raster data
         url: 'mapbox://joso.9g1mhqyu', // The tileset ID you uploaded to Mapbox
         tileSize: 256 // Common tile size for raster tiles
-      })
+      }) */
 
       this.map.addLayer({
         id: 'tileset-layer',
         type: 'raster', // Display raster data
         source: 'mapbox-tileset',
         paint: {
-          'raster-opacity': 0.8, // Adjust opacity as needed
+          'raster-opacity': 0.5, // Adjust opacity as needed
           'raster-fade-duration': 100 // Optional: makes transitions smoother
         }
       })
@@ -224,9 +233,11 @@ export default class MapPickerComponent extends Vue {
       console.log(visibility) */
       if (this.imageLayerVisible) {
         this.map.setLayoutProperty('my-layer', 'visibility', 'none')
+        this.map.setLayoutProperty('tileset-layer', 'visibility', 'none')
         this.imageLayerVisible = false
       } else {
         this.map.setLayoutProperty('my-layer', 'visibility', 'visible')
+        this.map.setLayoutProperty('tileset-layer', 'visibility', 'visible')
         this.imageLayerVisible = true
       }
     }
