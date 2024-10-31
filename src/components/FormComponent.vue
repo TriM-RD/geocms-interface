@@ -90,12 +90,12 @@ export default class FormComponent extends Vue {
         this.objectTemplates = this.mechanic.InitSet(this.extractChildren(this.entity))
         break
       case Definitions.Entity.Replace:
-        this.objectTemplates = await this.mechanic.InitGet('-1', 'replace/entity/' + this.$route.params.parentId.toString())
+        this.objectTemplates = await this.mechanic.InitGet('-1', 'replace/entity/' + router.currentRoute.value.params.parentId.toString())
         this.objectTemplates = this.mechanic.Append([
           new ObjectTemplate(RegionEnum.Form, ObjectTypeEnum.Field, SubObjectTypeEnum.ParentObject, ActionTypeEnum.None, {
             [StatTypeEnum.Label]: StatType.StatTypes[StatTypeEnum.Label]().CreateStat().InitData('ReplacedEntity'),
             [StatTypeEnum.Tag]: StatType.StatTypes[StatTypeEnum.Tag]().CreateStat().InitData('replacedEntity'),
-            [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(this.$route.params.parentId.toString()),
+            [StatTypeEnum.Value]: StatType.StatTypes[StatTypeEnum.Value]().CreateStat().InitData(router.currentRoute.value.params.parentId.toString()),
             [StatTypeEnum.Design]: StatType.StatTypes[StatTypeEnum.Design]().CreateStat().InitData('me-2 readonly'),
             [StatTypeEnum.ElementType]: StatType.StatTypes[StatTypeEnum.ElementType]().CreateStat().InitData('hidden'),
             [StatTypeEnum.Placeholder]: StatType.StatTypes[StatTypeEnum.Placeholder]().CreateStat().InitData(''),
@@ -114,7 +114,7 @@ export default class FormComponent extends Vue {
         this.objectTemplates = this.mechanic.InitSet(this.extractChildren(this.entity))
         break
       case Definitions.Attribute.Add:
-        this.objectTemplates = await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'attribute?group=' + this.$route.params.parentId.toString())
+        this.objectTemplates = await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'attribute?group=' + router.currentRoute.value.params.parentId.toString())
         break
       case Definitions.Attribute.Edit:
         this.objectTemplates = await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'attribute')

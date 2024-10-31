@@ -22,6 +22,7 @@ import {
 import { Manager } from '@/mechanics/footerMechanic'
 import { Definitions } from '@geocms/components'
 import { $t } from '@geocms/localization'
+import router from '@/router'
 @Options({
   props: {
     object: ObjectTemplate
@@ -48,7 +49,7 @@ export default class FooterComponent extends Vue {
   }
 
   mounted () {
-    if (this.$route.name !== undefined && this.$route.name !== null) { this.openTab = this.$route.name }
+    if (router.currentRoute.value.name !== undefined && router.currentRoute.value.name !== null) { this.openTab = router.currentRoute.value.name }
     this.choose()
   }
 

@@ -85,7 +85,7 @@ export default class App extends Vue {
       const temp = String(response)
       if (temp.includes('code 401')) {
         localStorage.setItem('access_token', '')
-        this.$router.push('/')
+        this.router.push('/')
         // window.location.href = 'http://blog.test/oauth/redirect'
       }
     })

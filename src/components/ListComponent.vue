@@ -69,12 +69,12 @@ export default class ListComponent extends Vue {
       this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'search/' + this.base64UrlSafe(this.title)))
     } else {
       this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'permissions/user'))
-      switch (this.$route.name) {
+      switch (router.currentRoute.value.name) {
         case Definitions.Administration.AccountProfile:
           this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'permissions/user'))
           break
         case Definitions.Entity.Edit:
-          this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(this.$route.params.id.toString(), 'replacement/entity'))
+          this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet(router.currentRoute.value.params.id.toString(), 'replacement/entity'))
           break
       }
     }

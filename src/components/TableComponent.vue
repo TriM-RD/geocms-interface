@@ -93,7 +93,7 @@ export default class TableComponent extends Vue {
   }
 
   mounted () {
-    if (this.$route.name === Definitions.Entity.Def) {
+    if (router.currentRoute.value.name === Definitions.Entity.Def) {
       this.onScroll = async () => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop
         const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
@@ -174,7 +174,7 @@ export default class TableComponent extends Vue {
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'division'))
         break
       case Definitions.Group.Edit:
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'filter/attribute/' + this.$route.params.id))
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'filter/attribute/' + router.currentRoute.value.params.id))
         break
       case Definitions.Group.Add:
         this.renderComponent = false
