@@ -46,6 +46,8 @@ import router from '@/router'
 import Loading from 'vue-loading-overlay'
 import { Definitions } from '@geocms/components'
 import { $t } from '@geocms/localization'
+import { MapFunctions } from '@campsabout/mapbox'
+let campsaboutObject:any = null
 
 @Options({
   computed: {
@@ -85,9 +87,139 @@ export default class MapPickerComponent extends Vue {
   imageLayerVisible = true
   showImageButton = false
   isSatelliteView = false
+  private classColors = {
+    obala: '#f3f2e7',
+    zemlja: '#dedfc4',
+    cesta: '#e2e6e8',
+    vegetacija: '#98b87c',
+    parking_podloga: '#e2e6e8',
+    'objekt wc roof1': '#f28586',
+    'objekt wc roof2': '#f28586',
+    'objekt podloga': '#f28586',
+    bazen_podloga: '#e4e9e8',
+    bazen: '#8decfe',
+    billboard: '#ffffff',
+
+    // new classes
+    periphery: '#A7DD88',
+    campground: '#f3f2e7',
+    road: '#e2e6e8',
+    parking: '#e0e0e0',
+    pool: '#8decfe',
+    patio: '#dedfc4',
+    line: '#ffffff', // for removal
+    line_white: '#ffffff',
+    line_black: '#000000',
+    grass: '#B4D894',
+    vegetation: '#709F50',
+    unit_base_gray: '#e2e6e8',
+    unit_base_green: '#95D07B',
+    fence: '#000000',
+    hedge: '#e2e6e8', // for removal
+    treetop_light: '#8FBE72',
+    treetop_dark: '#709F50',
+    coastline: 'transparent',
+    object_roof_light: '#f28586',
+    object_roof_dark: '#CF7273',
+    object_roof_light_gray: '#e0e0e0',
+    object_roof_dark_gray: '#bbbbbb',
+    object_base: '#F2F2F2',
+    playground: '#68b29e',
+    tennis: '#d2836f',
+    barrier: '#ffffff',
+    barrier_red: '#D20808',
+
+    // Jadranka
+    zone_Cikat: '#E6C29F',
+    zone_Slatina: '#D24E3D',
+    zone_Bijar1: '#D24E3D',
+    zone_Bijar2: '#4CB8BE',
+
+    // Atea
+    gaia_green_villas: '#bbbbbb',
+
+    // Oliva
+    mhPremium: '#a6846b',
+    mhComfort: '#da4456',
+    mhStandard: '#d6915b',
+    pitchZone1: '#371758',
+    pitchZone2: '#427d9c',
+    pitchZone3: '#989543'
+  }
+
+  private campGeojson = MapFunctions.getEmptyGeojson()
+  private labelsGeojson = MapFunctions.getEmptyGeojson()
+  private clickableIds: any = { openModal: {}, openPopup: {} }
+  private numberArr: any = {}
 
   mounted () {
     this.renderComponent = true
+  }
+
+  async initializeCampsaboutObject () {
+    await fetch('https://campsabout.com/mapAPI/typeSJColors.php?id=1&group=zaton').then(async (response) => {
+      if (!response.ok) return
+      const data = await response.json()
+      const result: { [index: string]: string } = {}
+      Object.keys(data).forEach((element: string) => {
+        result[element] = data[element][0].color
+      })
+      this.classColors = (Object.assign(this.classColors, result))
+    })
+    await this.callApi('https://campsabout.com/camp/zaton/1/assets/gj/Zaton.json').then((data) => (this.campGeojson = data))
+    await this.callApi('https://campsabout.com/mapAPI/natpisi.php?id=1&group=zaton').then((data) => (this.labelsGeojson = data))
+    await this.callApi('https://campsabout.com/mapAPI/revision/getFeatures.php?propertyId=1&group=zaton&mapaids=*').then((data) => {
+      this.numberArr = {}
+      data.forEach((feature: any) => {
+        if (!feature.noClick) {
+          if (feature.openModal) {
+            this.clickableIds.openModal[feature.mapId] = true
+          } else {
+            this.clickableIds.openPopup[feature.mapId] = true
+          }
+        }
+      })
+      data.forEach((feature: any) => {
+        if (feature.number) {
+          this.numberArr[feature.mapId] = feature.number
+        }
+      })
+    })
+    campsaboutObject = {
+      map: this.map,
+      campGeojson: this.campGeojson,
+      colors: MapFunctions.matchColorsWithIDs(this.campGeojson, this.classColors),
+      sortedCampGeojson: MapFunctions.sortLayers(this.campGeojson),
+      labelsGeojson: this.labelsGeojson,
+      is3d: false,
+      units3D: null,
+      billboard3D: null,
+      advertisement: null,
+      geolocate: null,
+      directions: null,
+      poly: null,
+      language: 'en',
+      onRouteChangeDel: null,
+      clickableIds: this.clickableIds,
+      numberArr: this.numberArr
+    }
+    await MapFunctions.initMap(campsaboutObject)
+  }
+
+  private async callApi (url: string): Promise<any | null> {
+    if (!url) return null
+    try {
+      const response = await fetch(url)
+      if (!response.ok) {
+        console.error(`Error: Received status code ${response.status} from ${url}`)
+        return null
+      }
+      const data = await response.json()
+      return data
+    } catch (error) {
+      console.error(`Error fetching data from ${url}:`, error)
+      return null
+    }
   }
 
   changeStyle () {
@@ -139,6 +271,7 @@ export default class MapPickerComponent extends Vue {
       this.addMarker()
       this.addGeolocateControl()
       this.addImageLayer()
+      this.initializeCampsaboutObject()
     })
   }
 
@@ -221,7 +354,7 @@ export default class MapPickerComponent extends Vue {
       })
 
       // Show image layer button conditionally based on firmName
-      if (localStorage.getItem('firmName') === 'trim') {
+      if (localStorage.getItem('firmName') === 'trim' || localStorage.getItem('firmName') === 'zaton' || localStorage.getItem('firmName') === 'test') {
         this.showImageButton = true
       }
     }
@@ -234,10 +367,12 @@ export default class MapPickerComponent extends Vue {
       if (this.imageLayerVisible) {
         this.map.setLayoutProperty('my-layer', 'visibility', 'none')
         this.map.setLayoutProperty('tileset-layer', 'visibility', 'none')
+        this.map.setPaintProperty('camp-fill-layer', 'fill-opacity', 0)
         this.imageLayerVisible = false
       } else {
         this.map.setLayoutProperty('my-layer', 'visibility', 'visible')
         this.map.setLayoutProperty('tileset-layer', 'visibility', 'visible')
+        this.map.setPaintProperty('camp-fill-layer', 'fill-opacity', 0.5)
         this.imageLayerVisible = true
       }
     }
