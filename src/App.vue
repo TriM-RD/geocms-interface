@@ -11,6 +11,7 @@
         <div class="modal-content">
           <div class="modal-body">
             <iframe class="iframeModal" id="yourIframeId" src="https://tri-m.app/ormari/modal.php"></iframe>
+            <iframe class="iframeModalAcc" id="accIframe" src="https://tri-m.app/ecabinet/index.php"></iframe>
           </div>
         </div>
       </div>
@@ -96,6 +97,12 @@ export default class App extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .iframeModal {
+  width: 100%;
+  height: 50vh;
+  overflow: hidden;
+}
+
+.iframeModalAcc {
   width: 100%;
   height: 50vh;
   overflow: hidden;
