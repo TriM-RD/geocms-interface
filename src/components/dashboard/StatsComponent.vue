@@ -50,24 +50,24 @@ export default class StatsComponent extends Vue {
       // Populate the devices array using the fetched data
       this.devices = [
         {
-          title: 'Active Clients',
+          title: '24-Hour Client Total',
           current: data.totalStations, // Example: active APs treated as active clients
           total: 0 // Total stations/clients
         },
         {
-          title: 'Active MACs (%)',
+          title: 'Active Access Points with Connected Clients (%)',
           current: data.activeMacPercentage,
           total: 100 // Represented as a percentage out of 100
         },
         {
-          title: 'Max Clients',
+          title: 'Max Clients per App',
           current: data.maxStations,
           total: 0 // Total max stations is itself
         },
         {
           title: 'Active Ap',
           current: 255, // Example: active APs treated as active clients
-          total: 279 // Total stations/clients
+          total: 307 // Total stations/clients
         }
       ]
     } catch (error) {
