@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import Show from '../views/Show.vue'
 import PermissionTree from '@/views/PermissionTree.vue'
 import Form from '@/views/Form.vue'
+import Dashboard from '@/views/Dashboard.vue'
 import AccountProfile from '@/views/AccountProfile.vue'
 import { Definitions } from '@/definitions/appDefinitions'
 import { FirmSelectionComponent } from '@geocms/components'
@@ -15,6 +16,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: Definitions.Other.Home,
     component: Home
+  },
+  {
+    path: '/dashboard',
+    name: Definitions.Other.Dashboard,
+    component: Dashboard
   },
   {
     path: '/entity',

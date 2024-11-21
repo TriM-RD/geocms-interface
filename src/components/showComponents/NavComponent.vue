@@ -1,5 +1,8 @@
 <template>
   <ul class="nav nav-pills nav-fill border mb-md-4">
+    <li v-if="checkFirm" class="nav-item border-end border-secondary border-opacity-10">
+      <router-link to="/dashboard" class="nav-link rounded-1" :class="{active: $route.path === '/dashboard'}">Dashboard</router-link>
+    </li>
     <li class="nav-item border-end border-secondary border-opacity-10">
       <router-link to="/" class="nav-link rounded-1" :class="{active: $route.path === '/'}">{{$t.map}}</router-link>
     </li>
@@ -45,6 +48,10 @@ export default class NavComponent extends Vue {
   regionType = RegionType
   regionEnum = RegionEnum
   object!: ObjectTemplate
+
+  get checkFirm () {
+    return localStorage.getItem('firmName') === 'zaton'
+  }
 }
 </script>
 

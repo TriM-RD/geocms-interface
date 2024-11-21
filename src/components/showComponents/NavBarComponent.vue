@@ -33,8 +33,8 @@
               <router-link to="/account" class="dropdown-item opacity-75">{{$t.profile}}</router-link>
               <router-link to="/administration" class="dropdown-item opacity-75">{{ $t.administration }}</router-link>
               <router-link to="/firm-selection" class="dropdown-item opacity-75">{{ $t.firmSelection }}</router-link>
-              <li class="opacity-50"><hr class="dropdown-divider"></li>
-              <li><button data-bs-toggle="modal" data-bs-target="#reportModal" class="dropdown-item opacity-75" type="button">
+              <li v-if="checkFirm" class="opacity-50"><hr class="dropdown-divider"></li>
+              <li v-if="checkFirm"><button data-bs-toggle="modal" data-bs-target="#reportModal" class="dropdown-item opacity-75" type="button">
                 {{ $t.openReport }}</button></li>
               <li class="opacity-50"><hr class="dropdown-divider"></li>
               <li><button class="dropdown-item opacity-75" type="button" v-on:click="logout()">{{ $t.logOut }}</button></li>
@@ -116,6 +116,10 @@ export default class NavBarComponent extends Vue {
     }, response => {
       // error
     })
+  }
+
+  get checkFirm () {
+    return localStorage.getItem('firmName') === 'umag'
   }
 
   openReport (dates: Date[]) : void {
