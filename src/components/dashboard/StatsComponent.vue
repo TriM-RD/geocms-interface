@@ -60,12 +60,12 @@ export default class StatsComponent extends Vue {
           total: 100 // Represented as a percentage out of 100
         },
         {
-          title: 'Max Clients per App',
+          title: 'Max Clients per Access Points',
           current: data.maxStations,
           total: 0 // Total max stations is itself
         },
         {
-          title: 'Active Ap',
+          title: 'Active Access Points',
           current: 255, // Example: active APs treated as active clients
           total: 307 // Total stations/clients
         }
@@ -98,12 +98,13 @@ export default class StatsComponent extends Vue {
   letter-spacing: 1px;
 }
 
-/* Cards */
+/* Modify your existing .status-card class */
 .status-card {
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
   border-radius: 15px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%; /* Add this line */
 }
 
 .status-card:hover {
@@ -111,9 +112,14 @@ export default class StatsComponent extends Vue {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
+/* Modify your existing .status-card-body class */
 .status-card-body {
   padding: 2rem 1.5rem;
   text-align: center;
+  display: flex; /* Add this line */
+  flex-direction: column; /* Add this line */
+  height: 100%; /* Add this line */
+  justify-content: center; /* Add this line */
 }
 
 .status-title {
