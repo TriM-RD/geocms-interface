@@ -1,0 +1,44 @@
+.btn-camp {
+    color: #fff !important;
+    background-color: var(--bs-camp) !important;
+    border-color: var(--bs-camp) !important;
+    transition:
+            color 0.15s ease-in-out,
+            background-color 0.15s ease-in-out,
+            border-color 0.15s ease-in-out,
+            box-shadow 0.15s ease-in-out !important;
+}
+
+.btn-camp:hover {
+    color: #fff !important;
+    background-color: var(--bs-camp-dark) !important;
+    border-color: var(--bs-camp-dark) !important;
+}
+
+.btn-camp:focus,
+.btn-camp.focus {
+    color: #fff !important;
+    background-color: var(--bs-camp-dark) !important;
+    border-color: var(--bs-camp-dark) !important;
+    box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.5) !important;
+}
+
+.btn-camp.disabled,
+.btn-camp:disabled {
+    color: #fff !important;
+    background-color: var(--bs-camp-disabled) !important;
+    border-color: var(--bs-camp-disabled) !important;
+}
+
+.btn-camp:not(:disabled):not(.disabled):active,
+.btn-camp:not(:disabled):not(.disabled).active,
+.show > .btn-camp.dropdown-toggle {
+    color: #fff !important;
+    background-color: var(--bs-camp-active) !important;
+    border-color: var(--bs-camp-active) !important;
+}
+
+.btn-camp:not(:disabled):not(.disabled):active:focus,
+.btn-camp:not(:disabled):not(.disabled).active:focus {
+    box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.5) !important;
+}

@@ -1,65 +1,37 @@
 <template>
-  <div class="my-4" v-if="checkRoute()">
-    <div class="row">
-      <div class="col-12 col-sm-9 d-flex justify-content-between align-items-center">
-        <div></div> <!-- Empty div for alignment with first column -->
-        <input @change="handleFilterChange" v-model="filters.code" type="search" class="form-control flex-fill me-3" id="codeFilter" :placeholder="$t.filterByCode">
-        <input @change="handleFilterChange" v-model="filters.division" type="search" class="form-control flex-fill me-3" id="divisionFilter" :placeholder="$t.filterByDivision">
-        <input @change="handleFilterChange" v-model="filters.group" type="search" class="form-control flex-fill me-3" id="groupFilter" :placeholder="$t.filterByGroup">
-      </div>
-      <div class="col-12 col-sm-3 mt-3 mt-sm-0">
-        <select class="form-select" id="sortOrder" @change="handleFilterChange" v-model="orderBy">
-          <option selected value="asc">{{$t.ascending}}</option>
-          <option value="desc">{{ $t.descending }}</option>
-        </select>
-      </div>
-      <div></div> <!-- Empty div for alignment with last column -->
-    </div>
-  </div>
-  <Loading v-model:active="renderComponent"
-           :can-cancel="false"
-           :is-full-page="false"/>
+  <Loading v-model:active="renderComponent" />
   <table class="table table-hover" v-if="!renderComponent">
-  <thead class="table-light">
-    <tr>
-      <th></th>
-      <th v-for="(header, key) in headers" :key="`${ key }-${ header }-${ Math.random().toString(36).slice(2, 7) }`" scope="col">
-        {{ header }}</th>
-    </tr>
-  </thead>
-  <tbody>
-    <component :rerender="changeRender"  v-for="(entity, key, index) in entities" :key="`${ key }-${ index }-${ Math.random().toString(36).slice(2, 7) }`" :is="getComponent(regionEnum.Table, objectTypeEnum.Row)" :entity='entity' :index='key'></component>
-  </tbody>
-</table>
+    <thead class="table-light">
+      <tr>
+        <th></th>
+        <th v-for="(header, key) in headers" :key="`${key}-${header}-${Math.random().toString(36).slice(2, 7)}`" scope="col">
+          {{ header }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <component :rerender="changeRender" v-for="(entity, key, index) in entities" :key="`${key}-${index}-${Math.random().toString(36).slice(2, 7)}`" :is="getComponent(regionEnum.Table, objectTypeEnum.Row)" :entity="entity" :index="key"></component>
+    </tbody>
+  </table>
   <!--button class="btn btn-outline-secondary" @click.prevent="scroll()">Load</button-->
 </template>
 
 <script lang="ts">
-import Loading from 'vue-loading-overlay'
+import LoadingComponent from '@/components/LoadingComponent.vue'
 import { Options, Vue } from 'vue-class-component'
 import { Manager } from '@/mechanics/tableMechanic'
-import {
-  ObjectTemplate,
-  MechanicAbstract,
-  ObjectType,
-  StatTypeEnum,
-  ObjectTypeEnum,
-  RegionType,
-  RegionEnum
-} from '@cybertale/interface'
+import { ObjectTemplate, MechanicAbstract, ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, RegionEnum } from '@cybertale/interface'
 import router from '@/router'
-import { TYPE, useToast } from 'vue-toastification'
-import ToastComponent from '@/components/ToastComponent.vue'
 import { Definitions } from '@geocms/components'
 import { $t } from '@geocms/localization'
 @Options({
   computed: {
-    $t () {
+    $t() {
       return $t
     }
   },
   components: {
-    Loading
+    Loading: LoadingComponent
   }
 })
 export default class TableComponent extends Vue {
@@ -69,7 +41,7 @@ export default class TableComponent extends Vue {
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType
   mechanic: MechanicAbstract = new Manager.Mechanic.TableMechanic(this.reRender.bind(this))
-  renderComponent= true
+  renderComponent = true
   loadingComponents = true
   objectTemplates!: ObjectTemplate[]
   entities: ObjectTemplate[][] = []
@@ -81,19 +53,19 @@ export default class TableComponent extends Vue {
   filters = { code: '', group: '', division: '' }
   onScroll: ((this: Window, ev: Event) => any) | null = null
 
-  beforeUnmount () {
+  beforeUnmount() {
     this.mechanic.UnsubscribeConditions()
     if (this.onScroll) {
       window.removeEventListener('scroll', this.onScroll)
     }
   }
 
-  created () {
+  created() {
     this.Init()
   }
 
-  mounted () {
-    if (router.currentRoute.value.name === Definitions.Entity.Def) {
+  mounted() {
+    if (this.$route.name === Definitions.Entity.Def) {
       this.onScroll = async () => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop
         const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
@@ -115,7 +87,7 @@ export default class TableComponent extends Vue {
     }
   }
 
-  reRender (reverseOrder: boolean) {
+  reRender(reverseOrder: boolean) {
     if (reverseOrder) {
       this.reverseEntities()
     } else {
@@ -130,7 +102,7 @@ export default class TableComponent extends Vue {
     }
   }
 
-  changeRender () {
+  changeRender() {
     if (this.renderComponent) {
       this.entities = []
       this.objectTemplates = []
@@ -142,12 +114,14 @@ export default class TableComponent extends Vue {
     }
   }
 
-  async scroll () {
-    if (this.isInitRunning) { return }
+  async scroll() {
+    if (this.isInitRunning) {
+      return
+    }
     await this.Init()
   }
 
-  handleFilterChange (): void {
+  handleFilterChange(): void {
     if (!this.isInitRunning) {
       this.renderComponent = true
       this.changeRender()
@@ -155,12 +129,14 @@ export default class TableComponent extends Vue {
     }
   }
 
-  checkRoute () {
+  checkRoute() {
     return router.currentRoute.value.name === Definitions.Entity.Def
   }
 
-  async Init () {
-    if (this.isInitRunning) { return }
+  async Init() {
+    if (this.isInitRunning) {
+      return
+    }
     this.isInitRunning = true
     switch (router.currentRoute.value.name) {
       case Definitions.Entity.Def:
@@ -174,7 +150,7 @@ export default class TableComponent extends Vue {
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'division'))
         break
       case Definitions.Group.Edit:
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'filter/attribute/' + router.currentRoute.value.params.id))
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'filter/attribute/' + this.$route.params.id))
         break
       case Definitions.Group.Add:
         this.renderComponent = false
@@ -218,27 +194,23 @@ export default class TableComponent extends Vue {
     this.isInitRunning = false
   }
 
-  reverseEntities () {
+  reverseEntities() {
     if (!this.isInitRunning) {
       const groupValues = Object.values(this.groupTypeFilter)
       this.renderComponent = true
       const currentGroupIndex = groupValues.indexOf(this.filters.group) + 1
-      if (currentGroupIndex >= groupValues.length && this.filters.group !== '') { // TODO something is not working (ORDER), most likely fixed
+      if (currentGroupIndex >= groupValues.length && this.filters.group !== '') {
+        // TODO something is not working (ORDER), most likely fixed
         this.filters.group = groupValues[0]
       } else {
         this.filters.group = groupValues[currentGroupIndex]
       }
-      useToast()({
-        component: ToastComponent,
-        props: { msg: { title: 'Loading...', info: this.filters.group === '' ? 'Loading all.' : 'Loading ' + this.filters.group + ' only.' } }
-      }, {
-        type: TYPE.INFO
-      })
       this.changeRender()
     }
   }
 
-  getHeaders () : void { // TODO Needs to be reworked. @JosoMarich
+  getHeaders(): void {
+    // TODO Needs to be reworked. @JosoMarich
     this.headers = []
     for (const header of this.objectTemplates) {
       if (this.headers.indexOf(header.Stats[StatTypeEnum.Label].Data) === -1 && header.Stats[StatTypeEnum.BelongsTo] === undefined) {
@@ -247,7 +219,7 @@ export default class TableComponent extends Vue {
     }
   }
 
-  getComponent (_regionEnum : number, _objectEnum: number) {
+  getComponent(_regionEnum: number, _objectEnum: number) {
     return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }
 }

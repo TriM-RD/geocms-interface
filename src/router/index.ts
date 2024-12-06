@@ -1,147 +1,187 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import Home from '../views/Home.vue'
-import Show from '../views/Show.vue'
-import PermissionTree from '@/views/PermissionTree.vue'
-import Form from '@/views/Form.vue'
-import Dashboard from '@/views/Dashboard.vue'
-import AccountProfile from '@/views/AccountProfile.vue'
-import { Definitions } from '@/definitions/appDefinitions'
-import { FirmSelectionComponent } from '@geocms/components'
-
-/* type MyRouteRecord = RouteRecordRaw & {
-  beforeRouteLeave: string;
-} */
-const routes: Array<RouteRecordRaw> = [
-  {
-    path: '/',
-    name: Definitions.Other.Home,
-    component: Home
-  },
-  {
-    path: '/dashboard',
-    name: Definitions.Other.Dashboard,
-    component: Dashboard
-  },
-  {
-    path: '/entity',
-    name: Definitions.Entity.Def,
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: Show
-  },
-  {
-    path: '/entity/add',
-    name: Definitions.Entity.Add,
-    component: Form
-  },
-  {
-    path: '/entity/add/:id',
-    name: Definitions.Entity.Edit,
-    component: Form
-  },
-  {
-    path: '/device/add',
-    name: Definitions.Entity.Add,
-    component: Form
-  },
-  {
-    path: '/device/add/:id',
-    name: Definitions.Entity.Edit,
-    component: Form
-  },
-  {
-    path: '/entity/replace/:parentId',
-    name: Definitions.Entity.Replace,
-    component: Form
-  },
-  {
-    path: '/group',
-    name: Definitions.Group.Def,
-    component: Show
-  },
-  {
-    path: '/group/add',
-    name: Definitions.Group.Add,
-    component: Form
-  },
-  {
-    path: '/group/add/:id',
-    name: Definitions.Group.Edit,
-    component: Form
-  },
-  {
-    path: '/permission',
-    name: 'Permission',
-    component: PermissionTree
-    // beforeRouteLeave: 'beforeRouteLeave'
-  }, // as MyRouteRecord,
-  {
-    path: '/division',
-    name: Definitions.Division.Def,
-    component: Show
-  },
-  {
-    path: '/division/add',
-    name: Definitions.Division.Add,
-    component: Form
-  },
-  {
-    path: '/division/add/:id',
-    name: Definitions.Division.Edit,
-    component: Form
-  },
-  {
-    path: '/show/:id',
-    name: 'Show',
-    component: Show
-  },
-  {
-    path: '/attribute',
-    name: Definitions.Attribute.Def,
-    component: Show
-  },
-  {
-    path: '/attribute/add/:parentId',
-    name: Definitions.Attribute.Add,
-    component: Form
-  },
-  {
-    path: '/attribute/add/:parentId/:id',
-    name: Definitions.Attribute.Edit,
-    component: Form
-  },
-  {
-    path: '/account',
-    name: Definitions.Administration.AccountProfile,
-    component: AccountProfile
-  },
-  {
-    path: '/administration',
-    name: Definitions.Administration.Def,
-    component: Show
-  },
-  {
-    path: '/administration/add',
-    name: Definitions.Administration.Add,
-    component: Form
-  },
-  {
-    path: '/administration/add/:id',
-    name: Definitions.Administration.Edit,
-    component: Form
-  },
-  {
-    path: '/firm-selection',
-    name: 'FirmSelectionComponent',
-    component: FirmSelectionComponent
-  }
-]
+import { createRouter, createWebHistory } from 'vue-router'
+import { useStoreHistory } from '@/stores/storeHistory'
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    {
+      path: '/searchdev',
+      name: 'searchdev',
+      component: () => import('../views/Search.vue')
+    },
+    {
+      path: '/:propertyCode/unit/:id/share',
+      name: 'share',
+      component: () => import('../views/Share.vue')
+    },
+    {
+      path: '/captcha',
+      name: 'captcha',
+      component: () => import('../views/Captcha.vue')
+    },
+    {
+      path: '/:propertyCode/unit/:id/payment',
+      name: 'payment',
+      component: () => import('../views/Payment.vue')
+    },
+    {
+      path: '/:propertyCode',
+      name: 'home',
+      component: () => import('../views/Main.vue'),
+      children: [
+        {
+          path: '',
+          name: 'map',
+          components: {
+            header: () => import('../views/Header.vue'),
+            navigationButtons: () => import('../components/MainButtonsComponent.vue'),
+            legend: () => import('../views/Legend.vue')
+          }
+        },
+        {
+          path: 'gallery',
+          name: 'gallery',
+          component: () => import('../views/Gallery.vue')
+        },
+        /*{
+          path: 'header',
+          name: 'header',
+          component: () => import('../views/Header.vue')
+        },*/
+        {
+          path: 'unit/:id/navigation/preview',
+          name: 'navigationPreview',
+          components: {
+            header: () => import('../components/NavigationHeaderComponent.vue'),
+            default: () => import('../components/NavigationPreview.vue'),
+            navigationButtons: () => import('../components/NavigationButtonsComponent.vue')
+          }
+        },
+        {
+          path: 'unit/:id/navigation/run',
+          name: 'navigationRun',
+          components: {
+            header: () => import('../components/NavigationHeaderComponent.vue'),
+            default: () => import('../components/NavigationRun.vue'),
+            navigationButtons: () => import('../components/NavigationButtonsComponent.vue')
+          }
+        },
+        {
+          path: 'poi/:id/navigation/preview',
+          name: 'poiNavigationPreview',
+          components: {
+            header: () => import('../components/NavigationHeaderComponent.vue'),
+            default: () => import('../components/NavigationPreview.vue'),
+            navigationButtons: () => import('../components/NavigationButtonsComponent.vue')
+          }
+        },
+        {
+          path: 'poi/:id/navigation/run',
+          name: 'poiNavigationRun',
+          components: {
+            header: () => import('../components/NavigationHeaderComponent.vue'),
+            default: () => import('../components/NavigationRun.vue'),
+            navigationButtons: () => import('../components/NavigationButtonsComponent.vue')
+          }
+        },
+        {
+          path: 'bookNow',
+          name: 'bookNow',
+          components: {
+            header: () => import('../views/Header.vue'),
+            default: () => import('../views/BookNow.vue'),
+            navigationButtons: () => import('../components/MainButtonsComponent.vue')
+          }
+        },
+        {
+          path: 'search',
+          name: 'search',
+          components: {
+            header: () => import('../views/Header.vue'),
+            default: () => import('../views/Modal.vue'),
+            navigationButtons: () => import('../components/MainButtonsComponent.vue')
+          }
+        },
+        {
+          path: 'unit',
+          name: 'unit',
+          components: {
+            header: () => import('../views/Header.vue'),
+            default: () => import('../views/Modal.vue'),
+            navigationButtons: () => import('../components/MainButtonsComponent.vue')
+          }
+        },
+        {
+          path: 'unit/:id',
+          name: 'unitId',
+          components: {
+            header: () => import('../views/Header.vue'),
+            default: () => import('../views/Modal.vue'),
+            navigationButtons: () => import('../components/MainButtonsComponent.vue')
+          }
+        },
+        {
+          path: 'poi/:id',
+          name: 'poiId',
+          components: {
+            header: () => import('../views/Header.vue'),
+            navigationButtons: () => import('../components/MainButtonsComponent.vue'),
+            legend: () => import('../views/Legend.vue')
+          }
+        },
+        {
+          path: 'filter',
+          name: 'filter',
+          components: {
+            header: () => import('../views/Header.vue'),
+            default: () => import('../views/Modal.vue'),
+            navigationButtons: () => import('../components/MainButtonsComponent.vue')
+          }
+        },
+        {
+          path: 'dialog',
+          name: 'dialog',
+          components: {
+            header: () => import('../views/Header.vue'),
+            default: () => import('../components/MessageBoxComponent.vue'),
+            navigationButtons: () => import('../components/MainButtonsComponent.vue')
+          }
+        }
+      ]
+    }
+  ]
+})
+
+let HistoryStore: any = null
+router.beforeEach((to, from, next) => {
+  if (!HistoryStore) HistoryStore = useStoreHistory()
+
+  if (from.path == to.path) HistoryStore.replace(to.fullPath)
+  else HistoryStore.push(to.fullPath)
+
+  next()
+})
+
+// Transfer noGps value from url to localStorage
+router.beforeEach((to, from, next) => {
+  // Check if the specific query parameters exist
+  if (to.query.noGps === undefined && to.query.dev === undefined) return next()
+
+  // Create a new query object without the specific parameters
+  const { noGps, dev, ...newQuery } = to.query
+
+  // Handle 'noGps' parameter
+  if (['true', '1', 'null'].includes(String(noGps).toLocaleLowerCase())) {
+    window.localStorage.setItem('noGps', 'true')
+  }
+
+  // Handle 'dev' parameter
+  if (['true', '1', 'null'].includes(String(dev).toLocaleLowerCase())) {
+    window.localStorage.setItem('dev', 'true')
+  }
+
+  // Replace the current route with the new query parameters
+  next({ path: to.path, query: newQuery })
 })
 
 export default router

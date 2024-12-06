@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    Test
     <div class="tableComp">
       <TableComponent />
     </div>
@@ -7,16 +8,17 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component'
-import TableComponent from '@/components/TableComponent.vue' // @ is an alias to /src
+import { Component, Vue } from 'vue-facing-decorator'
+import TableComponent from '@/components/TableComponent.vue'
 
-@Options({
-  components: {
+@Component({components: {
     TableComponent
-  }
-})
+  }})
 export default class Show extends Vue {
+
 }
 </script>
+
 <style scoped>
+
 </style>

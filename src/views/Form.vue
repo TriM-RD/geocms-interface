@@ -1,41 +1,20 @@
 <template>
   <div class="container">
-    <FormComponent/>
-    <TableComponent v-if="renderTable" />
-    <ListComponent v-if="renderList" :use-routes="true" />
-    <div style="height: 10vh"></div>
+    Form
+    <div class="tableComp">
+      <!--FormComponent /-->
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component'
-import FormComponent from '@/components/FormComponent.vue'
-import TableComponent from '@/components/TableComponent.vue'
-import router from '@/router'
-import ListComponent from '@/components/ListComponent.vue'
-import { Definitions } from '@geocms/components'
+import { Component, Vue } from 'vue-facing-decorator'
+//import FormComponent from '@/components/FormComponent.vue'
 
-@Options({
-  components: {
-    ListComponent,
-    FormComponent,
-    TableComponent
-  }
-})
-export default class Form extends Vue {
-  renderTable = false
-  renderList = false
-
-  mounted () {
-    switch (router.currentRoute.value.name) {
-      case Definitions.Group.Edit:
-      case Definitions.Group.Add:
-        this.renderTable = true
-        break
-      case Definitions.Entity.Edit:
-        this.renderList = true
-        break
-    }
-  }
-}
+@Component /*{components: {
+    FormComponent
+  }}*/
+export default class Form extends Vue {}
 </script>
+
+<style scoped></style>
