@@ -14,7 +14,9 @@
                 <span class="text-primary">{{ item.current }}</span><span v-if="item.total">/{{ item.total }}</span>
               </h2>
               <!-- Uncomment if health/status is needed -->
-              <!--p :class="`status-text ${item.statusClass}`">{{ item.health }}</p-->
+              <p class="status-text" :class="item.trendClass" v-if="item.trend">
+                {{ getTrendWord(item.trend) }}
+              </p>
               <!--span :class="`badge ${item.badgeClass}`">{{ item.status }}</span-->
             </div>
           </div>
@@ -34,7 +36,7 @@ import Loading from 'vue-loading-overlay' // Import Loading component
   }
 })
 export default class StatsComponent extends Vue {
-  devices: Array<{ title: string; current: number; total: number; health?: string; status?: string; statusClass?: string; badgeClass?: string }> = [];
+  devices: Array<{ title: string; current: number; total: number; health?: string; trend?: string; trendClass?: string; badgeClass?: string }> = [];
   isLoading = false; // Loading state
 
   // Fetch data from the API when the component is mounted
@@ -51,13 +53,15 @@ export default class StatsComponent extends Vue {
       this.devices = [
         {
           title: '24-Hour Client Total',
-          current: data.totalStations, // Example: active APs treated as active clients
+          current: data.totalStationsLast24, // Example: active APs treated as active clients
           total: 0 // Total stations/clients
         },
         {
           title: 'Active Access Points with Connected Clients (%)',
           current: data.activeMacPercentage,
-          total: 100 // Represented as a percentage out of 100
+          total: 100, // Represented as a percentage out of 100
+          trend: data.activeMacTrend, // Include the trend
+          trendClass: this.getTrendClass(data.activeMacTrend)
         },
         {
           title: 'Max Clients per Access Points',
@@ -74,6 +78,30 @@ export default class StatsComponent extends Vue {
       console.error('Error fetching data:', error)
     } finally {
       this.isLoading = false // Set loading state to false when done
+    }
+  }
+
+  getTrendClass (trend: string): string {
+    switch (trend) {
+      case 'down':
+        return 'text-success' // Green for decreasing usage
+      case 'up':
+        return 'text-danger' // Red for increasing usage
+      case 'unchanged':
+      default:
+        return 'text-secondary' // Grey for stable usage
+    }
+  }
+
+  getTrendWord (trend: string): string {
+    switch (trend) {
+      case 'down':
+        return 'Decreasing' // Favorable trend
+      case 'up':
+        return 'Increasing' // Unfavorable trend
+      case 'unchanged':
+      default:
+        return 'Stable' // Neutral trend
     }
   }
 }
