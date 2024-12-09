@@ -12,8 +12,8 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-facing-decorator'
 import { ObjectTemplate, ObjectTypeEnum, RegionEnum, RegionType, StatTypeEnum } from '@cybertale/interface'
-import { useStoreMapFunctions } from '@/stores/storeMapFunctions'
-import { $t } from '@/stores/storeTranslations'
+/*import { useStoreMapFunctions } from '@/stores/storeMapFunctions'
+import { $t } from '@/stores/storeTranslations'*/
 
 interface LabelData {
   iconClass: string
@@ -56,9 +56,9 @@ export default class ButtonComponent extends Vue {
     if (typeof tooltip === 'string') {
       return tooltip // Return the string directly if it's a string
     }
-    if (tooltip.translate) {
+    /*if (tooltip.translate) {
       return $t(tooltip.value)
-    }
+    }*/
     return tooltip.value
   }
 
@@ -76,18 +76,18 @@ export default class ButtonComponent extends Vue {
   }
 
   get buttonLabel(): string {
-    if (this.showIcon) {
+    /*if (this.showIcon) {
       const value = this.getValue(StatTypeEnum.Label) as LabelData
       return $t(value.title)
-    }
+    }*/
     return this.getValue(StatTypeEnum.Label) as string
   }
 
   get contentValue(): string {
-    if (this.showIcon) {
+    /*if (this.showIcon) {
       const value = this.getValue(StatTypeEnum.Label) as LabelData
       return $t(value.contentValue)
-    }
+    }*/
     return ''
   }
 

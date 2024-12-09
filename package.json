@@ -1,6 +1,6 @@
 {
-  "name": "campsabout-interface",
-  "version": "0.3.0",
+  "name": "geocms-interface",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -17,11 +17,11 @@
     "copy-package": "node node_modules/@cybertale/form/copy-package.mjs"
   },
   "dependencies": {
+    "@campsabout/mapbox": "git+https://github.com/TriM-RD/campsabout-mapbox.git",
     "@cybertale/form": "^2.0.5",
     "@cybertale/interface": "^2.1.2",
     "@fancyapps/ui": "^5.0.36",
     "@fortawesome/fontawesome-free": "^6.6.0",
-    "@geocms/components": "git+https://github.com/TriM-RD/geocms-components.git",
     "@geocms/localization": "git+https://github.com/TriM-RD/geocms-localization.git",
     "@popperjs/core": "^2.11.8",
     "@primevue/themes": "^4.0.4",
@@ -29,18 +29,23 @@
     "@uppy/core": "^3.1.2",
     "@uppy/dashboard": "^3.3.2",
     "@uppy/tus": "^3.0.6",
+    "@vuepic/vue-datepicker": "^10.0.0",
     "aframe": "^1.6.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "fancybox": "^3.0.1",
+    "mapbox-gl": "^3.8.0",
     "pinia": "^2.1.7",
     "primevue": "^4.0.4",
     "prompt-sync": "^4.2.0",
     "uuid": "^10.0.0",
     "vue": "^3.4.30",
+    "vue-loading-overlay": "^6.0.6",
     "vue-recaptcha": "^3.0.0-alpha.6",
     "vue-recaptcha-v3": "^2.0.1",
     "vue-router": "^4.4.0",
+    "vue-toastification": "^2.0.0-rc.5",
+    "vue3-blocks-tree": "^0.6.2",
     "vuex": "^4.1.0"
   },
   "devDependencies": {

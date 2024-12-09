@@ -1,33 +1,57 @@
 <template>
-  <div>
-    <div class="d-none">{{ reRender }}</div>
+  <div v-if="!reRender">
     <div v-if="returnIfExists(statTypeEnum.ElementType) === 'button'" class="mb-3 row justify-content-md-center">
-      <button data-bs-toggle="tooltip" data-bs-placement="top" :class="object.Stats[statTypeEnum.Design].Data" @click.prevent="regionType.RegionTypes[object.Region].ObjectTypes[objectTypeEnum.Button].ChooseSubType(JSON.parse(JSON.stringify(objectCopy(object as ObjectTemplate))) as ObjectTemplate)">
-        {{ object.Stats[statTypeEnum.Label].Data }}
+      <button data-bs-toggle="tooltip" data-bs-placement="top"
+              :class="object.Stats[statTypeEnum.Design].Data"
+              @click.prevent='regionType.RegionTypes[object.Region].ObjectTypes[objectTypeEnum.Button].ChooseSubType(JSON.parse(JSON.stringify(objectCopy(object as ObjectTemplate))) as ObjectTemplate)'>
+        {{object.Stats[statTypeEnum.Label].Data}}
       </button>
     </div>
-    <div v-else class="row justify-content-md-center w-100">
-      <div class="col-12">
-        <div class="input-group" v-for="(group, index) in groupedObjectTemplates" :key="`${index}-${Math.random().toString(36).slice(2, 7)}`">
-          <component v-for="(_objectTemplate, key) in group" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object="_objectTemplate" :key="`${key}-${Math.random().toString(36).slice(2, 7)}`"></component>
+    <div v-else class="mb-3 row justify-content-md-center">
+      <div class="col-lg"></div>
+      <div class="col">
+        <div class="input-group" v-for="(group, index) in groupedObjectTemplates" :key="`${ index }-${ Math.random().toString(36).slice(2, 7) }`">
+          <component v-for="(_objectTemplate, key) in group" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object='_objectTemplate' :key="`${ key }-${ Math.random().toString(36).slice(2, 7) }`"></component>
         </div>
       </div>
+      <div class="col-lg"></div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-facing-decorator'
+import {Component, Vue} from 'vue-facing-decorator'
 import { Manager } from '@/mechanics/placeholderMechanic'
-import { ActionTypeEnum, MechanicAbstract, ObjectTemplate, ObjectType, ObjectTypeEnum, RegionEnum, RegionType, StatType, StatTypeEnum, SubObjectTypeEnum } from '@cybertale/interface'
+import {
+  ActionTypeEnum,
+  MechanicAbstract,
+  ObjectTemplate,
+  ObjectType,
+  ObjectTypeEnum,
+  RegionEnum,
+  RegionType,
+  StatType,
+  StatTypeEnum,
+  SubObjectTypeEnum
+} from '@cybertale/interface'
 
-@Component
+@Component({
+  computed: {
+    ObjectTemplate () {
+      return ObjectTemplate
+    }
+  },
+  props: {
+    entity: Array,
+    object: ObjectTemplate,
+    index: Number,
+    pageRefresh: {
+      type: Boolean,
+      default: true
+    }
+  }
+})
 export default class InputGroupComponent extends Vue {
-  @Prop() readonly entity!: ObjectTemplate[]
-  @Prop() readonly object!: ObjectTemplate
-  @Prop() readonly index!: number
-  @Prop({ default: true }) readonly pageRefresh!: boolean
-
   mechanic: MechanicAbstract = new Manager.Mechanic.PlaceholderMechanic()
   objectTemplate = ObjectTemplate
   regionEnum = RegionEnum
@@ -37,19 +61,17 @@ export default class InputGroupComponent extends Vue {
   subObjectTypeEnum = SubObjectTypeEnum
   actionTypeEnum = ActionTypeEnum
   objectType = ObjectType
+  object!: ObjectTemplate
+  entity!: ObjectTemplate[]
+  index!: number
   objectTemplates: ObjectTemplate[] = []
-  count = 0
-  testValue = true
+  pageRefresh!: boolean
 
-  testMe() {
-    this.objectTemplates = this.mechanic.InitSet(this.entityCopy(this.entity))
-  }
-
-  get groupedObjectTemplates(): ObjectTemplate[][] {
-    const groups: ObjectTemplate[][] = []
+  get groupedObjectTemplates () : ObjectTemplate[][] {
+    const groups = []
     let currentGroup: ObjectTemplate[] = []
 
-    this.objectTemplates.forEach((_objectTemplate) => {
+    this.objectTemplates.forEach(_objectTemplate => {
       currentGroup.push(_objectTemplate)
 
       if (_objectTemplate.Stats[StatTypeEnum.BreakLine]) {
@@ -58,27 +80,31 @@ export default class InputGroupComponent extends Vue {
       }
     })
 
+    // Push the last group if it's not empty
     if (currentGroup.length > 0) {
       groups.push(currentGroup)
     }
+
     return groups
   }
 
-  get reRender(): ObjectTemplate {
-    this.objectTemplates = []
+  returnIfExists (tag: number): string {
+    if (this.object.Stats[tag]) {
+      return this.object.Stats[tag].Data
+    }
+    return ''
+  }
+
+  mounted () : void {
+    this.objectTemplates = this.mechanic.InitSet(this.entityCopy(this.entity))
+  }
+
+  get reRender () : boolean {
     this.objectTemplates = this.mechanic.InitSet(this.entityCopy(this.entity))
     return this.pageRefresh
   }
 
-  returnIfExists(tag: number): string {
-    return this.object.Stats[tag]?.Data || ''
-  }
-
-  mounted(): void {
-    this.objectTemplates = this.mechanic.InitSet(this.entityCopy(this.entity))
-  }
-
-  objectCopy(_object: ObjectTemplate): ObjectTemplate {
+  objectCopy (_object : ObjectTemplate) : ObjectTemplate {
     if (_object.Stats[StatTypeEnum.Inherit]) {
       for (const stat of JSON.parse(_object.Stats[StatTypeEnum.Inherit].Data)) {
         if (_object.Stats[stat]) {
@@ -92,11 +118,11 @@ export default class InputGroupComponent extends Vue {
     return new ObjectTemplate(_object.Region, _object.ObjectEnum, _object.SubObjectEnum, _object.ActionEnum, _object.Stats)
   }
 
-  entityCopy(entities: ObjectTemplate[]): ObjectTemplate[] {
-    const arr: ObjectTemplate[] = []
+  entityCopy (entities: ObjectTemplate[]) : ObjectTemplate[] {
+    const arr = []
     entities = JSON.parse(JSON.stringify(entities))
     for (const entity of entities) {
-      entity.Stats[StatTypeEnum.Tag].Data += this.object.Stats[StatTypeEnum.Tag].Data
+      entity.Stats[StatTypeEnum.Tag].Data = entity.Stats[StatTypeEnum.Tag].Data + this.object.Stats[StatTypeEnum.Tag].Data
       if (entity.Stats[StatTypeEnum.Option]) {
         entity.Stats[StatTypeEnum.Option].Data = this.object.Stats[StatTypeEnum.Option].Data
       }
@@ -105,23 +131,18 @@ export default class InputGroupComponent extends Vue {
     return arr
   }
 
-  isJSON(str: string): boolean {
-    try {
-      return Array.isArray(JSON.parse(str))
-    } catch {
-      return false
-    }
-  }
-
-  beforeUnmount(): void {
+  beforeUnmount () : void {
     this.mechanic.UnsubscribeConditions()
   }
 
-  getComponent(_regionEnum: number, _objectEnum: number): StatTypeEnum {
+  getComponent (_regionEnum : number, _objectEnum: number): StatTypeEnum {
+    // _object.Stats[StatTypeEnum.Tag].Data = uuidv4()
     return RegionType.RegionTypes[_regionEnum].ObjectTypes[_objectEnum].GetComponent()
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style scoped>
+
+</style>

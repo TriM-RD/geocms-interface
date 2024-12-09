@@ -12,8 +12,8 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-facing-decorator'
 import { ObjectTemplate, ObjectType, ObjectTypeEnum, RegionEnum, RegionType, StatTypeEnum } from '@cybertale/interface'
-import { useStoreMapFunctions } from '@/stores/storeMapFunctions'
-import { $t } from '@/stores/storeTranslations'
+//import { useStoreMapFunctions } from '@/stores/storeMapFunctions'
+//import { $t } from '@/stores/storeTranslations'
 
 interface LabelData {
   styleData: string
@@ -48,9 +48,9 @@ export default class LabelComponent extends Vue {
   get label(): string {
     if (this.showIcon) {
       const value = this.getValue(StatTypeEnum.Label) as LabelData
-      if (value.translate) {
+      /*if (value.translate) {
         return $t(value.title) + ' ' + (value.number || '')
-      }
+      }*/
       return value.title
     }
     return this.getValue(StatTypeEnum.Label) as string
@@ -144,13 +144,13 @@ export default class LabelComponent extends Vue {
   }
 
   get contentValue(): string {
-    if (this.showIcon) {
+    /*if (this.showIcon) {
       const value = this.getValue(StatTypeEnum.Label) as LabelData
       if (value.distanceFromSea) {
         return useStoreMapFunctions().getDistance(value.distanceFromSea, 'coastline', 'line', 'class')
       }
       return $t(value.contentValue)
-    }
+    }*/
     return ''
   }
 
