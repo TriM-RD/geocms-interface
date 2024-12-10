@@ -40,7 +40,7 @@ export default class FirmSelectionComponent extends Vue {
   @Inject() updateHeaders: any;
 
   async created () {
-    await this.http.get(process.env.VUE_APP_BASE_URL + 'firm').then((response: { data: never[] }) => {
+    await this.http.get(import.meta.env.VITE_APP_BASE_URL + 'firm').then((response: { data: never[] }) => {
       // success
       this.firms = response.data
     })
@@ -63,7 +63,7 @@ export default class FirmSelectionComponent extends Vue {
   }
 
   async firmSelection (id: number) { // Not a number
-    await this.http.get(process.env.VUE_APP_BASE_URL + 'firm/' + id).then((response: { data: { id: string; name: string } }) => {
+    await this.http.get(import.meta.env.VITE_APP_BASE_URL + 'firm/' + id).then((response: { data: { id: string; name: string } }) => {
       // success
       this.closeModal()
       localStorage.setItem('firm', response.data.id)

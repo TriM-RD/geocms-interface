@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component'
+import { Component, Vue, Prop } from 'vue-facing-decorator';
 import { Manager } from '@/mechanics/listMechanic'
 import {
   ObjectTemplate,
@@ -21,23 +21,18 @@ import {
   RegionType
 } from '@cybertale/interface'
 import router from '@/router'
-import { Definitions } from '@geocms/components'
+import { Definitions } from '@/@geocms'
 
-@Options({
-  props: {
-    title: String,
-    useRoutes: Boolean
-  }
-})
+@Component
 export default class ListComponent extends Vue {
   mechanic: MechanicAbstract = new Manager.Mechanic.ListMechanic()
   renderComponent = false
   objectTemplates!: ObjectTemplate[]
   statTypeEnum = StatTypeEnum
-  title!: string
+  @Prop() title!: string
   count = 0
   countDevice = 0
-  useRoutes = false
+  @Prop() useRoutes = false
   headers: string[] = []
 
   beforeUnmount () {

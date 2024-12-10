@@ -10,7 +10,7 @@ export namespace Manager.Mechanic{
 
       // Add a conditional to include the id in the request URL when it's not '-1'.
       const requestUrl =
-        process.env.VUE_APP_BASE_URL +
+        import.meta.env.VITE_APP_BASE_URL +
         _route +
         (_id !== '-1' ? '/' + _id : '')
 

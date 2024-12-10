@@ -23,13 +23,13 @@ export namespace Manager.Mechanic{
     public async InitGet (_id: string, _route: string): Promise<ObjectTemplate[]> {
       this.id = _id
       if (this.id === '-1') {
-        const response = await http.get(process.env.VUE_APP_BASE_URL + 'form/' + _route)
+        const response = await http.get(import.meta.env.VITE_APP_BASE_URL + 'form/' + _route)
         return (this.ObjectTemplates = response.data.map((_object: any) => {
           return new ObjectTemplate(_object.Region, _object.ObjectEnum,
             _object.SubObjectEnum, _object.ActionEnum, this.reStructure(_object.Stats))
         }))
       }
-      const response = await http.get(process.env.VUE_APP_BASE_URL + _route + '/' + this.id)
+      const response = await http.get(import.meta.env.VITE_APP_BASE_URL + _route + '/' + this.id)
       if (response.data.id !== undefined) {
         await router.push({
           name: Definitions.Entity.Edit,

@@ -79,7 +79,7 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
     switch (strings[0]) {
       case 'destroy':
         if (window.confirm('Are you sure you want to delete this entity?')) {
-          http.delete(process.env.VUE_APP_BASE_URL + 'entity' + '/' + id)
+          http.delete(import.meta.env.VITE_APP_BASE_URL + 'entity' + '/' + id)
             .then((response) => {
               useToast()({
                 component: ToastComponent,
@@ -118,7 +118,7 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
           type: TYPE.INFO
         })
         if (inEdit && !(!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(id))) {
-          await http.patch(process.env.VUE_APP_BASE_URL + route + '/' + id, objectTemplates)
+          await http.patch(import.meta.env.VITE_APP_BASE_URL + route + '/' + id, objectTemplates)
             .then((response) => {
               if (response.data.id !== false) {
                 refreshPage()// TODO Most Likely not needed anymore
@@ -153,7 +153,7 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
               }
             })
         } else {
-          await http.post(process.env.VUE_APP_BASE_URL + route, objectTemplates)
+          await http.post(import.meta.env.VITE_APP_BASE_URL + route, objectTemplates)
             .then((response) => {
               if (response.data.id !== false) {
                 router.push({
@@ -192,7 +192,7 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
   protected async validateDelete (route: string, objectTemplates: ObjectTemplate[], refreshPage: () => void, id: string): Promise<ObjectTemplate[]> {
     if (window.confirm('Are you sure you want to delete this entity?')) {
       refreshPage()
-      http.delete(process.env.VUE_APP_BASE_URL + route + '/' + id)
+      http.delete(import.meta.env.VITE_APP_BASE_URL + route + '/' + id)
         .then((response) => {
           useToast()({
             component: ToastComponent,

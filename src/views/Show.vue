@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import {Component} from 'vue-facing-decorator'
+import {Component, Vue} from 'vue-facing-decorator'
 import TableComponent from '@/components/TableComponent.vue' // @ is an alias to /src
 
 @Component({
@@ -15,7 +15,7 @@ import TableComponent from '@/components/TableComponent.vue' // @ is an alias to
     TableComponent
   }
 })
-export default class Show {
+export default class Show extends Vue{
 }
 </script>
 

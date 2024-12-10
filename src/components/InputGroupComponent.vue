@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-facing-decorator'
+import {Component, Vue, Prop} from 'vue-facing-decorator'
 import { Manager } from '@/mechanics/placeholderMechanic'
 import {
   ActionTypeEnum,
@@ -40,15 +40,6 @@ import {
     ObjectTemplate () {
       return ObjectTemplate
     }
-  },
-  props: {
-    entity: Array,
-    object: ObjectTemplate,
-    index: Number,
-    pageRefresh: {
-      type: Boolean,
-      default: true
-    }
   }
 })
 export default class InputGroupComponent extends Vue {
@@ -61,11 +52,11 @@ export default class InputGroupComponent extends Vue {
   subObjectTypeEnum = SubObjectTypeEnum
   actionTypeEnum = ActionTypeEnum
   objectType = ObjectType
-  object!: ObjectTemplate
-  entity!: ObjectTemplate[]
-  index!: number
+  @Prop() object!: ObjectTemplate
+  @Prop() entity!: ObjectTemplate[]
+  @Prop() index!: number
   objectTemplates: ObjectTemplate[] = []
-  pageRefresh!: boolean
+  @Prop() pageRefresh: boolean = true
 
   get groupedObjectTemplates () : ObjectTemplate[][] {
     const groups = []

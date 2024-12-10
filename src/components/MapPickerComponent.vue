@@ -80,6 +80,9 @@ import { Definitions } from '@/@geocms';
 import { $t } from '@geocms/localization';
 import { MapFunctions } from '@campsabout/mapbox';
 
+import koversadaImage from '../assets/koversada.png';
+import koversadaBigImage from '../assets/koversadaBig.png';
+
 let campsaboutObject: any = null;
 
 @Component({
@@ -357,7 +360,7 @@ export default class MapPickerComponent extends Vue {
     if (this.map) {
       this.map.addSource('my-source', {
         type: 'image',
-        url: require('../assets/koversada.png'),
+        url: koversadaImage,
         coordinates: [
           [13.610872533, 45.136310612],
           [13.617992154, 45.136625937],
@@ -378,7 +381,7 @@ export default class MapPickerComponent extends Vue {
 
       this.map.addSource('mapbox-tileset', {
         type: 'image',
-        url: require('../assets/koversadaBig.png'),
+        url: koversadaBigImage,
         coordinates: [
           [13.59431264, 45.14664839],
           [13.62086774, 45.14728560],

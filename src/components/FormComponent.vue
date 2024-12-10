@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component'
+import { Component, Vue } from 'vue-facing-decorator';
 import { Manager } from '@/mechanics/formMechanic'
 import {
   ObjectTemplate,
@@ -21,8 +21,8 @@ import {
 } from '@cybertale/interface'
 import Loading from 'vue-loading-overlay'
 import router from '@/router'
-import { Definitions } from '@geocms/components'
-@Options({
+import { Definitions } from '@/@geocms'
+@Component({
   components: {
     Loading
   }

@@ -221,7 +221,7 @@ export default class PermissionTreeComponent extends Vue {
     console.log(this.newDatabaseData) */
     // sending to  backend  newDatabaseData
     // edit old
-    http.post(process.env.VUE_APP_BASE_URL + 'editAll/permission', this.databaseData)
+    http.post(import.meta.env.VITE_APP_BASE_URL + 'editAll/permission', this.databaseData)
       .then(response => {
         console.log(response)
         if (response.status === 200) {
@@ -238,7 +238,7 @@ export default class PermissionTreeComponent extends Vue {
     await new Promise(resolve => setTimeout(resolve, 500))
 
     // saving new data
-    http.post(process.env.VUE_APP_BASE_URL + 'permission', this.newDatabaseData)
+    http.post(import.meta.env.VITE_APP_BASE_URL + 'permission', this.newDatabaseData)
       .then(response => {
         console.log(response)
         if (response.status === 200) {
@@ -315,7 +315,7 @@ export default class PermissionTreeComponent extends Vue {
   async deleteData () {
     console.log('Deletion')
     console.log(this.deleteCheckData)
-    const deleteTest = await http.post(process.env.VUE_APP_BASE_URL + 'delete/permission', this.deleteCheckData.permission)
+    const deleteTest = await http.post(import.meta.env.VITE_APP_BASE_URL + 'delete/permission', this.deleteCheckData.permission)
       .then(response => {
         console.log(response)
         if (response.status === 200) {
@@ -355,7 +355,7 @@ export default class PermissionTreeComponent extends Vue {
     console.log(this.databaseData)
     this.startPreorder()
     this.updateOldData(this.permissionsTreeData)
-    http.post(process.env.VUE_APP_BASE_URL + 'editAll/permission', this.databaseData)
+    http.post(import.meta.env.VITE_APP_BASE_URL + 'editAll/permission', this.databaseData)
       .then(response => console.log(response))
   }
 
@@ -367,7 +367,7 @@ export default class PermissionTreeComponent extends Vue {
     }
     //
     this.deleteCheckData = data
-    const deleteResponse = await http.post(process.env.VUE_APP_BASE_URL + 'deleteCheck/permission', data.permission)
+    const deleteResponse = await http.post(import.meta.env.VITE_APP_BASE_URL + 'deleteCheck/permission', data.permission)
       .then(response => { return response.data })
       .catch((error) => console.log(error))
 
@@ -404,7 +404,7 @@ export default class PermissionTreeComponent extends Vue {
 
   async start () : Promise<void> {
     console.log(localStorage.getItem('firm'))
-    const response = await http.get(process.env.VUE_APP_BASE_URL + 'permission')
+    const response = await http.get(import.meta.env.VITE_APP_BASE_URL + 'permission')
     if (this.permissionsTreeData.children.length > 0) {
       this.permissionsTreeData.children.splice(0)
     }

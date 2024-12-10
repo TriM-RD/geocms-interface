@@ -2,7 +2,7 @@
   <nav class="navbar navbar-light bg-light static-top">
     <div class="container">
       <a class="navbar-brand" href="/public">
-        <img :src="require('../assets/LogoTriM.png')" alt="Logo" width="85" class="d-inline-block align-text-top">
+        <img :src="LogoTriM" alt="Logo" width="85" class="d-inline-block align-text-top">
       </a>
       <div class="dropdown">
         <button class="btn btn-sm dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -11,11 +11,11 @@
         </button>
         <div class="dropdown-menu bg-light" aria-labelledby="languageDropdown">
           <button class="dropdown-item" @click="changeLanguage('en')">
-            <img :src="require('../assets/lang/en.svg')" alt="English" width="30" class="img-fluid" />
+            <img :src="langEn" alt="English" width="30" class="img-fluid" />
             {{ $t.english }}
           </button>
           <button class="dropdown-item" @click="changeLanguage('hr')">
-            <img :src="require('../assets/lang/hr.svg')" alt="Croatian" width="30" class="img-fluid" />
+            <img :src="langHr" alt="Croatian" width="30" class="img-fluid" />
             {{ $t.croatian }}
           </button>
         </div>
@@ -102,12 +102,12 @@
         </div>
         <div class="col-lg-1 order-md-3"></div>
         <div class="col-lg-6 order-md-4 order-1 text-white showcase-img">
-          <img class="img-fluid" :src="require('../assets/smartCity_2.jpg')" alt="..." />
+          <img class="img-fluid" :src="smartCity" alt="..." />
         </div>
       </div>
       <div class="row g-0">
         <div class="col-lg-6 order-1 text-white showcase-img">
-          <img class="img-fluid" :src="require('../assets/smartCamp_1.jpg')" alt="..." />
+          <img class="img-fluid" :src="smartCamp" alt="..." />
         </div>
         <div class="col-lg-1 order-md-2"></div>
         <div class="col-lg-3 order-md-3 order-2 my-auto showcase-text oval-shape deep-sea-blue-bg">
@@ -124,7 +124,7 @@
         </div>
         <div class="col-lg-1 order-md-3"></div>
         <div class="col-lg-6 order-md-last order-md-4 order-1 text-white showcase-img">
-          <img class="img-fluid" :src="require('../assets/smartInfrastructure_3.png')" alt="..." />
+          <img class="img-fluid" :src="smartInfrastructure" alt="..." />
         </div>
       </div>
     </div>
@@ -136,7 +136,7 @@
       <div class="row">
         <div class="col-lg-4">
           <div class="mx-auto mb-5 mb-lg-0">
-            <img class="img-fluid mb-3" :src="require('../assets/gradUmag.png')" alt="Grad Umag" />
+            <img class="img-fluid mb-3" :src="gradUmag" alt="Grad Umag" />
             <h5>Grad Umag</h5>
             <p class="font-weight-light mb-0">"{{
                 $t.efficientlyManagingCityLights
@@ -267,6 +267,16 @@ import {
   RegionEnum
 } from '@cybertale/interface'
 import { $t, Translations } from '@geocms/localization'
+// In the script section, update/add these imports
+import LogoTriM from '../assets/LogoTriM.png';
+import langEn from '../assets/lang/en.svg';
+import langHr from '../assets/lang/hr.svg';
+import smartCity from '../assets/smartCity_2.jpg';
+import smartCamp from '../assets/smartCamp_1.jpg';
+import smartInfrastructure from '../assets/smartInfrastructure_3.png';
+import gradUmag from '../assets/gradUmag.png';
+import { useStoreMain } from '@/stores/storeMain'
+
 interface CodeChallengePair {
   codeVerifier: string;
   codeChallenge: string;
@@ -284,13 +294,20 @@ export default class WelcomeComponent extends Vue {
   @Inject() router: any;
   @Inject() updateHeaders: any;
   @Prop() object!: ObjectTemplate
-  selectedImage = require(`../assets/lang/${localStorage.getItem('lang') || 'en'}.svg`)
+  selectedImage = localStorage.getItem('lang') === 'hr' ? langHr : langEn;
   statTypeEnum = StatTypeEnum
   objectTypeEnum = ObjectTypeEnum
   objectType = ObjectType
   regionType = RegionType
   regionEnum = RegionEnum
   $t = $t
+  langEn = langEn
+  langHr = langHr
+  LogoTriM = LogoTriM;
+  smartCity = smartCity;
+  smartCamp = smartCamp;
+  smartInfrastructure = smartInfrastructure;
+  gradUmag = gradUmag;
 
   async created (): Promise<void> {
     // Generate code verifier and code challenge
@@ -299,33 +316,40 @@ export default class WelcomeComponent extends Vue {
 
     // Save clientId and codeVerifier to the Vuex store
     this.generateCodeChallengePair().then((codeChallengePair) => {
-      this.$store.commit('setCodeVerifier', codeChallengePair.codeVerifier)
-      this.$store.commit('setCodeChallenge', codeChallengePair.codeChallenge)
+      useStoreMain().setCodeVerifier(codeChallengePair.codeVerifier)
+      useStoreMain().setCodeChallenge(codeChallengePair.codeChallenge)
     })
-    this.$store.commit('setClientId', process.env.VUE_APP_CLIENT_ID)
-    this.$store.commit('setNonce', nonce)
+    useStoreMain().setClientId(import.meta.env.VITE_APP_CLIENT_ID)
+    useStoreMain().setNonce(nonce)
   }
 
   async changeLanguage (lang: keyof Translations): Promise<void> {
+    // Store the language preference
     localStorage.setItem('lang', lang)
+
+    // Update headers
     this.updateHeaders()
+
+    // Update the selected image based on language
+    this.selectedImage = lang === 'hr' ? langHr : langEn
+
+    // Redirect to home page
     window.location.href = window.location.origin
-    this.selectedImage = require(`../assets/lang/${lang}.svg`)
   }
 
   login (): void {
-    const clientId = this.$store.state.clientId
-    const redirectUri = process.env.VUE_APP_URL + 'oauth/callback'
-    const codeChallenge = this.$store.state.codeChallenge
-    const verifier = this.$store.state.codeVerifier
-    const nonce = this.$store.state.nonce // Add state parameter
+    const clientId = useStoreMain().clientId
+    const redirectUri = import.meta.env.VITE_APP_URL + 'oauth/callback'
+    const codeChallenge = useStoreMain().codeChallenge
+    const verifier = useStoreMain().codeVerifier
+    const nonce = useStoreMain().nonce // Add state parameter
     const query = `client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&code_challenge=${codeChallenge}&verifier=${verifier}&code_challenge_method=S256&state=${nonce}` // Add state parameter to the query string
-    // console.log(process.env.VUE_APP_URL + 'oauth/authorize?' + query)
-    window.location.href = process.env.VUE_APP_URL + 'oauth/redirect?' + query
+    // console.log(process.env.VITE_APP_URL + 'oauth/authorize?' + query)
+    window.location.href = import.meta.env.VITE_APP_URL + 'oauth/redirect?' + query
   }
 
   redirectToRegistration () : void {
-    const registrationUrl = process.env.VUE_APP_URL + 'register'
+    const registrationUrl = import.meta.env.VITE_APP_URL + 'register'
     window.open(registrationUrl, '_blank')
   }
 

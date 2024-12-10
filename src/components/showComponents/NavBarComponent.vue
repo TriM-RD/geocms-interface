@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">
-        <img src="../../assets/LogoTriM.png" alt="Logo" width="90" class="d-inline-block align-text-top">
+        <img src="@/assets/LogoTriM.png" alt="Logo" width="90" class="d-inline-block align-text-top">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -83,7 +83,12 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import { $t } from '@geocms/localization'
 import {useStoreMain} from "@/stores/storeMain";
 @Component({
-  components: { Datepicker }
+  components: { Datepicker },
+  computed: {
+    $t () {
+      return $t
+    }
+  }
 })
 export default class NavBarComponent extends Vue {
   statTypeEnum = StatTypeEnum
@@ -93,11 +98,7 @@ export default class NavBarComponent extends Vue {
   regionEnum = RegionEnum
   @Prop() object!: ObjectTemplate
   storeMain = useStoreMain()
-
-  get $t () {
-    // console.log($t.logOut)
-    return 'test'
-  }
+  $t = $t
 
   @Watch('$route')
   onDataChanged (value: any, oldValue: string) {
@@ -108,7 +109,7 @@ export default class NavBarComponent extends Vue {
   }
 
   async logout () : Promise<void> {
-    await http.get(process.env.VUE_APP_BASE_URL + 'user/logout').then(response => {
+    await http.get(import.meta.env.VITE_APP_BASE_URL + 'user/logout').then(response => {
       // success
       window.location.href = window.location.origin
     }, response => {

@@ -33,6 +33,10 @@ export default class FieldComponent extends Vue {
   ObjectTypeEnum = ObjectTypeEnum
   RegionEnum = RegionEnum
 
+  mounted () {
+    alert('test')
+  }
+
   // Computed properties
   get computedValue(): string {
     if (this.isLabelDisabled) {

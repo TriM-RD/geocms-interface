@@ -11,8 +11,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { Component, Provide } from 'vue-facing-decorator';
+import { Component, Provide, Vue } from 'vue-facing-decorator';
 import { MapComponent, WelcomeComponent, FirmSelectionComponent, Definitions } from '@/@geocms';
 import http, { updateHeaders } from '@/http-common';
 import { $t } from '@geocms/localization';

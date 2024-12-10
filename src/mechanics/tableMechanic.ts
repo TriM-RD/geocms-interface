@@ -31,7 +31,7 @@ export namespace Manager.Mechanic{
         if (this.page > 0) { this.loadNextPage() }
         this.page++
         this.ObjectTemplates = []
-        let url = `${process.env.VUE_APP_BASE_URL + query.api}?page=${this.page}&order=${query.order}`
+        let url = `${import.meta.env.VITE_APP_BASE_URL + query.api}?page=${this.page}&order=${query.order}`
         for (const filter in query.filters) {
           url += `&${filter}=${query.filters[filter]}`
         }
@@ -48,7 +48,7 @@ export namespace Manager.Mechanic{
         if (this.page > 0) { this.loadNextPage() }
         this.page++
         this.ObjectTemplates = []
-        const response = await http.get(`${process.env.VUE_APP_BASE_URL + _api}?page=${this.page}&order=asc`)
+        const response = await http.get(`${import.meta.env.VITE_APP_BASE_URL + _api}?page=${this.page}&order=asc`)
         if (Object.keys(response.data).length !== 0) {
           this.ObjectTemplates = await this.forEachElement(response.data)
           return this.ObjectTemplates

@@ -1,5 +1,4 @@
 <template>
-  <div>test</div>
   <div class="d-flex flex-column vh-100">
     <div v-if="(storeMain.requiresAuth === 2 || storeMain.requiresAuth === 3)">
       <NavBarComponent />
@@ -82,6 +81,16 @@ export default class App extends Vue {
   }
 }
 </script>
+
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+</style>
 
 <style scoped>
 .iframeModal,

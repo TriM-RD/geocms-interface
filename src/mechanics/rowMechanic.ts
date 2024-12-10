@@ -12,7 +12,7 @@ export namespace Manager.Mechanic{
   export class RowMechanic extends MechanicAbstract {
     public async InitGet (_id: string): Promise<ObjectTemplate[]> {
       this.ObjectTemplates = []
-      const response = await http.get(process.env.VUE_APP_BASE_URL)
+      const response = await http.get(import.meta.env.VITE_APP_BASE_URL)
       return (this.ObjectTemplates = this.forEachElement(response.data))
     }
 

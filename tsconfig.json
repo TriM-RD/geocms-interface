@@ -10,10 +10,12 @@
       "@/*": ["src/*"]
     },
     "skipLibCheck": true, // Skip type checking of declaration files
-    "moduleResolution": "NodeNext"
+    "moduleResolution": "NodeNext",
+    "types": ["vite/client"]
   },
   "include": [
     "src/**/*.ts",
+    "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",

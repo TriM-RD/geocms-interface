@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import Loading from 'vue-loading-overlay'
-import { Options, Vue } from 'vue-class-component'
+import { Component, Vue } from 'vue-facing-decorator';
 import { Manager } from '@/mechanics/tableMechanic'
 import {
   ObjectTemplate,
@@ -50,9 +50,9 @@ import {
 import router from '@/router'
 import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
-import { Definitions } from '@geocms/components'
+import { Definitions } from '@/@geocms'
 import { $t } from '@geocms/localization'
-@Options({
+@Component({
   computed: {
     $t () {
       return $t

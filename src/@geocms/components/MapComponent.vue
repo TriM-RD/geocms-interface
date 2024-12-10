@@ -70,6 +70,16 @@ import Loading from 'vue-loading-overlay'
 import { Modal } from 'bootstrap'
 import { $t } from '@geocms/localization'
 
+import icoLamp from '@/@geocms/assets/map_files/ico-lamp.svg';
+import icoSro from '@/@geocms/assets/map_files/ico-sro.svg';
+import icoSsro from '@/@geocms/assets/map_files/ico-ssro.svg';
+import strujaIdle from '@/@geocms/assets/map_files/struja-idle.svg';
+import icoSwitch from '@/@geocms/assets/map_files/ico-switch.svg';
+import icoActive from '@/@geocms/assets/map_files/ico-active.svg';
+/*import strujaOn from '@/@geocms/assets/map_files/struja-on.svg';
+import strujaOff from '@/@geocms/assets/map_files/struja-off.svg';
+import strujaWarning from '@/@geocms/assets/map_files/struja-warning.svg';*/
+
 interface IconTypesLabels {
   [key: string]: string;
 }
@@ -131,14 +141,26 @@ export default class MapComponent extends Vue {
     'struja-idle': 'NCV'
   }
 
+  iconImages: { [key: string]: string } = {
+    'ico-lamp': icoLamp,
+    'ico-sro': icoSro,
+    'ico-ssro': icoSsro,
+    'struja-idle': strujaIdle,
+    'ico-switch': icoSwitch,
+    'ico-active': icoActive,
+   /*'struja-on': strujaOn,
+    'struja-off': strujaOff,
+    'struja-warning': strujaWarning,*/
+  };
+
   isSatelliteView = true
 
   entityCode = ''
   error = false
   strujaFeatureIds: string[] = []
 
-  getIconPath (iconType: string) {
-    return require('../assets/map_files/' + iconType + '.svg')
+  getIconPath(iconType: string) {
+    return this.iconImages[iconType] || '';
   }
 
   created () {
@@ -328,14 +350,14 @@ export default class MapComponent extends Vue {
   }
 
   async test (): Promise<void> {
-    const response = await this.http.get(process.env.VUE_APP_BASE_URL + 'map')
+    const response = await this.http.get(import.meta.env.VITE_APP_BASE_URL + 'map')
     this.entities = response.data.data
     this.generateMap()
   }
 
   async updateMapData (id: string) {
     if (this.checkedIconTypes.includes('ico-lamp')) {
-      const response = await this.http.get(process.env.VUE_APP_BASE_URL + 'maprelation/' + id)
+      const response = await this.http.get(import.meta.env.VITE_APP_BASE_URL + 'maprelation/' + id)
       this.relData = response.data
       // Update the arrows with the relationship data
       await this.connectUnclusteredPoints(this.relData)

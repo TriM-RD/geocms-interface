@@ -14,7 +14,7 @@ export class ModalHandler extends HandlerAbstract {
       case SubObjectTypeEnum.Middle:
         this.removeElementFromArray(wrapper.objectTemplates, TagHelpers.CyberTags.group)
         wrapper.refreshPage()
-        wrapper.objectTemplates = wrapper.append((await http.get(process.env.VUE_APP_BASE_URL + 'form/entity_modal/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
+        wrapper.objectTemplates = wrapper.append((await http.get(import.meta.env.VITE_APP_BASE_URL + 'form/entity_modal/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
         wrapper.refreshPage()
         break
       default:
@@ -32,7 +32,7 @@ export class ModalHandler extends HandlerAbstract {
       if (!(form as HTMLFormElement).checkValidity()) {
         form.classList.add('was-validated')
       } else {
-        await http.post(process.env.VUE_APP_BASE_URL + route, objectTemplates)
+        await http.post(import.meta.env.VITE_APP_BASE_URL + route, objectTemplates)
           .then((response) => {
             if (response.data.id !== false) {
               if (temp !== null) {
