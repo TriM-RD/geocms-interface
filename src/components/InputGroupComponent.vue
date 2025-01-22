@@ -6,12 +6,14 @@
         {{ object.Stats[statTypeEnum.Label].Data }}
       </button>
     </div>
-    <div v-else class="row justify-content-md-center w-100">
-      <div class="col-12">
+    <div v-else class="mb-3 row justify-content-md-center w-100">
+      <div class="col-lg"></div>
+      <div class="col">
         <div class="input-group" v-for="(group, index) in groupedObjectTemplates" :key="`${index}-${Math.random().toString(36).slice(2, 7)}`">
           <component v-for="(_objectTemplate, key) in group" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :object="_objectTemplate" :key="`${key}-${Math.random().toString(36).slice(2, 7)}`"></component>
         </div>
       </div>
+      <div class="col-lg"></div>
     </div>
   </div>
 </template>
