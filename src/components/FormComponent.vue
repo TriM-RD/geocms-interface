@@ -114,10 +114,12 @@ export default class FormComponent extends Vue {
         this.objectTemplates = this.mechanic.InitSet(this.extractChildren(this.entity))
         break
       case Definitions.Attribute.Add:
-        this.objectTemplates = await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'attribute?group=' + router.currentRoute.value.params.parentId.toString())
+        this.entity = await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'attribute?group=' + router.currentRoute.value.params.parentId.toString())
+        this.objectTemplates = this.mechanic.InitSet(this.extractChildren(this.entity))
         break
       case Definitions.Attribute.Edit:
-        this.objectTemplates = await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'attribute')
+        this.entity = await this.mechanic.InitGet(router.currentRoute.value.params.id === undefined ? '-1' : String(router.currentRoute.value.params.id), 'attribute')
+        this.objectTemplates = this.mechanic.InitSet(this.extractChildren(this.entity))
         break
       case Definitions.Administration.Add:
       case Definitions.Administration.Edit:
