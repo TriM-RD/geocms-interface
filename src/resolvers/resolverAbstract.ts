@@ -222,7 +222,6 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
   }
 
   protected addObjectTemplateInputGroup (wrapper: WrapperAbstract) : WrapperAbstract {
-    wrapper.refreshPage()
     wrapper.eventHandler.payload = this.getObjectTemplateFromObject(wrapper.eventHandler.payload)
     wrapper.eventHandler.payload.Stats[StatTypeEnum.ElementType].Data = ''
     let i = 0

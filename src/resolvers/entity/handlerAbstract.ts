@@ -27,7 +27,6 @@ export abstract class HandlerAbstract extends ResolverAbstract {
       case SubObjectTypeEnum.Middle:
         this.removeElementFromArray(wrapper.objectTemplates, TagHelpers.CyberTags.group)
         wrapper = this.updateValueData(wrapper)
-        wrapper.refreshPage()
         wrapper.objectTemplates = wrapper.append((await http.get(import.meta.env.VITE_APP_BASE_URL + 'form/entity/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
         wrapper.refreshPage()
         break
@@ -58,7 +57,6 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         })
         break
       case SubObjectTypeEnum.Up:
-        wrapper.refreshPage()
         // eslint-disable-next-line no-case-declarations
         const oldTag = wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data
         for (const row of wrapper.objectTemplates) {
@@ -77,7 +75,6 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         wrapper.refreshPage()
         break
       case SubObjectTypeEnum.Down:
-        wrapper.refreshPage()
         wrapper.objectTemplates = this.resolveButtonDown(wrapper.eventHandler, wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data.split('|'), wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
         wrapper.refreshPage()
         break

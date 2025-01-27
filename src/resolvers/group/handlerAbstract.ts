@@ -23,7 +23,6 @@ export abstract class HandlerAbstract extends ResolverAbstract {
     switch (wrapper.eventHandler.subObjectType) {
       case SubObjectTypeEnum.Middle:
         wrapper = this.updateValueData(wrapper)
-        wrapper.refreshPage()
         this.removeElementFromArray(wrapper.objectTemplates, TagHelpers.CyberTags.groupType)
         wrapper.objectTemplates = this.append(wrapper, (await http.get(import.meta.env.VITE_APP_BASE_URL + 'form/group/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
         wrapper.refreshPage()
@@ -64,7 +63,6 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         })
         break
       case SubObjectTypeEnum.Down:
-        wrapper.refreshPage()
         this.resolveButtonDown(wrapper.eventHandler, wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data.split('|'), wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
         wrapper.refreshPage()
         break

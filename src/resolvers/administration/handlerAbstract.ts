@@ -24,7 +24,6 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         await this.validateForm('user', Definitions.Administration.Edit, wrapper.objectTemplates, wrapper.refreshPage, wrapper.append, wrapper.id, wrapper.inEdit, wrapper.eventHandler.payload)
         break
       case SubObjectTypeEnum.Middle:
-        wrapper.refreshPage()
         this.addObjectTemplateInputGroup(wrapper)
         wrapper.refreshPage()
         break
@@ -34,7 +33,6 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         })
         break
       case SubObjectTypeEnum.Down:
-        wrapper.refreshPage()
         this.resolveButtonDown(wrapper.eventHandler, wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data.split('|'), wrapper.objectTemplates, wrapper.refreshPage, wrapper.id)
         wrapper.refreshPage()
         break

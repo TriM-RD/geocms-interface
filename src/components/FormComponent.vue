@@ -2,8 +2,8 @@
   <Loading v-model:active="renderComponent"
            :can-cancel="false"
            :is-full-page="false"/>
-  <form v-if="!reRenderToo" :key="componentKey" class="needs-validation" id="classic-form" novalidate>
-    <component :rerender="changeRender" :page-refresh="renderComponent"  v-for="(_objectTemplate, key, index) in objectTemplates" :key="`${ key }-${ index }-${ _objectTemplate.Stats[statTypeEnum.Tag].Data }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :entity='resolveEntities(_objectTemplate)' :object='_objectTemplate'> </component>
+  <form class="needs-validation" id="classic-form" novalidate :key="key">
+    <component v-for="(_objectTemplate) in objectTemplates" :key="`${ _objectTemplate.Stats[statTypeEnum.Tag].Data }`" :is="getComponent(_objectTemplate.Region, _objectTemplate.ObjectEnum)" :entity='resolveEntities(_objectTemplate)' :object='_objectTemplate'> </component>
   </form>
 </template>
 
@@ -28,10 +28,10 @@ import { Definitions } from '@/@geocms'
   }
 })
 export default class FormComponent extends Vue {
-  msg!: string
+  key: PropertyKey | undefined = 0
   mechanic: MechanicAbstract = new Manager.Mechanic.FormMechanic(this.reRender.bind(this))
   renderComponent= true
-  objectTemplates!: ObjectTemplate[]
+  objectTemplates: ObjectTemplate[] = []
   statTypeEnum = StatTypeEnum
   belongsTo: { [key: string]: ObjectTemplate[] } = {}
   entity!: ObjectTemplate[]
@@ -128,24 +128,11 @@ export default class FormComponent extends Vue {
     this.renderComponent = false
   }
 
-  get reRenderToo () : boolean {
+  reRender (): void {
     if (this.objectTemplates !== undefined) {
       this.objectTemplates = this.extractChildren(this.objectTemplates)
     }
-    this.componentKey = !this.componentKey
-    return this.renderComponent
-  }
-
-  reRender (): void {
-    this.renderComponent = !this.renderComponent
-  }
-
-  changeRender (): void {
-    this.renderComponent = !this.renderComponent
-    this.mechanic.UnsubscribeConditions()
-    this.objectTemplates = []
-    this.mechanic = new Manager.Mechanic.FormMechanic(this.reRender.bind(this))
-    this.Init()
+    this.key = Date.now();
   }
 
   getComponent (_regionEnum : number, _objectEnum: number) {

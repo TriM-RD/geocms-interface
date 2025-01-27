@@ -13,7 +13,6 @@ export class ModalHandler extends HandlerAbstract {
     switch (wrapper.eventHandler.subObjectType) {
       case SubObjectTypeEnum.Middle:
         this.removeElementFromArray(wrapper.objectTemplates, TagHelpers.CyberTags.group)
-        wrapper.refreshPage()
         wrapper.objectTemplates = wrapper.append((await http.get(import.meta.env.VITE_APP_BASE_URL + 'form/entity_modal/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data)).data)
         wrapper.refreshPage()
         break
