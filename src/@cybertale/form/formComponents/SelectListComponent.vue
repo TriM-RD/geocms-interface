@@ -1,5 +1,6 @@
 <template>
   <select class="form-select" aria-label="Default select example"
+          :hidden="(getValue(statTypeEnum.ElementType) === 'hidden')"
           :class="validate()"
           :required="attributeCheck(statTypeEnum.Required)"
           :disabled="attributeCheck(statTypeEnum.Disabled)"
@@ -12,8 +13,9 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-facing-decorator'
-import { ObjectTemplate, ObjectType, StatTypeEnum, ObjectTypeEnum, RegionType, RegionEnum } from '@cybertale/interface'
+import {Component, Prop, Vue} from 'vue-facing-decorator'
+import {ObjectTemplate, ObjectType, ObjectTypeEnum, RegionEnum, RegionType, StatTypeEnum} from '@cybertale/interface'
+
 @Component({
   computed: {
     ObjectTemplate() {
@@ -46,6 +48,43 @@ export default class SelectListComponent extends Vue {
       return this.object.Stats[tag].Data
     }
     return ''
+  }
+
+  getStatData(statType: StatTypeEnum, returnType: 'boolean' | 'string' = 'string'): boolean | string {
+    try {
+      const data = this.object.Stats[statType]?.Data ?? ''
+      return returnType === 'boolean' ? !!data : data
+    } catch (error) {
+      return returnType === 'boolean' ? false : ''
+    }
+  }
+
+  statIsDefined (statType: StatTypeEnum): boolean {
+    return !!this.object.Stats[statType]
+  }
+
+  isJSON(str: string): boolean {
+    try {
+      return Array.isArray(JSON.parse(str))
+    } catch {
+      return false
+    }
+  }
+
+  getValue( statEnum: StatTypeEnum, indexStatTypeEnum = StatTypeEnum.Option): string {
+    const tempData:string = this.getStatData(statEnum) as string
+    if (!tempData) return '';
+    if (this.statIsDefined(indexStatTypeEnum) && this.isJSON(tempData)) {
+      const data = JSON.parse(tempData);
+      const optionData = this.getStatData(indexStatTypeEnum) as string
+      if(this.isJSON(optionData)){
+        const parsedOptionData = JSON.parse(optionData)[Number(this.object.Stats[StatTypeEnum.OptionIndices].Data)]
+        return data[Number(parsedOptionData)] || '';
+      }
+      return data[Number(this.getStatData(indexStatTypeEnum))] || '';
+    }
+
+    return tempData;
   }
 
   attributeCheck (statType : number) : boolean | string {

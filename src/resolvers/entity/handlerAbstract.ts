@@ -38,6 +38,7 @@ export abstract class HandlerAbstract extends ResolverAbstract {
   }
 
   public async FormButton (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
+    console.log(wrapper)
     let rowCount = 0
     let rowsExist = false
     switch (wrapper.eventHandler.subObjectType) {
@@ -115,6 +116,12 @@ export abstract class HandlerAbstract extends ResolverAbstract {
         }
         break
       case TagHelpers.CyberTags.add + TagHelpers.CyberTags.division:
+        this.addObjectTemplateInputGroup(wrapper)
+        break
+      case 'InformationItemcampsaboutCommonItem':
+        this.addObjectTemplateInputGroup(wrapper)
+        break
+      case 'AmenitiesItemcampsaboutCommonItem':
         this.addObjectTemplateInputGroup(wrapper)
         break
     }
