@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="returnIfExists(statTypeEnum.ElementType) === 'button'" class="mb-3 row justify-content-md-center">
+    <div v-if="returnIfExists(statTypeEnum.ElementType) === 'button'" class="mb-3 container row justify-content-md-center">
       <button data-bs-toggle="tooltip" data-bs-placement="top" :class="object.Stats[statTypeEnum.Design].Data" @click.prevent="regionType.RegionTypes[object.Region].ObjectTypes[objectTypeEnum.Button].ChooseSubType(JSON.parse(JSON.stringify(objectCopy(object as ObjectTemplate))) as ObjectTemplate)">
         {{ object.Stats[statTypeEnum.Label].Data }}
       </button>

@@ -6,7 +6,7 @@
           :disabled="attributeCheck(statTypeEnum.Disabled)"
           :autocomplete="returnIfExists(statTypeEnum.AutoComplete)"
           @input="regionType.RegionTypes[object.Region].ObjectTypes[object.ObjectEnum].ChooseSubType(object as ObjectTemplate, $event.target.value)">
-    <option value="" :selected="object.Stats[statTypeEnum.Value] === undefined" hidden>Select a type.</option>
+    <option value="" :selected="computedValue" hidden>Select a type.</option>
     <option v-for="(item, key, index) in JSON.parse(object.Stats[statTypeEnum.ItemList].Data)" :selected="check(item.id)" :key="`${ key }-${ index }`" :value="item.id">{{item.name}}</option>
   </select>
   <div class="invalid-feedback order-1">{{ returnIfExists(statTypeEnum.ErrorMessage) }}</div>
@@ -31,6 +31,10 @@ export default class SelectListComponent extends Vue {
   regionEnum = RegionEnum
   @Prop() object!: ObjectTemplate
   renderComponent= true
+
+  get computedValue(): boolean {
+    return this.getStatData(StatTypeEnum.Value, 'boolean') as boolean
+  }
 
   validate () : string {
     if (this.object.Stats[this.statTypeEnum.IsValid] === undefined) { return '' }
@@ -94,8 +98,7 @@ export default class SelectListComponent extends Vue {
   }
 
   check (id : string) {
-    if (this.object.Stats[this.statTypeEnum.Value] === undefined || id === undefined) { return false }
-    return this.object.Stats[this.statTypeEnum.Value].Data === id.toString()
+    return this.getValue(StatTypeEnum.Value, StatTypeEnum.ValueIndices) === id.toString()
   }
 
   specialCase () {
