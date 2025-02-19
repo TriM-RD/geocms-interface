@@ -120,6 +120,12 @@ export abstract class HandlerAbstract extends ResolverAbstract {
       case TagHelpers.CyberTags.add + TagHelpers.CyberTags.division:
         this.addObjectTemplateInputGroup(wrapper)
         break
+      case 'InformationItemcampsaboutCommonItem':
+        this.addObjectTemplateInputGroup(wrapper)
+        break
+      case 'AmenitiesItemcampsaboutCommonItem':
+        this.addObjectTemplateInputGroup(wrapper)
+        break
     }
     return wrapper
   }
