@@ -56,7 +56,8 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
   }
 
   public async FormDataList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
-    const matchingIndex = wrapper.objectTemplates.findIndex(element => element.Stats[StatTypeEnum.Tag].Data === wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+    console.log(wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+    const matchingIndex = this.getObjectTemplateIndex(wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data, wrapper.objectTemplates)
     if (this.isJSON(wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data)) {
       const stat = JSON.parse(wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data)
       stat[wrapper.eventHandler.payload.Stats[StatTypeEnum.ValueIndices].Data] = wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data.id
