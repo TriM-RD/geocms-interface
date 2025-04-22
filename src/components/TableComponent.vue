@@ -133,7 +133,7 @@ export default class TableComponent extends Vue {
   filters = { code: '', group: '', division: '' }
   onScroll: ((this: Window, ev: Event) => any) | null = null
   debounceTimer: number | null = null
-
+  noMoreRecords = false
   csvFile: File | null = null
 
   onSearchInput (): void {
@@ -253,6 +253,7 @@ export default class TableComponent extends Vue {
   mounted () {
     if (router.currentRoute.value.name === Definitions.Entity.Def) {
       this.onScroll = async () => {
+        if (this.noMoreRecords) return
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop
         const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
         // Check if isLoading is false and user is at the bottom of the page
@@ -336,6 +337,7 @@ export default class TableComponent extends Vue {
 
   async Init () {
     if (this.isInitRunning) { return }
+    this.noMoreRecords = false
     this.isInitRunning = true
     switch (router.currentRoute.value.name) {
       case Definitions.Entity.Def:
@@ -361,9 +363,10 @@ export default class TableComponent extends Vue {
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'users'))
         break
     }
-    if (this.objectTemplates.length === 0) {
+    if (this.objectTemplates.length === 0 && this.currentPage < 2) {
       // no results: clear out the rows and reset all loading flags
-      this.entities = []
+      // this.entities = []
+      this.noMoreRecords = true
       this.renderComponent = false
       this.loadingComponents = false
       this.isInitRunning = false

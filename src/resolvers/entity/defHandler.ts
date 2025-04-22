@@ -1,6 +1,6 @@
 import { HandlerAbstract } from './handlerAbstract'
 import {
-  ObjectTemplate,
+  ObjectTemplate, StatTypeEnum,
   SubObjectTypeEnum
 } from '@cybertale/interface'
 import { Definitions } from '@/definitions/appDefinitions'
@@ -20,10 +20,7 @@ export class DefHandler extends HandlerAbstract {
         })
         break
       case SubObjectTypeEnum.Right: // Pregledaj
-        await router.push({
-          name: Definitions.Entity.Edit,
-          params: { id: wrapper.id }
-        })
+        window.open('https://campsabout.com/map/' + wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data, '_blank')
         break
       default:
         break
