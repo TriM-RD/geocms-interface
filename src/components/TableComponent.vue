@@ -2,10 +2,43 @@
   <div class="my-4" v-if="checkRoute()">
     <div class="row">
       <div class="col-12 col-sm-9 d-flex justify-content-between align-items-center">
-        <div></div> <!-- Empty div for alignment with first column -->
-        <input @change="handleFilterChange" v-model="filters.code" type="search" class="form-control flex-fill me-3" id="codeFilter" :placeholder="$t.filterByCode">
-        <input @change="handleFilterChange" v-model="filters.division" type="search" class="form-control flex-fill me-3" id="divisionFilter" :placeholder="$t.filterByDivision">
-        <input @change="handleFilterChange" v-model="filters.group" type="search" class="form-control flex-fill me-3" id="groupFilter" :placeholder="$t.filterByGroup">
+        <!-- CODE FILTER -->
+        <input
+          id="codeFilter"
+          type="search"
+          class="form-control flex-fill me-3"
+          v-model.trim="filters.code"
+          @input="onSearchInput"
+          @search="onSearchInput"
+          :placeholder="$t.filterByCode"
+          aria-label="Search by code or name"
+        />
+
+        <!-- DIVISION FILTER -->
+        <input
+          id="divisionFilter"
+          type="search"
+          class="form-control flex-fill me-3"
+          v-model.trim="filters.division"
+          @input="onSearchInput"
+          @search="onSearchInput"
+          :placeholder="$t.filterByDivision"
+          aria-label="Filter by division"
+        />
+
+        <!-- GROUP FILTER -->
+        <input
+          id="groupFilter"
+          type="search"
+          class="form-control flex-fill me-3"
+          v-model.trim="filters.group"
+          @input="onSearchInput"
+          @search="onSearchInput"
+          :placeholder="$t.filterByGroup"
+          aria-label="Filter by group"
+        />
+
+        <!-- CSV UPLOAD -->
         <div class="d-flex flex-fill me-3 align-items-center">
           <input
             type="file"
@@ -19,7 +52,7 @@
             :disabled="!csvFile"
             @click="uploadCsv"
           >
-            {{ "uploadCsv" }}
+            {{ 'uploadCsv' }}
           </button>
         </div>
       </div>
@@ -29,7 +62,7 @@
           <option value="desc">{{ $t.descending }}</option>
         </select>
       </div>
-      <div></div> <!-- Empty div for alignment with last column -->
+      <div></div>
     </div>
   </div>
   <Loading v-model:active="renderComponent"
@@ -99,8 +132,21 @@ export default class TableComponent extends Vue {
   groupTypeFilter: { [key: string]: string } = { all: '', group: 'group', template: 'template' }
   filters = { code: '', group: '', division: '' }
   onScroll: ((this: Window, ev: Event) => any) | null = null
+  debounceTimer: number | null = null
 
   csvFile: File | null = null
+
+  onSearchInput (): void {
+    // if there’s already a pending timer, cancel it
+    if (this.debounceTimer !== null) {
+      clearTimeout(this.debounceTimer)
+    }
+    // schedule a fresh call 250ms after the *last* keystroke
+    this.debounceTimer = window.setTimeout(() => {
+      this.handleFilterChange()
+      this.debounceTimer = null
+    }, 250)
+  }
 
   onCsvChange (e: Event) {
     const files = (e.target as HTMLInputElement).files
@@ -260,15 +306,32 @@ export default class TableComponent extends Vue {
   }
 
   handleFilterChange (): void {
-    if (!this.isInitRunning) {
-      this.renderComponent = true
-      this.changeRender()
-      this.Init()
-    }
+    // don't do anything if we're already mid‐request
+    if (this.isInitRunning) return
+
+    // blank out the table and start loading
+    this.renderComponent = true
+    this.entities = []
+    this.objectTemplates = []
+    this.headers = []
+
+    // reset the paging/mechanic so filters apply cleanly
+    this.mechanic = new Manager.Mechanic.TableMechanic(this.reRender.bind(this))
+
+    // finally, fetch with the new filter
+    this.Init()
   }
 
   checkRoute () {
     return router.currentRoute.value.name === Definitions.Entity.Def
+  }
+
+  get cleanedFilters (): Record<string, string> {
+    const out: Record<string, string> = {}
+    if (this.filters.code) out.code = this.filters.code
+    if (this.filters.division) out.division = this.filters.division
+    if (this.filters.group) out.group = this.filters.group
+    return out
   }
 
   async Init () {
@@ -277,10 +340,10 @@ export default class TableComponent extends Vue {
     switch (router.currentRoute.value.name) {
       case Definitions.Entity.Def:
         // console.log(this.orderBy)
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', JSON.stringify({ api: 'entity', filters: this.filters, order: this.orderBy })))
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', JSON.stringify({ api: 'entity', filters: this.cleanedFilters, order: this.orderBy })))
         break
       case Definitions.Group.Def:
-        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', JSON.stringify({ api: 'group', filters: this.filters, order: this.orderBy })))
+        this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', JSON.stringify({ api: 'group', filters: this.cleanedFilters, order: this.orderBy })))
         break
       case Definitions.Division.Def:
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'division'))
@@ -298,8 +361,12 @@ export default class TableComponent extends Vue {
         this.objectTemplates = this.mechanic.InitSet(await this.mechanic.InitGet('-1', 'users'))
         break
     }
-    if (Object.keys(this.objectTemplates).length === 0) {
+    if (this.objectTemplates.length === 0) {
+      // no results: clear out the rows and reset all loading flags
+      this.entities = []
       this.renderComponent = false
+      this.loadingComponents = false
+      this.isInitRunning = false
       return
     }
     let tempId = null
@@ -334,15 +401,15 @@ export default class TableComponent extends Vue {
     if (!this.isInitRunning) {
       const groupValues = Object.values(this.groupTypeFilter)
       this.renderComponent = true
-      const currentGroupIndex = groupValues.indexOf(this.filters.group) + 1
-      if (currentGroupIndex >= groupValues.length && this.filters.group !== '') { // TODO something is not working (ORDER), most likely fixed
-        this.filters.group = groupValues[0]
+      const currentGroupIndex = groupValues.indexOf(this.cleanedFilters.group) + 1
+      if (currentGroupIndex >= groupValues.length && this.cleanedFilters.group !== '') { // TODO something is not working (ORDER), most likely fixed
+        this.cleanedFilters.group = groupValues[0]
       } else {
-        this.filters.group = groupValues[currentGroupIndex]
+        this.cleanedFilters.group = groupValues[currentGroupIndex]
       }
       useToast()({
         component: ToastComponent,
-        props: { msg: { title: 'Loading...', info: this.filters.group === '' ? 'Loading all.' : 'Loading ' + this.filters.group + ' only.' } }
+        props: { msg: { title: 'Loading...', info: this.cleanedFilters.group === '' ? 'Loading all.' : 'Loading ' + this.cleanedFilters.group + ' only.' } }
       }, {
         type: TYPE.INFO
       })
