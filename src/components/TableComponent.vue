@@ -6,6 +6,22 @@
         <input @change="handleFilterChange" v-model="filters.code" type="search" class="form-control flex-fill me-3" id="codeFilter" :placeholder="$t.filterByCode">
         <input @change="handleFilterChange" v-model="filters.division" type="search" class="form-control flex-fill me-3" id="divisionFilter" :placeholder="$t.filterByDivision">
         <input @change="handleFilterChange" v-model="filters.group" type="search" class="form-control flex-fill me-3" id="groupFilter" :placeholder="$t.filterByGroup">
+        <div class="d-flex flex-fill me-3 align-items-center">
+          <input
+            type="file"
+            ref="csvFileInput"
+            accept=".csv"
+            @change="onCsvChange"
+            class="form-control flex-fill"
+          />
+          <button
+            class="btn btn-primary ms-2"
+            :disabled="!csvFile"
+            @click="uploadCsv"
+          >
+            {{ "uploadCsv" }}
+          </button>
+        </div>
       </div>
       <div class="col-12 col-sm-3 mt-3 mt-sm-0">
         <select class="form-select" id="sortOrder" @change="handleFilterChange" v-model="orderBy">
@@ -20,17 +36,17 @@
            :can-cancel="false"
            :is-full-page="false"/>
   <table class="table table-hover" v-if="!renderComponent">
-  <thead class="table-light">
+    <thead class="table-light">
     <tr>
       <th></th>
       <th v-for="(header, key) in headers" :key="`${ key }-${ header }-${ Math.random().toString(36).slice(2, 7) }`" scope="col">
         {{ header }}</th>
     </tr>
-  </thead>
-  <tbody>
+    </thead>
+    <tbody>
     <component :rerender="changeRender"  v-for="(entity, key, index) in entities" :key="`${ key }-${ index }-${ Math.random().toString(36).slice(2, 7) }`" :is="getComponent(regionEnum.Table, objectTypeEnum.Row)" :entity='entity' :index='key'></component>
-  </tbody>
-</table>
+    </tbody>
+  </table>
   <!--button class="btn btn-outline-secondary" @click.prevent="scroll()">Load</button-->
 </template>
 
@@ -52,6 +68,8 @@ import { TYPE, useToast } from 'vue-toastification'
 import ToastComponent from '@/components/ToastComponent.vue'
 import { Definitions } from '@geocms/components'
 import { $t } from '@geocms/localization'
+import { Provide } from 'vue-property-decorator'
+import http, { updateHeaders } from '@/http-common'
 @Options({
   computed: {
     $t () {
@@ -63,6 +81,7 @@ import { $t } from '@geocms/localization'
   }
 })
 export default class TableComponent extends Vue {
+  @Provide() http = http;
   headers: string[] = []
   regionEnum = RegionEnum
   statTypeEnum = StatTypeEnum
@@ -80,6 +99,99 @@ export default class TableComponent extends Vue {
   groupTypeFilter: { [key: string]: string } = { all: '', group: 'group', template: 'template' }
   filters = { code: '', group: '', division: '' }
   onScroll: ((this: Window, ev: Event) => any) | null = null
+
+  csvFile: File | null = null
+
+  onCsvChange (e: Event) {
+    const files = (e.target as HTMLInputElement).files
+    this.csvFile = files && files.length ? files[0] : null
+  }
+
+  async uploadCsv () {
+    if (!this.csvFile) return
+
+    const form = new FormData()
+    form.append('file', this.csvFile)
+    // 1) show a persistent “Uploading…” toast
+    const validatingToast = useToast()(
+      {
+        component: ToastComponent,
+        props: {
+          msg: {
+            title: 'Uploading CSV',
+            info: 'Please wait while we import your data…'
+          }
+        }
+      },
+      {
+        type: TYPE.INFO,
+        timeout: false, // don’t auto‐dismiss
+        closeOnClick: false
+      }
+    )
+
+    try {
+      this.renderComponent = true
+      const res = await http.post(process.env.VUE_APP_BASE_URL + 'import-csv/entity', form, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+
+      // 2) clear loading toast & show success
+      useToast().dismiss(validatingToast)
+      useToast()(
+        {
+          component: ToastComponent,
+          props: {
+            msg: {
+              title: 'Import Complete',
+              info: res.data.message || 'CSV imported successfully.'
+            }
+          }
+        },
+        { type: TYPE.SUCCESS }
+      )
+
+      // refresh table
+      this.changeRender()
+    } catch (err: any) {
+      // If we got a 422 with per‐row details, show each
+      if (err.response?.status === 422 && Array.isArray(err.response.data.details)) {
+        for (const detail of err.response.data.details) {
+          useToast().dismiss(validatingToast)
+          useToast()(
+            {
+              component: ToastComponent,
+              props: {
+                msg: {
+                  title: `Row ${detail.row} error`,
+                  info: detail.reason
+                }
+              }
+            },
+            { type: TYPE.ERROR }
+          )
+        }
+      } else {
+        useToast().dismiss(validatingToast)
+        useToast()(
+          {
+            component: ToastComponent,
+            props: {
+              msg: {
+                title: 'Import Failed',
+                info: err.response?.data?.message || 'An unexpected error occurred.'
+              }
+            }
+          },
+          { type: TYPE.ERROR }
+        )
+      }
+    } finally {
+      this.renderComponent = false
+      this.csvFile = null
+      ;(this.$refs.csvFileInput as HTMLInputElement).value = ''
+    }
+  }
 
   beforeUnmount () {
     this.mechanic.UnsubscribeConditions()
