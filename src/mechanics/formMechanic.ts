@@ -55,6 +55,7 @@ export namespace Manager.Mechanic{
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Field].SubscribeLogic(this.Field.bind(this))
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.ECabinetRow].SubscribeLogic(this.ECabinetRow.bind(this))
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.DataList].SubscribeLogic(this.DataList.bind(this))
+      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.ModalList].SubscribeLogic(this.ModalList.bind(this))
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.CheckBox].SubscribeLogic(this.Field.bind(this))
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Radio].SubscribeLogic(this.Radio.bind(this))
     }
@@ -65,9 +66,17 @@ export namespace Manager.Mechanic{
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.SelectList].NullifyLogic()
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.ECabinetRow].NullifyLogic()
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.DataList].NullifyLogic()
+      RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.ModalList].NullifyLogic()
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.CheckBox].NullifyLogic()
       RegionType.RegionTypes[RegionEnum.Form].ObjectTypes[ObjectTypeEnum.Radio].NullifyLogic()
       MechanicAbstract.instance = null
+    }
+
+    protected async ModalList (eventHandler: EventHandlerType): Promise<void> {
+      const name = router.currentRoute.value.name
+      if (typeof name === 'string') {
+        this.ObjectTemplates = await (ResolverType.ResolverTypes[name] as ResolverInterface<FormWrapper>).FormModalDataList(new FormWrapper().ModalList(eventHandler, this.ObjectTemplates, this.refreshPage.bind(this)))
+      }
     }
 
     protected async DataList (eventHandler: EventHandlerType): Promise<void> {

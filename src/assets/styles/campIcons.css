@@ -1,0 +1,191 @@
+.camp-microwave::before {
+    content: '';
+    display: inline-block;
+    width: 1.5em; /* Adjust the width as needed */
+    height: 1.5em; /* Adjust the height as needed */
+    mask: url('../icons/microwave-svgrepo-com.svg') no-repeat center;
+    -webkit-mask: url('../icons/microwave-svgrepo-com.svg') no-repeat center;
+    background-color: currentColor; /* This makes it use the text color */
+}
+
+.camp-dishwasher::before {
+    content: '';
+    display: inline-block;
+    width: 1.5em; /* Adjust the width as needed */
+    height: 1.5em; /* Adjust the height as needed */
+    mask: url('../icons/dishwasher-svgrepo.svg') no-repeat center;
+    -webkit-mask: url('../icons/dishwasher-svgrepo.svg') no-repeat center;
+    background-color: currentColor; /* This makes it use the text color */
+}
+
+.camp-washing::before {
+    content: '';
+    display: inline-block;
+    width: 1.5em; /* Adjust the width as needed */
+    height: 1.5em; /* Adjust the height as needed */
+    mask: url('../icons/washing-machine-svgrepo-com.svg') no-repeat center;
+    -webkit-mask: url('../icons/washing-machine-svgrepo-com.svg') no-repeat center;
+    background-color: currentColor; /* This makes it use the text color */
+}
+
+.camp-air::before {
+    content: '';
+    display: inline-block;
+    width: 1.5em; /* Adjust the width as needed */
+    height: 1.5em; /* Adjust the height as needed */
+    mask: url('../icons/air-conditioner-svgrepo.svg') no-repeat center;
+    -webkit-mask: url('../icons/air-conditioner-svgrepo.svg') no-repeat center;
+    background-color: currentColor; /* This makes it use the text color */
+}
+
+.camp-toaster::before {
+    content: '';
+    display: inline-block;
+    width: 1.5em; /* Adjust the width as needed */
+    height: 1.5em; /* Adjust the height as needed */
+    mask: url('../icons/toaster-svgrepo-com.svg') no-repeat center;
+    -webkit-mask: url('../icons/toaster-svgrepo-com.svg') no-repeat center;
+    background-color: currentColor; /* This makes it use the text color */
+}
+
+.camp-iron::before {
+    content: '';
+    display: inline-block;
+    width: 1.5em; /* Adjust the width as needed */
+    height: 1.5em; /* Adjust the height as needed */
+    mask: url('../icons/iron-svgrepo-com.svg') no-repeat center;
+    -webkit-mask: url('../icons/iron-svgrepo-com.svg') no-repeat center;
+    background-color: currentColor; /* This makes it use the text color */
+}
+
+.camp-barbecue::before {
+    content: '';
+    display: inline-block;
+    width: 1.5em; /* Adjust the width as needed */
+    height: 1.5em; /* Adjust the height as needed */
+    mask: url('../icons/barbecue-svgrepo-com.svg') no-repeat center;
+    -webkit-mask: url('../icons/barbecue-svgrepo-com.svg') no-repeat center;
+    background-color: currentColor; /* This makes it use the text color */
+}
+
+.camp-jacuzzi::before {
+    content: '';
+    display: inline-block;
+    width: 1.5em; /* Adjust the width as needed */
+    height: 1.5em; /* Adjust the height as needed */
+    mask: url('../icons/bath-of-immersion-svgrepo-com.svg') no-repeat center;
+    -webkit-mask: url('../icons/bath-of-immersion-svgrepo-com.svg') no-repeat center;
+    background-color: currentColor; /* This makes it use the text color */
+}
+
+.camp-sunbed::before {
+    content: '';
+    display: inline-block;
+    width: 1.5em; /* Adjust the width as needed */
+    height: 1.5em; /* Adjust the height as needed */
+    mask: url('../icons/sunbed.svg') no-repeat center;
+    -webkit-mask: url('../icons/sunbed.svg') no-repeat center;
+    background-color: currentColor; /* This makes it use the text color */
+}
+
+.camp-pool::before {
+    content: '';
+    display: inline-block;
+    width: 1.5em; /* Adjust the width as needed */
+    height: 1.5em; /* Adjust the height as needed */
+    mask: url('../icons/pool-svgrepo-com.svg') no-repeat center;
+    -webkit-mask: url('../icons/pool-svgrepo-com.svg') no-repeat center;
+    background-color: currentColor; /* This makes it use the text color */
+}
+
+.camp-other::before {
+    content: '';
+    display: inline-block;
+    width: 100%; /* Adjust the width as needed */
+    margin-top: 18%;
+    height: 70%; /* Adjust the height as needed */
+    mask: url('../icons/other.svg') no-repeat center;
+    -webkit-mask: url('../icons/other.svg') no-repeat center;
+    background-color: currentColor; /* This makes it use the text color */
+}
+
+.camp-recenter::before {
+    content: '';
+    display: inline-block;
+    width: 100%; /* Adjust the width as needed */
+    height: 100%; /* Adjust the height as needed */
+    mask: url('../icons/recenter.svg') no-repeat center;
+    -webkit-mask: url('../icons/recenter.svg') no-repeat center;
+    background-color: currentColor; /* This makes it use the text color */
+}
+
+.camp-xmark::before {
+    content: '';
+    display: inline-block;
+    width: 100%; /* Adjust the width as needed */
+    height: 100%; /* Adjust the height as needed */
+    mask: url('../icons/xmark.svg') no-repeat center;
+    -webkit-mask: url('../icons/xmark.svg') no-repeat center;
+    background-color: currentColor; /* This makes it use the text color */
+}
+
+.camp-car::before {
+    content: '';
+    display: inline-block;
+    width: 100%; /* Adjust the width as needed */
+    height: 100%; /* Adjust the height as needed */
+    mask: url('../icons/car.svg') no-repeat center;
+    -webkit-mask: url('../icons/car.svg') no-repeat center;
+    background-color: currentColor; /* This makes it use the text color */
+}
+
+.camp-fridge::before {
+    content: '';
+    display: inline-block;
+    width: 1.5em; /* Adjust the width as needed */
+    height: 1.5em; /* Adjust the height as needed */
+    mask: url('../icons/fridge.svg') no-repeat center;
+    -webkit-mask: url('../icons/fridge.svg') no-repeat center;
+    background-color: currentColor; /* This makes it use the text color */
+}
+
+.camp-cross::before {
+    content: '';
+    display: inline-block;
+    width: 1.5em; /* Adjust the width as needed */
+    height: 1.5em; /* Adjust the height as needed */
+    mask: url('../icons/cross.svg') no-repeat center;
+    -webkit-mask: url('../icons/cross.svg') no-repeat center;
+    background-color: currentColor; /* This makes it use the text color */
+}
+
+.camp-rv::before {
+    content: '';
+    display: inline-block;
+    width: 1.3em; /* Adjust the width as needed */
+    margin-top: 8px;
+    height: 1.3em; /* Adjust the height as needed */
+    mask: url('../icons/rv.svg') no-repeat center;
+    -webkit-mask: url('../icons/rv.svg') no-repeat center;
+    background-color: currentColor; /* This makes it use the text color */
+}
+
+.camp-legend::before {
+    content: '';
+    display: inline-block;
+    width: 1em; /* Adjust the width as needed */
+    height: 1em; /* Adjust the height as needed */
+    mask: url('../icons/rgb-legend.svg') no-repeat center;
+    -webkit-mask: url('../icons/rgb-legend.svg') no-repeat center;
+}
+
+.camp-pitch::before {
+    content: '';
+    display: inline-block;
+    width: 1.3em; /* Adjust the width as needed */
+    height: 1.3em; /* Adjust the height as needed */
+    mask: url('../icons/pitch.svg') no-repeat center;
+    -webkit-mask: url('../icons/pitch.svg') no-repeat center;
+    background-color: currentColor; /* This makes it use the text color */
+    margin-bottom: -4px;
+}

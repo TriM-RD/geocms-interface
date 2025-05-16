@@ -8,7 +8,7 @@ import VueBlocksTree from 'vue3-blocks-tree'
 import 'vue3-blocks-tree/dist/vue3-blocks-tree.css'
 import Toast, { PluginOptions, POSITION, TYPE } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
-import { LabelComponent, FieldComponent, ButtonComponent, AlertComponent, CheckBoxComponent, DataListComponent, SelectListComponent, RadioComponent } from '@cybertale/form/src'
+import { ModalListComponent, LabelComponent, FieldComponent, ButtonComponent, AlertComponent, CheckBoxComponent, DataListComponent, SelectListComponent, RadioComponent } from '@cybertale/form/src'
 import RowComponent from '@/components/RowComponent.vue'
 import ColumnComponent from '@/components/ColumnComponent.vue'
 import ECabinetColumnComponent from '@/components/ECabinetColumnComponent.vue'
@@ -19,6 +19,7 @@ import MapPickerComponent from '@/components/MapPickerComponent.vue'
 import { ObjectType, ObjectTypeEnum } from '@cybertale/interface/src'
 import { UppyComponent } from '@geocms/components/src/index'
 import InputGroupComponent from '@/components/InputGroupComponent.vue'
+import './assets/styles/index.css'
 
 const defaultOptions = { nodeName: 'node-tree', treeName: 'blocks-tree' }
 
@@ -40,6 +41,7 @@ ObjectType.ObjectTypes[ObjectTypeEnum.ModalForm](() => ModalFormComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.MapPicker](() => MapPickerComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.UploadFile](() => UppyComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.Label](() => LabelComponent)
+ObjectType.ObjectTypes[ObjectTypeEnum.ModalList](() => ModalListComponent)
 
 const options: PluginOptions = {
   position: POSITION.TOP_RIGHT,

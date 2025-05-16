@@ -55,6 +55,24 @@ export abstract class ResolverAbstract implements ResolverInterface<WrapperAbstr
     throw new Error('Feature not implemented')
   }
 
+  public async FormModalDataList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
+    console.log(wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
+    const matchingIndex = this.getObjectTemplateIndex(wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data, wrapper.objectTemplates)
+    if (this.isJSON(wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data)) {
+      const stat = JSON.parse(wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data)
+      stat[wrapper.eventHandler.payload.Stats[StatTypeEnum.ValueIndices].Data] = wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data
+      wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data = JSON.stringify(stat)
+    } else {
+      if (wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data) {
+        wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data = wrapper.eventHandler.payload.Stats[StatTypeEnum.Value].Data
+      } else {
+        wrapper.objectTemplates[matchingIndex].Stats[StatTypeEnum.Value].Data = ''
+      }
+    }
+
+    return wrapper.objectTemplates
+  }
+
   public async FormDataList (wrapper: WrapperAbstract): Promise<ObjectTemplate[]> {
     console.log(wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data)
     const matchingIndex = this.getObjectTemplateIndex(wrapper.eventHandler.payload.Stats[StatTypeEnum.Tag].Data, wrapper.objectTemplates)

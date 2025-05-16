@@ -19,6 +19,13 @@ export class FormWrapper extends WrapperAbstract {
     return this
   }
 
+  ModalList (eventHandler: EventHandlerType, objectTemplates: ObjectTemplate[], refreshPage: () => void): FormWrapper {
+    this.eventHandler = eventHandler
+    this.objectTemplates = objectTemplates
+    this.refreshPage = refreshPage
+    return this
+  }
+
   SelectList (eventHandler: EventHandlerType, objectTemplates: ObjectTemplate[], refreshPage: () => void, append: (_objectTemplates: ObjectTemplate[]) => ObjectTemplate[]): FormWrapper {
     this.eventHandler = eventHandler
     this.objectTemplates = objectTemplates
