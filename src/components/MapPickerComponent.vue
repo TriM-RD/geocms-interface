@@ -18,13 +18,28 @@
       </div>
     </div>
     <div class="row" v-show="showImageButton">
-      <div class="col-6">
-        <button class="btn btn-outline-secondary" @click.prevent="toggleImageLayer">{{ imageLayerVisible ? 'Hide' : 'Show' }} Image Layer</button>
-      </div>
-      <div class="col-6">
-        <button class="btn btn-outline-secondary" @click.prevent="changeStyle">{{ isSatelliteView ? 'Switch to Def View' : 'Switch to Sat View' }}</button>
+      <div class="col-12 d-flex flex-wrap gap-2">
+        <button class="btn btn-outline-secondary" @click.prevent="toggleLayerVisibility('my-layer')">
+          {{ imageLayerVisibility['my-layer'] ? 'Hide' : 'Show' }} my-layer
+        </button>
+
+        <button class="btn btn-outline-secondary" @click.prevent="toggleLayerVisibility('tileset-layer')">
+          {{ imageLayerVisibility['tileset-layer'] ? 'Hide' : 'Show' }} tileset-layer
+        </button>
+
+        <button class="btn btn-outline-secondary" @click.prevent="toggleLayerVisibility('my-layer-koversada')">
+          {{ imageLayerVisibility['my-layer-koversada'] ? 'Hide' : 'Show' }} koversada-layer
+        </button>
       </div>
     </div>
+    <div class="row mt-2">
+      <div class="col-12 d-flex justify-content-center">
+        <button class="btn btn-outline-primary" @click.prevent="changeStyle">
+          {{ isSatelliteView ? 'Switch to Map View' : 'Switch to Satellite View' }}
+        </button>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -87,6 +102,12 @@ export default class MapPickerComponent extends Vue {
   imageLayerVisible = true
   showImageButton = false
   isSatelliteView = false
+  imageLayerVisibility: { [key: string]: boolean } = {
+    'my-layer': true,
+    'tileset-layer': false,
+    'my-layer-koversada': true
+  }
+
   private classColors = {
     obala: '#f3f2e7',
     zemlja: '#dedfc4',
@@ -353,30 +374,68 @@ export default class MapPickerComponent extends Vue {
         }
       })
 
+      this.map.addSource('my-source-koversada', {
+        type: 'image',
+        url: require('../assets/koversada_mini.png'),
+        coordinates: [
+          [13.60391238, 45.13581617], // top-left
+          [13.61565923, 45.13599869], // top-right
+          [13.6157488, 45.13023311], // bottom-right
+          [13.6040019, 45.1300508] // bottom-left
+        ]
+      })
+
+      this.map.addLayer({
+        id: 'my-layer-koversada',
+        type: 'raster',
+        source: 'my-source-koversada',
+        paint: {
+          'raster-fade-duration': 0,
+          'raster-opacity': 0.5
+        }
+      })
+
       // Show image layer button conditionally based on firmName
-      if (localStorage.getItem('firmName') === 'trim' || localStorage.getItem('firmName') === 'zaton' || localStorage.getItem('firmName') === 'test') {
+      if (localStorage.getItem('firmName') === 'trim' || localStorage.getItem('firmName') === 'zaton' || localStorage.getItem('firmName') === 'test4') {
         this.showImageButton = true
       }
     }
   }
 
-  toggleImageLayer () {
+  toggleLayerVisibility (layerId: string) {
+    if (!this.map) return
+
+    const current = this.imageLayerVisibility[layerId]
+    const newVisibility = current ? 'none' : 'visible'
+
+    this.map.setLayoutProperty(layerId, 'visibility', newVisibility)
+
+    if (layerId === 'my-layer-koversada') {
+      this.map.setPaintProperty(layerId, 'raster-opacity', current ? 0 : 0.5)
+    }
+
+    this.imageLayerVisibility[layerId] = !current
+  }
+
+  /* toggleImageLayer () {
     if (this.map) {
       /* const visibility = this.map.getLayoutProperty('my-layer', 'visibility')
       console.log(visibility) */
-      if (this.imageLayerVisible) {
+  /* if (this.imageLayerVisible) {
         this.map.setLayoutProperty('my-layer', 'visibility', 'none')
         this.map.setLayoutProperty('tileset-layer', 'visibility', 'none')
         this.map.setPaintProperty('camp-fill-layer', 'fill-opacity', 0)
+        this.map.setPaintProperty('my-layer-koversada', 'fill-opacity', 0)
         this.imageLayerVisible = false
       } else {
         this.map.setLayoutProperty('my-layer', 'visibility', 'visible')
         this.map.setLayoutProperty('tileset-layer', 'visibility', 'visible')
         this.map.setPaintProperty('camp-fill-layer', 'fill-opacity', 0.5)
+        this.map.setPaintProperty('my-layer-koversada', 'fill-opacity', 0.5)
         this.imageLayerVisible = true
       }
     }
-  }
+  } */
 
   geoLocate () {
     if ('geolocation' in navigator) {

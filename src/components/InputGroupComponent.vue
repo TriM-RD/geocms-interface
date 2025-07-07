@@ -104,18 +104,47 @@ export default class InputGroupComponent extends Vue {
     return this.pageRefresh
   }
 
-  objectCopy (_object : ObjectTemplate) : ObjectTemplate {
-    if (_object.Stats[StatTypeEnum.Inherit]) {
-      for (const stat of JSON.parse(_object.Stats[StatTypeEnum.Inherit].Data)) {
-        if (_object.Stats[stat]) {
-          _object.Stats[stat].Data = this.object.Stats[stat].Data
-        } else if (this.object.Stats[stat]) {
+  objectCopy (_object: ObjectTemplate): ObjectTemplate {
+    const inheritStat = _object.Stats[StatTypeEnum.Inherit]
+    if (inheritStat) {
+      const inheritedStats = JSON.parse(inheritStat.Data) as StatTypeEnum[]
+
+      for (const stat of inheritedStats) {
+        const hasStatInObject = _object.Stats[stat] !== undefined
+        const hasStatInThis = this.object.Stats[stat] !== undefined
+        const hasValueIndices = _object.Stats[StatTypeEnum.ValueIndices] !== undefined
+        const isValueStat = stat === StatTypeEnum.Value
+
+        if (hasValueIndices) {
+          console.log('booleans', hasValueIndices, isValueStat, hasStatInObject, hasStatInThis)
+        }
+
+        if (hasStatInObject) {
+          if (hasValueIndices && isValueStat) {
+            _object.Stats[stat].Data = JSON.parse(this.object.Stats[stat].Data)[_object.Stats[StatTypeEnum.ValueIndices].Data]
+            console.log('_object.Stats[stat].Data_1', JSON.parse(this.object.Stats[stat].Data))
+          } else {
+            _object.Stats[stat].Data = this.object.Stats[stat].Data
+          }
+        } else if (hasStatInThis) {
           _object.Stats[stat] = StatType.StatTypes[stat]()
-          _object.Stats[stat].Data = this.object.Stats[stat].Data
+          if (hasValueIndices && isValueStat) {
+            _object.Stats[stat].Data = JSON.parse(this.object.Stats[stat].Data)[_object.Stats[StatTypeEnum.ValueIndices].Data]
+            console.log('_object.Stats[stat].Data_2', _object.Stats[stat].Data)
+          } else {
+            _object.Stats[stat].Data = this.object.Stats[stat].Data
+          }
         }
       }
     }
-    return new ObjectTemplate(_object.Region, _object.ObjectEnum, _object.SubObjectEnum, _object.ActionEnum, _object.Stats)
+
+    return new ObjectTemplate(
+      _object.Region,
+      _object.ObjectEnum,
+      _object.SubObjectEnum,
+      _object.ActionEnum,
+      _object.Stats
+    )
   }
 
   entityCopy (entities: ObjectTemplate[]) : ObjectTemplate[] {
