@@ -10,6 +10,7 @@ import Toast, { PluginOptions, POSITION, TYPE } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 import { ModalListComponent, LabelComponent, FieldComponent, ButtonComponent, AlertComponent, CheckBoxComponent, DataListComponent, SelectListComponent, RadioComponent } from '@cybertale/form/src'
 import RowComponent from '@/components/RowComponent.vue'
+import MarkdownModalInput from '@/components/MarkdownModalInput.vue'
 import ColumnComponent from '@/components/ColumnComponent.vue'
 import ECabinetColumnComponent from '@/components/ECabinetColumnComponent.vue'
 import ECabinetRowComponent from '@/components/ECabinetRowComponent.vue'
@@ -42,6 +43,7 @@ ObjectType.ObjectTypes[ObjectTypeEnum.MapPicker](() => MapPickerComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.UploadFile](() => UppyComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.Label](() => LabelComponent)
 ObjectType.ObjectTypes[ObjectTypeEnum.ModalList](() => ModalListComponent)
+ObjectType.ObjectTypes[ObjectTypeEnum.Text](() => MarkdownModalInput)
 
 const options: PluginOptions = {
   position: POSITION.TOP_RIGHT,

@@ -2,6 +2,9 @@ module.exports = {
   css: {
     extract: false
   },
+  transpileDependencies: [
+    'markdown-it'
+  ],
   chainWebpack: config => {
     config.module
       .rule('babel')
@@ -15,5 +18,10 @@ module.exports = {
       .options({
         plugins: ['@babel/plugin-transform-optional-chaining']
       })
+
+    config.module
+      .rule('mjs')
+      .test(/\.mjs$/)
+      .set('type', 'javascript/auto')
   }
 }
