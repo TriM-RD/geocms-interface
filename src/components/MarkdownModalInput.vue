@@ -162,6 +162,12 @@ export default class MarkdownModalInput extends Vue {
 </script>
 
 <style scoped>
+.modal-dialog{
+  margin-top: 0.25%;
+}
+.modal{
+  overflow: hidden;
+}
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
